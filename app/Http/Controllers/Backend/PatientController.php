@@ -54,6 +54,12 @@ class PatientController extends Controller
             'email' => 'nullable',
             'district' => 'nullable',
             'sex' => 'required',
+            'status' => 'nullable',
+            'address' => 'nullable',
+            'insurance' => 'nullable',
+            'ocupation' => 'nullable',
+            'religion' => 'nullable',
+            'birth_place' => 'nullable',
         ]);
 
         patients()->create($validated);
@@ -68,8 +74,9 @@ class PatientController extends Controller
             'title' => [
                 'resource' => 'Pacientes',
                 'action' => 'Editar',
-                'url' => route('patients.index'),
+                'url' => route('patients.index')
             ],
+
 
             'form' => 'Backend/Patients/form.js',
             'model' => $patient,
@@ -82,15 +89,21 @@ class PatientController extends Controller
     public function update(Patient $patient, Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string',
-            'lastname1' => 'required|string',
-            'lastname2' => 'required|string',
+            'name' => 'required',
+            'lastname1' => 'required',
+            'lastname2' => 'required',
             'dni' => 'required',
-            'birth_date' => 'required|date:Y-m-d',
-            'sex' => 'required|string',
-            'email' => 'nullable|email',
-            'phone' => 'nullable|integer',
-            'district' => 'nullable|string',
+            'birth_date' => 'required|date',
+            'phone' => 'required',
+            'email' => 'nullable',
+            'district' => 'nullable',
+            'sex' => 'required',
+            'status' => 'nullable',
+            'address' => 'nullable',
+            'insurance' => 'nullable',
+            'ocupation' => 'nullable',
+            'religion' => 'nullable',
+            'birth_place' => 'nullable',
         ]);
 
         $patient->update($validated);

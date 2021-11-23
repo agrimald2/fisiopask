@@ -77,6 +77,48 @@ export default (props, { attrs }) => [
   },
 
   {
+    name: "status",
+    label: "Estado Civil",
+    type: inputs.Select,
+    options: ['S','C','V','D'],
+  },
+
+  {
+    name: "address",
+    label: "Domicilio Actual",
+    type: "text",
+  },
+
+  {
+    name: "insurance",
+    label: "Seguro",
+    type: inputs.Select,
+    options: [
+    'Rimac','La Positiva','Pacifico ','Mapfre',
+    'Interseguro ','Cardif','Protecta  ','Ace', 'Secrex', 'Nacional', 'Otro'
+    ],
+  },
+
+  {
+    name: "ocupation",
+    label: "Ocupación",
+    type: "text",
+  },
+
+  {
+    name: "religion",
+    label: "Religión",
+    type: "text",
+  },
+
+  {
+    name: "birth_place",
+    label: "Lugar de Nacimiento",
+    type: "text",
+  },
+
+  
+  {
     type: inputs.Buttons,
     buttons: [
       // Button delete
