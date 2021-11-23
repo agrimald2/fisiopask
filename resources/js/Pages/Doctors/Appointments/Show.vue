@@ -52,6 +52,12 @@
             </td>
           </tr>
           <tr>
+            <th>DNI:</th>
+            <td>
+              {{ appointment.patient.dni }}
+            </td>
+          </tr>
+          <tr>
             <th>Fecha de Nacimiento:</th>
             <td>
               {{ dates.dateForHumans(appointment.patient.birth_date) }}

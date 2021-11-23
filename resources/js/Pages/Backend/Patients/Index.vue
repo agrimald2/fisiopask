@@ -6,7 +6,7 @@
       </h2>
     </template>
 
-    <div class="mt-8 text-center hidden">
+    <div class="mt-8 text-center">
       <jet-secondary-button @click="$inertia.visit(route('doctors.create'))">
         Añadir un paciente
       </jet-secondary-button>

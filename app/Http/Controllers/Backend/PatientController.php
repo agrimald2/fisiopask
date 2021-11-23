@@ -21,12 +21,46 @@ class PatientController extends Controller
 
             'title' => 'Lista de Pacientes',
 
-            'create' => null,
+            'create' => route('patients.create'),
 
             'grid' => 'Backend/Patients/grid.js',
         ]);
     }
 
+    public function create()
+    {
+        return inertia('Backend/Dynamic/Form', [
+            'title' => [
+                'resource' => 'Pacientes',
+                'action' => 'Crear',
+                'url' => route('patients.index'),
+            ],
+
+            'form' => 'Backend/Patients/form.js',
+
+            'sexOptions' => config('doctors.sex'),
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required',
+            'lastname1' => 'required',
+            'lastname2' => 'required',
+            'dni' => 'required',
+            'birth_date' => 'required|date',
+            'phone' => 'required',
+            'email' => 'nullable',
+            'district' => 'nullable',
+            'sex' => 'required',
+        ]);
+
+        patients()->create($validated);
+
+        toast('success', 'Paciente creado correctamente');
+        return redirect()->route('patients.index');
+    }
 
     public function edit(Patient $patient)
     {
