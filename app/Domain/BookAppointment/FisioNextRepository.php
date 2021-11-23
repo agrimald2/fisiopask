@@ -176,15 +176,21 @@ class FisioNextRepository implements RepositoryContract
         $date = $appointment->date->format('d/m/Y');
         $startTime = $appointment->start;
         $patientName = $patient->name;
-        $doctorName = $appointment->doctor->name;
+        $patientLastName = $patient->lastname1 . $patient->lastname2;
+        $doctorName = $appointment->doctor->name. ' ' . $appointment->doctor->lastname;
         $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
+        $dashboardDoctor = env('APP_URL').'dashboard/doctors/appointments/'.$appointment->id;
+        $sucursal = $appointment->office;
 
         $data = compact(
             'patientName',
             'date',
             'startTime',
             'doctorName',
-            'dashboardLink'
+            'dashboardLink',
+            'patientLastName',
+            'dashboardDoctor',
+            'sucursal'
         );
 
         // Send message to patient

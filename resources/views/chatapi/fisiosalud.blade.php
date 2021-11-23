@@ -1,4 +1,4 @@
-*FISIOSALUD: CONFIRMACIÓN DE CITA*
+*HOLA $doctorName!*
 
 *Paciente:*
 {{ $patientName }}
