@@ -27,6 +27,23 @@
                 >
                   Dashboard
                 </jet-nav-link>
+                <jet-nav-link
+                  :href="route('doctors.appointments.index')"
+                  :active="route().current('doctors.appointments.index')"
+                >
+                  Citas
+                </jet-nav-link>
+                <jet-nav-link
+                  :href="route('patients.index')"
+                  :active="route().current('patients.index')"
+                >
+                  Pacientes/Historias C.
+                </jet-nav-link>
+                <jet-nav-link
+
+                >
+                  Estadísticas
+                </jet-nav-link>
               </div>
             </div>
 

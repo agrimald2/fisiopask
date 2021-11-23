@@ -3,6 +3,7 @@
     class="w-full overflow-x-auto"
     :rows="rows"
     :cols="cols"
+    style="text-align:center"
   />
 </template>
 

@@ -32,11 +32,19 @@
     />
   </link-group>
 
+
+
   <!-- System records -->
   <link-group
     title="Registros"
-    class="hidden"
+    class=""
   >
+    <link-item
+      label="Gráficos y Estadística"
+      icon="fa-chart-bar"
+      @click="go('')"
+    />
+
     <link-item
       label="Historiales Médicos"
       icon="fa-book-medical"
@@ -63,7 +71,7 @@
   </link-group>
 
   <!-- Categorias -->
-  <link-group title="Categorías y etiquetas">
+  <link-group title="Tarifas y Pagos">
     <link-item
       label="Tarifas"
       icon="fa-dollar-sign"
