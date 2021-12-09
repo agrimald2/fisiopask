@@ -26,7 +26,7 @@ class ServiceProvider extends BaseProvider
     {
         $repo = app(ClinicHistoriesRepo::class);
 
-        $formLists = explode(',', trim(env('FORMS_ENABLED', '')));
+        $formLists = explode(',', trim(env('FORMS_ENABLED', 'fisio,fisioRevision')));
 
         $repo->enableForms(
             $formLists

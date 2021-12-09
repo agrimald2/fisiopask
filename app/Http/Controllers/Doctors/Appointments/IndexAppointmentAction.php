@@ -11,8 +11,9 @@ class IndexAppointmentAction extends Controller
     public function __invoke(Request $request)
     {
         $searchQuery = $request->searchQuery;
+        $dateQuery = $request->dateQuery;
 
-        $model = $this->getModels($searchQuery);
+        $model = $this->getModels($searchQuery, $dateQuery);
 
         return inertia('Backend/Dynamic/Grid', [
             'model' => $model->items(),
@@ -30,7 +31,7 @@ class IndexAppointmentAction extends Controller
     }
 
 
-    private function getModels($searchQuery)
+    private function getModels($searchQuery, $dateQuery)
     {
         $appointments = $this->getAppointments();
 
@@ -44,6 +45,13 @@ class IndexAppointmentAction extends Controller
                             ->orWhere('lastname2', 'LIKE', "%$value%")
                             ->orWhere('dni', 'LIKE', "%$value%")
                             ->orWhere('phone', 'LIKE', "%$value%");
+                    });
+                });
+            })
+            ->whereHas('patient', function ($q) use ($dateQuery) {
+                $q->when($dateQuery, function ($q, $value) {
+                    $q->where(function ($q) use ($value) {
+                        $q->where('date', 'LIKE', "%$value%");
                     });
                 });
             })

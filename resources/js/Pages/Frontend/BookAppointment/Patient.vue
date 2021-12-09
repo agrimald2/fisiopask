@@ -49,14 +49,14 @@
         <!-- lastname1 -->
         <div class="mt-4">
           <div class="text-center font-bold uppercase tracking-wider text-gray-800">
-            Apellido Materno
+            Apellido Paterno
           </div>
 
           <div class="mt-2">
             <ui-input
               v-model="form.lastname1"
               required
-              placeholder="Tu apellido materno"
+              placeholder="Tu apellido paterno"
               :disabled="loading"
             />
             <ui-error
@@ -69,14 +69,14 @@
         <!-- lastname2 -->
         <div class="mt-4">
           <div class="text-center font-bold uppercase tracking-wider text-gray-800">
-            apellido paterno
+            Apellido Materno
           </div>
 
           <div class="mt-2">
             <ui-input
               v-model="form.lastname2"
               required
-              placeholder="Tu apellido paterno"
+              placeholder="Tu apellido materno"
               :disabled="loading"
             />
             <ui-error

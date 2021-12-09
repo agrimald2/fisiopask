@@ -31,6 +31,11 @@ x<template>
               placeholder="Filtro de busqueda..."
               v-model="searchQuery"
             >
+            <input
+              type="date"
+              class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 px-4 py-3"
+              v-model="dateQuery"
+            >
             <button
               type="submit"
               class="px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white flex items-center rounded-r-lg"
@@ -93,21 +98,25 @@ export default {
   },
 
   mounted() {
-    if (this.parameters && this.parameters.hasOwnProperty("searchQuery")) {
-      this.searchQuery = this.parameters.searchQuery;
+    if (this.parameters)
+    { 
+      if(this.parameters.hasOwnProperty("searchQuery")) this.searchQuery = this.parameters.searchQuery;
+      if(this.parameters.hasOwnProperty("dateQuery")) this.dateQuery = this.parameters.dateQuery;
     }
   },
 
   data() {
     return {
       searchQuery: null,
+      dateQuery: null,
     };
   },
 
   methods: {
     onSearch() {
       const searchQuery = this.searchQuery;
-      const data = { searchQuery };
+      const dateQuery = this.dateQuery;
+      const data = { searchQuery, dateQuery};
       this.$inertia.get("", data, { preserveScroll: true });
     },
   },

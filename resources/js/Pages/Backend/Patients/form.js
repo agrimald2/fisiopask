@@ -28,13 +28,13 @@ export default (props, { attrs }) => [
   },
 
   {
-    name: "lastname2",
+    name: "lastname1",
     label: "Apellido Paterno",
     type: "text",
   },
 
   {
-    name: "lastname1",
+    name: "lastname2",
     label: "Apellido Materno",
     type: "text",
   },

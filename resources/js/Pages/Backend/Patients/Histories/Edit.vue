@@ -12,14 +12,14 @@
         @submitted="submit"
       />
 
-      <div
+      <!--div
         class="mt-8"
         v-show="id"
       >
         <ui-confirmation title="Eliminar historia clínica">
           <ui-button @click="destroy">Eliminar historia clínica definitivamente.</ui-button>
         </ui-confirmation>
-      </div>
+      </div-->
     </app-body>
 
   </app-layout>
