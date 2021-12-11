@@ -1,4 +1,4 @@
-x<template>
+<template>
   <app-layout title="Dashboard">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -25,6 +25,15 @@ x<template>
       >
         <form @submit.prevent="onSearch">
           <div class="flex items-stretch">
+            <template v-if="enableDoctorSearch">
+              <button @click.prevent.self="toggleDropDown()" class="px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white flex items-center rounded-l-r-lg"> Doctores </button>
+              <div v-if="this.showDropDown">
+                <input type="text" placeholder="Buscar" id="myInput" v-model="docFilterQuery">
+                <div v-for="(doctor, index) in filteredDoctors" :key="index">
+                  <div @click.prevent.self="selectDropDown(doctor)"> {{doctor.name}} </div>
+                </div>
+              </div>
+            </template>
             <input
               type="text"
               class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-l-lg px-4 py-3"
@@ -32,6 +41,7 @@ x<template>
               v-model="searchQuery"
             >
             <input
+              v-if="enableDateSearch"
               type="date"
               class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 px-4 py-3"
               v-model="dateQuery"
@@ -79,9 +89,22 @@ export default {
     title: null,
     links: null,
     parameters: null,
+    doctors: null,
     // Options
     enableSearch: {
       default: true,
+      type: Boolean,
+    },
+    enableDateSearch: {
+      default: false,
+      type: Boolean,
+    },
+    enableDoctorSearch: {
+      default: false,
+      type: Boolean,
+    },
+    enableOfficeSearch: {
+      default: false,
       type: Boolean,
     },
   },
@@ -109,15 +132,38 @@ export default {
     return {
       searchQuery: null,
       dateQuery: null,
+      doctorQuery: null,
+
+      showDropDown: false,
+      docFilterQuery: null,
+      docName: null,
     };
+  },
+
+  computed: {
+    filteredDoctors() {
+      if(this.docFilterQuery == null || this.docFilterQuery == '') return this.doctors;
+
+      const filter = this.docFilterQuery.toLowerCase().trim();
+      return this.doctors.filter((doc) => doc.name.toLowerCase().trim().includes(filter));
+    }
   },
 
   methods: {
     onSearch() {
       const searchQuery = this.searchQuery;
       const dateQuery = this.dateQuery;
-      const data = { searchQuery, dateQuery};
+      const doctorQuery = this.doctorQuery;
+      const data = { searchQuery, dateQuery, doctorQuery};
       this.$inertia.get("", data, { preserveScroll: true });
+    },
+    toggleDropDown() {
+        this.showDropDown = !this.showDropDown;
+    },
+    selectDropDown($doc) {
+      this.doctorQuery = $doc.id;
+      this.docFilterQuery = $doc.name;
+      this.showDropDown = false;
     },
   },
 };

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\Doctor;
+
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+
 use Inertia\Inertia;
 
 class DoctorController extends Controller
