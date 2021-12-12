@@ -125,6 +125,7 @@ export default {
     { 
       if(this.parameters.hasOwnProperty("searchQuery")) this.searchQuery = this.parameters.searchQuery;
       if(this.parameters.hasOwnProperty("dateQuery")) this.dateQuery = this.parameters.dateQuery;
+      if(this.parameters.hasOwnProperty("doctorQuery")) this.doctorQuery = this.parameters.doctorQuery;
     }
   },
 
