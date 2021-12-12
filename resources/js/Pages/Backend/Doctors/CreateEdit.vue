@@ -18,6 +18,7 @@
         <default-form
           class="mt-10 sm:mt-0"
           :model="model"
+          :workspaces="workspaceIdOptions"
         />
 
         <div v-if="model">
@@ -43,7 +44,7 @@ import DefaultForm from "./Components/Form";
 import SpecialtiesForm from "./Components/SpecialtiesForm";
 
 export default {
-  props: ["model", "specialties"],
+  props: ["model", "specialties", "workspaces"],
 
   components: {
     AppLayout,
@@ -52,6 +53,16 @@ export default {
     DefaultForm,
 
     SpecialtiesForm,
+  },
+
+  computed: {
+    workspaceIdOptions() {
+      let list = {};
+      this.workspaces.map((x) => {
+        list[x.id] = x.name;
+      });
+      return list;
+    }
   },
 
   data() {

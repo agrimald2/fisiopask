@@ -11,6 +11,8 @@ export default (props, { attrs }) => {
     c("sex", "Sexo"),
     c("phone", "Teléfono"),
 
+    c("workspace.name", "Cubículo"),
+
     {
       type: cells.Buttons,
       attrs: {

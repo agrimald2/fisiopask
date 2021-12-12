@@ -6,24 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Office extends Model
+class Workspace extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-
     /**
      * Relationships
      */
-    public function schedules()
-    {
-        return $this->hasMany(Schedule::class);
-    }
 
-    public function workspace()
-    {
-        return $this->hasMany(Workspace::class);
-    }
+     public function doctor() 
+     {
+         return $this->hasOne(Doctor::class);
+     }
+
+     public function office()
+     {
+         return $this->belongsTo(Office::class);
+     }
 }

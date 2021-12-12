@@ -20,6 +20,12 @@
     />
 
     <link-item
+      label="Cubículos"
+      icon="fa-kaaba"
+      @click="go('workspaces.index')"
+    />
+
+    <link-item
       label="Especialidades"
       icon="fa-briefcase-medical"
       @click="go('doctorSpecialties.index')"

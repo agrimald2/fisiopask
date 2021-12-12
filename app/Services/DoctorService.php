@@ -18,6 +18,7 @@ class DoctorService
     {
         return Doctor::query()
             ->with('user')
+            ->with('workspace')
             ->when($searchQuery, function ($query, $searchQuery) {
                 return $query->where('name', 'like', "%$searchQuery%")
                     ->orWhere('lastname', 'like', "%$searchQuery%");

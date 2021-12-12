@@ -5,7 +5,9 @@ use App\Http\Controllers\Backend\DoctorSpecialtyController;
 use App\Http\Controllers\Backend\FamilyController;
 use App\Http\Controllers\Backend\IndexAction;
 use App\Http\Controllers\Backend\OfficeController;
+use App\Http\Controllers\Backend\WorkspaceController;
 use App\Http\Controllers\Backend\PatientController;
+use App\Http\Controllers\Backend\PatientAppointmentController;
 use App\Http\Controllers\Backend\PatientRates\AddPaymentToPatientAction;
 use App\Http\Controllers\Backend\PatientRates\AddRateToPatientAction;
 use App\Http\Controllers\Backend\PatientRates\DestroyPatientRateAction;
@@ -66,6 +68,16 @@ Route::resource('doctors.freezes', ScheduleFreezeController::class)
 Route::resource('patients', PatientController::class)
     ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
 /**
+ * Patient Appointments
+ */
+Route::resource('patients.appointment', PatientAppointmentController::class)
+    ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
+// Pick time
+Route::post('/dni/{dni}/day', [PatientAppointmentController::class, 'pickDatePost'])
+    ->name('patients.appointment.pickDate.post');
+Route::get('/dni/{dni}/day/{date}/time/', [PatientAppointmentController::class, 'pickTime'])
+    ->name('patients.appointment.pickTime');
+/**
  * Patient wallet
  */
 Route::delete('/patients/rates/{patientRate}', DestroyPatientRateAction::class)
@@ -98,6 +110,12 @@ Route::namespace(null)
  */
 Route::resource('offices', OfficeController::class)
     ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+/**
+ * Workspaces
+ */
+Route::resource('workspaces', WorkspaceController::class)
+->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
 /**
  * Doctor specialties

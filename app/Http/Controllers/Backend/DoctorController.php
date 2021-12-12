@@ -34,9 +34,11 @@ class DoctorController extends Controller
 
     public function create()
     {
+        $workspaces = workspaces()->index();
+
         Inertia::share('doctorsConfig', config('doctors'));
 
-        return inertia('Backend/Doctors/CreateEdit');
+        return inertia('Backend/Doctors/CreateEdit', compact('workspaces'));
     }
 
     public function store(Request $request)
@@ -51,6 +53,7 @@ class DoctorController extends Controller
             'phone' => 'required',
             'document_type' => 'required',
             'document_reference' => 'required',
+            'workspace_id' => '',
         ]);
 
         doctors()->create($validated);
@@ -65,8 +68,10 @@ class DoctorController extends Controller
 
         $specialties = doctorSpecialties()->index();
 
+        $workspaces = workspaces()->index();
+
         Inertia::share('doctorsConfig', config('doctors'));
-        return inertia('Backend/Doctors/CreateEdit', compact('model', 'specialties'));
+        return inertia('Backend/Doctors/CreateEdit', compact('model', 'specialties', 'workspaces'));
     }
 
 
@@ -89,6 +94,7 @@ class DoctorController extends Controller
             'phone' => 'required',
             'document_type' => 'required',
             'document_reference' => 'required',
+            'workspace_id' => '',
         ]);
 
         doctors()->update($doctor, $validated);

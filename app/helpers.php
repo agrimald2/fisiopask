@@ -100,6 +100,17 @@ if (!function_exists('offices')) {
 }
 
 
+if (!function_exists('workspaces')) {
+    /**
+     * @return App\Services\WorkspaceService
+     */
+    function workspaces()
+    {
+        return app(App\Services\WorkspaceService::class);
+    }
+}
+
+
 if (!function_exists('appointments')) {
     /**
      * @return App\Services\AppointmentService

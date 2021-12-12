@@ -44,4 +44,9 @@ class Doctor extends Model
     {
         return $this->hasMany(Appointment::class);
     }
+
+    public function workspace()
+    {
+        return $this->belongsTo(Workspace::class);
+    }
 }
