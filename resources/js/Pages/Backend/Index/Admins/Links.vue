@@ -41,7 +41,6 @@
   <!-- System records -->
   <link-group
     title="Registros"
-    class="hidden"
   >
     <link-item
       label="Historiales Médicos"
@@ -64,7 +63,7 @@
     <link-item
       label="Encuestas"
       icon="fa-comment-medical"
-      @click="go('')"
+      @click="go('surveys.index')"
     />
   </link-group>
 

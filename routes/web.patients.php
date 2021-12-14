@@ -6,6 +6,7 @@ use App\Http\Controllers\Patients\IndexAction;
 use App\Http\Controllers\Patients\RebookAction;
 use App\Http\Controllers\Patients\CancelAction;
 use App\Http\Controllers\Patients\CancelConfirmAction;
+use App\Http\Controllers\Patients\PatientSurveyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,12 @@ Route::get('/logout', LogoutAction::class)
     ->middleware('patients.auth');
 
 Route::middleware('patients.auth')->group(function () {
+    Route::get('/survey/appointment/{id}', PatientSurveyController::class)
+        ->name('survey.take');
+
+    Route::resource('/survey', PatientSurveyController::class)
+        ->only('store');
+
     Route::get('/', IndexAction::class)
         ->name('area.patients.index');
 

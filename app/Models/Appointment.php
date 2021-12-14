@@ -72,6 +72,7 @@ class Appointment extends Model
         return $this->belongsTo(Doctor::class);
     }
 
+
     public function schedule()
     {
         return $this->belongsTo(Schedule::class);
@@ -87,5 +88,11 @@ class Appointment extends Model
     public function patientRates()
     {
         return $this->hasMany(PatientRate::class);
+    }
+    
+
+    public function survey()
+    {
+        return $this->hasOne(Survey::class);
     }
 }

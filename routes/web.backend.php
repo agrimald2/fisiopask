@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\DoctorController;
 use App\Http\Controllers\Backend\DoctorSpecialtyController;
+use App\Http\Controllers\Backend\SurveyShowController;
 use App\Http\Controllers\Backend\FamilyController;
 use App\Http\Controllers\Backend\IndexAction;
 use App\Http\Controllers\Backend\OfficeController;
@@ -132,6 +133,15 @@ Route::resource('patients.histories', PatientHistoriesController::class)
     ->only('index', 'create', 'store', 'edit', 'update', 'destroy')
     ->shallow();
 
+/**
+ * Surveys
+ */
+
+Route::resource('surveys', SurveyShowController::class)
+    ->only('index', 'destroy');
+
+Route::get('/show/{id}', [SurveyShowController::class, 'show'])
+    ->name("surveys.show");
 
 /**
  * Payment methods
