@@ -49,4 +49,19 @@ class Doctor extends Model
     {
         return $this->belongsTo(Workspace::class);
     }
+
+    public function medicalHistory()
+    {
+        return $this->hasOne(MedicalHistory::class);
+    }
+
+    public function medicalRevision()
+    {
+        return $this->hasOne(MedicalRevision::class);
+    }
+
+    public function historyGroup()
+    {
+        return $this->hasMany(HistoryGroup::class);
+    }
 }

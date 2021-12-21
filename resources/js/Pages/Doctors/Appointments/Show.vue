@@ -87,7 +87,7 @@
       <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
         <front-button
           color="green"
-          @click="$inertia.visit(route('patients.histories.index', appointment.patient.id))"
+          @click="$inertia.visit(route('patients.historygroup.index', appointment.patient.id))"
         >
           Ver Historial Clínico
         </front-button>

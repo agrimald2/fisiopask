@@ -43,20 +43,32 @@
     title="Registros"
   >
     <link-item
-      label="Historiales Médicos"
-      icon="fa-book-medical"
-      @click="go('')"
+      label="Análisis"
+      icon="fa-laptop-medical"
+      @click="go('analysis.index')"
+    />
+
+    <link-item
+      label="Áreas afectadas"
+      icon="fa-child"
+      @click="go('affectedarea.index')"
+    />
+
+    <link-item
+      label="Diagnósticos"
+      icon="fa-file-medical-alt"
+      @click="go('diagnostic.index')"
+    />
+
+    <link-item
+      label="Tratamientos"
+      icon="fa-stethoscope"
+      @click="go('treatment.index')"
     />
 
     <link-item
       label="Pagos recibidos"
       icon="fa-receipt"
-      @click="go('')"
-    />
-
-    <link-item
-      label="Diagnósticos"
-      icon="fa-stethoscope"
       @click="go('')"
     />
 

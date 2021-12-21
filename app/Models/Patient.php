@@ -21,11 +21,29 @@ class Patient extends Model implements Authenticatable
     protected $hidden = ['token'];
 
 
+     /**
+     * Relationships
+     */
+
+    public function historyGroup()
+    {
+        return $this->hasMany(HistoryGroup::class);
+    }
+
+    public function medicalHistory()
+    {
+        return $this->hasMany(MedicalHistory::class);
+    }
+
+    public function medicalRevision()
+    {
+        return $this->hasMany(MedicalRevision::class);
+    }
+
     public function paymentRequests()
     {
         return $this->hasMany(PatientPaymentRequest::class);
     }
-
 
     public function appointments()
     {

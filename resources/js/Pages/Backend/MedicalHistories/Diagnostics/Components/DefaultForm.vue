@@ -1,34 +1,24 @@
 <template>
   <JetFormSection @submitted="onSubmitted">
     <template #title>
-      {{ model ? 'Editar' : 'Crear' }} un Cubículo
+      {{ model ? 'Editar' : 'Crear' }} un Diagnóstico
     </template>
 
     <template #form>
-      <!-- Name -->
+      <!-- Category -->
+      <FormInput
+        label="CIE-10"
+        name="cie_10"
+        v-model="form.cie_10"
+        :form="form"
+      />
+
+      <!-- Sub Category -->
       <FormInput
         label="Nombre"
         name="name"
         v-model="form.name"
-        :form="form"
-      />
-
-      <!-- Description -->
-      <FormInput
-        label="Descripción"
-        name="description"
-        v-model="form.description"
         type="text"
-        :form="form"
-      />
-
-      <!-- Office -->
-      <FormInput
-        label="Sucursal"
-        name="office"
-        v-model="form.office_id"
-        type="select"
-        :options="offices"
         :form="form"
       />
 
@@ -61,7 +51,7 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["model", "offices"],
+  props: ["model"],
 
   components: {
     JetActionMessage,
@@ -77,9 +67,8 @@ export default {
       form: this.$inertia.form({
         _method: "POST",
 
+        cie_10: null,
         name: null,
-        description: null,
-        office_id: null,
 
         ...this.model,
       }),
@@ -88,16 +77,12 @@ export default {
 
   methods: {
     onSubmitted() {
-      if(this.form.description == null) this.form.description = "";
-      if (this.model) {
-        this.submitEditForm();
-      } else {
-        this.submitCreateForm();
-      }
+      if(this.model) this.submitEditForm();
+      else this.submitCreateForm();
     },
 
     submitEditForm() {
-      const url = route("workspaces.update", this.model.id);
+      const url = route("diagnostic.update", this.model.id);
 
       this.form._method = "PUT";
 
@@ -109,7 +94,7 @@ export default {
     },
 
     submitCreateForm() {
-      const url = route("workspaces.store");
+      const url = route("diagnostic.store");
 
       this.form._method = "POST";
 
@@ -118,10 +103,6 @@ export default {
         preserveScroll: true,
         onSuccess: this.onSuccess,
       });
-    },
-
-    onSuccess() {
-      // Clear inputs
     },
   },
 };

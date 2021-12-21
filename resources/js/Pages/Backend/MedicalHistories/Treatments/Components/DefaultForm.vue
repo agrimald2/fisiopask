@@ -1,7 +1,7 @@
 <template>
   <JetFormSection @submitted="onSubmitted">
     <template #title>
-      {{ model ? 'Editar' : 'Crear' }} un Cubículo
+      {{ model ? 'Editar' : 'Crear' }} un Tratamiento
     </template>
 
     <template #form>
@@ -19,16 +19,6 @@
         name="description"
         v-model="form.description"
         type="text"
-        :form="form"
-      />
-
-      <!-- Office -->
-      <FormInput
-        label="Sucursal"
-        name="office"
-        v-model="form.office_id"
-        type="select"
-        :options="offices"
         :form="form"
       />
 
@@ -61,7 +51,7 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["model", "offices"],
+  props: ["model"],
 
   components: {
     JetActionMessage,
@@ -79,7 +69,6 @@ export default {
 
         name: null,
         description: null,
-        office_id: null,
 
         ...this.model,
       }),
@@ -88,16 +77,12 @@ export default {
 
   methods: {
     onSubmitted() {
-      if(this.form.description == null) this.form.description = "";
-      if (this.model) {
-        this.submitEditForm();
-      } else {
-        this.submitCreateForm();
-      }
+      if(this.model) this.submitEditForm();
+      else this.submitCreateForm();
     },
 
     submitEditForm() {
-      const url = route("workspaces.update", this.model.id);
+      const url = route("treatment.update", this.model.id);
 
       this.form._method = "PUT";
 
@@ -109,7 +94,7 @@ export default {
     },
 
     submitCreateForm() {
-      const url = route("workspaces.store");
+      const url = route("treatment.store");
 
       this.form._method = "POST";
 
@@ -118,10 +103,6 @@ export default {
         preserveScroll: true,
         onSuccess: this.onSuccess,
       });
-    },
-
-    onSuccess() {
-      // Clear inputs
     },
   },
 };

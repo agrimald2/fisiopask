@@ -7,7 +7,7 @@
     </template>
 
     <div class="text-center pt-6">
-      <ui-button @click="$inertia.visit(route('patients.histories.create', patientId))">Crear historia clínica</ui-button>
+      <ui-button @click="$inertia.visit(route('patients.historygroup.create', {'patientId' : patientId, 'doctorId' : doctor.id}))">Crear historia clínica</ui-button>
     </div>
 
     <app-body>
@@ -34,7 +34,7 @@ import dates from "@/ui/dates.js";
 import UiButton from "@/Shared/UI/Button";
 
 export default {
-  props: ["patientId", "rows"],
+  props: ["patientId", "rows", 'doctor'],
 
   components: {
     AppLayout,
@@ -47,13 +47,12 @@ export default {
   setup() {
     const cols = [
       c("patient.name", "Paciente"),
-      c("name", "Nombre"),
       c("created_at", "Creado").format((value) => dates.dateForLaravel(value)),
       {
         type: cells.Buttons,
         buttons: [
           {
-            label: "Editar",
+            label: "Ver",
             clicked({ row }) {
               const url = route("patients.historygroup.show", row.id);
               Inertia.visit(url);

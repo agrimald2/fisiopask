@@ -14,6 +14,9 @@ class ChatApiService
     {
         $this->token = env('CHATAPI_TOKEN');
         $this->instanceId = env('CHATAPI_INSTANCE_ID');
+
+        //$this->token = 'rway84qnx1zpgzkg';
+        //$this->instanceId = '271955';
     }
 
 

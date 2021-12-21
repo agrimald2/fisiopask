@@ -23,6 +23,18 @@ use App\Http\Controllers\Backend\Rates\ProductSelectController;
 use App\Http\Controllers\Backend\ScheduleController;
 use App\Http\Controllers\Backend\ScheduleFreezeController;
 use App\Http\Controllers\Backend\SubfamilyController;
+
+
+use App\Http\Controllers\Backend\HistoryGroupController;
+use App\Http\Controllers\Backend\MedicalHistoryController;
+use App\Http\Controllers\Backend\MedicalRevisionController;
+
+use App\Http\Controllers\Backend\AffectedAreaController;
+use App\Http\Controllers\Backend\AnalysisController;
+use App\Http\Controllers\Backend\DiagnosticController;
+use App\Http\Controllers\Backend\TreatmentController;
+
+
 use App\Http\Controllers\Doctors\Appointments\CancelAppointmentAction;
 use App\Http\Controllers\Doctors\PatientHistories\PatientHistoriesController;
 use App\Http\Controllers\Doctors\SeeScheduleAction;
@@ -196,6 +208,52 @@ Route::prefix('productSelect')
             ->name('rates');
     });
 
+///////////////////////////////
+/**
+ * CRUD MEDICAL HISTORIES
+ */
+
+//History Group
+Route::resource('patients.historygroup', HistoryGroupController::class)
+    ->only('index');
+
+Route::get('patients/{patientId}/historygroup/create/{doctorId}', [HistoryGroupController::class, 'store'])
+    ->name('patients.historygroup.create');
+
+Route::get('/historygroup/show/{id}', [HistoryGroupController::class, 'show'])
+    ->name('patients.historygroup.show');
+
+//Medical History
+Route::resource('medicalhistory', MedicalHistoryController::class)
+    ->only('index', 'store');
+
+Route::get('medicalhistory/create/{id}', [MedicalHistoryController::class, 'create'])
+    ->name('medicalhistory.create');
+
+//Medical Revision
+Route::resource('medicalrevision', MedicalRevisionController::class)
+    ->only('index', 'store');
+
+Route::get('medicalrevision/create/{id}', [MedicalRevisionController::class, 'create'])
+    ->name('medicalrevision.create');
+
+//Affected Areas
+Route::resource('affectedarea', AffectedAreaController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//Analysis
+Route::resource('analysis', AnalysisController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//Diagnostic
+Route::resource('diagnostic', DiagnosticController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//Treatment
+Route::resource('treatment', TreatmentController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+////////////////////////////////
 
 /**
  * AREA: Doctors
