@@ -65,7 +65,7 @@ export default {
           {
             label: "Ver",
             clicked({ row }) {
-              const url = route("histories.edit", row.id);
+              const url = route("medicalhistory.show", row.id);
               Inertia.visit(url);
             },
           },
@@ -83,7 +83,7 @@ export default {
           {
             label: "Ver",
             clicked({ row }) {
-              const url = route("histories.edit", row.id);
+              const url = route("medicalrevision.show", row.id);
               Inertia.visit(url);
             },
           },

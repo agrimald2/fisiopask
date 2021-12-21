@@ -5,40 +5,12 @@
     </template>
 
     <template #form>
-      <!-- Antecedentes -->
-      <FormInput
-        label="Antecedentes"
-        name="background"
-        v-model="form.background"
-        type="text"
-        :form="form"
-      />
-
-      <!-- Advertencias -->
-      <FormInput
-        label="Advertencias"
-        name="warnings"
-        v-model="form.warnings"
-        type="text"
-        :form="form"
-      />
-
       <!-- Description -->
       <FormInput
         label="Descripción"
         name="description"
         v-model="form.description"
         type="text"
-        :form="form"
-      />
-
-      <!-- Diagnostic -->
-      <FormInput
-        label="Diagnósticos"
-        name="diagnostics"
-        v-model="form.diagnostic_id"
-        type="select"
-        :options="diagnostics"
         :form="form"
       />
 
@@ -87,27 +59,6 @@
         :options="treatments"
         :form="form"
       />
-
-      <!-- Analysis -->
-      <FormInput
-        label="Análisis"
-        name="analysis"
-        v-model="form.analysis_id"
-        type="select"
-        :options="analysis"
-        :form="form"
-      />
-
-      <!-- Afected Areas -->
-      <FormInput
-        label="Área Afectada"
-        name="affected_areas"
-        v-model="form.affected_area_id"
-        type="select"
-        :options="affected_areas"
-        :form="form"
-      />
-
     </template>
 
     <template #actions>
@@ -137,7 +88,7 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["history_group", "diagnostics", "treatments", "analysis", "affected_areas"],
+  props: ["history_group", "treatments"],
 
   components: {
     JetActionMessage,
@@ -156,8 +107,6 @@ export default {
         patient_id: null,
         doctor_id: null,
 
-        background: null,
-        warnings: null,
         description: null,
 
         pain_scale: null,
@@ -165,10 +114,7 @@ export default {
         joint_range: null,
         recovery_progress: null,
 
-        diagnostic_id: null,
         treatment_id: null,
-        analysis_id: null,
-        affected_area_id: null,
 
         history_group_id: null,
       }),
@@ -181,7 +127,7 @@ export default {
       this.form.doctor_id = this.history_group.doctor_id;
       this.form.history_group_id = this.history_group.id;
 
-      const url = route("medicalhistory.store");
+      const url = route("medicalrevision.store");
 
       this.form._method = "POST";
 
