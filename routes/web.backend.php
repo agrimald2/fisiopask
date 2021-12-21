@@ -225,17 +225,23 @@ Route::get('/historygroup/show/{id}', [HistoryGroupController::class, 'show'])
 
 //Medical History
 Route::resource('medicalhistory', MedicalHistoryController::class)
-    ->only('index', 'store');
+    ->only('store');
 
 Route::get('medicalhistory/create/{id}', [MedicalHistoryController::class, 'create'])
     ->name('medicalhistory.create');
 
+Route::get('/medicalhistory/show/{id}', [MedicalHistoryController::class, 'show'])
+    ->name('medicalhistory.show');
+
 //Medical Revision
 Route::resource('medicalrevision', MedicalRevisionController::class)
-    ->only('index', 'store');
+    ->only('store');
 
 Route::get('medicalrevision/create/{id}', [MedicalRevisionController::class, 'create'])
     ->name('medicalrevision.create');
+
+Route::get('/medicalrevision/show/{id}', [MedicalRevisionController::class, 'show'])
+    ->name('medicalrevision.show');
 
 //Affected Areas
 Route::resource('affectedarea', AffectedAreaController::class)

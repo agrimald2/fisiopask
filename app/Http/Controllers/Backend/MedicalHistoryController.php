@@ -15,9 +15,9 @@ use Illuminate\Http\Request;
 
 class MedicalHistoryController extends Controller
 {
-    public function index(Request $request)
+    public function show($id)
     {
-        $model = MedicalHistory::query()->orderBy('id', 'desc')->get();
+        $model = MedicalHistory::with('patient')->get()->find($id);
 
         return inertia('Backend/Patients/MedicalHistories/Index', compact('model'));
     }
