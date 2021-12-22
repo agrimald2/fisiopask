@@ -17,6 +17,6 @@ class AffectedArea extends Model
 
      public function medicalHistory()
      {
-         return $this->hasOne(MedicalHistory::class);
+        return $this->hasOne(MedicalHistory::class);
      }
 }

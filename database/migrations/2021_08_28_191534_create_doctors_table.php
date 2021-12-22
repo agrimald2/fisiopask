@@ -28,7 +28,7 @@ class CreateDoctorsTable extends Migration
             $table->string('document_type');
             $table->string('document_reference');
 
-            $table->integer('workspace_id');
+            $table->integer('workspace_id')->nullable();
 
             $table->softDeletes();
             $table->timestamps();

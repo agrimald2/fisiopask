@@ -48,6 +48,12 @@
         name="pain_scale"
         v-model="form.pain_scale"
         type="number"
+        min="0"
+        max="10"
+        value="0"
+        step="1"
+        onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"
+        onkeyup="if(this.value>10){this.value='10';}else if(this.value<0){this.value='0';}"
         :form="form"
       />
 
@@ -57,6 +63,9 @@
         name="force_scale"
         v-model="form.force_scale"
         type="number"
+        min="-5"
+        max="5"
+        step="1"
         :form="form"
       />
 
@@ -66,6 +75,9 @@
         name="joint_range"
         v-model="form.joint_range"
         type="number"
+        min="0"
+        max="180"
+        step="5"
         :form="form"
       />
 
@@ -75,6 +87,9 @@
         name="recovery_progress"
         v-model="form.recovery_progress"
         type="number"
+        min="0"
+        max="100"
+        step="5"
         :form="form"
       />
 

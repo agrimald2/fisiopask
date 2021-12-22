@@ -46,6 +46,6 @@ class MedicalHistory extends Model
 
     public function affectedArea()
     {
-        return $this->belongsTo(AfectedArea::class);
+        return $this->belongsTo(AffectedArea::class);
     }
 }

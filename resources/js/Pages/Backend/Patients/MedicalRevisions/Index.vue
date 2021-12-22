@@ -5,7 +5,6 @@
         Historia Médica
       </h2>
     </template>
-
     {{ model.id }} <br>
 
     {{ model.patient.name }} <br>

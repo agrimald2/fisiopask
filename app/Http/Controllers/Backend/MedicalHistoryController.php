@@ -17,7 +17,7 @@ class MedicalHistoryController extends Controller
 {
     public function show($id)
     {
-        $model = MedicalHistory::with('patient')->get()->find($id);
+        $model = MedicalHistory::with('patient','treatment','diagnostic','analysis','doctor','affectedArea')->get()->find($id);
 
         return inertia('Backend/Patients/MedicalHistories/Index', compact('model'));
     }
