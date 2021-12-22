@@ -42,9 +42,5 @@ export default {
 
     Grid,
   },
-
-  mounted() {
-      console.log(this.model);
-  },
 };
 </script>
