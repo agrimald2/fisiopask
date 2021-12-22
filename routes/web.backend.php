@@ -41,6 +41,8 @@ use App\Http\Controllers\Doctors\SeeScheduleAction;
 use App\Http\Controllers\Doctors\Appointments\IndexAppointmentAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\GenerateTicketAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\ShowRatesIndexAction;
+use App\Http\Controllers\Doctors\Appointments\Rates\ShowRatesAction;
+use App\Http\Controllers\Doctors\Appointments\Rates\MarkAssistedAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\StoreRateAction;
 use App\Http\Controllers\Doctors\Appointments\ShowAppointmentAction;
 use App\Http\Controllers\GoogleCalendar\GoogleCalendarController;
@@ -95,6 +97,9 @@ Route::get('/dni/{dni}/day/{date}/time/', [PatientAppointmentController::class, 
  */
 Route::delete('/patients/rates/{patientRate}', DestroyPatientRateAction::class)
     ->name('patients.rates.destroy');
+
+Route::get('/patients/rates/{patientRate}/assisted', MarkAssistedAction::class)
+    ->name('patients.rates.assited');
 
 Route::namespace(null)
     ->name('patients.rates.')
@@ -282,6 +287,9 @@ Route::middleware(['role:doctor|admin'])
 
         Route::get('/appointments/{appointment}/rates', ShowRatesIndexAction::class)
             ->name('doctors.appointments.rates.index');
+
+        Route::get('/appointments/{appointment}/selectrate', ShowRatesAction::class)
+            ->name('doctors.appointments.rates.show');
 
         Route::get('/appointments/{appointment}/ticket', GenerateTicketAction::class)
             ->name('doctors.appointments.ticket.index');

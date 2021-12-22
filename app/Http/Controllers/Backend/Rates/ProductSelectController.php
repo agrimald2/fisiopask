@@ -31,7 +31,7 @@ class ProductSelectController extends Controller
     {
         return $subfamily->rates()
             ->orderBy('id', 'desc')
-            ->select('id', 'name', 'price')
+            ->select('id', 'name', 'price', 'is_product')
             ->get();
     }
 }

@@ -19,6 +19,8 @@ class CreatePatientRatesTable extends Migration
             $table->float('price');
             $table->unsignedInteger('qty')->default(1);
 
+            $table->unsignedInteger('sessions_left');
+
             $table->unsignedBigInteger('patient_id');
 
             $table->unsignedBigInteger('rate_id')->nullable();

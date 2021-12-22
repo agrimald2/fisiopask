@@ -114,13 +114,21 @@
         </front-button>
       </div>
 
-      <div class="py-3 text-center">
+      <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
         <front-button
           color="red"
           v-show="appointment.status != 4 && appointment.is_pending"
           @click="cancelAppointment"
         >
           Cancelar Cita
+        </front-button>
+
+        <front-button
+          color="green"
+          v-show="appointment.status != 4 && appointment.is_pending"
+          @click="$inertia.visit(route('doctors.appointments.rates.show', appointment.id))"
+        >
+          Marcar Asistencia
         </front-button>
       </div>
 

@@ -19,12 +19,17 @@ class AddRateToPatientAction extends Controller
             ->map(function ($cartRate) use ($patient, $request) {
                 $rate = Rate::findOrFail($cartRate['id']);
 
+                $qty = 1;
+
+                if($rate->is_product) $qty = $cartRate['qty'];
+
                 $patientRate = $patient->rates()
                     ->create([
                         'rate_id' => $rate->id,
                         'name' => $rate->name,
                         'price' => $rate->price,
                         'qty' => $cartRate['qty'],
+                        'sessions_left' => $rate->stock,
                         'appointment_id' => $request->appointment_id,
                     ]);
 
