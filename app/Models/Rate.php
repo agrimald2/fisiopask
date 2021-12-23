@@ -12,7 +12,7 @@ class Rate extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at', 'stock'];
 
     protected $casts = [
         'is_product' => 'boolean',
@@ -28,5 +28,9 @@ class Rate extends Model
     {
         $buyer = $buyer ?: new RateBuyer;
         return $buyer->buy($this, $qty);
+    }
+
+    public function patientRate() {
+        return $this->belongsTo(PatientRate::class);
     }
 }

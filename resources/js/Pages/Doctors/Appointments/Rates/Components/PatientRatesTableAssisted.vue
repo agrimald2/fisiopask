@@ -18,13 +18,18 @@ export default {
     Gridie,
   },
 
+  mounted() {
+    console.log(this.patientRates);
+  },
+
   setup() {
     const cols = [
       c("name", "Nombre"),
       c("price", "Precio"),
-      c("sessions_left", "Citas Restantes"),
-      c()
-        .type(cells.Buttons)
+      c("amount_paid", "Cantidad Pagadas"),
+      c("getAppointmentsPaid", "Citas Restantes"),
+      c("name", "Nombre"),
+      c().type(cells.Buttons)
         .extend({
           buttons: [
             {

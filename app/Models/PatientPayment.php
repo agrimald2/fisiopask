@@ -16,4 +16,12 @@ class PatientPayment extends Model
     protected $casts = [
         'created_at' => 'datetime:Y-m-d h:i A'
     ];
+
+    /**
+     * Relationships
+     */
+
+    public function patientRate() {
+        return $this->hasOne(PatientRate::class);
+    }
 }

@@ -13,10 +13,13 @@ class ShowRatesAction extends Controller
     {
         $appointment->load("patient");
         $appointment->patient->append("fullname");
-
+        
+        
         $patientRates = $appointment->patientRates()
             ->orderBy('id', 'desc')
             ->get();
+
+        $patientRates->load("getAppointmentsPaid");
 
         return inertia('Doctors/Appointments/Rates/Show', compact('appointment', 'patientRates'));
     }

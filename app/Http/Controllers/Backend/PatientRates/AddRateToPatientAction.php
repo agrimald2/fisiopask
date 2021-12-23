@@ -29,6 +29,7 @@ class AddRateToPatientAction extends Controller
                         'name' => $rate->name,
                         'price' => $rate->price,
                         'qty' => $cartRate['qty'],
+                        'amount_paid' => 0,
                         'sessions_left' => $rate->stock,
                         'appointment_id' => $request->appointment_id,
                     ]);
