@@ -26,9 +26,11 @@ export default {
     const cols = [
       c("name", "Nombre"),
       c("price", "Precio"),
-      c("amount_paid", "Cantidad Pagadas"),
-      c("getAppointmentsPaid", "Citas Restantes"),
-      c("name", "Nombre"),
+      c("amount_paid", "Cantidad Pagada"),
+      c("rate.stock", "Citas Totales"),
+      c("appointments_paid", "Citas Pagadas"),
+      c("appointments_assisted", "Citas Asistidas"),
+      c("can_assist", "Puede Asistir"),
       c().type(cells.Buttons)
         .extend({
           buttons: [

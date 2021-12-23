@@ -13,6 +13,8 @@ class PatientRate extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
+    protected $appends = ['appointments_paid', 'appointments_assisted', 'can_assist'];
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d h:i A'
     ];
@@ -26,21 +28,39 @@ class PatientRate extends Model
     }
 
     public function rate() {
-        return $this->hasOne(Rate::class);
+        return $this->belongsTo(Rate::class);
     }
     
-    public function getAppointmentsPaid() {
-        $stock = $this->rate()->get();
+    function getAppointmentsPaidAttribute() {
+        $myRate = $this->rate()->get()->first();
 
-        var_dump($stock);
+        $stock = floatval($myRate->stock);
+        $price = floatval($myRate->price);
 
-        $price = $this->price;
         $amountPaid = $this->amount_paid;
-
+        
         $appointmentPrice = $price / $stock;
 
         $appointmentsPaid = $amountPaid / $appointmentPrice;
 
-        return $appointmentsPaid;
+        return floor($appointmentsPaid);
+    }
+
+    function getAppointmentsAssistedAttribute() {
+        $myRate = $this->rate()->get()->first();
+
+        $stock = floatval($myRate->stock);
+
+        $sessionsLeft = $this->sessions_left;
+
+        $appointmentsAssisted = $stock - $sessionsLeft;
+
+        return $appointmentsAssisted;
+    }
+
+    public function getCanAssistAttribute() {
+        $canAssist = $this->getAppointmentsPaidAttribute() > $this->getAppointmentsAssistedAttribute();
+
+        return $canAssist ? "Sí" : "No";
     }
 }

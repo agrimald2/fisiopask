@@ -31,6 +31,6 @@ class Rate extends Model
     }
 
     public function patientRate() {
-        return $this->belongsTo(PatientRate::class);
+        return $this->hasOne(PatientRate::class);
     }
 }

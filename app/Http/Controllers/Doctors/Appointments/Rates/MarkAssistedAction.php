@@ -18,6 +18,9 @@ class MarkAssistedAction extends Controller
             $patientRate->save();
         }
 
+        $appointment_id = $patientRate->appointment_id;
+        if($appointment_id != null) return redirect()->route('doctors.appointments.show', $appointment_id);
+
         return redirect()->route('doctors.appointments.index');
     }
 }
