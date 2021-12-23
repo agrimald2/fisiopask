@@ -66,6 +66,7 @@
         min="-5"
         max="5"
         step="1"
+        onkeyup="if(this.value>5){this.value='5';}else if(this.value<-5){this.value='-5';}"
         :form="form"
       />
 
@@ -78,6 +79,7 @@
         min="0"
         max="180"
         step="5"
+        onkeyup="if(this.value>180){this.value='180';}else if(this.value<0){this.value='0';}"
         :form="form"
       />
 
@@ -90,6 +92,7 @@
         min="0"
         max="100"
         step="5"
+        onkeyup="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}"
         :form="form"
       />
 
