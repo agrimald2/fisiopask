@@ -19,7 +19,6 @@
         />
       </div>
     </app-body>
-
   </app-layout>
 </template>
 
@@ -47,7 +46,8 @@ export default {
   setup() {
     const cols = [
       c("patient.name", "Paciente"),
-      c("created_at", "Creado").format((value) => dates.dateForLaravel(value)),
+      c("created_at", "Fecha").format((value) => dates.dateForLaravel(value)),
+      c("created_at", "Hora").format((value) => dates.hourForHumans(value)),
       {
         type: cells.Buttons,
         buttons: [
