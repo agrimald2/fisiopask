@@ -10,7 +10,7 @@
       <div class="p-2">
         <div class="text-xl">Paciente:</div>
         Cita de <span class="text-lg">{{ appointment.patient.fullname }}</span>
-        El {{ appointment.date }} de {{ appointment.start }} a {{ appointment.end }} hrs.
+        - El {{ appointment.date }} de {{ appointment.start }} a {{ appointment.end }} hrs.
 
         <div class="mt-4 pt-4 border-t">
           <div class="text-xl">Tarifas de la Cita:</div>
