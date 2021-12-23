@@ -12,13 +12,13 @@ class Appointment extends Model
 
     const STATUS_CONFIRMED = 1;
     const STATUS_NOT_ASSISTED = 2;
-    const STATUS_PAID = 3;
+    const STATUS_ASSISTED = 3;
     const STATUS_CANCELED = 4;
 
     const STATUS_LABEL = [
         1 => 'CONFIRMADO',
         2 => 'NO ASISTIÓ',
-        3 => 'PAGADA',
+        3 => 'ASISTIÓ',
         4 => 'CANCELADA',
     ];
 

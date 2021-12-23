@@ -125,7 +125,7 @@
 
         <front-button
           color="green"
-          v-show="appointment.status != 4 && appointment.is_pending"
+          v-show="appointment.status != 4"
           @click="$inertia.visit(route('doctors.appointments.rates.show', appointment.id))"
         >
           Marcar Asistencia

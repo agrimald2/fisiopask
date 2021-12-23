@@ -10,10 +10,14 @@ use Illuminate\Http\Request;
 
 class ShowRatesAction extends Controller
 {
+    //This controller also sets the appointment to assisted
     public function __invoke(Appointment $appointment)
     {
         $appointment->load("patient");
         $appointment->patient->append("fullname");
+
+        $appointment->status = Appointment::STATUS_ASSISTED;
+        $appointment->save();
 
         $patientRates = PatientRate::query()
             ->with('rate')
