@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Domain\BookAppointment\RepositoryContract;
 use App\Http\Controllers\Controller;
+use App\Models\PatientPayment;
+use App\Models\PatientRate;
 use Illuminate\Http\Request;
 
 class BookAppointmentController extends Controller
@@ -223,6 +225,33 @@ class BookAppointmentController extends Controller
 
         $appointment = $this->repo->makeAppointment($dni, $date, $schedule);
 
+        $patientId = $appointment->patient_id;
+
+        $payments = PatientPayment::query()->where('patient_id', $patientId)->get();
+        $products = PatientRate::query()->where('patient_id', $patientId)->get();
+
+        if($payments->first())
+        {
+            $moneyPaid = 0;
+            $moneyOwed = 0;
+
+            foreach($payments as $payment) $moneyPaid += $payment->ammount;
+            foreach($products as $product) $moneyOwed += $product->price;
+
+            if($moneyPaid > $moneyOwed)
+            {
+                //Money in favor
+            }
+            else
+            {
+                //else
+            }
+        }
+        else
+        {
+            //No payments, hasn't assisted to any appoinments (new client)
+        }
+            
         $this->repo->sendConfirmationToPatient($dni, $appointment);
 
         $phone = $this->repo->getPatientPhoneByDni($dni);
