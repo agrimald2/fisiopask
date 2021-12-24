@@ -28,10 +28,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new SendReminderBefore)->everyMinute();
-        $schedule->job(new SendSurvey)->everyMinute();
+        //$schedule->job(new SendReminderBefore)->daily();
+        //$schedule->job(new SendSurvey)->daily();
 
-        //$schedule->job(new CheckAssistance)->hourly();
+        $schedule->job(new CheckAssistance)->everyMinute();
     }
 
     /**
