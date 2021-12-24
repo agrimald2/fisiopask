@@ -17,6 +17,22 @@ class DoctorController extends Controller
     {
         $model = doctors()->index($request->searchQuery);
 
+        $user = auth()->user();
+
+        if ($user->hasRole('assistant')) {
+            return inertia('Backend/Dynamic/Grid', [
+                'model' => $model->items(),
+    
+                'links' => $model->linkCollection(),
+    
+                'parameters' => $request->all(),
+    
+                'title' => 'Lista de Doctores',
+    
+                'grid' => 'Backend/Doctors/gridAssistant.js',
+            ]);
+        }
+
         return inertia('Backend/Dynamic/Grid', [
             'model' => $model->items(),
 

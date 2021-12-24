@@ -8,6 +8,12 @@
     />
 
     <link-item
+      label="Asistente"
+      icon="fa-hands-helping"
+      @click="go('assistants.index')"
+    />
+
+    <link-item
       label="Pacientes"
       icon="fa-hospital-user"
       @click="go('patients.index')"

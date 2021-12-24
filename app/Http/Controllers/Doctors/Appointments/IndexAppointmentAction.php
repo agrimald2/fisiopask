@@ -92,6 +92,10 @@ class IndexAppointmentAction extends Controller
             return Appointment::query();
         }
 
+        if ($user->hasRole('assistant')) {
+            return Appointment::query();
+        }
+
         return $user
             ->doctor
             ->appointments();

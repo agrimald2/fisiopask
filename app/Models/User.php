@@ -88,4 +88,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Doctor::class);
     }
+
+    public function assistant()
+    {
+        return $this->hasOne(Assistant::class);
+    }
 }
