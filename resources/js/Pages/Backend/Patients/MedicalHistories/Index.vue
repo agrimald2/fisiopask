@@ -16,16 +16,16 @@
 
 
       <div class="mt-4">
-        <div class="flex items-center gap-4 justify-center text-xl">
-          DOCTOR
+        <div class="flex items-center gap-4 justify-center text-xl" style="text-transform:uppercase">
+          <span style="font-weight:bold"> DOCTOR </span>
           <i class="fas fa-angle-right"></i>
           {{model.doctor.name}} {{model.doctor.lastname}}
         </div>      
       </div>
 
       <div class="mt-4">
-        <div class="flex items-center gap-4 justify-center text-xl">
-          PACIENTE
+        <div class="flex items-center gap-4 justify-center text-xl" style="text-transform:uppercase">
+          <span style="font-weight:bold"> PACIENTE </span>
           <i class="fas fa-angle-right"></i>
           {{model.patient.name}} {{model.patient.lastname1}} {{model.patient.lastname2}}
         </div>      
@@ -111,31 +111,65 @@
           </tr>
         </table>
       </div>
+      <div class="mt-4 border rounded p-3">
+        <table class="w-full mt-4" style="text-align:left">
+          <tr class="ranges">
+            <th>ESCALA DE DOLOR</th>
+            <th>ESCALA DE FUERZA</th>
+            <th>RANGO ARTICULAR</th>
+            <th>PROGRESO RECUPERACIÓN</th>
+          </tr>
+          <tr class="ranges">
+            <td>{{model.pain_scale}}</td>
+            <td>{{model.force_scale}}</td>
+            <td>{{model.joint_range}}</td>
+            <td>{{model.recovery_progress}} %</td>
+          </tr>
+        </table>
+      </div>
 
       <div class="pb-12"></div>
     </app-body>
   </app-layout>
 </template>
 
+<style scoped>
+  .ranges{
+    text-align:center;
+    font-size: 1.2rem;
+  }
+</style>
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AppBody from "@/Shared/Backend/AppBody";
 import Grid from "@/Shared/Grid/Grid";
 import dates from "@/ui/dates";
-
+import vue3starRatings from "vue3-star-ratings";
+import RadialProgressBar from "vue3-radial-progress";
 
 export default {
   props: ["model"],
-
+  data: () => {
+    return {
+      rating: 2.5,
+    };
+  },
   components: {
     AppLayout,
     AppBody,
-
+    vue3starRatings,
+    RadialProgressBar,
     Grid,
   },
   setup() {
     const dashboardLink = route("dashboard");
-    return { dates, dashboardLink };
+
+      const completedSteps = 5;
+      const totalSteps = 10;
+      const name = "Hola";
+      const description = "Bola";
+
+    return { dates, dashboardLink, completedSteps,totalSteps,name,description  };
   },
 };
 </script>

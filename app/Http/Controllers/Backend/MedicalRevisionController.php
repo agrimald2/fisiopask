@@ -14,7 +14,7 @@ class MedicalRevisionController extends Controller
 {
     public function show($id)
     {
-        $model = MedicalRevision::with('patient')->get()->find($id);
+        $model = MedicalRevision::with('patient','doctor')->get()->find($id);
 
         return inertia('Backend/Patients/MedicalRevisions/Index', compact('model'));
     }

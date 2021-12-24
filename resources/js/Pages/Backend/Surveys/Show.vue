@@ -1,5 +1,6 @@
 <template>
   <JetFormSection @submitted="onSubmitted">
+    
     <template #title>
       Ver Encuesta
     </template>

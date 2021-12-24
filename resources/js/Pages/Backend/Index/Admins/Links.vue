@@ -62,6 +62,48 @@
 
     <link-item
       label="Tratamientos"
+
+      
+      icon="fa-stethoscope"
+      @click="go('treatment.index')"
+    />
+
+    <link-item
+      label="Pagos recibidos"
+      icon="fa-receipt"
+      @click="go('')"
+    />
+
+    <link-item
+      label="Encuestas"
+      icon="fa-comment-medical"
+      @click="go('surveys.index')"
+    />
+  </link-group>
+
+  <link-group
+    title="Reportes y Estadísticas"
+  >
+    <link-item
+      label="Pagos Recibidos"
+      icon="fa-laptop-medical"
+      @click="go('analysis.index')"
+    />
+
+    <link-item
+      label="Doctores"
+      icon="fa-child"
+      @click="go('affectedarea.index')"
+    />
+
+    <link-item
+      label="Diagnósticos"
+      icon="fa-file-medical-alt"
+      @click="go('diagnostic.index')"
+    />
+
+    <link-item
+      label="Tratamientos"
       icon="fa-stethoscope"
       @click="go('treatment.index')"
     />

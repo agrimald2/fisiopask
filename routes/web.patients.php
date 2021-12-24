@@ -19,11 +19,6 @@ Route::get('/logout', LogoutAction::class)
     ->middleware('patients.auth');
 
 Route::middleware('patients.auth')->group(function () {
-    Route::get('/survey/appointment/{id}', PatientSurveyController::class)
-        ->name('survey.take');
-
-    Route::resource('/survey', PatientSurveyController::class)
-        ->only('store');
 
     Route::get('/', IndexAction::class)
         ->name('area.patients.index');
@@ -36,3 +31,9 @@ Route::middleware('patients.auth')->group(function () {
     Route::post('/cancel/{appointment}', CancelConfirmAction::class)
         ->name('area.patients.cancelPost');
 });
+
+Route::get('/survey/appointment/{id}', PatientSurveyController::class)
+->name('survey.take');
+
+Route::resource('/survey', PatientSurveyController::class)
+->only('store');

@@ -16,37 +16,55 @@
 
       <!-- Pain Scale -->
       <FormInput
-        label="Nivel de Dolor"
+        label="Nivel de Dolor (0 a 10)"
         name="pain_scale"
         v-model="form.pain_scale"
         type="number"
+        min="0"
+        max="10"
+        value="0"
+        step="1"
+        onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"
+        onkeyup="if(this.value>10){this.value='10';}else if(this.value<0){this.value='0';}"
         :form="form"
       />
 
       <!-- Force Scale -->
       <FormInput
-        label="Nivel de Fuerza"
+        label="Nivel de Fuerza (-5 a 5)"
         name="force_scale"
         v-model="form.force_scale"
         type="number"
+        min="-5"
+        max="5"
+        step="1"
+        onkeyup="if(this.value>5){this.value='5';}else if(this.value<-5){this.value='-5';}"
         :form="form"
       />
 
       <!-- Joint Range -->
       <FormInput
-        label="Rango Articular"
+        label="Rango Articular (0 a 180) (5*)"
         name="joint_range"
         v-model="form.joint_range"
         type="number"
+        min="0"
+        max="180"
+        step="5"
+        onkeyup="if(this.value>180){this.value='180';}else if(this.value<0){this.value='0';}"
         :form="form"
       />
 
       <!-- Recovery Progress -->
       <FormInput
-        label="Avance de Recuperación"
+        label="Avance de Recuperación % (5*)"
         name="recovery_progress"
         v-model="form.recovery_progress"
         type="number"
+        min="0"
+        max="100"
+        step="5"
+        onkeyup="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}"
         :form="form"
       />
 

@@ -6,10 +6,11 @@ export default (props, { attrs }) => {
   
     const cols = [
       c("appointment.office", "Oficina"),
-      c("office_score", "Puntaje Oficina"),
       c("appointment.doctor.name", "Doctor"),
-      c("doctor_score", "Puntaje Doctor"),
-      c("service_score", "Puntaje Servicio"),
+      c("appointment.patient.name", "Paciente"),
+      c("office_score", "Oficina"),
+      c("doctor_score", "Doctor"),
+      c("service_score", "Servicio"),
 
       c("comment", "Comentario"),
 
