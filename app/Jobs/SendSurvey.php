@@ -2,6 +2,10 @@
 
 namespace App\Jobs;
 
+use \App\Models\Appointment;
+
+use \Carbon\Carbon;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,20 +24,21 @@ class SendSurvey implements ShouldQueue
      */
     public function __construct()
     {
-        $confirmedAppointments = Appointment::query()
-            ->where('status', Appointment::STATUS_CONFIRMED)
+        $assistedAppointments = Appointment::query()
+            ->where('status', Appointment::STATUS_ASSISTED)
+            ->with('patient')
             ->get();
 
-        foreach($confirmedAppointments as $appointment)
+        foreach($assistedAppointments as $appointment)
         {
             $carbonDate = Carbon::parse($appointment->date);
 
             if($carbonDate->isYesterday())
             {
-                $phone = "51934094501";
-                $text = "Llena tu encuesta p ctm";
+                $phone = $appointment->patient->phone;
+                $surveyLink = "www.fisiosalud.pe/area/patients/surveys/appointment/";
+                $surveyLink .= $appointment->id;
                 chatapi($phone, $text);
-                //Send Survey
             }
         }
     }

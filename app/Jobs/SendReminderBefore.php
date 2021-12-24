@@ -4,18 +4,18 @@ namespace App\Jobs;
 
 use \App\Models\Appointment;
 
-use Carbon\Carbon;
+use \Carbon\Carbon;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-//use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\SerializesModels;
 
 class SendReminderBefore implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -31,13 +31,12 @@ class SendReminderBefore implements ShouldQueue
         foreach($confirmedAppointments as $appointment)
         {
             $carbonDate = Carbon::parse($appointment->date);
-
+            
             if($carbonDate->isTomorrow())
             {
-                $phone = "51934094501";
-                $text = "Oe ven p";
+                $phone = $appointment->patient->phone;
+                $text = "oe";
                 chatapi($phone, $text);
-                //Send reminder for tomorrow
             }
         }
     }

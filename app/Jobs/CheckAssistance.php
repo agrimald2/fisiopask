@@ -24,21 +24,21 @@ class CheckAssistance implements ShouldQueue
      */
     public function __construct()
     {
-        /*$confirmedAppointments = Appointment::query()
-            ->where(['status', '=', Appointment::STATUS_CONFIRMED],
-                    ['date', '=', Carbon::now()->format('Y-m-d')])
+        $confirmedAppointments = Appointment::query()
+            ->where('status', Appointment::STATUS_CONFIRMED)
+            ->where('date', Carbon::now()->format('Y-m-d'))
             ->get();
         
         foreach($confirmedAppointments as $appointment)
         {
-            $startTime = $appointment->date . $appointment->start . ":00";
-
-            if($startTime->diffInHours(Carbon::now()->format('H:i'), false) > 1)
+            $startTime = Carbon::parse($appointment->start);
+            
+            if($startTime->diffInHours(Carbon::now()->format('Y-m-d H:i:s'), false) > 1)
             {
                 $appointment->status = Appointment::STATUS_NOT_ASSISTED;
                 $appointment->save();
             }
-        }*/
+        }
     }
 
     /**
