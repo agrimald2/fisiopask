@@ -8,7 +8,7 @@
             @click="$inertia.visit(route('patients.historygroup'))"
           >Historia Médica</span>
           <i class="fas fa-angle-right"></i>
-          Crear una Historia Médica
+          Crear una Revisión Médica
         </div>
       </h2>
     </template>

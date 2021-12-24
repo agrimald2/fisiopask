@@ -160,6 +160,9 @@ Route::resource('surveys', SurveyShowController::class)
 Route::get('/show/{id}', [SurveyShowController::class, 'show'])
     ->name("surveys.show");
 
+Route::get('/show}', [SurveyShowController::class, 'showAll'])
+    ->name("surveys.showAll");
+
 /**
  * Payment methods
  */

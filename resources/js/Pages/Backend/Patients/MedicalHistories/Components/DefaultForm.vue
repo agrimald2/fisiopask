@@ -44,7 +44,7 @@
 
       <!-- Pain Scale -->
       <FormInput
-        label="Nivel de Dolor"
+        label="Nivel de Dolor (0 a 10)"
         name="pain_scale"
         v-model="form.pain_scale"
         type="number"
@@ -59,7 +59,7 @@
 
       <!-- Force Scale -->
       <FormInput
-        label="Nivel de Fuerza"
+        label="Nivel de Fuerza (-5 a 5)"
         name="force_scale"
         v-model="form.force_scale"
         type="number"
@@ -72,7 +72,7 @@
 
       <!-- Joint Range -->
       <FormInput
-        label="Rango Articular"
+        label="Rango Articular (0 a 180) (5*)"
         name="joint_range"
         v-model="form.joint_range"
         type="number"
@@ -85,7 +85,7 @@
 
       <!-- Recovery Progress -->
       <FormInput
-        label="Avance de Recuperación"
+        label="Avance de Recuperación % (5*)"
         name="recovery_progress"
         v-model="form.recovery_progress"
         type="number"

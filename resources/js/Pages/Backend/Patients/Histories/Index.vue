@@ -39,7 +39,6 @@ export default {
   components: {
     AppLayout,
     AppBody,
-
     UiButton,
     Gridie,
   },

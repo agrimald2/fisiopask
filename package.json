@@ -32,6 +32,8 @@
         "mosha-vue-toastify": "^1.0.20",
         "v-calendar": "^3.0.0-alpha.5",
         "vue-tel-input": "^6.0.0-beta.4",
-        "vue3-popper": "^1.2.1"
+        "vue3-popper": "^1.2.1",
+        "vue3-radial-progress": "^1.0.6",
+        "vue3-star-ratings": "^1.0.7"
     }
 }
