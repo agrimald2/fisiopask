@@ -26,11 +26,19 @@
         <form @submit.prevent="onSearch">
           <div class="flex items-stretch">
             <template v-if="enableDoctorSearch">
-              <button @click.prevent.self="toggleDropDown()" class="px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white flex items-center rounded-l-r-lg"> Doctores </button>
-              <div v-if="this.showDropDown">
+              <button @click.prevent.self="toggleDropDownDoctors()" class="px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white flex items-center rounded-l-r-lg"> Doctores </button>
+              <div v-if="this.showDropDownDoctors">
                 <input type="text" placeholder="Buscar" id="myInput" v-model="docFilterQuery">
                 <div v-for="(doctor, index) in filteredDoctors" :key="index">
-                  <div @click.prevent.self="selectDropDown(doctor)"> {{doctor.name}} </div>
+                  <div @click.prevent.self="selectDropDownDoctor(doctor)"> {{doctor.name}} </div>
+                </div>
+              </div>
+            </template>
+            <template v-if="enableOfficeSearch">
+              <button @click.prevent.self="toggleDropDownOffices()" class="px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white flex items-center rounded-l-r-lg"> Office </button>
+              <div v-if="this.showDropDownOffices">
+                <div v-for="(office, index) in offices" :key="index">
+                  <div @click.prevent.self="selectDropDownOffice(office)"> {{office.name}} </div>
                 </div>
               </div>
             </template>
@@ -90,6 +98,7 @@ export default {
     links: null,
     parameters: null,
     doctors: null,
+    offices: null,
     // Options
     enableSearch: {
       default: true,
@@ -134,8 +143,10 @@ export default {
       searchQuery: null,
       dateQuery: null,
       doctorQuery: null,
+      officeQuery: null,
 
-      showDropDown: false,
+      showDropDownDoctors: false,
+      showDropDownOffices: false,
       docFilterQuery: null,
       docName: null,
     };
@@ -146,7 +157,10 @@ export default {
       if(this.docFilterQuery == null || this.docFilterQuery == '') return this.doctors;
 
       const filter = this.docFilterQuery.toLowerCase().trim();
-      return this.doctors.filter((doc) => doc.name.toLowerCase().trim().includes(filter));
+      return this.doctors.filter(function(doc) {
+        if(doc.name.toLowerCase().trim().includes(filter) || doc.lastname.toLowerCase().trim().includes(filter)) return true;
+        return false;
+      });
     }
   },
 
@@ -155,16 +169,24 @@ export default {
       const searchQuery = this.searchQuery;
       const dateQuery = this.dateQuery;
       const doctorQuery = this.doctorQuery;
-      const data = { searchQuery, dateQuery, doctorQuery};
+      const officeQuery = this.officeQuery;
+      const data = { searchQuery, dateQuery, doctorQuery, officeQuery };
       this.$inertia.get("", data, { preserveScroll: true });
     },
-    toggleDropDown() {
-        this.showDropDown = !this.showDropDown;
+    toggleDropDownDoctors() {
+      this.showDropDownDoctors = !this.showDropDownDoctors;
     },
-    selectDropDown($doc) {
+    toggleDropDownOffices() {
+      this.showDropDownOffices = !this.showDropDownOffices;
+    },
+    selectDropDownDoctor($doc) {
       this.doctorQuery = $doc.id;
       this.docFilterQuery = $doc.name;
-      this.showDropDown = false;
+      this.showDropDownDoctors = false;
+    },
+    selectDropDownOffice($office) {
+      this.officeQuery = $office.name;
+      this.showDropDownOffices = false;
     },
   },
 };

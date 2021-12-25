@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Doctors\Appointments;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Doctor;
+use App\Models\Office;
 use Illuminate\Http\Request;
 
 class IndexAppointmentAction extends Controller
@@ -14,10 +15,12 @@ class IndexAppointmentAction extends Controller
         $searchQuery = $request->searchQuery;
         $dateQuery = $request->dateQuery;
         $doctorQuery = $request->doctorQuery;
+        $officeQuery = $request->officeQuery;
         $canSearchByDoctor = false;
         $doctors = Doctor::query()->get();
+        $offices = Office::query()->get();
 
-        $model = $this->getModels($searchQuery, $dateQuery, $doctorQuery);
+        $model = $this->getModels($searchQuery, $dateQuery, $doctorQuery, $officeQuery);
 
         $user = auth()->user();
         if ($user->hasRole('admin')) {
@@ -39,16 +42,20 @@ class IndexAppointmentAction extends Controller
 
             'doctors' => $doctors,
 
+            'offices' => $offices,
+
             'enableDateSearch' => true,
 
             'enableOfficeSearch' => true,
 
             'enableDoctorSearch' => $canSearchByDoctor,
+
+            'enableOfficeSearch' => true,
         ]);
     }
 
 
-    private function getModels($searchQuery, $dateQuery, $doctorQuery)
+    private function getModels($searchQuery, $dateQuery, $doctorQuery, $officeQuery)
     {
         $appointments = $this->getAppointments();
 
@@ -80,6 +87,7 @@ class IndexAppointmentAction extends Controller
                     });
                 });
             })
+            ->where('office', 'LIKE', $officeQuery)
             ->orderBy('date', 'desc')
             ->paginate(15);
     }
