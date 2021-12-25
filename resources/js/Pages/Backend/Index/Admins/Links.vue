@@ -8,7 +8,7 @@
     />
 
     <link-item
-      label="Asistente"
+      label="Asistentes"
       icon="fa-hands-helping"
       @click="go('assistants.index')"
     />
