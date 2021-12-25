@@ -22,6 +22,10 @@ class PatientPayment extends Model
      */
 
     public function patientRate() {
-        return $this->hasOne(PatientRate::class);
+        return $this->belongsTo(PatientRate::class);
+    }
+
+    public function patient() {
+        return $this->belongsTo(Patient::class);
     }
 }
