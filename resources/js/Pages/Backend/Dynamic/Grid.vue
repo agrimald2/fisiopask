@@ -23,17 +23,20 @@
         class="mt-8 max-w-2xl mx-auto px-4"
         v-if="enableSearch"
       >
+
+        <template v-if="enableDoctorSearch">
+          <div class="filter_space px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white grid items-center rounded-l-r-lg">
+            <button @click.prevent.self="toggleDropDown()" style="font-size:1.15rem"> Filtro Doctores - {{docFilterQuery}} </button>
+            <div v-if="this.showDropDown">
+              <input type="text" placeholder="Buscar" id="myInput" v-model="docFilterQuery" style="width:100%" class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-l-lg px-4 py-3">
+              <div v-for="(doctor, index) in filteredDoctors" :key="index" class="doctors_display rounded-r-lg .rounded-l-lg">
+                <div @click.prevent.self="selectDropDown(doctor)"> {{doctor.name}} {{doctor.lastname}} </div>
+              </div>
+            </div>
+          </div>
+        </template>
         <form @submit.prevent="onSearch">
           <div class="flex items-stretch">
-            <template v-if="enableDoctorSearch">
-              <button @click.prevent.self="toggleDropDown()" class="px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white flex items-center rounded-l-r-lg"> Doctores </button>
-              <div v-if="this.showDropDown">
-                <input type="text" placeholder="Buscar" id="myInput" v-model="docFilterQuery">
-                <div v-for="(doctor, index) in filteredDoctors" :key="index">
-                  <div @click.prevent.self="selectDropDown(doctor)"> {{doctor.name}} </div>
-                </div>
-              </div>
-            </template>
             <input
               type="text"
               class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-l-lg px-4 py-3"
@@ -75,6 +78,25 @@
   </app-layout>
 </template>
 
+<style scoped>
+  .filter_space{
+    --tw-border-opacity: 1;
+    border-color: rgba(209, 213, 219, var(--tw-border-opacity));
+  }
+  .filter_space button {
+    padding: 5px
+  }
+  .doctors_display{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+    border: 1px solid;
+    border-bottom-left-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+    border-color: rgba(209, 213, 219, var(--tw-border-opacity));
+    padding: 5px;
+  }
+</style>
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Pagination from "@/Shared/Pagination.vue";

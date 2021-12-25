@@ -90,7 +90,7 @@
           :form="form"
         />
 
-        <!-- document_reference -->
+        <!-- Cubiculo  -->
         <form-input
           label="Cubículo"
           name="workspace"

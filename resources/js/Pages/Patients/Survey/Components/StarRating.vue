@@ -3,16 +3,16 @@
   <div class="form-group required">
     <div class="col-sm-12">
       <fieldset :id="starfield">
-        <input class="star star-5 fas fa-star" :value="5" id="star-5" type="radio" name="star" @input="$emit('update:modelValue', $event.target.value)"/>
-        <label class="star star-5 fas fa-star" for="star-5"></label>
-        <input class="star star-4 fas fa-star" :value="4" id="star-4" type="radio" name="star" @input="$emit('update:modelValue', $event.target.value)"/>
-        <label class="star star-4 fas fa-star" for="star-4"></label>
-        <input class="star star-3 fas fa-star" :value="3" id="star-3" type="radio" name="star" @input="$emit('update:modelValue', $event.target.value)"/>
-        <label class="star star-3 fas fa-star" for="star-3"></label>
-        <input class="star star-2 fas fa-star" :value="2" id="star-2" type="radio" name="star" @input="$emit('update:modelValue', $event.target.value)"/>
-        <label class="star star-2 fas fa-star" for="star-2"></label>
-        <input class="star star-1 fas fa-star" :value="1" id="star-1" type="radio" name="star" @input="$emit('update:modelValue', $event.target.value)"/>
-        <label class="star star-1 fas fa-star" for="star-1"></label>
+        <input class="star star-5 fas fa-star" :value="5" :id="'star-5-'+starfield" type="radio" name="star" @input="$emit('update:modelValue', $event.target.value)"/>
+          <label class="star star-5 fas fa-star" :for="'star-5-'+starfield"></label>
+        <input class="star star-5 fas fa-star" :value="4" :id="'star-4-'+starfield" type="radio" name="star" @input="$emit('update:modelValue', $event.target.value)"/>
+          <label class="star star-5 fas fa-star" :for="'star-4-'+starfield"></label>
+        <input class="star star-5 fas fa-star" :value="3" :id="'star-3-'+starfield" type="radio" name="star" @input="$emit('update:modelValue', $event.target.value)"/>
+        <label class="star star-5 fas fa-star" :for="'star-3-'+starfield"></label>
+        <input class="star star-5 fas fa-star" :value="2" :id="'star-2-'+starfield" type="radio" name="star" @input="$emit('update:modelValue', $event.target.value)"/>
+          <label class="star star-5 fas fa-star" :for="'star-2-'+starfield"></label>
+        <input class="star star-5 fas fa-star" :value="1" :id="'star-1-'+starfield" type="radio" name="star" @input="$emit('update:modelValue', $event.target.value)"/>
+          <label class="star star-5 fas fa-star" :for="'star-1-'+starfield"></label>
       </fieldset>
     </div>
   </div>
@@ -21,7 +21,10 @@
 
 <script>
 export default {
-    emits: ["update:modelValue"],
+    emits: ["update:modelValue", "starfield"],
+    props: {
+      starfield : null,
+    },
 
     data() {
         return {
@@ -50,16 +53,17 @@ label.star {
 
 input.star:checked ~ label.star:before {
   color: 
-#f3de26;
+  red;
   transition: all .25s;
 }
 
 input.star-5:checked ~ label.star:before {
   color: 
-#ffe600;
+#a6d3d3;
   text-shadow: 0 0 5px 
 #7f8c8d;
 }
+
 
 input.star-1:checked ~ label.star:before { color: 
 #ddce43; }

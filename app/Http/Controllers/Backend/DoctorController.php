@@ -53,7 +53,7 @@ class DoctorController extends Controller
             'phone' => 'required',
             'document_type' => 'required',
             'document_reference' => 'required',
-            'workspace_id' => 'required',
+            'workspace_id' => '',
         ]);
 
         doctors()->create($validated);

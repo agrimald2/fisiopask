@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="onSubmit" style="text-align:center">
       <ui-container>
         <!-- Title -->
         <div class="text-center text-2xl uppercase tracking-wider text-gray-800">
@@ -13,16 +13,18 @@
             Instalaciones
           </div>
 
-          <StarRating @update:modelValue="this.form.office_score = $event"/>
+          <StarRating @update:modelValue="this.form.office_score = $event" 
+          starfield="offices"/>
         </div>
 
         <!-- Doctor -->
-        <div class="mt-4" id="doctor">
+        <div class="mt-4 text-center" id="doctor">
           <div class="text-center font-bold uppercase tracking-wider text-gray-800">
             Doctor
           </div>
 
-          <StarRating @update:modelValue="this.form.doctor_score = $event"/>
+          <StarRating @update:modelValue="this.form.doctor_score = $event" 
+          starfield="doctor"/>
         </div>
 
         <!-- Service -->
@@ -31,7 +33,8 @@
             Servicio
           </div>
 
-          <StarRating @update:modelValue="this.form.service_score = $event"/>
+          <StarRating @update:modelValue="this.form.service_score = $event" 
+          starfield="service"/>
           <ui-error
               class="mt-2"
               :message="form.errors.service_score"
