@@ -68,8 +68,6 @@
 
     <link-item
       label="Tratamientos"
-
-      
       icon="fa-stethoscope"
       @click="go('treatment.index')"
     />
@@ -77,7 +75,7 @@
     <link-item
       label="Pagos recibidos"
       icon="fa-receipt"
-      @click="go('')"
+      @click="go('payments.index')"
     />
 
     <link-item

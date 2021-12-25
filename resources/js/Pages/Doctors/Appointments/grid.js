@@ -23,9 +23,11 @@ export default (props, { attrs }) => {
       .class("capitalize")
       .format((v) => dates.dateForHumans(v)),
 
-    c("patient.name", "Paciente").format((value, { row }) => {
-      return `${row.patient.name} ${row.patient.lastname1} ${row.patient.lastname2}`;
-    }),
+    c("", "Paciente")
+     .extend({ html: true})
+     .format((value, {row}) => {
+       return `${row.patient.fullname.toUpperCase()} <b style="color:green">${row.patient.is_new}</b>`;
+     }),
 
     c("office", "Sucursal"),
 
