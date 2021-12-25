@@ -87,6 +87,7 @@
       <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
         <front-button
           color="green"
+          v-if="role == 'admin'"
           @click="$inertia.visit(route('patients.historygroup.index', appointment.patient.id))"
         >
           Ver Historial Clínico
@@ -147,7 +148,7 @@ import FrontButton from "@/Shared/Frontend/Button";
 import dates from "@/ui/dates";
 
 export default {
-  props: ["appointment"],
+  props: ["appointment", "role"],
 
   components: {
     AppLayout,

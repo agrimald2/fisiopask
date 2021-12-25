@@ -34,6 +34,21 @@ class PatientSurveyController extends Controller
             'survey_date' => 'required|date|date_format:Y-m-d',
         ]);
 
+        $appointment = Appointment::with('patient')->find($validated['appointment_id']);
+
+        $patient = $appointment->patient()->first();
+
+        $phone = $patient->phone;
+
+        if($validated['office_score'] == 5 && 
+            $validated['doctor_score'] == 5 && 
+            $validated['service_score'] == 5)
+        {
+            $text = "Todo 5!";
+
+            chatapi($phone, $text);
+        }
+
         Survey::create($validated);
 
         return inertia('Patients/Survey/Thanks');

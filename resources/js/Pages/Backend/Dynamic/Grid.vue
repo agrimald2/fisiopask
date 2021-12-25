@@ -26,17 +26,34 @@
 
         <template v-if="enableDoctorSearch">
           <div class="filter_space px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white grid items-center rounded-l-r-lg">
-            <button @click.prevent.self="toggleDropDown()" style="font-size:1.15rem"> Filtro Doctores - {{docFilterQuery}} </button>
-            <div v-if="this.showDropDown">
+            <button @click.prevent.self="toggleDropDownDoctors()" style="font-size:1.15rem"> Filtro Doctores <span v-show="docFilterQuery" style="font-size:1rem; font-weight:bold"> -  {{docFilterQuery}} </span> </button>
+            <div v-if="this.showDropDownDoctors">
               <input type="text" placeholder="Buscar" id="myInput" v-model="docFilterQuery" style="width:100%" class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-l-lg px-4 py-3">
               <div v-for="(doctor, index) in filteredDoctors" :key="index" class="doctors_display rounded-r-lg .rounded-l-lg">
-                <div @click.prevent.self="selectDropDown(doctor)"> {{doctor.name}} {{doctor.lastname}} </div>
+                <div @click.prevent.self="selectDropDownDoctor(doctor)"> {{doctor.name}} {{doctor.lastname}} </div>
               </div>
             </div>
           </div>
         </template>
         <form @submit.prevent="onSearch">
           <div class="flex items-stretch">
+            <template v-if="enableOfficeSearch">
+              <div class="filter_space px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white grid items-center rounded-l-r-lg">
+                <button @click.prevent.self="toggleDropDownOffices()" class="px-3 cursor-pointer hover:bg-gray-100 bg-white items-center rounded-l-r-lg" style="font-size:1.2rem">
+                   Filtro Sucursal
+                   <br>
+                   <span style="font-size:1rem; font-weight:bold">
+                   {{officeQuery}} 
+                   </span>
+                </button>
+                <div v-if="this.showDropDownOffices">
+                  <div v-for="(office, index) in offices" :key="index" class="doctors_display rounded-r-lg .rounded-l-lg">
+                    <div @click.prevent.self="selectDropDownOffice(office)"> {{office.name}} </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+
             <input
               type="text"
               class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-l-lg px-4 py-3"
@@ -112,6 +129,7 @@ export default {
     links: null,
     parameters: null,
     doctors: null,
+    offices: null,
     // Options
     enableSearch: {
       default: true,
@@ -156,8 +174,10 @@ export default {
       searchQuery: null,
       dateQuery: null,
       doctorQuery: null,
+      officeQuery: null,
 
-      showDropDown: false,
+      showDropDownDoctors: false,
+      showDropDownOffices: false,
       docFilterQuery: null,
       docName: null,
     };
@@ -168,7 +188,10 @@ export default {
       if(this.docFilterQuery == null || this.docFilterQuery == '') return this.doctors;
 
       const filter = this.docFilterQuery.toLowerCase().trim();
-      return this.doctors.filter((doc) => doc.name.toLowerCase().trim().includes(filter));
+      return this.doctors.filter(function(doc) {
+        if(doc.name.toLowerCase().trim().includes(filter) || doc.lastname.toLowerCase().trim().includes(filter)) return true;
+        return false;
+      });
     }
   },
 
@@ -177,16 +200,24 @@ export default {
       const searchQuery = this.searchQuery;
       const dateQuery = this.dateQuery;
       const doctorQuery = this.doctorQuery;
-      const data = { searchQuery, dateQuery, doctorQuery};
+      const officeQuery = this.officeQuery;
+      const data = { searchQuery, dateQuery, doctorQuery, officeQuery };
       this.$inertia.get("", data, { preserveScroll: true });
     },
-    toggleDropDown() {
-        this.showDropDown = !this.showDropDown;
+    toggleDropDownDoctors() {
+      this.showDropDownDoctors = !this.showDropDownDoctors;
     },
-    selectDropDown($doc) {
+    toggleDropDownOffices() {
+      this.showDropDownOffices = !this.showDropDownOffices;
+    },
+    selectDropDownDoctor($doc) {
       this.doctorQuery = $doc.id;
-      this.docFilterQuery = $doc.name;
-      this.showDropDown = false;
+      this.docFilterQuery = $doc.name + ' ' + $doc.lastname;
+      this.showDropDownDoctors = false;
+    },
+    selectDropDownOffice($office) {
+      this.officeQuery = $office.name;
+      this.showDropDownOffices = false;
     },
   },
 };

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\AssistantController;
 use App\Http\Controllers\Backend\DoctorController;
 use App\Http\Controllers\Backend\DoctorSpecialtyController;
 use App\Http\Controllers\Backend\SurveyShowController;
@@ -53,6 +54,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', IndexAction::class)
     ->name('dashboard');
 
+/**
+ * Assistants
+*/
+Route::resource('assistants', AssistantController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
 /**
  * Doctors
@@ -273,7 +279,7 @@ Route::resource('treatment', TreatmentController::class)
  * AREA: Doctors
  */
 
-Route::middleware(['role:doctor|admin'])
+Route::middleware(['role:doctor|admin|assistant'])
     ->prefix('doctors')
     ->group(function () {
         Route::get('/see-schedule', SeeScheduleAction::class)
