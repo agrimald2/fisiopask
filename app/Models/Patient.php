@@ -19,7 +19,7 @@ class Patient extends Model implements Authenticatable
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $hidden = ['token'];
-    protected $appends = ['fullname'];
+    protected $appends = ['fullname', 'is_new'];
 
      /**
      * Relationships
@@ -67,9 +67,8 @@ class Patient extends Model implements Authenticatable
 
     function getIsNewAttribute()
     {
-        $payments = payments();
-        var_dump($payments);
-        return;
+        if($this->payments()->first()) return "";
+        return "(Nuevo)";
     }
 
 
