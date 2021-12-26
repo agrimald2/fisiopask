@@ -28,6 +28,7 @@
     "dependencies": {
         "@ferchoposting/formie": "^1.0.513",
         "@ferchoposting/gridie": "^1.0.54",
+        "jquery": "^3.6.0",
         "moment": "^2.29.1",
         "mosha-vue-toastify": "^1.0.20",
         "v-calendar": "^3.0.0-alpha.5",

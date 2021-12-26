@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\IndexController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Frontend\BookAppointmentController;
 use App\Http\Controllers\Paynow\ShowRequestPaymentAction;
 use App\Http\Controllers\Paynow\StorePaymentRequestAction;
@@ -8,8 +9,8 @@ use App\Http\Controllers\Paynow\VerifyPaymentRequestAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', IndexController::class)
-    ->name('frontend.index');
+Route::get('/', [LandingPageController::class, 'index'])
+    ->name('landing.index');
 
 Route::namespace(null)
     ->prefix('book-appointment')
