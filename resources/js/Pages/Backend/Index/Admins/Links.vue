@@ -79,6 +79,12 @@
     />
 
     <link-item
+      label="Links de Pagos"
+      icon="fa-credit-card"
+      @click="go('paymentlinks.index')"
+    />
+
+    <link-item
       label="Encuestas"
       icon="fa-comment-medical"
       @click="go('surveys.index')"

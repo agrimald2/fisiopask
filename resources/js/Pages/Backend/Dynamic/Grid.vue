@@ -64,7 +64,13 @@
               v-if="enableDateSearch"
               type="date"
               class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 px-4 py-3"
-              v-model="dateQuery"
+              v-model="dateQueryFrom"
+            >
+            <input
+              v-if="enableDateSearch"
+              type="date"
+              class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 px-4 py-3"
+              v-model="dateQueryTo"
             >
             <button
               type="submit"
@@ -164,7 +170,8 @@ export default {
     if (this.parameters)
     { 
       if(this.parameters.hasOwnProperty("searchQuery")) this.searchQuery = this.parameters.searchQuery;
-      if(this.parameters.hasOwnProperty("dateQuery")) this.dateQuery = this.parameters.dateQuery;
+      if(this.parameters.hasOwnProperty("dateQueryFrom")) this.dateQueryFrom = this.parameters.dateQueryFrom;
+      if(this.parameters.hasOwnProperty("dateQueryTo")) this.dateQueryTo = this.parameters.dateQueryTo;
       if(this.parameters.hasOwnProperty("doctorQuery")) this.doctorQuery = this.parameters.doctorQuery;
     }
   },
@@ -172,7 +179,8 @@ export default {
   data() {
     return {
       searchQuery: null,
-      dateQuery: null,
+      dateQueryFrom: null,
+      dateQueryTo: null,
       doctorQuery: null,
       officeQuery: null,
 
@@ -198,10 +206,11 @@ export default {
   methods: {
     onSearch() {
       const searchQuery = this.searchQuery;
-      const dateQuery = this.dateQuery;
+      const dateQueryFrom = this.dateQueryFrom;
+      const dateQueryTo = this.dateQueryTo;
       const doctorQuery = this.doctorQuery;
       const officeQuery = this.officeQuery;
-      const data = { searchQuery, dateQuery, doctorQuery, officeQuery };
+      const data = { searchQuery, dateQueryFrom, dateQueryTo, doctorQuery, officeQuery };
       this.$inertia.get("", data, { preserveScroll: true });
     },
     toggleDropDownDoctors() {

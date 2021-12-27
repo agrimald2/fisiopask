@@ -19,6 +19,7 @@ use App\Http\Controllers\Backend\PatientRates\RenderPatientRatesAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPaymentFormAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPosAction;
 use App\Http\Controllers\Backend\PaymentController;
+use App\Http\Controllers\Backend\PaymentLinksController;
 use App\Http\Controllers\Backend\PaymentMethodController;
 use App\Http\Controllers\Backend\RecommendationController;
 use App\Http\Controllers\Backend\RateController;
@@ -134,10 +135,13 @@ Route::namespace(null)
 /**
  * Payment Indexer
  */
-
  Route::resource('payments', PaymentController::class)
     ->only('index');
-
+/**
+ * Payment Links
+ */
+Route::resource('paymentlinks', PaymentLinksController::class)
+    ->only('index');
 /**
  * Offices
  */
