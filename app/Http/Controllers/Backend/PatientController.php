@@ -28,7 +28,7 @@ class PatientController extends Controller
     }
 
     public function create()
-    {
+    {   
         return inertia('Backend/Dynamic/Form', [
             'title' => [
                 'resource' => 'Pacientes',
@@ -39,7 +39,7 @@ class PatientController extends Controller
             'form' => 'Backend/Patients/form.js',
 
             'sexOptions' => config('doctors.sex'),
-
+            
             'recommendations' => recommendations()->index(),
         ]);
     }
@@ -56,6 +56,7 @@ class PatientController extends Controller
             'email' => 'nullable',
             'district' => 'nullable',
             'sex' => 'required',
+            'recommendation' => '',
         ]);
 
         patients()->create($validated);
@@ -77,6 +78,8 @@ class PatientController extends Controller
             'model' => $patient,
 
             'sexOptions' => config('doctors.sex'),
+
+            'recommendations' => recommendations()->index(),
         ]);
     }
 
@@ -93,6 +96,7 @@ class PatientController extends Controller
             'email' => 'nullable|email',
             'phone' => 'nullable|integer',
             'district' => 'nullable|string',
+            'recommendation' => '',
         ]);
 
         $patient->update($validated);

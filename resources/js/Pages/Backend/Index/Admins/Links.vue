@@ -89,6 +89,12 @@
       icon="fa-comment-medical"
       @click="go('surveys.index')"
     />
+
+    <link-item
+      label="Recomendaciones"
+      icon="fas fa-handshake"
+      @click="go('recommendation.index')"
+    />
   </link-group>
 
   <!-- Categorias -->

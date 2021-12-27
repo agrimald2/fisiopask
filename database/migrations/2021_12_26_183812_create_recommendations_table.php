@@ -17,6 +17,7 @@ class CreateRecommendationsTable extends Migration
             $table->id();
             $table->string('recommendation');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
