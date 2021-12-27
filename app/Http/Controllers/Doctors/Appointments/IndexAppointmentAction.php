@@ -13,14 +13,15 @@ class IndexAppointmentAction extends Controller
     public function __invoke(Request $request)
     {
         $searchQuery = $request->searchQuery;
-        $dateQuery = $request->dateQuery;
+        $dateQueryFrom = $request->dateQueryFrom;
+        $dateQueryTo = $request->dateQueryTo;
         $doctorQuery = $request->doctorQuery;
         $officeQuery = $request->officeQuery;
         $canSearchByDoctor = false;
         $doctors = Doctor::query()->get();
         $offices = Office::query()->get();
 
-        $model = $this->getModels($searchQuery, $dateQuery, $doctorQuery, $officeQuery);
+        $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery);
 
         $user = auth()->user();
         if ($user->hasRole('admin')) {
@@ -55,7 +56,7 @@ class IndexAppointmentAction extends Controller
     }
 
 
-    private function getModels($searchQuery, $dateQuery, $doctorQuery, $officeQuery)
+    private function getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery)
     {
         $appointments = $this->getAppointments();
 
@@ -63,22 +64,17 @@ class IndexAppointmentAction extends Controller
             ->with('patient')
             ->whereHas('patient', function ($q) use ($searchQuery) {
                 $q->when($searchQuery, function ($q, $value) {
-                    $q->where(function ($q) use ($value) {
-                        $q->where('name', 'LIKE', "%$value%")
-                        ->orWhere('lastname1', 'LIKE', "%$value%")
-                        ->orWhere('lastname2', 'LIKE', "%$value%")
-                        ->orWhere('dni', 'LIKE', "%$value%")
-                        ->orWhere('phone', 'LIKE', "%$value%")
-                        ->orWhere('office', 'LIKE', "%$value%");
-                    });
+                    $q->where('name', 'LIKE', "%$value%")
+                    ->orWhere('lastname1', 'LIKE', "%$value%")
+                    ->orWhere('lastname2', 'LIKE', "%$value%")
+                    ->orWhere('dni', 'LIKE', "%$value%")
+                    ->orWhere('phone', 'LIKE', "%$value%")
+                    ->orWhere('office', 'LIKE', "%$value%");
                 });
             })
-            ->whereHas('patient', function ($q) use ($dateQuery) {
-                $q->when($dateQuery, function ($q, $value) {
-                    $q->where(function ($q) use ($value) {
-                        $q->where('date', 'LIKE', "%$value%");
-                    });
-                });
+            ->whereHas('patient', function ($q) use ($dateQueryFrom, $dateQueryTo) {
+                if(!(empty($dateQueryFrom) || empty($dateQueryTo)))
+                    $q->whereBetween('date', [$dateQueryFrom, $dateQueryTo]);
             })
             ->whereHas('patient', function ($q) use ($doctorQuery) {
                 $q->when($doctorQuery, function ($q, $value) {
