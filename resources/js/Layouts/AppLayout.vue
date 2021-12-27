@@ -27,6 +27,13 @@
                 >
                   Dashboard
                 </jet-nav-link>
+                
+                <jet-nav-link
+                  :href="route('doctors.appointments.index')"
+                  :active="route().current('doctors.appointments.index')"
+                >
+                  Citas
+                </jet-nav-link>
               </div>
             </div>
 
@@ -235,8 +242,16 @@
               :href="route('dashboard')"
               :active="route().current('dashboard')"
             >
-              Dashboard
+              Dashboard2
             </jet-responsive-nav-link>
+
+            <jet-responsive-nav-link
+              :href="route('doctors.appointments.index')"
+              :active="route().current('doctors.appointments.index')"
+            >
+              Citas
+            </jet-responsive-nav-link>
+            
           </div>
 
           <!-- Responsive Settings Options -->

@@ -139,4 +139,9 @@ class Patient extends Model implements Authenticatable
     {
         return null;
     }
+
+    public function recommendation()
+    {
+        return $this->belongsTo(Recommendation::class);
+    }
 }

@@ -20,6 +20,7 @@ use App\Http\Controllers\Backend\PatientRates\RenderPaymentFormAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPosAction;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\PaymentMethodController;
+use App\Http\Controllers\Backend\RecommendationController;
 use App\Http\Controllers\Backend\RateController;
 use App\Http\Controllers\Backend\Rates\ProductSelectController;
 use App\Http\Controllers\Backend\ScheduleController;
@@ -183,6 +184,11 @@ Route::get('/show}', [SurveyShowController::class, 'showAll'])
 Route::resource('paymentMethods', PaymentMethodController::class)
     ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
+/**
+ * Recomendations  
+ */
+Route::resource('recommendation', RecommendationController::class)
+->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
 /**
  * Families & subfamilies

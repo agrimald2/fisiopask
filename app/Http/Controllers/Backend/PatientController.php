@@ -39,6 +39,8 @@ class PatientController extends Controller
             'form' => 'Backend/Patients/form.js',
 
             'sexOptions' => config('doctors.sex'),
+
+            'recommendations' => recommendations()->index(),
         ]);
     }
 

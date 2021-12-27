@@ -77,6 +77,13 @@ export default (props, { attrs }) => [
   },
 
   {
+    name: "recommendation",
+    label: "¿Cómo llegó a Fisiosalud?",
+    type: inputs.Select,
+    options: attrs.recommendations,
+  },
+
+  {
     type: inputs.Buttons,
     buttons: [
       // Button delete
