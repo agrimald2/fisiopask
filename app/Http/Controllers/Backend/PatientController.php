@@ -56,7 +56,7 @@ class PatientController extends Controller
             'email' => 'nullable',
             'district' => 'nullable',
             'sex' => 'required',
-            'recommendation' => '',
+            'recommendation_id' => '',
         ]);
 
         patients()->create($validated);
@@ -66,7 +66,14 @@ class PatientController extends Controller
     }
 
     public function edit(Patient $patient)
-    {
+    {   
+
+        $recommendations = recommendations()->index();
+
+        $recommendationsMap = [];
+
+        foreach($recommendations as $recommendation) $recommendationsMap[$recommendation->id] = $recommendation->recommendation;
+        
         return inertia('Backend/Dynamic/Form', [
             'title' => [
                 'resource' => 'Pacientes',
@@ -79,7 +86,7 @@ class PatientController extends Controller
 
             'sexOptions' => config('doctors.sex'),
 
-            'recommendations' => recommendations()->index(),
+            'recommendations' => $recommendationsMap,
         ]);
     }
 
@@ -96,7 +103,7 @@ class PatientController extends Controller
             'email' => 'nullable|email',
             'phone' => 'nullable|integer',
             'district' => 'nullable|string',
-            'recommendation' => '',
+            'recommendation_id' => '',
         ]);
 
         $patient->update($validated);

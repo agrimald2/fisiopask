@@ -29,12 +29,14 @@ class CheckAssistance implements ShouldQueue
             ->where('date', Carbon::now()->format('Y-m-d'))
             ->get();
         
+         //TODO @WHATSAPP 5 estrellas paciente
         foreach($confirmedAppointments as $appointment)
         {
             $startTime = Carbon::parse($appointment->start);
             
             if($startTime->diffInHours(Carbon::now()->format('Y-m-d H:i:s'), false) > 1)
             {
+                chatapi($phone, $text);
                 $appointment->status = Appointment::STATUS_NOT_ASSISTED;
                 $appointment->save();
             }

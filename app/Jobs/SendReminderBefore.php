@@ -32,6 +32,7 @@ class SendReminderBefore implements ShouldQueue
         {
             $carbonDate = Carbon::parse($appointment->date);
             
+            //TODO @WHATSAPP RECORDATORIO UN DÍA ANTES
             if($carbonDate->isTomorrow())
             {
                 $phone = $appointment->patient->phone;

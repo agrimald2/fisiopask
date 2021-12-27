@@ -28,7 +28,7 @@ class CreatePatientsTable extends Migration
             $table->string('phone')->nullable();
 
             $table->string('district')->nullable();
-            $table->string('reccomendation')->nullable();
+            $table->integer('reccomendation_id')->nullable();
 
             $table->string('token')->nullable();
 

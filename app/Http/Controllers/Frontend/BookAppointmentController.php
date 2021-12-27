@@ -237,19 +237,22 @@ class BookAppointmentController extends Controller
 
             foreach($payments as $payment) $moneyPaid += $payment->ammount;
             foreach($products as $product) $moneyOwed += $product->price;
-
+            
+            //TODO @WHATSAPP SALDO A FAVOR 
             if($moneyPaid > $moneyOwed)
             {
-                //Money in favor
+                chatapi($phone, $text);
             }
             else
-            {
-                //else
+            { 
+            //TODO @WHATSAPP SIN SALDO 
+                chatapi($phone, $text);
             }
         }
         else
         {
-            //No payments, hasn't assisted to any appoinments (new client)
+            //TODO @WHATSAPP PACIENTE NUEVO 
+            chatapi($phone, $text);
         }
             
         $this->repo->sendConfirmationToPatient($dni, $appointment);

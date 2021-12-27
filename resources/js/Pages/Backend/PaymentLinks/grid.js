@@ -17,8 +17,9 @@ export default (props, { attrs }) => {
             var payed = row.is_completed ? "Sí" : "No";
             return `${payed}`;
         }),
-
+    
     c("patient.fullname", "Cliente"),
+    //TODO @QR CODE PAYMENTLINK
   ];
 
   return { rows, cols };

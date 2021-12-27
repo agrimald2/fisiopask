@@ -38,19 +38,29 @@ class PatientSurveyController extends Controller
 
         $patient = $appointment->patient()->first();
 
-        $phone = $patient->phone;
+        $patientPhone = $patient->phone;
+        $patientName = $patient->name;
+
+        $data = compact(
+            'patientName',
+        );
+
+        $text = $this->getWhatsappPatientReseña($data);
 
         if($validated['office_score'] == 5 && 
             $validated['doctor_score'] == 5 && 
             $validated['service_score'] == 5)
         {
-            $text = "Todo 5!";
-
-            chatapi($phone, $text);
+            chatapi($patientPhone, $text);
         }
 
         Survey::create($validated);
 
         return inertia('Patients/Survey/Thanks');
+    }
+
+    protected function getWhatsappPatientReseña($data)
+    {
+        return view('chatapi.reseña', $data)->render();
     }
 }

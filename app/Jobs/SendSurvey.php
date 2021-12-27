@@ -33,6 +33,7 @@ class SendSurvey implements ShouldQueue
         {
             $carbonDate = Carbon::parse($appointment->date);
 
+            //TODO @WHATSAPP ENCUESTA
             if($carbonDate->isYesterday())
             {
                 $phone = $appointment->patient->phone;
