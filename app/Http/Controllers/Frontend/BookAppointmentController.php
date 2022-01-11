@@ -230,34 +230,37 @@ class BookAppointmentController extends Controller
         $payments = PatientPayment::query()->where('patient_id', $patientId)->get();
         $products = PatientRate::query()->where('patient_id', $patientId)->get();
 
-        if($payments->first())
-        {
-            $moneyPaid = 0;
-            $moneyOwed = 0;
+        $phone = $this->repo->getPatientPhoneByDni($dni);
 
-            foreach($payments as $payment) $moneyPaid += $payment->ammount;
-            foreach($products as $product) $moneyOwed += $product->price;
+        if($payments->first())
+        {   
+            $credit = true;
+
+            foreach($products as $product) 
+            {
+                if(!$product->can_assist_bool) 
+                {
+                    $credit = false;
+                    break;
+                }
+            }
             
             //TODO @WHATSAPP SALDO A FAVOR 
-            if($moneyPaid > $moneyOwed)
+            if($credit)
             {
-                chatapi($phone, $text);
+                $this->repo->sendConfirmationToPatient($dni, $appointment, 'credit');
             }
             else
             { 
             //TODO @WHATSAPP SIN SALDO 
-                chatapi($phone, $text);
+                $this->repo->sendConfirmationToPatient($dni, $appointment, 'no_credit');
             }
         }
         else
         {
             //TODO @WHATSAPP PACIENTE NUEVO 
-            chatapi($phone, $text);
+            $this->repo->sendConfirmationToPatient($dni, $appointment, 'new');
         }
-            
-        $this->repo->sendConfirmationToPatient($dni, $appointment);
-
-        $phone = $this->repo->getPatientPhoneByDni($dni);
 
         return redirect()->route('bookAppointment.thanks')
             ->with('phone', $phone);

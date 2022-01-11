@@ -7,6 +7,7 @@ use App\Models\MedicalHistory;
 
 use App\Models\Diagnostic;
 use App\Models\Treatment;
+use App\Models\HistoryTreatment;
 use App\Models\Analysis;
 use App\Models\AffectedArea;
 
@@ -17,7 +18,7 @@ class MedicalHistoryController extends Controller
 {
     public function show($id)
     {
-        $model = MedicalHistory::with('patient','treatment','diagnostic','analysis','doctor','affectedArea')->get()->find($id);
+        $model = MedicalHistory::with('patient','treatment','diagnostic','analysis','doctor','affectedArea', 'historyTreatments.treatment')->get()->find($id);
 
         return inertia('Backend/Patients/MedicalHistories/Index', compact('model'));
     }

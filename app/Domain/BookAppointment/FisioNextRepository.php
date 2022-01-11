@@ -169,14 +169,16 @@ class FisioNextRepository implements RepositoryContract
         }
     }
 
-    public function sendConfirmationToPatient($dni, $appointment)
+    public function sendConfirmationToPatient($dni, $appointment, $type)
     {
         $patient = patients()->getByDni($dni);
 
         $date = $appointment->date->format('d/m/Y');
         $startTime = $appointment->start;
         $patientName = $patient->name;
+        $patientName = $patient->lastname1;
         $doctorName = $appointment->doctor->name;
+        $doctorWorkspace = $appointment->doctor->workspace->name;
         $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
 
         $data = compact(
@@ -184,31 +186,40 @@ class FisioNextRepository implements RepositoryContract
             'date',
             'startTime',
             'doctorName',
-            'dashboardLink'
+            'dashboardLink',
+            'doctorWorkspace'
         );
 
         // Send message to patient
-        $patientText = $this->getWhatsappPatientConfirmationText($data);
+        $patientText = $this->getWhatsappPatientConfirmationText($data, $type);
         if ($patientText) {
             chatapi($patient->phone, $patientText);
-        }
-
+        } 
         // Send message to doctor
         $doctorText = $this->getWhatsappDoctorConfirmationText($data);
         if ($doctorText) {
             chatapi($appointment->doctor->phone, $doctorText);
-        }
+        }           
     }
 
+    protected function getWhatsappPatientConfirmationText($data, $type)
+    {   
+        switch ($type) {
+            case "credit":
+                return view('chatapi.confirmation.credit', $data)->render();
+              break;
+            case "no_credit":
+                return view('chatapi.confirmation.no_credit', $data)->render();
+              break;
+            default:
+                return view('chatapi.confirmation.new', $data)->render();
+          }
 
-    protected function getWhatsappPatientConfirmationText($data)
-    {
-        return view('chatapi.fisiosalud', $data)->render();
     }
 
     protected function getWhatsappDoctorConfirmationText($data)
     {
-        return null;
+        return view('chatapi.doctor', $data)->render();ll;
     }
 
 

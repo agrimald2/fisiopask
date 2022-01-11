@@ -6,6 +6,7 @@ use App\Models\HistoryGroup;
 use App\Models\MedicalRevision;
 
 use App\Models\Treatment;
+use App\Models\HistoryTreatment;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class MedicalRevisionController extends Controller
 {
     public function show($id)
     {
-        $model = MedicalRevision::with('patient','doctor')->get()->find($id);
+        $model = MedicalRevision::with('patient','doctor', 'historyTreatments.treatment')->get()->find($id);
 
         return inertia('Backend/Patients/MedicalRevisions/Index', compact('model'));
     }
@@ -53,7 +54,15 @@ class MedicalRevisionController extends Controller
             'history_group_id' => 'required',
         ]);
 
-        MedicalRevision::create($validated);
+        $model = MedicalRevision::create($validated);
+
+        foreach($request->treatments as $treatment)
+        {
+            HistoryTreatment::Create([
+                'treatment_id' => $treatment,
+                'medical_revision_id' => $model->id,
+            ]);
+        }
 
         return redirect()->route('patients.historygroup.show', $request->history_group_id);
     }

@@ -26,8 +26,8 @@ export default (props, { attrs }) => {
     c("", "Paciente")
      .extend({ html: true})
      .format((value, {row}) => {
-       return `${row.patient.fullname.toUpperCase()} <b style="color:green">${row.patient.is_new}</b>`;
-     }),
+      return `<button onclick="window.open('http://fisiopask.test/book-appointment/dni/${row.patient.dni}/day', '_blank', 'toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=500,width=600,height=600')">${row.patient.fullname.toUpperCase()} <b style="color:green">${row.patient.is_new}</b></button>`;
+    }),
 
     c("office", "Sucursal"),
 
@@ -50,6 +50,8 @@ export default (props, { attrs }) => {
         ],
       }),
   ];
-
+  function windowAppointment() {
+    window.open("https://fisiosalud.pe/cita", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=500,width=600,height=600");
+  }
   return { rows, cols };
 };

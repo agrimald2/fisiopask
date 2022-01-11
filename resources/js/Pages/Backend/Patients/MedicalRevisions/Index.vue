@@ -68,6 +68,20 @@
             {{ model.description}}
           </p>
       </div>
+
+      <div class="mt-4 border rounded p-3">
+        <table class="w-full mt-4" style="text-align:left">
+          <tr>
+            <th>TRATAMIENTOS:</th>
+            <template v-for="treatment in model.history_treatments" :key="treatment.id">
+              <tr>
+                {{ treatment.treatment.name}} - {{ treatment.treatment.description}}
+              </tr>
+            </template>
+          </tr>
+        </table>
+      </div>
+
       <div class="mt-4 border rounded p-3">
         <table class="w-full mt-4" style="text-align:left">
           <tr class="ranges">

@@ -37,11 +37,17 @@ export default {
             {
               label: "Marcar Asistencia",
               clicked({ row }) {
-                if (
-                  confirm("Estas seguro?")
-                ) {
-                  const url = route("patients.rates.assited", row.id);
-                  Inertia.get(url);
+                if(row.can_assist_bool)
+                {
+                  if(confirm("Estas seguro?"))
+                  {
+                    const url = route("patients.rates.assited", row.id);
+                    Inertia.get(url);
+                  }
+                }
+                else
+                {
+                  confirm("Tiene que pagar para asistir");
                 }
               },
             },

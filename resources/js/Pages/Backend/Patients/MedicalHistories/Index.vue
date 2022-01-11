@@ -88,15 +88,18 @@
       <div class="mt-4 border rounded p-3">
         <table class="w-full mt-4" style="text-align:left">
           <tr>
-            <th>TRATAMIENTO:</th>
-            <td>
-              {{ model.treatment.name}} - {{ model.treatment.description}}
-            </td>
+            <th>TRATAMIENTOS:</th>
+            <template v-for="treatment in model.history_treatments" :key="treatment.id">
+              <tr>
+                {{ treatment.treatment.name}} - {{ treatment.treatment.description}}
+              </tr>
+            </template>
             <th>DIAGNÓSTICO:</th>
             <td>
               {{ model.diagnostic.cie_10 }} - {{ model.diagnostic.name }}
             </td>
           </tr>
+          <br>
           <tr>
             <th>ANÁLISIS SUGERIDOS:</th>
             <td>
@@ -160,6 +163,11 @@ export default {
     vue3starRatings,
     RadialProgressBar,
     Grid,
+  },
+
+  mounted()
+  {
+    console.log(this.model);
   },
   setup() {
     const dashboardLink = route("dashboard");

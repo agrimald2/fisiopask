@@ -15,6 +15,11 @@ class Treatment extends Model
      * Relationships
      */
 
+    public function historyTreatment()
+    {
+        return $this->hasOne(HistoryTreatment::class);
+    }
+
     public function medicalHistory()
     {
         return $this->hasOne(MedicalHistory::class);

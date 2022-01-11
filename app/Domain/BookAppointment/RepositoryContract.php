@@ -63,7 +63,7 @@ interface RepositoryContract
 
     public function makeAppointment($dni, $date, $schedule);
 
-    public function sendConfirmationToPatient($dni, $appointment);
+    public function sendConfirmationToPatient($dni, $appointment, $type);
 
     public function getThankYouPageButtonUrl();
 }

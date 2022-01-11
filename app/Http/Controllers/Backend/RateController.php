@@ -35,7 +35,7 @@ class RateController extends DynamicController
      */
     public function create()
     {
-        return $this->form(['stock' => 0], [
+        return $this->form(['stock' => 2], [
             'subfamilies' => $this->getSubfamilyOptions(),
         ]);
     }
@@ -50,10 +50,9 @@ class RateController extends DynamicController
     {
         $validated = $request->validate([
             'name' => 'required',
-            'price' => 'numeric',
+            'price' => 'required|numeric',
             'is_product' => 'nullable|boolean',
-            'stock' => 'required|integer',
-
+            'stock' => 'required|numeric',
             'subfamily_id' => 'required|integer',
         ]);
 

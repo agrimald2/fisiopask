@@ -34,4 +34,9 @@ class MedicalRevision extends Model
     {
         return $this->belongsTo(Treatment::class);
     }
+
+    public function historyTreatments()
+    {
+        return $this->hasMany(HistoryTreatment::class);
+    }
 }

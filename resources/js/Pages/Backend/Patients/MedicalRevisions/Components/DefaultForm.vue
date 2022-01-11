@@ -135,6 +135,8 @@ export default {
         treatment_id: null,
 
         history_group_id: null,
+
+        treatments: [],
       }),
     };
   },

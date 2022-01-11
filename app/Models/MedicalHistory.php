@@ -48,4 +48,9 @@ class MedicalHistory extends Model
     {
         return $this->belongsTo(AffectedArea::class);
     }
+
+    public function historyTreatments()
+    {
+        return $this->hasMany(HistoryTreatment::class);
+    }
 }
