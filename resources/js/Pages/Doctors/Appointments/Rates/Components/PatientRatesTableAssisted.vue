@@ -18,26 +18,22 @@ export default {
     Gridie,
   },
 
-  mounted() {
-    console.log(this.patientRates);
-  },
-
   setup() {
     const cols = [
       c("name", "Nombre"),
       c("price", "Precio"),
-      c("amount_paid", "Cantidad Pagada"),
-      c("rate.stock", "Citas Totales"),
+      c("payed", "Cantidad Pagada"),
+      c("sessions_total", "Citas Totales"),
       c("appointments_paid", "Citas Pagadas"),
       c("appointments_assisted", "Citas Asistidas"),
-      c("can_assist", "Puede Asistir"),
+      c("can_assist_string", "Puede Asistir"),
       c().type(cells.Buttons)
         .extend({
           buttons: [
             {
               label: "Marcar Asistencia",
               clicked({ row }) {
-                if(row.can_assist_bool)
+                if(row.can_assist)
                 {
                   if(confirm("Estas seguro?"))
                   {

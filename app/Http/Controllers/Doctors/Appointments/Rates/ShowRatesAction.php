@@ -20,7 +20,6 @@ class ShowRatesAction extends Controller
         $appointment->save();
 
         $patientRates = PatientRate::query()
-            ->with('rate')
             ->where('patient_id', $appointment->patient->id)
             ->orderBy('id', 'desc')
             ->get();

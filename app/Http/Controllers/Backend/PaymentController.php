@@ -39,7 +39,7 @@ class PaymentController extends Controller
         if(!(empty($dateQueryFrom) || empty($dateQueryTo)))
         {        
             return $payments
-                ->with('patient', 'patientRate.rate')
+                ->with('patient', 'patientRate')
                 ->whereBetween('created_at', [$dateQueryFrom, $dateQueryTo])
                 ->whereHas('patient', function($query) use($searchQuery) {
                     $query->when($searchQuery, function ($query, $value) {
@@ -50,7 +50,7 @@ class PaymentController extends Controller
         }
 
         return $payments
-            ->with('patient', 'patientRate.rate')
+            ->with('patient', 'patientRate')
             ->whereHas('patient', function($query) use($searchQuery) {
                 $query->when($searchQuery, function ($query, $value) {
                    $query->where('name', 'LIKE', "%$value%");

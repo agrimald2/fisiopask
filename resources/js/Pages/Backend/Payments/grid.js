@@ -13,15 +13,9 @@ export default (props, { attrs }) => {
     c("ammount", "Monto"),
     c("concept", "Concepto"),
 
-    c("patient_rate.rate.name", "Tarifa"),
+    c("patient_rate.name", "Tarifa"),
 
     c("patient.fullname", "Cliente"),
-
-  /*c("", "Horario")
-    .extend({ html: true })
-    .format((value, { row }) => {
-      return `<a href="https://gay.com">${row.created_at} ASJDKHASJ</a>`;
-    }),*/
   ];
 
   return { rows, cols };

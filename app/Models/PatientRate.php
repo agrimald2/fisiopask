@@ -11,62 +11,73 @@ class PatientRate extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    const RATE_STATUS_OPEN = 0;
+    const RATE_STATUS_COMPLETE = 1;
+    const RATE_STATUS_ABANDONED = 2;
 
-    protected $appends = ['appointments_paid', 'appointments_assisted', 'can_assist', 'can_assist_bool'];
+    const RATE_STATUS_LABEL = [
+        0 => 'ABIERTO',
+        1 => 'COMPLETADO',
+        2 => 'ABANDONADO'
+    ];
 
+    protected $guarded = [
+        'id', 
+        'created_at', 
+        'updated_at', 
+        'deleted_at'
+    ];
+    protected $appends = [
+        'status_label', 
+        'appointments_paid', 
+        'appointments_assisted',
+        'can_assist',
+        'can_assist_string'
+    ];
     protected $casts = [
         'created_at' => 'datetime:Y-m-d h:i A'
     ];
 
     /**
-     * Relationships
+     * Attributes
      */
 
-    public function patientPayment() {
-        return $this->hasMany(PatientPayment::class);
+    function getStatusLabelAttribute()
+    {
+        return self::RATE_STATUS_LABEL[$this->state];
     }
 
-    public function rate() {
-        return $this->belongsTo(Rate::class);
-    }
-    
-    function getAppointmentsPaidAttribute() {
-        $myRate = $this->rate()->get()->first();
-
-        $stock = floatval($myRate->stock);
-        $price = floatval($myRate->price);
-
-        $amountPaid = $this->amount_paid;
-        
-        $appointmentPrice = $price / $stock;
-
-        $appointmentsPaid = $amountPaid / $appointmentPrice;
+    function getAppointmentsPaidAttribute()
+    {
+        $appointmentPrice = $this->price / $this->sessions_total;
+        $appointmentsPaid = $this->payed / $appointmentPrice;
 
         return floor($appointmentsPaid);
     }
 
-    function getAppointmentsAssistedAttribute() {
-        $myRate = $this->rate()->get()->first();
-
-        $stock = floatval($myRate->stock);
-
-        $sessionsLeft = $this->sessions_left;
-
-        $appointmentsAssisted = $stock - $sessionsLeft;
-
-        return $appointmentsAssisted;
+    function getAppointmentsAssistedAttribute()
+    {
+        return $this->sessions_total - $this->sessions_left;
     }
 
-    public function getCanAssistBoolAttribute() {
-        $canAssist = $this->getAppointmentsPaidAttribute() > $this->getAppointmentsAssistedAttribute();
-
-        return $canAssist ? true : false;
+    function getCanAssistAttribute()
+    {
+       $canAssist = $this->getAppointmentsPaidAttribute() > $this->getAppointmentsAssistedAttribute();
+       return $canAssist ? true : false;
     }
 
-    public function getCanAssistAttribute() {
-        $canAssist = $this->getAppointmentsPaidAttribute() > $this->getAppointmentsAssistedAttribute();
-
-        return $canAssist ? "Sí" : "No";
+    function getCanAssistStringAttribute()
+    {
+       $canAssist = $this->getAppointmentsPaidAttribute() > $this->getAppointmentsAssistedAttribute();
+       return $canAssist ? "Sí" : "No";
     }
+
+    /**
+     * Relationships
+     */
+
+     public function patientPayment()
+     {
+         return $this->hasMany(PatientPayment::class);
+     }
 }

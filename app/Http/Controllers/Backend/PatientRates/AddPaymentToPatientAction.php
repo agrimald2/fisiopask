@@ -22,7 +22,7 @@ class AddPaymentToPatientAction extends Controller
 
         $rate = PatientRate::findOrFail($request->rate_id);
 
-        $rate->amount_paid += $request->ammount;
+        $rate->payed += $request->ammount;
         $rate->save();
 
         $patient->payments()
