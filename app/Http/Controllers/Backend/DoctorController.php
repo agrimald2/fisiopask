@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 
 use App\Models\Doctor;
+use App\Models\Subfamily;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -84,10 +85,15 @@ class DoctorController extends Controller
 
         $specialties = doctorSpecialties()->index();
 
+        $subfamilies = Subfamily::query()
+            ->orderBy('id', 'desc')
+            ->with('doctors')
+            ->get();
+
         $workspaces = workspaces()->index();
 
         Inertia::share('doctorsConfig', config('doctors'));
-        return inertia('Backend/Doctors/CreateEdit', compact('model', 'specialties', 'workspaces'));
+        return inertia('Backend/Doctors/CreateEdit', compact('model', 'specialties', 'subfamilies', 'workspaces'));
     }
 
 
@@ -149,6 +155,39 @@ class DoctorController extends Controller
         ]);
 
         doctorSpecialties()->doctorRemove($request->doctor_id, $request->specialty_id);
+
+        return redirect()->route('doctors.edit', $request->doctor_id);
+    }
+
+    public function subfamiliesAdd(Request $request)
+    {
+        $request->validate([
+            'doctor_id' => 'required|numeric',
+            'subfamily_id' => 'required|numeric',
+        ]);
+
+        $subfamily = SubFamily::findOrFail($request->subfamily_id);
+
+        Doctor::findOrFail($request->doctor_id)
+            ->subfamilies()
+            ->syncWithoutDetaching($subfamily);
+
+        return redirect()->route('doctors.edit', $request->doctor_id);
+    }
+
+
+    public function subfamiliesRemove(Request $request)
+    {
+        $request->validate([
+            'doctor_id' => 'required|numeric',
+            'subfamily_id' => 'required|numeric',
+        ]);
+
+        $subfamily = SubFamily::findOrFail($request->subfamily_id);
+
+        Doctor::findOrFail($request->doctor_id)
+            ->subfamilies()
+            ->detach($subfamily);
 
         return redirect()->route('doctors.edit', $request->doctor_id);
     }

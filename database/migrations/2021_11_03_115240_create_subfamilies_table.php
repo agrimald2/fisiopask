@@ -19,6 +19,11 @@ class CreateSubfamiliesTable extends Migration
             $table->unsignedBigInteger('family_id');
             $table->timestamps();
         });
+
+        Schema::create('doctor_subfamily', function (Blueprint $table) {
+            $table->unsignedBigInteger('doctor_id');
+            $table->unsignedBigInteger('subfamily_id');
+        });
     }
 
     /**
@@ -29,5 +34,6 @@ class CreateSubfamiliesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('subfamilies');
+        Schema::dropIfExists('doctor_subfamily');
     }
 }

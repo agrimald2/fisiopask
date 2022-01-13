@@ -74,6 +74,11 @@ Route::prefix('doctors')->group(function () {
         ->name("doctors.specialties.add");
     Route::post('/specialties/remove', [DoctorController::class, 'specialtiesRemove'])
         ->name("doctors.specialties.remove");
+
+    Route::post('/subfamilies/add', [DoctorController::class, 'subfamiliesAdd'])
+        ->name("doctors.subfamilies.add");
+    Route::post('/subfamilies/remove', [DoctorController::class, 'subfamiliesRemove'])
+        ->name("doctors.subfamilies.remove");
 });
 
 

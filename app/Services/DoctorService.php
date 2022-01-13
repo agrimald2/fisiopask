@@ -33,7 +33,8 @@ class DoctorService
     {
         return Doctor::findOrFail($id)
             ->load('user')
-            ->load('specialties');
+            ->load('specialties')
+            ->load('subfamilies');
     }
 
 

@@ -28,6 +28,13 @@
             :model="model"
             :specialties="specialties"
           />
+
+          <jet-section-border />
+
+          <subfamilies-form
+            :model="model"
+            :subfamilies="subfamilies"
+          />
         </div>
 
       </div>
@@ -42,9 +49,10 @@ import JetSectionBorder from "@/Jetstream/SectionBorder.vue";
 import DefaultForm from "./Components/Form";
 
 import SpecialtiesForm from "./Components/SpecialtiesForm";
+import SubfamiliesForm from "./Components/SubfamiliesForm";
 
 export default {
-  props: ["model", "specialties", "workspaces"],
+  props: ["model", "specialties", "subfamilies", "workspaces"],
 
   components: {
     AppLayout,
@@ -53,6 +61,7 @@ export default {
     DefaultForm,
 
     SpecialtiesForm,
+    SubfamiliesForm,
   },
 
   computed: {

@@ -21,4 +21,9 @@ class Subfamily extends Model
     {
         return $this->hasMany(Rate::class);
     }
+
+    public function doctors()
+    {
+        return $this->belongsToMany(Doctor::class);
+    }
 }
