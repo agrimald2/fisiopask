@@ -22,6 +22,23 @@ class AddPaymentToPatientAction extends Controller
 
         $rate = PatientRate::findOrFail($request->rate_id);
 
+        if($request->appointment_id != null)
+        {
+            $rate->payed += $request->ammount * $rate->appointment_price;
+            $rate->save();
+
+            $patient->payments()
+                ->create([
+                    'ammount' => $request->ammount * $rate->appointment_price,
+                    'concept' => $request->concept,
+                    'payment_method_id' => $paymentMethod->id,
+                    'payment_method' => $paymentMethod->payment_method,
+                    'patient_rate_id' => $request->rate_id,
+                ]);
+
+            return redirect()->route('doctors.appointments.show', $request->appointment_id);
+        }
+
         $rate->payed += $request->ammount;
         $rate->save();
 
@@ -33,8 +50,6 @@ class AddPaymentToPatientAction extends Controller
                 'payment_method' => $paymentMethod->payment_method,
                 'patient_rate_id' => $request->rate_id,
             ]);
-
-        if($request->appointment_id != null) return redirect()->route('doctors.appointments.show', $request->appointment_id);
         
         return redirect()->route('patients.rates.index', $patient);
     }
