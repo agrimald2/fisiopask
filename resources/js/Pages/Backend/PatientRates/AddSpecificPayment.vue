@@ -9,7 +9,7 @@
     <app-body>
       <div class="text-center pt-4">
         <div class="text-2xl">
-          $ <span class="px-2 border select-all">{{ balance }}</span>
+          $ <span class="px-2 border select-all">{{ balance }}</span> - {{ patientRate.name }}
         </div>
         <div class="text-xl">
           Saldo Deudor
@@ -29,15 +29,19 @@
           </div>
 
           <div class="grid">
-            <div class="font-bold">Cantidad</div>
+            <div class="font-bold">Citas a pagar</div>
             <input
-              type="text"
+              type="number"
+              min="1"
+              :max="balance / patientRate.appointment_price"
+              onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"
+              :onkeyup="`if(this.value>${balance / patientRate.appointment_price}){this.value='${balance / patientRate.appointment_price}';}else if(this.value<1){this.value='1';}`"
               v-model="form.ammount"
             >
             <div
               class="underline text-sm cursor-pointer p-2 text-center"
-              @click="form.ammount = balance"
-            >Click para cobrar el saldo deudor total</div>
+              @click="form.ammount = balance / patientRate.appointment_price"
+            >Click para cobrar todas las citas</div>
           </div>
 
           <div class="grid">

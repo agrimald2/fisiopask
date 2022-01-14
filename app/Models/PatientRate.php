@@ -29,7 +29,8 @@ class PatientRate extends Model
     ];
     protected $appends = [
         'status_label', 
-        'appointments_paid', 
+        'appointments_paid',
+        'appointment_price',
         'appointments_assisted',
         'can_assist',
         'can_assist_string'
@@ -45,6 +46,11 @@ class PatientRate extends Model
     function getStatusLabelAttribute()
     {
         return self::RATE_STATUS_LABEL[$this->state];
+    }
+
+    function getAppointmentPriceAttribute()
+    {
+        return $this->price / $this->sessions_total;
     }
 
     function getAppointmentsPaidAttribute()

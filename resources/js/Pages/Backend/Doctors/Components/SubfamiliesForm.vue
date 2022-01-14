@@ -35,7 +35,7 @@
       >
         <div class="border bg-white rounded px-4 py-2 inline-block">
           <div class="flex items-center gap-4">
-            {{ subfamily.name }}
+            {{ subfamily.name_with_family }}
             <div
               class="text-red-500 underline cursor-pointer"
               @click="removeSubfamily(subfamily.id)"
@@ -67,7 +67,7 @@ export default {
     subfamiliesOptions() {
       const options = {};
       this.subfamilies.map((x) => {
-        options[x.id] = x.name;
+        options[x.id] = x.name_with_family;
       });
       return options;
     },

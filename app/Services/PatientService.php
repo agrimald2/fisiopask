@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Domain\Reniec\Datas\PatientData;
 use App\Models\Patient;
 use App\Models\User;
+use App\Models\PatientRate;
+use App\Models\Rate;
 
 class PatientService
 {
@@ -65,6 +67,21 @@ class PatientService
 
         if (!$patient) {
             $patient = Patient::create($data);
+
+            $constantRate = Rate::find(1);
+
+            PatientRate::create([
+                'name' => $constantRate->name,
+                'subfamily_id' => $constantRate->subfamily_id,
+                'patient_id' => $patient->id,
+                'price' => $constantRate->price,
+                'payed' => 0,
+                'is_product' => false,
+                'qty' => 1,
+                'sessions_total' => 1,
+                'sessions_left' => 1,
+                'state' => PatientRate::RATE_STATUS_OPEN,
+            ]);
         }
 
         return $patient;

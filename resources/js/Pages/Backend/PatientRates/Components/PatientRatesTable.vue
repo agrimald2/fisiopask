@@ -48,6 +48,18 @@ export default {
             },
           ],
         }),
+      c().type(cells.Buttons)
+        .extend({
+          buttons: [
+            {
+              label: "Pagar",
+              clicked({ row }) {
+                const url = route("patients.rates.pay", row.id);
+                Inertia.get(url);
+              },
+            },
+          ],
+        }),
     ];
 
     return { cols };
