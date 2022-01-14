@@ -46,9 +46,7 @@
           <tr>
             <th>Nombre:</th>
             <td>
-              {{ appointment.patient.name }}
-              {{ appointment.patient.lastname1 }}
-              {{ appointment.patient.lastname2 }}
+              {{ appointment.patient.fullname }}
             </td>
           </tr>
           <tr>
@@ -82,6 +80,49 @@
             </td>
           </tr>
         </table>
+        <template v-if="rate != null">
+          <div class="mt-4 text-center text-xl">
+            {{ rate.name }}
+          </div>
+          <table class="w-full mt-4">
+            <tr>
+              <th>Precio:</th>
+              <td>
+                {{ rate.price }}
+              </td>
+            </tr>
+            <tr>
+              <th>Cantidad Pagada:</th>
+              <td>
+                {{ rate.payed }}
+              </td>
+            </tr>
+            <tr>
+              <th>Citas Totales:</th>
+              <td>
+                {{ rate.sessions_total }}
+              </td>
+            </tr>
+            <tr>
+              <th>Citas Pagadas:</th>
+              <td>
+                {{ rate.appointments_paid }}
+              </td>
+            </tr>
+            <tr>
+              <th>Citas Asistidas:</th>
+              <td>
+                {{ rate.appointments_assisted }}
+              </td>
+            </tr>
+            <tr>
+              <th>Puede Asistir:</th>
+              <td>
+                {{ rate.can_assist_string }}
+              </td>
+            </tr>
+          </table>
+        </template>
       </div>
 
       <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
@@ -127,7 +168,7 @@
         <front-button
           color="green"
           v-show="appointment.status != 4"
-          @click="$inertia.visit(route('doctors.appointments.rates.show', appointment.id))"
+          @click="markAssisted"
         >
           Marcar Asistencia
         </front-button>
@@ -148,7 +189,7 @@ import FrontButton from "@/Shared/Frontend/Button";
 import dates from "@/ui/dates";
 
 export default {
-  props: ["appointment", "role"],
+  props: ["appointment", "role", "rate"],
 
   components: {
     AppLayout,
@@ -170,6 +211,21 @@ export default {
       ) {
         const url = route("doctors.appointments.cancel", this.appointment.id);
         this.$inertia.post(url);
+      }
+    },
+    markAssisted() {
+      if(this.rate.can_assist)
+      {
+        if(confirm("Estás seguro?"))
+        {
+          const url = route('patients.rates.assisted', this.rate.id);
+          this.$inertia.visit(url);
+        }
+      }
+      else
+      {
+        const url = route('patients.rates.pay', this.rate.id);
+        this.$inertia.visit(url);
       }
     },
   },

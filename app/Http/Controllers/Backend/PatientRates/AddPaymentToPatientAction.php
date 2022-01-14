@@ -34,6 +34,8 @@ class AddPaymentToPatientAction extends Controller
                 'patient_rate_id' => $request->rate_id,
             ]);
 
+        if($request->appointment_id != null) return redirect()->route('doctors.appointments.show', $request->appointment_id);
+        
         return redirect()->route('patients.rates.index', $patient);
     }
 }

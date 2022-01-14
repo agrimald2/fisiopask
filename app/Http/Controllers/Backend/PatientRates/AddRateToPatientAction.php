@@ -27,6 +27,7 @@ class AddRateToPatientAction extends Controller
                     $patientRate = $patient->rates()
                         ->create([
                             'name' => $rate->name,
+                            'subfamily_id' => $rate->subfamily_id,
                             'price' => $rate->price,
                             'is_product' => true,
                             'qty' => $qty,
@@ -41,6 +42,7 @@ class AddRateToPatientAction extends Controller
                     $patientRate = $patient->rates()
                         ->create([
                             'name' => $rate->name,
+                            'subfamily_id' => $rate->subfamily_id,
                             'price' => $rate->price,
                             'is_product' => false,
                             'sessions_total' => $rate->stock,

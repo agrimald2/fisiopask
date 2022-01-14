@@ -27,24 +27,23 @@ export default {
       c("appointments_paid", "Citas Pagadas"),
       c("appointments_assisted", "Citas Asistidas"),
       c("can_assist_string", "Puede Asistir"),
+      c("", "Estado")
+        .extend({
+            html: true,
+        })
+        .format(function (row) {
+            let colorClass = (row.state == 0 ? "bg-green-400" : "bg-red-400");
+
+            return `<span class="${colorClass} text-white px-2 rounded">${row.status_label}</span>`;
+        }),
       c().type(cells.Buttons)
         .extend({
           buttons: [
             {
-              label: "Marcar Asistencia",
+              label: "Detalles",
               clicked({ row }) {
-                if(row.can_assist)
-                {
-                  if(confirm("Estás seguro?"))
-                  {
-                    const url = route("patients.rates.assited", row.id);
-                    Inertia.get(url);
-                  }
-                }
-                else
-                {
-                  confirm("Tiene que pagar para asistir");
-                }
+                const url = route("patients.rates.payments", row.id);
+                Inertia.get(url);
               },
             },
           ],

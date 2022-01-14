@@ -48,7 +48,7 @@ class AppointmentService
     {
         return Appointment::query()
             ->whereKey($id)
-            ->with('patient')
+            ->with('patient', 'doctor.subfamilies')
             ->firstOrFail();
     }
 }

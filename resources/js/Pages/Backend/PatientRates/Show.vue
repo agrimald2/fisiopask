@@ -2,20 +2,19 @@
   <app-layout title="Tarifas de la Cita">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Tarifas de la Cita
+        Pagos de la Tarifa
       </h2>
     </template>
 
     <app-body>
       <div class="p-2">
-        <div class="text-xl">Paciente:</div>
-        Cita de <span class="text-lg">{{ appointment.patient.fullname }}</span>
-        - El {{ appointment.date }} de {{ appointment.start }} a {{ appointment.end }} hrs.
+        <div class="text-xl">Tarifa:</div>
+        <span class="text-lg">{{ patientRate.name }}</span>
 
         <div class="mt-4 pt-4 border-t">
-          <div class="text-xl">Tarifas de la Cita:</div>
+          <div class="text-xl">Pagos de la Tarifa:</div>
           <div class="py-4">
-            <patient-rates-table :patientRates="patientRates" />
+            <patient-payments-table :payments="patientRate.patient_payment" />
           </div>
         </div>
 
@@ -30,10 +29,10 @@ import AppBody from "@/Shared/Backend/AppBody";
 
 import UiButton from "@/Shared/Frontend/Button";
 import UiCheckout from "@/Pages/Backend/PatientRates/Components/Checkout.vue";
-import PatientRatesTable from "./Components/PatientRatesTableAssisted.vue";
+import PatientPaymentsTable from "./Components/PatientPaymentsTable.vue";
 
 export default {
-  props: ["appointment", "patientRates"],
+  props: ["patientRate"],
 
   components: {
     AppLayout,
@@ -41,7 +40,7 @@ export default {
     UiCheckout,
     UiButton,
 
-    PatientRatesTable,
+    PatientPaymentsTable,
   },
 };
 </script>

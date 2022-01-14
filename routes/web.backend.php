@@ -18,6 +18,9 @@ use App\Http\Controllers\Backend\PatientRates\RenderPatientPosAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPatientRatesAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPaymentFormAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPosAction;
+use App\Http\Controllers\Backend\PatientRates\ShowPaymentsAction;
+use App\Http\Controllers\Backend\PatientRates\CancelPaymentAction;
+use App\Http\Controllers\Backend\PatientRates\PayRateAction;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\PaymentLinksController;
 use App\Http\Controllers\Backend\PaymentMethodController;
@@ -96,6 +99,7 @@ Route::resource('doctors.freezes', ScheduleFreezeController::class)
  */
 Route::resource('patients', PatientController::class)
     ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
+
 /**
  * Patient Appointments
  */
@@ -106,6 +110,7 @@ Route::post('/dni/{dni}/day', [PatientAppointmentController::class, 'pickDatePos
     ->name('patients.appointment.pickDate.post');
 Route::get('/dni/{dni}/day/{date}/time/', [PatientAppointmentController::class, 'pickTime'])
     ->name('patients.appointment.pickTime');
+
 /**
  * Patient wallet
  */
@@ -113,7 +118,16 @@ Route::delete('/patients/rates/{patientRate}', DestroyPatientRateAction::class)
     ->name('patients.rates.destroy');
 
 Route::get('/patients/rates/{patientRate}/assisted', MarkAssistedAction::class)
-    ->name('patients.rates.assited');
+    ->name('patients.rates.assisted');
+
+Route::get('/patients/rates/{patientRate}/pay', PayRateAction::class)
+    ->name('patients.rates.pay');
+
+Route::get('/patients/rates/{patientRate}/payments', ShowPaymentsAction::class)
+    ->name('patients.rates.payments');
+
+Route::get('/patients/payments/{payment}/cancel', CancelPaymentAction::class)
+    ->name('patients.rates.payments.cancel');
 
 Route::namespace(null)
     ->name('patients.rates.')
