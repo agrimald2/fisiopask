@@ -10,12 +10,25 @@ class Subfamily extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'family_id'];
+    protected $appends = ['name_with_family'];
+
+    /**
+     * Attributes
+     */
+
+    function getNameWithFamilyAttribute()
+    {
+        return $this->family->name . " - " . $this->name;
+    }
+
+    /**
+     * Relationships
+     */
 
     public function family()
     {
         return $this->belongsTo(Family::class);
     }
-
 
     public function rates()
     {
