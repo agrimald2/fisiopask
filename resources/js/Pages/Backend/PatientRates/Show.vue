@@ -14,7 +14,7 @@
         <div class="mt-4 pt-4 border-t">
           <div class="text-xl">Pagos de la Tarifa:</div>
           <div class="py-4">
-            <patient-payments-table :payments="patientRate.patient_payment" />
+            <patient-payments-table :payments="payments" />
           </div>
         </div>
 
@@ -32,7 +32,7 @@ import UiCheckout from "@/Pages/Backend/PatientRates/Components/Checkout.vue";
 import PatientPaymentsTable from "./Components/PatientPaymentsTable.vue";
 
 export default {
-  props: ["patientRate"],
+  props: ["patientRate", "payments"],
 
   components: {
     AppLayout,

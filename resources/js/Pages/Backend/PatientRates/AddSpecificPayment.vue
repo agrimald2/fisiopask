@@ -9,7 +9,7 @@
     <app-body>
       <div class="text-center pt-4">
         <div class="text-2xl">
-          $ <span class="px-2 border select-all">{{ balance }}</span>
+          $ <span class="px-2 border select-all">{{ balance }}</span> - {{ patientRate.name }}
         </div>
         <div class="text-xl">
           Saldo Deudor

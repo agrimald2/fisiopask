@@ -148,12 +148,6 @@
           Añadir Pagos Manuales
         </front-button>
 
-        <front-button
-          color="yellow"
-          @click="$inertia.visit(route('patients.rates.link', appointment.patient.id))"
-        >
-          Generar Link de Pago
-        </front-button>
       </div>
 
       <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
