@@ -34,7 +34,6 @@
             class="text-center mt-4 text-lg"
             v-if="input.product"
           >
-            {{ input.product.name }} x {{ input.qty }} = ${{ input.product.price * input.qty }}
           </div>
         </div>
       </form>
