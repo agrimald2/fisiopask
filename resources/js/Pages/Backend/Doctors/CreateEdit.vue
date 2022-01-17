@@ -23,20 +23,18 @@
 
         <div v-if="model">
           <jet-section-border />
+            <specialties-form
+              :model="model"
+              :specialties="specialties"
+            />
 
-          <specialties-form
-            :model="model"
-            :specialties="specialties"
-          />
+            <jet-section-border />
 
-          <jet-section-border />
-
-          <subfamilies-form
-            :model="model"
-            :subfamilies="subfamilies"
-          />
+            <subfamilies-form
+              :model="model"
+              :subfamilies="subfamilies"
+            />
         </div>
-
       </div>
     </div>
   </app-layout>

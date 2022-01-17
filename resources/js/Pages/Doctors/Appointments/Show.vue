@@ -15,7 +15,7 @@
 
     <app-body>
       <div class="mt-4 capitalize text-center text-xl">
-        {{ appointment.status_label}}
+        {{ appointment.status_label}} -  <span v-if="appointment.patient.is_new" style="color:green"> {{ appointment.patient.is_new}} </span>
         <br>
         {{ dates.dateForHumans(appointment.date) }}
       </div>
@@ -27,18 +27,13 @@
           {{ appointment.end }}
         </div>
       </div>
+      <div class="mt-2">
+        <div class="flex items-center gap-4 justify-center text-xl">
+          <div class="font-bold">Sucursal:</div> {{ appointment.office }}
+        </div>
+      </div>
 
       <div class="mt-4 border rounded p-3">
-
-        <div class="text-center grid gap-4">
-          <div>
-            <div class="font-bold">Especialidad:</div> {{ appointment.specialty }}
-          </div>
-          <div>
-            <div class="font-bold">Sucursal:</div> {{ appointment.office }}
-          </div>
-        </div>
-
         <div class="mt-4 text-center text-xl">
           Paciente:
         </div>
@@ -127,30 +122,13 @@
 
       <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
         <front-button
-          color="green"
+          color="yellow"
           v-if="role == 'admin'"
           @click="$inertia.visit(route('patients.historygroup.index', appointment.patient.id))"
         >
           Ver Historial Clínico
         </front-button>
 
-        <front-button
-          color="green"
-          @click="$inertia.visit(route('doctors.appointments.rates.index', appointment.id))"
-        >
-          Añadir Productos / Servicios
-        </front-button>
-
-        <front-button
-          color="yellow"
-          @click="$inertia.visit(route('patients.rates.index', appointment.patient.id))"
-        >
-          Añadir Pagos Manuales
-        </front-button>
-
-      </div>
-
-      <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
         <front-button
           color="red"
           v-show="appointment.status != 4 && appointment.is_pending"
@@ -165,6 +143,30 @@
           @click="markAssisted"
         >
           Marcar Asistencia
+        </front-button>
+
+        <!--<front-button
+          color="yellow"
+          @click="$inertia.visit(route('patients.rates.link', appointment.patient.id))"
+        >
+          Generar Link de Pago
+        </front-button>-->
+      </div>
+
+      <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
+
+        <front-button
+          color=""
+          @click="$inertia.visit(route('doctors.appointments.rates.index', appointment.id))"
+        >
+          Añadir Productos / Servicios
+        </front-button>
+
+        <front-button
+          color=""
+          @click="$inertia.visit(route('patients.rates.index', appointment.patient.id))"
+        >
+          Añadir Pagos
         </front-button>
       </div>
 
