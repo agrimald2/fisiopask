@@ -13,15 +13,6 @@ class Subfamily extends Model
     protected $appends = ['name_with_family'];
 
     /**
-     * Attributes
-     */
-
-    function getNameWithFamilyAttribute()
-    {
-        return $this->family->name . " - " . $this->name;
-    }
-
-    /**
      * Relationships
      */
 
@@ -38,5 +29,15 @@ class Subfamily extends Model
     public function doctors()
     {
         return $this->belongsToMany(Doctor::class)->withPivot('subfamily_id');
+    }
+
+    /**
+     * Attributes
+     */
+
+    function getNameWithFamilyAttribute()
+    {
+        if($this->family != null) return $this->family->name . " - " . $this->name;
+        return $this->name;
     }
 }
