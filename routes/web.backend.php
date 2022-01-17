@@ -21,6 +21,7 @@ use App\Http\Controllers\Backend\PatientRates\RenderPosAction;
 use App\Http\Controllers\Backend\PatientRates\ShowPaymentsAction;
 use App\Http\Controllers\Backend\PatientRates\CancelPaymentAction;
 use App\Http\Controllers\Backend\PatientRates\PayRateAction;
+use App\Http\Controllers\Backend\PatientRates\PayConstantRateAction;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\PaymentLinksController;
 use App\Http\Controllers\Backend\PaymentMethodController;
@@ -122,6 +123,9 @@ Route::get('/patients/rates/{patientRate}/assisted', MarkAssistedAction::class)
 
 Route::get('/patients/rates/{patientRate}/pay', PayRateAction::class)
     ->name('patients.rates.pay');
+
+Route::get('/patients/constantrate/{appointment}/pay', PayConstantRateAction::class)
+    ->name('patients.constantrate.pay');
 
 Route::get('/patients/rates/{patientRate}/payments', ShowPaymentsAction::class)
     ->name('patients.rates.payments');
