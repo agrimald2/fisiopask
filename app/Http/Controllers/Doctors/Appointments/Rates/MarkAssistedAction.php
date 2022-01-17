@@ -15,6 +15,12 @@ class MarkAssistedAction extends Controller
         if($sessions_left > 0) 
         {
             $patientRate->sessions_left = $sessions_left - 1;
+
+            if($patientRate->sessions_left == 0)
+            {
+                $patientRate->state = PatientRate::RATE_STATUS_COMPLETE;
+            }
+            
             $patientRate->save();
         }
 
