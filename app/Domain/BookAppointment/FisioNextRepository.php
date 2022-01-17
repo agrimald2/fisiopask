@@ -178,7 +178,8 @@ class FisioNextRepository implements RepositoryContract
         $patientName = $patient->name;
         $patientName = $patient->lastname1;
         $doctorName = $appointment->doctor->name;
-        $doctorWorkspace = $appointment->doctor->workspace->name;
+        $doctorWorkspace = [];
+        if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
         $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
 
         $data = compact(
