@@ -55,9 +55,24 @@ class PatientService
 
     public function create($data)
     {
-        return Patient::create(
-            $data
-        );
+        $patient = Patient::create($data);
+
+        $constantRate = Rate::find(1);
+
+        PatientRate::create([
+            'name' => $constantRate->name,
+            'subfamily_id' => $constantRate->subfamily_id,
+            'patient_id' => $patient->id,
+            'price' => $constantRate->price,
+            'payed' => 0,
+            'is_product' => false,
+            'qty' => 1,
+            'sessions_total' => 1,
+            'sessions_left' => 1,
+            'state' => PatientRate::RATE_STATUS_OPEN,
+        ]);
+
+        return $patient;
     }
 
 
@@ -66,22 +81,7 @@ class PatientService
         $patient = $this->getByDni($data['dni']);
 
         if (!$patient) {
-            $patient = Patient::create($data);
-
-            $constantRate = Rate::find(1);
-
-            PatientRate::create([
-                'name' => $constantRate->name,
-                'subfamily_id' => $constantRate->subfamily_id,
-                'patient_id' => $patient->id,
-                'price' => $constantRate->price,
-                'payed' => 0,
-                'is_product' => false,
-                'qty' => 1,
-                'sessions_total' => 1,
-                'sessions_left' => 1,
-                'state' => PatientRate::RATE_STATUS_OPEN,
-            ]);
+            $patient = $this->create($data);
         }
 
         return $patient;
