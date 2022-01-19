@@ -64,6 +64,7 @@ class PatientService
             'subfamily_id' => $constantRate->subfamily_id,
             'patient_id' => $patient->id,
             'price' => $constantRate->price,
+            'appointment_id' => 1,
             'payed' => 0,
             'is_product' => false,
             'qty' => 1,
