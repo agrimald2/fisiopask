@@ -19,7 +19,9 @@
         <br>
         {{ dates.dateForHumans(appointment.date) }}
       </div>
-
+      <div class="mt-4 capitalize text-center text-xl large-text bold">
+          {{appointment.doctor.name}} {{appointment.doctor.lastname}}
+      </div>
       <div class="mt-4">
         <div class="flex items-center gap-4 justify-center text-xl">
           {{ appointment.start }}
@@ -33,85 +35,56 @@
         </div>
       </div>
 
-      <div class="mt-4 border rounded p-3">
+      <div class="mt-4 border rounded p-3 text-center">
         <div class="mt-4 text-center text-xl">
-          Paciente:
+          <h1 class="large-text bold"> INFORMACIÓN DEL PACIENTE </h1> 
         </div>
-        <table class="w-full mt-4">
-          <tr>
-            <th>Nombre:</th>
-            <td>
-              {{ appointment.patient.fullname }}
-            </td>
-          </tr>
-          <tr>
-            <th>DNI:</th>
-            <td>
-              {{ appointment.patient.dni }}
-            </td>
-          </tr>
-          <tr>
-            <th>Fecha de Nacimiento:</th>
-            <td>
-              {{ dates.dateForHumans(appointment.patient.birth_date) }}
-            </td>
-          </tr>
-          <tr>
-            <th>Edad:</th>
-            <td>
-              {{ dates.moment().year() - dates.moment(appointment.patient.birth_date).year() }} años
-            </td>
-          </tr>
-          <tr>
-            <th>Sexo:</th>
-            <td>
-              {{ appointment.patient.sex }}
-            </td>
-          </tr>
-          <tr>
-            <th>Teléfono:</th>
-            <td>
-              {{ appointment.patient.phone }}
-            </td>
-          </tr>
-        </table>
+        <div class="mt-4">
+          <p class="medium-text">
+            {{appointment.patient.fullname}}
+          </p>
+          <p class="medium-text">
+            {{ appointment.patient.dni }} |  {{ appointment.patient.sex }} | {{ dates.moment().year() - dates.moment(appointment.patient.birth_date).year() }} años
+          </p>
+        </div>
+      </div>
+      <div class="border rounded p-3 text-center">
+        <div class="mt-4 text-center text-xl">
+          <h1 class="large-text bold"> TARIFA DE LA CITA </h1> 
+        </div>
         <template v-if="rate != null">
-          <div class="mt-4 text-center text-xl">
+          <div class="mt-4 text-center text-xl medium-text">
             {{ rate.name }}
           </div>
           <table class="w-full mt-4">
-            <tr>
+            <tr class="uppercase">
               <th>Precio:</th>
+
+              <th>Totales:</th>
+
+              <th>Pagadas:</th>
+
+              <th>Asistidas:</th>
+
+              <th>Puede Asistir:</th>
+            </tr>            
+            <tr class="medium-text">
               <td>
                 {{ rate.price }}
               </td>
-            </tr>
-            <tr>
-              <th>Cantidad Pagada:</th>
-              <td>
-                {{ rate.payed }}
-              </td>
-            </tr>
-            <tr>
-              <th>Citas Totales:</th>
+
               <td>
                 {{ rate.sessions_total }}
               </td>
-            </tr>
-            <tr>
-              <th>Citas Pagadas:</th>
+
               <td>
                 {{ rate.appointments_paid }}
               </td>
-            </tr>
-            <tr>
-              <th>Citas Asistidas:</th>
+
               <td>
                 {{ rate.appointments_assisted }}
               </td>
-            </tr>
-            <tr>
-              <th>Puede Asistir:</th>
+
               <td>
                 {{ rate.can_assist_string }}
               </td>
