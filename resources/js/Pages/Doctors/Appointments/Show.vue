@@ -141,6 +141,15 @@
         >
           Añadir Pagos
         </front-button>
+
+        <front-button
+        v-if="rate == null"
+          color="green"
+          v-show="appointment.status != 4"
+          @click="payConstantRate"
+        >
+          Cobrar Consulta
+        </front-button>
       </div>
 
       <div class="pb-12"></div>
@@ -194,6 +203,14 @@ export default {
       else
       {
         const url = route('patients.rates.pay', this.rate.id);
+        this.$inertia.visit(url);
+      }
+    },
+    payConstantRate() {
+      if (
+        confirm("Estas seguro?")
+      ) {
+        const url = route('patients.constantrate.pay', this.appointment.id);
         this.$inertia.visit(url);
       }
     },

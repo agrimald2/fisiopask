@@ -18,6 +18,7 @@ class ShowAppointmentAction extends Controller
         if ($user->hasRole('assistant')) $role = "assistant";
 
         $appointment = appointments()->show($id);
+        $patient = $appointment->patient;
 
         $doctor = $appointment->doctor;
         $doctorSubfamilies = $doctor->subfamilies[0]->get();
@@ -29,6 +30,7 @@ class ShowAppointmentAction extends Controller
             $query = PatientRate::query()
                 ->where('subfamily_id', $subfamily->id)
                 ->where('state', PatientRate::RATE_STATUS_OPEN)
+                ->where('patient_id', $patient->id)
                 ->first();
 
             if($query) 
