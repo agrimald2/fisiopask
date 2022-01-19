@@ -49,6 +49,7 @@ class PayConstantRateAction extends Controller
                 'subfamily_id' => $constantRateModel->subfamily_id,
                 'patient_id' => $patient->id,
                 'price' => $constantRateModel->price,
+                'appointment_id' => $appointment->id,
                 'payed' => 0,
                 'is_product' => false,
                 'qty' => 1,
