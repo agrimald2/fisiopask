@@ -15,6 +15,10 @@
           </div>
         </div>
         <div
+          v-if="can_assist"
+          class="px-2 py-1 rounded font-bold text-sm bg-red-500 text-white"
+        >No Pagada</div>
+        <div
           v-if="model.status==4"
           class="px-2 py-1 rounded font-bold text-sm bg-red-500 text-white"
         >Cancelada</div>
@@ -29,7 +33,7 @@
         <i class="fas fa-arrow-right"></i>
         {{ model.end }}
       </div>
-      <div class="mt-3 text-sm">
+      <div class="mt-3 text-sm medium-text">
         {{ model.doctor.name }} {{ model.doctor.lastname }}
       </div>
     </div>
@@ -60,7 +64,7 @@ export default {
   },
 
   data() {
-    return { expanded: false };
+    return { expanded: false, can_assist: true};
   },
 
   setup() {

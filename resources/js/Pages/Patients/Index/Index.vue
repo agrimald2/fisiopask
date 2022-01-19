@@ -34,6 +34,12 @@
 
       <!-- Ver citas -->
       <div class="mt-6">
+        <div class="text-4xl font-bold">Tarifas Pendientes</div>
+        <div class="mt-4">
+          <appointments :appointments="appointments" />
+        </div>
+      </div>
+      <div class="mt-6">
         <div class="text-4xl font-bold">Citas registradas</div>
         <div class="mt-4">
           <appointments :appointments="appointments" />
