@@ -9,6 +9,8 @@ class DoctorSubfamily extends Model
 {
     use HasFactory;
 
+    protected $table = 'doctor_subfamily';
+
     /**
      * Relationships
      */

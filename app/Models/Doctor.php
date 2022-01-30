@@ -41,7 +41,7 @@ class Doctor extends Model
 
     public function subfamilies()
     {
-        return $this->belongsToMany(Subfamily::class)->withPivot('subfamily_id');
+        return $this->belongsToMany(Subfamily::class);
     }
 
 

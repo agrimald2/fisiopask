@@ -6,6 +6,9 @@ use App\Domain\Appointments\AppointmentCanceler;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\DoctorSubfamily;
+use App\Models\PatientRate;
+
 class Appointment extends Model
 {
     use HasFactory;
@@ -32,6 +35,8 @@ class Appointment extends Model
     protected $appends = [
         'status_label',
         'is_pending',
+        'main_rate',
+        'appointments_paid',
     ];
 
     /**
@@ -45,6 +50,37 @@ class Appointment extends Model
     public function getIsPendingAttribute()
     {
         return $this->date->gt(now());
+    }
+
+    function getMainRateAttribute()
+    {
+        $rate = null;
+
+        $doctorSubfamilies = DoctorSubfamily::query()->where('doctor_id' , $this->doctor_id)->get();
+        
+        foreach($doctorSubfamilies as $subfamily)
+        {
+            $query = PatientRate::query()
+                ->where('subfamily_id', $subfamily->subfamily_id)
+                ->where('patient_id', $this->patient_id)
+                ->first();
+            
+            if($query)
+            {
+                $rate = $query;
+                break;
+            }
+        }
+
+        return $rate;
+    }
+
+    function getAppointmentsPaidAttribute()
+    {
+        $rate = $this->getMainRateAttribute();
+        if($rate != null) return $rate->appointments_paid;
+
+        return 0;
     }
 
 
