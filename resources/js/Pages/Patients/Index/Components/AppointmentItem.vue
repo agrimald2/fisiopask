@@ -15,13 +15,21 @@
           </div>
         </div>
         <div
-          v-if="can_assist"
+          v-if="appointmentsLeft <= 0"
           class="px-2 py-1 rounded font-bold text-sm bg-red-500 text-white"
         >No Pagada</div>
         <div
           v-if="model.status==4"
           class="px-2 py-1 rounded font-bold text-sm bg-red-500 text-white"
         >Cancelada</div>
+        <div
+          v-else-if="model.status==3"
+          class="px-2 py-1 rounded font-bold text-sm bg-green-500 text-white"
+        >Asistida</div>
+        <div
+          v-else-if="model.status==2"
+          class="px-2 py-1 rounded font-bold text-sm bg-red-500 text-white"
+        >No asistida</div>
         <div
           v-else
           v-show="isPendient"
@@ -57,7 +65,7 @@ import UiButton from "@/Shared/Frontend/Button";
 import dates from "@/ui/dates.js";
 
 export default {
-  props: ["model"],
+  props: ["model", "appointmentsLeft"],
 
   components: {
     UiButton,
@@ -77,6 +85,11 @@ export default {
       const url = route("area.patients.cancel", id);
       this.$inertia.visit(url);
     },
+    pay() {
+      const id = this.model.id;
+      const url = route("area.patients.pay", id);
+      this.$inertia.visit(url);
+    }
   },
 
   computed: {

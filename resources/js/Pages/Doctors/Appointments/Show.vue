@@ -48,11 +48,11 @@
           </p>
         </div>
       </div>
-      <div class="border rounded p-3 text-center">
-        <div class="mt-4 text-center text-xl">
-          <h1 class="large-text bold"> TARIFA DE LA CITA </h1> 
-        </div>
-        <template v-if="rate != null">
+      <template v-if="rate != null">
+        <div class="border rounded p-3 text-center">
+          <div class="mt-4 text-center text-xl">
+            <h1 class="large-text bold"> TARIFA DE LA CITA </h1> 
+          </div>
           <div class="mt-4 text-center text-xl medium-text">
             {{ rate.name }}
           </div>
@@ -90,8 +90,8 @@
               </td>
             </tr>
           </table>
-        </template>
-      </div>
+        </div>
+      </template>
 
       <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
         <front-button
@@ -142,14 +142,14 @@
           Añadir Pagos
         </front-button>
 
-        <front-button
+        <!--front-button
         v-if="rate == null"
           color="green"
           v-show="appointment.status != 4"
           @click="payConstantRate"
         >
           Cobrar Consulta
-        </front-button>
+        </front-button-->
       </div>
 
       <div class="pb-12"></div>

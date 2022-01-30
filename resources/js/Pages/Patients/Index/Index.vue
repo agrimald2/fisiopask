@@ -32,17 +32,25 @@
         </div>
       </div>
 
+      <!-- Ver Tarifas -->
+      <div class="mt-6">
+        <div class="text-4xl font-bold">Tarifas Activas</div>
+        <div class="mt-4">
+          <RatesCmp :rates="rates"/>
+        </div>
+      </div>
+
       <!-- Ver citas -->
       <div class="mt-6">
-        <div class="text-4xl font-bold">Tarifas Pendientes</div>
+        <div class="text-4xl font-bold">Citas Pendientes</div>
         <div class="mt-4">
-          <appointments :appointments="appointments" />
+          <appointments :appointments="appointments" :past="false"/>
         </div>
       </div>
       <div class="mt-6">
-        <div class="text-4xl font-bold">Citas registradas</div>
+        <div class="text-4xl font-bold">Citas Pasadas</div>
         <div class="mt-4">
-          <appointments :appointments="appointments" />
+          <appointments :appointments="appointments" :past="true" />
         </div>
       </div>
 
@@ -56,9 +64,10 @@ import UiContainer from "@/Pages/Frontend/BookAppointment/UI/Container";
 import UiButton from "@/Shared/Frontend/Button";
 
 import Appointments from "./Components/Appointments";
+import RatesCmp from "./Components/Rates";
 
 export default {
-  props: ["model", "appointments"],
+  props: ["model", "appointments", "rates"],
 
   components: {
     Layout,
@@ -66,6 +75,7 @@ export default {
     UiButton,
 
     Appointments,
+    RatesCmp,
   },
 };
 //TODO @ IMPROVE CLIENT DESIGN

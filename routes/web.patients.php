@@ -5,6 +5,7 @@ use App\Http\Controllers\Patients\Auth\LogoutAction;
 use App\Http\Controllers\Patients\IndexAction;
 use App\Http\Controllers\Patients\RebookAction;
 use App\Http\Controllers\Patients\CancelAction;
+use App\Http\Controllers\Patients\PayAction;
 use App\Http\Controllers\Patients\CancelConfirmAction;
 use App\Http\Controllers\Patients\PatientSurveyController;
 use Illuminate\Http\Request;
@@ -30,6 +31,9 @@ Route::middleware('patients.auth')->group(function () {
         ->name('area.patients.cancel');
     Route::post('/cancel/{appointment}', CancelConfirmAction::class)
         ->name('area.patients.cancelPost');
+
+    Route::post('/pay', PayAction::class)
+        ->name('area.patients.pay');
 });
 
 Route::get('/survey/appointment/{id}', PatientSurveyController::class)

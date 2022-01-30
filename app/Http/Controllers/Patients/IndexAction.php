@@ -20,6 +20,10 @@ class IndexAction extends Controller
             ->orderBy('date', 'desc')
             ->paginate(5);
 
-        return inertia('Patients/Index/Index', compact('model', 'appointments'));
+        $rates = $model->rates()
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return inertia('Patients/Index/Index', compact('model', 'appointments', 'rates'));
     }
 }
