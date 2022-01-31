@@ -46,6 +46,7 @@ class PayAction extends Controller
                 'product_name' => $rate->name,
                 'qty' => $request->amount,
                 'amount' => $rate->appointment_price,
+                'patient_rate_id' => $request->rate_id,
             ]);
 
         $url = $paymentRequest->request(new MercadoPagoRequester);

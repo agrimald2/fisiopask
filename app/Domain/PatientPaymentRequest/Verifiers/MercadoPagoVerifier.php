@@ -5,6 +5,7 @@ namespace App\Domain\PatientPaymentRequest\Verifiers;
 use App\Domain\PatientPaymentRequest\Requesters\MercadoPagoRequester;
 use App\Domain\PaymentGateways\MercadoPagoGateway;
 use App\Models\PatientPaymentRequest;
+use App\Models\PatientRate;
 
 class MercadoPagoVerifier implements VerifierContract
 {
@@ -49,7 +50,8 @@ class MercadoPagoVerifier implements VerifierContract
                 $patientPayment = $patientPaymentRequest->payment()
                     ->create([
                         'payment_method' => MercadoPagoRequester::PAYMENT_METHOD,
-                        'ammount' => $patientPaymentRequest->amount,
+                        'ammount' => $patientPaymentRequest->amount * $patientPaymentRequest->qty,
+                        'patient_rate_id' => $patientPaymentRequest->patient_rate_id,
                         'concept' => 'system',
                         'patient_id' => $patientPaymentRequest->patient_id,
                     ]);
@@ -58,6 +60,10 @@ class MercadoPagoVerifier implements VerifierContract
                     ->payment()
                     ->associate($patientPayment)
                     ->save();
+
+                $patientRate = PatientRate::find($patientPaymentRequest->patient_rate_id);
+                $patientRate->payed = $patientPaymentRequest->amount * $patientPaymentRequest->qty;
+                $patientRate->save();
             }
         }
 

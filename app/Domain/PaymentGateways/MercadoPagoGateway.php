@@ -31,6 +31,8 @@ class MercadoPagoGateway
             "pending" => $url,
         ];
 
+        $preference->auto_return = "approved";
+
         /**
          * List of `MercadoPago\Item` class
          */
