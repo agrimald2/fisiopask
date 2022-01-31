@@ -30,7 +30,6 @@ class PayConstantRateAction extends Controller
 
         foreach($rates as $rate)
         {
-
             if($rate.name == $constantRateModel.name)
             {
                 if($rate.state == RATE_STATUS_OPEN)

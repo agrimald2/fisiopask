@@ -7,10 +7,12 @@ use App\Models\PatientPaymentRequest;
 
 class MercadoPagoRequester implements RequesterContract
 {
-    const PAYMENT_METHOD = "mercadopago";
+    const PAYMENT_METHOD = "Mercadopago";
 
     public function request(PatientPaymentRequest $patientPaymentRequest)
     {
+        $name = $patientPaymentRequest->product_name;
+        $qty = $patientPaymentRequest->qty;
         $amount = $patientPaymentRequest->amount;
 
         $webhookUrl = route('paynow.verify', $patientPaymentRequest);
@@ -18,6 +20,8 @@ class MercadoPagoRequester implements RequesterContract
         list($gatewayReference, $gatewayUrl) = app(MercadoPagoGateway::class)
             ->generate(
                 $patientPaymentRequest->id,
+                $name,
+                $qty,
                 $amount,
                 $webhookUrl
             );

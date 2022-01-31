@@ -18,6 +18,9 @@ class CreatePatientPaymentRequestsTable extends Migration
             $table->string('payment_method')->nullable();
             $table->string('reference')->nullable();
 
+            $table->string('product_name')->default("null");
+            $table->unsignedInteger('qty')->default(1);
+            //amount = price for some reason...
             $table->float('amount');
             $table->boolean('is_completed')->default(false);
 

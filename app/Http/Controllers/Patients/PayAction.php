@@ -27,11 +27,26 @@ class PayAction extends Controller
         $rate = PatientRate::find($request->rate_id);
         $patient = Patient::find($rate->patient_id);
 
-        $ammountToPay = $rate->appointment_price * $request->amount;
+        /**
+         * Since this is confusing as fuck, let me explain
+         * On Payment Request:
+         * name = name of the rate
+         * qty = quantity of the product
+         * amount = price... apparently
+         * 
+         * On The request:
+         * $rate->name = name of the rate
+         * $request->amount = quantity of the product
+         * $rate->appointment_price = price of the product
+         */
 
         $paymentRequest = $patient
             ->paymentRequests()
-            ->create(['amount' => $ammountToPay]);
+            ->create([
+                'product_name' => $rate->name,
+                'qty' => $request->amount,
+                'amount' => $rate->appointment_price,
+            ]);
 
         $url = $paymentRequest->request(new MercadoPagoRequester);
 
