@@ -33,9 +33,7 @@
             <input
               type="number"
               min="1"
-              :max="balance / patientRate.appointment_price"
-              onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"
-              :onkeyup="`if(this.value>${balance / patientRate.appointment_price}){this.value='${balance / patientRate.appointment_price}';}else if(this.value<1){this.value='1';}`"
+              :max="`${balance / patientRate.appointment_price}`"
               v-model="form.ammount"
             >
             <div

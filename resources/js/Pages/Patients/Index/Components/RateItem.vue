@@ -24,8 +24,6 @@
             type="number"
             min="1"
             :max="(model.price - model.payed) / model.appointment_price"
-            onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"
-            :onkeyup="`if(this.value>${(model.price - model.payed) / model.appointment_price}){this.value='${(model.price - model.payed) / model.appointment_price}';}else if(this.value<1){this.value='1';}`"
             v-model="amount"
           >
         </div>
