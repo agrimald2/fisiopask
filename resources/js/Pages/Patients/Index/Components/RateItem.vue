@@ -50,7 +50,7 @@ export default {
 
   data() {
     return { 
-        amount: 2,
+        amount: 1,
         expanded: false,
         can_assist: true
     };
