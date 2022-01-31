@@ -23,6 +23,7 @@ class CreatePatientPaymentRequestsTable extends Migration
             //amount = price for some reason...
             $table->float('amount');
             $table->boolean('is_completed')->default(false);
+            $table->unsignedBigInteger('patient_rate_id');
 
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('patient_payment_id')->nullable();
