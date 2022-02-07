@@ -299,6 +299,29 @@ a:hover {
 }
 
 @media screen and (max-width: 991px) {
+    #banner_top{
+        background: rgba(70,120,120,.75);
+        position: absolute;
+        top: 12vh;
+        text-align: center;
+    }
+    .st-hero.st-style1 {
+        height: 100vh!important;
+    }
+    .st-hero-social-group{
+        margin-bottom: 3vh;
+        justify-content: center;
+        align-items: center;
+        display: grid;
+        bottom: 3vh!important;
+
+    }
+    #agendar_top{
+        position: absolute;
+        top: 45vh;
+        left: 27vw;
+        margin-right: auto;
+    }
     .st-height-lg-b0 {
         height: 0px;
     }
@@ -946,7 +969,11 @@ hr {
         display: none;
     }
     .st-site-header.st-style1 {
-        background-color: #fff;
+        background-color: transparent;
+    }
+    #logo_topbar{
+        width: 14rem;
+        margin-left: 21vw;
     }
 }
 
@@ -1294,7 +1321,7 @@ hr {
         display: none !important;
     }
     .st-site-header.st-style2 {
-        background-color: #fff;
+        background-color: transparent;
     }
     .st-site-header.st-style2 .st-nav {
         display: flex;
@@ -5454,4 +5481,15 @@ hr {
 
 #main_gallery{
     background-size: cover;
+    height: 100vh;
+}
+
+.social-links{
+    color: white!important;
+    font-size: 3rem;
+}
+
+#logo_topbar{
+    width: 10rem;
+    
 }

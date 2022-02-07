@@ -1,24 +1,19 @@
 <div class="st-hero-wrap st-gray-bg st-dynamic-bg overflow-hidden st-fixed-bg" id="main_gallery" data-src="landing/img/main-bg.jpg" data-src-m="landing/img/main-bgm.jpg">
     <div class="st-hero st-style1">
-        <div class="container">
+        <div class="container" id="banner_top">
             <div class="st-hero-text">
-                <h1 class="st-hero-title cd-headline slide">
+                <h1 class="st-hero-title cd-h   eadline slide" style="font-weight: 100!important;">
                     <span style="color: white;">Recuperarse rápido <br> SÍ es posible</span> 
                     <br>
-                    <span class="cd-words-wrapper" style="font-size: 1.8rem; margin-top:15px">
-                        <b class="is-visible">Traumatología</b>
-                        <b>Neurología</b>
-                        <b>Reumatología</b>
-                        <b>Pediatría</b>
-                        <b>Geriatría</b>
-                    </span>
                 </h1>
-                <div class="st-hero-subtitle" style="color: black; font-weight: bold;">
+                <!--
+                    <div class="st-hero-subtitle" style="color: black; font-weight: bold;">
                     Tu Cuerpo fue hecho para moverse
                     <br>
                     Te ayudamos a que sea como antes
                 </div>
-                <div class="st-hero-btn">
+                --> 
+                <div class="st-hero-btn" id="agendar_top">
                     <a href="/book-appointment" class="st-btn st-style1 st-color1 st-smooth-move">Agendar Cita</a>
                 </div>
             </div>
@@ -35,6 +30,8 @@
     </div>
     <div class="st-slider st-style1 st-hero-slider1" id="home"> 
     </div>
-    <!-- .st-slider -->
+    <!-- 
+    .st-slider 
     <div class="st-hero-shape"><img src="landing/img/shape/hero-shape.png" alt="hero shape"></div>
+    -->
 </div>

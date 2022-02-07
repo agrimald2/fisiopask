@@ -152,12 +152,13 @@ UNLOCK TABLES;
 -- Dumping data for table `migrations`
 --
 
+/*
 LOCK TABLES `migrations` WRITE;
-/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS ;
 INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_resets_table',1),(3,'2014_10_12_200000_add_two_factor_columns_to_users_table',1),(4,'2019_08_19_000000_create_failed_jobs_table',1),(5,'2019_12_14_000001_create_personal_access_tokens_table',1),(6,'2021_08_26_002923_create_sessions_table',1),(7,'2021_08_28_191534_create_doctors_table',1),(8,'2021_08_30_185316_create_permission_tables',1),(9,'2021_08_31_142741_create_schedules_table',1),(10,'2021_09_01_130523_create_patients_table',1),(11,'2021_09_02_114248_create_offices_table',1),(12,'2021_09_03_181328_create_doctor_specialties_table',1),(13,'2021_09_17_144238_create_appointments_table',1),(14,'2021_10_27_122547_create_patient_histories_table',1),(15,'2021_10_29_104121_create_payment_methods_table',1),(16,'2021_10_29_113551_create_families_table',1),(17,'2021_11_03_115240_create_subfamilies_table',1),(18,'2021_11_03_121819_create_schedule_freezes_table',1),(19,'2021_11_03_122321_create_rates_table',1),(20,'2021_11_03_202005_create_patient_rates_table',1),(21,'2021_11_03_211520_create_patient_payments_table',1),(22,'2021_11_10_132148_create_patient_payment_requests_table',1),(23,'2021_12_11_153730_create_workspaces_table',1),(24,'2021_12_12_112421_create_surveys_table',1),(25,'2021_12_19_113230_create_diagnostics_table',1),(26,'2021_12_19_115147_create_treatments_table',1),(27,'2021_12_19_115210_create_analysis_table',1),(28,'2021_12_19_115244_create_affected_areas_table',1),(29,'2021_12_20_104206_create_medical_histories_table',1),(30,'2021_12_20_120607_create_history_groups_table',1),(31,'2021_12_20_121342_create_medical_revisions_table',1),(32,'2021_12_24_163333_create_assistants_table',1),(33,'2021_12_26_183812_create_recommendations_table',1),(34,'2022_01_06_115544_create_history_treatments_table',1);
-/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS ;
 UNLOCK TABLES;
-
+*/
 --
 -- Dumping data for table `model_has_permissions`
 --

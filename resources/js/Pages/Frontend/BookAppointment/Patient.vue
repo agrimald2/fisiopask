@@ -36,7 +36,7 @@
             <ui-input
               v-model="form.name"
               required
-              placeholder="Tu nombre"
+              placeholder="NOMBRES"
               :disabled="loading"
             />
             <ui-error
@@ -56,7 +56,7 @@
             <ui-input
               v-model="form.lastname1"
               required
-              placeholder="Tu apellido paterno"
+              placeholder="APELLIDO PATERNO"
               :disabled="loading"
             />
             <ui-error
@@ -76,7 +76,7 @@
             <ui-input
               v-model="form.lastname2"
               required
-              placeholder="Tu apellido materno"
+              placeholder="APELLIDO MATERNO"
               :disabled="loading"
             />
             <ui-error
@@ -116,7 +116,7 @@
             <ui-radio
               v-model="form.sex"
               :options="sexOptions"
-              class="justify-center"
+              class="justify-center uppercase bold"
             />
             <ui-error
               class="mt-2"
@@ -136,7 +136,7 @@
         >
           <ui-button>
             <div class="flex items-center justify-center">
-              Siguiente
+              SIGUIENTE
               <i class="fas fa-angle-right pl-3"></i>
             </div>
           </ui-button>

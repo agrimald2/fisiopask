@@ -47,7 +47,7 @@ class IndexAppointmentAction extends Controller
 
             'enableDateSearch' => true,
 
-            'enableOfficeSearch' => true,
+            'enableOfficeSearch' => true,   
 
             'enableDoctorSearch' => $canSearchByDoctor,
 

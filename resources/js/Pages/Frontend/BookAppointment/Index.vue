@@ -56,8 +56,8 @@
           v-else
         >
           <ui-button>
-            <div class="flex items-center justify-center">
-              Siguiente
+            <div class="flex items-center justify-center" style="font-size:1.2rem">
+              SIGUIENTE
               <i class="fas fa-angle-right pl-3"></i>
             </div>
           </ui-button>

@@ -42,8 +42,8 @@ class FisioLegacyRepository implements RepositoryContract
     public function getSexOptions()
     {
         return [
-            'M' => 'Masculino',
-            'F' => 'Femenino',
+            'M' => 'MASCULINO',
+            'F' => 'FEMENINO',
         ];
     }
 
