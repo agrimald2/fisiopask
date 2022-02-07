@@ -9,7 +9,7 @@
       :class="{ 'hover:bg-gray-100': !expanded }"
       @click="expanded = !expanded"
     >
-      <div class="text-gray-700 text-center">
+      <div class="text-gray-700 text-center large-text">
         {{ schedule.doctor }}
       </div>
       <div
@@ -17,13 +17,13 @@
       text-sm text-gray-500 pt-2"
         :class="{'': !expanded }"
       >
-        <div class="">
+        <div class="large-text">
           {{ dates.hourForHumans(schedule.start_time) }}
         </div>
         <div class="">
           <i class="fas fa-caret-right"></i>
         </div>
-        <div class="">
+        <div class="large-text">
           {{ dates.hourForHumans(schedule.end_time) }}
         </div>
       </div>
