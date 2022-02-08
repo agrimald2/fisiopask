@@ -28,7 +28,7 @@
           label="Fecha del Test"
           name="test_date"
           v-model="form.taken_at"
-          type="date"
+          type="datetime-local"
           :form="form"
         />
 
@@ -37,7 +37,7 @@
           label="Fecha del Resultado"
           name="result_date"
           v-model="form.result_at"
-          type="date"
+          type="datetime-local"
           :form="form"
         />
 
