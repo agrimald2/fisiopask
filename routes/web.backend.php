@@ -53,6 +53,11 @@ use App\Http\Controllers\Doctors\Appointments\Rates\ShowRatesAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\MarkAssistedAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\StoreRateAction;
 use App\Http\Controllers\Doctors\Appointments\ShowAppointmentAction;
+
+use App\Http\Controllers\Backend\Tests\TestTypeController;
+use App\Http\Controllers\Backend\Tests\TestController;
+use App\Http\Controllers\Backend\Tests\CompanyController;
+
 use App\Http\Controllers\GoogleCalendar\GoogleCalendarController;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
@@ -370,3 +375,19 @@ Route::prefix('test')
             return inertia('Test/Dropdown');
         });
     });
+
+/**
+ * Tests
+*/
+
+Route::resource('testTypes', TestTypeController::class)
+    ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
+
+Route::post('/testTypes/addResult', [TestTypeController::class, 'addResult'])
+    ->name('testTypes.addResult');
+
+Route::resource('tests', TestController::class)
+    ->only('index', 'create', 'edit', 'store', 'update');
+
+Route::resource('companies', CompanyController::class)
+    ->only('index', 'create', 'edit', 'store', 'update', 'destroy');

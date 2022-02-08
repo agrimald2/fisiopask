@@ -127,6 +127,28 @@
       @click="go('subfamilies.index')"
     />
   </link-group>
+
+  <!-- COV-19 -->
+  <link-group style="margin-top:-3rem!important;" 
+    title="COV-19">
+    <link-item
+      label="Tipos de test"
+      icon="fa-microscope"
+      @click="go('testTypes.index')"
+    />
+
+    <link-item
+      label="Tests"
+      icon="fa-lungs-virus"
+      @click="go('tests.index')"
+    />
+
+    <link-item
+      label="Compañias"
+      icon="fa-hospital-alt"
+      @click="go('companies.index')"
+    />
+  </link-group>
 </template>
 
 
