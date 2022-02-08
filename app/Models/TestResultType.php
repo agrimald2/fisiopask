@@ -10,7 +10,7 @@ class TestResultType extends Model
     use HasFactory;
 
     protected $table = "test_result_type";
-    protected $fillable = ["test_type_id", "result"];
+    protected $guarded = ["id", "created_at", "updated_at"];
 
     public $timestamps = false;
 }
