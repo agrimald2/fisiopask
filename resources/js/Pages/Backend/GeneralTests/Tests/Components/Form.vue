@@ -119,6 +119,17 @@ export default {
     };
   },
 
+  mounted() {
+      if(this.model)
+      {
+        const list = this.resultOptions;
+        for(const key in list)
+        {
+            if(list[key] == this.model.result) this.form.result = key;
+        }
+      }
+  },
+
   computed: {
       resultOptions() {
         if(this.previousTestType != this.form.test_type_id)
