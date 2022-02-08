@@ -25,7 +25,7 @@
         class="mt-1 block w-full"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
-        autocomplete="name"
+        autocomplete="${{name}}"
       />
     </div>
     <jet-input-error
