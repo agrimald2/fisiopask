@@ -18,7 +18,7 @@
         class="flex-grow border-t"
         :class="{'border-white': expanded}"
       ></div>
-      <div class="text-sm uppercase font-bold pr-2">
+      <div class="text-sm uppercase font-bold pr-2 medium-text">
         {{ schedules.length }} disponibles
       </div>
     </div>

@@ -1,6 +1,14 @@
 *FISIOSALUD: CONFIRMACIÓN DE CITA*
 
-Hola, por favor acércate a recepción para pagar tu cita:
+Hola {{$patientName}}, bienvenido de vuelta! 
+Tu cita ha sido generada
+
+*Puedes realizar el pago de tu cita por medio de este link para evitar colas y demoras en recepción:*
+
+{{ $dashboardLink }}
+
+
+O puedes hacer el pago con otros medios más convencionales acercándote a recepción
 
 *Fecha de cita:*
 {{ $date }}
@@ -11,9 +19,6 @@ Hola, por favor acércate a recepción para pagar tu cita:
 
 Ver *mapa* aquí:
 https://goo.gl/maps/hp6fbftYYrdKnkcr7
-
-Ver / Cancelar tus citas aquí:
-{{ $dashboardLink }}
 
 Te esperamos, FISIOSALUD:
 https://fisiosalud.pe

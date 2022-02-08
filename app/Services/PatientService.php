@@ -35,7 +35,6 @@ class PatientService
     {
         return $this->create([
             'phone' => null,
-
             'name' => $patientReniec->name,
             'lastname1' => $patientReniec->lastname1,
             'lastname2' => $patientReniec->lastname2,

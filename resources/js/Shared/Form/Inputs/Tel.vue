@@ -5,7 +5,7 @@
       v-model="input"
       mode="international"
       defaultCountry="pe"
-      :inputOptions="{ placeholder: 'Escribe tu número de teléfono', styleClasses:'py-3', type: 'tel' }"
+      :inputOptions="{ placeholder: 'NÚMERO DE CELULAR', styleClasses:'py-3', type: 'tel' }"
       validCharactersOnly
       :preferredCountries="['pe', 'mx', 'cl', 'ar', 've', 'co', 'us']"
       required
