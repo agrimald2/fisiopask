@@ -55,13 +55,15 @@ export default {
 
   computed: {
       resultStrings() {
-          let arr = [];
-
+        let arr = [];
+        if(this.results)
+        {
           this.results.forEach(element => {
-              arr.push(element.result);
+            arr.push(element.result);
           });
+        }
 
-          return arr;
+        return arr;
       },
   },
 };
