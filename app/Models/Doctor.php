@@ -12,7 +12,15 @@ class Doctor extends Model
     use SoftDeletes;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $appends = ['fullname'];
 
+    /**
+     * Attributes
+     */
+
+    public function getFullnameAttribute() {
+        return "{$this->name} {$this->lastname}";
+    }
 
     /**
      * Relationships
@@ -68,5 +76,10 @@ class Doctor extends Model
     public function historyGroup()
     {
         return $this->hasMany(HistoryGroup::class);
+    }
+
+    public function test()
+    {
+        return $this->hasMany(Test::class);
     }
 }
