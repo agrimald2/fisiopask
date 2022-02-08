@@ -7,8 +7,8 @@ export default (props, { attrs }) => {
 
   const cols = [
     c("test_type.name", "Tipo de Test"),
-    c("patient.name", "Paciente"),
-    c("doctor.name", "Doctor"),
+    c("patient.fullname", "Paciente"),
+    c("doctor.fullname", "Doctor"),
     c("company.name", "Compañía"),
 
     c("result", "Resultado"),
@@ -27,7 +27,7 @@ export default (props, { attrs }) => {
         {
           label: "Editar",
           clicked({ row }) {
-            const url = route("testTypes.edit", row.id);
+            const url = route("tests.edit", row.id);
             Inertia.visit(url);
           },
         },
