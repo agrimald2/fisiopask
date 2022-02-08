@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCov19TestTypeTable extends Migration
+class CreateTestTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCov19TestTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('cov19_test_type', function (Blueprint $table) {
+        Schema::create('test_type', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('description');
@@ -29,6 +29,6 @@ class CreateCov19TestTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cov19_test_type');
+        Schema::dropIfExists('test_type');
     }
 }
