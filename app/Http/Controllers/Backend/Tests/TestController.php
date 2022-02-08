@@ -53,11 +53,17 @@ class TestController extends Controller
             'test_type_id' => 'required',
             'result' => 'required',
             'taken_at' => 'required',
+            'result_at' => '',
             'observations' => '',
         ]);
 
-        $resultsArray = TestResultType::query()->where('test_type_id', $validated['test_type_id'])->get();
-        $resultString = $resultsArray[$validated['result']]->result;
+        $resultString = "Pendiente";
+
+        if($validated['result'] != 0)
+        {
+            $resultsArray = TestResultType::query()->where('test_type_id', $validated['test_type_id'])->get();
+            $resultString = $resultsArray[$validated['result'] -1]->result;
+        }
 
         Test::create([
             'test_type_id' => $validated['test_type_id'],
@@ -66,6 +72,7 @@ class TestController extends Controller
             'company_id' => $validated['company_id'],
             'result' => $resultString,
             'taken_at' => $validated['taken_at'],
+            'result_at' => $validated['result_at'],
             'observations' => $validated['observations'],
         ]);
 
@@ -92,22 +99,27 @@ class TestController extends Controller
             'test_type_id' => 'required',
             'result' => 'required',
             'taken_at' => 'required',
+            'result_at' => '',
             'observations' => '',
         ]);
 
-        $resultsArray = TestResultType::query()->where('test_type_id', $validated['test_type_id'])->get();
-        $resultString = $resultsArray[$validated['result']]->result;
+        $resultString = "Pendiente";
+
+        if($validated['result'] != 0)
+        {
+            $resultsArray = TestResultType::query()->where('test_type_id', $validated['test_type_id'])->get();
+            $resultString = $resultsArray[$validated['result'] -1]->result;
+        }
 
         $model = Test::find($id);
 
-        $model->name = $validated['name'];
-        $model->description = $validated['description'];
         $model->test_type_id = $validated['test_type_id'];
         $model->patient_id = 1;  //@todo: change
         $model->doctor_id = $validated['doctor_id'];
         $model->company_id = $validated['company_id'];
         $model->result = $resultString;
         $model->taken_at = $validated['taken_at'];
+        $model->result_at = $validated['result_at'];
         $model->observations = $validated['observations'];
 
         $model->save();

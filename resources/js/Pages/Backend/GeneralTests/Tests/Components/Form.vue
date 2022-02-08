@@ -33,6 +33,15 @@
         />
 
         <form-input
+          v-if="form.result != null && form.result != 0"
+          label="Fecha del Resultado"
+          name="result_date"
+          v-model="form.result_at"
+          type="date"
+          :form="form"
+        />
+
+        <form-input
             label="Doctor"
             name="doctor"
             v-model="form.doctor_id"
@@ -112,6 +121,7 @@ export default {
         test_type_id: null,
         result: null,
         taken_at: null,
+        result_at: null,
         observations: null,
 
         ...this.model,
@@ -144,7 +154,8 @@ export default {
             return x.test_type_id == this.form.test_type_id;
         });
 
-        let id = 0;
+        let id = 1;
+        list[0] = "Pendiente";
         newArray.map((x) => {
             list[id] = x.result;
             id++;
