@@ -110,6 +110,16 @@ if (!function_exists('workspaces')) {
     }
 }
 
+if (!function_exists('companies')) {
+    /**
+     * @return App\Services\CompannyService
+     */
+    function companies()
+    {
+        return app(App\Services\CompanyService::class);
+    }
+}
+
 if (!function_exists('recommendations')) {
     /**
      * @return App\Services\RecommendationService

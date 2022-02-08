@@ -2,7 +2,11 @@
   <div>
     <jet-form-section @submitted="onSubmitted">
       <template #title>
-        {{ model ? "Editar " : "Crear una nueva" }} Compañía
+        {{ model ? "Editar " : "Crear un nuevo" }} Encargaddo
+      </template>
+
+      <template #description>
+        Un encargado puede acceder a la plataforma con su email y contraseña.
       </template>
 
       <template #form>
@@ -14,37 +18,37 @@
           :form="form"
         />
 
-        <!-- description -->
+        <!-- lastname -->
         <form-input
-          label="Descripción"
-          name="description"
-          v-model="form.description"
+          label="Apellido"
+          name="lastname"
+          v-model="form.lastname"
           :form="form"
         />
 
-        <!-- RUC -->
+        <!-- email -->
         <form-input
-          label="RUC"
-          name="ruc"
-          v-model="form.ruc"
+          label="Email"
+          name="user.email"
+          v-model="form.user.email"
           :form="form"
         />
 
-        <!-- domain -->
         <form-input
-          label="Domain"
-          name="domain"
-          v-model="form.domain"
+          label="Company"
+          type="select"
+          name="company_id"
+          v-model="form.company_id"
+          :options="companies"
           :form="form"
         />
 
-        <!-- is active -->
+        <!-- password -->
         <form-input
-          class="cb"
-          label="Activa (click)"
-          name="is_active"
-          type="checkbox"
-          v-model="form.is_active"
+          label="Password"
+          name="user.password"
+          v-model="form.user.password"
+          type="password"
           :form="form"
         />
 
@@ -73,7 +77,7 @@
         v-if="model"
         @click="destroy"
       >
-        Eliminar Compañía
+        Eliminar asistente
       </jet-danger-button>
     </div>
 
@@ -90,7 +94,7 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["model"],
+  props: ["model", "companies"],
 
   components: {
     JetActionMessage,
@@ -108,31 +112,39 @@ export default {
       form: this.$inertia.form({
         _method: "POST",
 
+        user: {
+          email: null,
+          password: null,
+        },
+
         name: null,
-        description: null,
-        ruc: null,
-        domain: null,
-        is_active: null,
+        lastname: null,
+        company_id: null,
 
         ...this.model,
       }),
     };
   },
-  
+
   methods: {
     onSubmitted() {
       const model = this.model;
-      let url = route("companies.store");
+      let url = route("workers.store");
 
       if (model) {
-        url = route("companies.update", model.id);
+        url = route("workers.update", model.id);
         this.form._method = "PUT";
       }
 
       this.form.post(url, {
+        // errorBag: "",
         preserveScroll: true,
         onSuccess: this.onSuccess,
       });
+    },
+
+    onSuccess() {
+      // Clear inputs
     },
 
     destroy() {
@@ -141,15 +153,9 @@ export default {
           "Esta acción no puede deshacerse, presione cancelar si no está seguro."
         )
       ) {
-        this.$inertia.delete(route("companies.destroy", this.form.id));
+        this.$inertia.delete(route("workers.destroy", this.form.id));
       }
     },
   },
 };
 </script>
-
-<style scoped>
-  .cb{
-    width:5vw; height:5vw
-  }
-</style>

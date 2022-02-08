@@ -93,4 +93,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Assistant::class);
     }
+
+    public function worker()
+    {
+        return $this->hasOne(Worker::class);
+    }
 }

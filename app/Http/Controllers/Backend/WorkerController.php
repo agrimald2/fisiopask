@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\Assistant;
+use App\Models\Worker;
 use App\Models\User;
 
 use App\Http\Controllers\Controller;
@@ -10,11 +10,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class AssistantController extends Controller
+class WorkerController extends Controller
 {
     public function index(Request $request)
     {
-        $model = Assistant::query()
+        $model = Worker::query()
             ->with('user')
             ->orderBy('id', 'desc')
             ->get();
@@ -24,17 +24,18 @@ class AssistantController extends Controller
 
             'parameters' => $request->all(),
 
-            'title' => 'Lista de Asistentes',
+            'title' => 'Lista de Encargados',
 
-            'create' => route('assistants.create'),
+            'create' => route('workers.create'),
 
-            'grid' => 'Backend/Assistants/grid.js',
+            'grid' => 'Backend/Workers/grid.js',
         ]);
     }
 
     public function create()
     {
-        return inertia('Backend/Assistants/CreateEdit');
+        $companies = companies()->index();
+        return inertia('Backend/Workers/CreateEdit', compact('companies'));
     }
 
     public function store(Request $request)
@@ -42,6 +43,7 @@ class AssistantController extends Controller
         $validated = $request->validate([
             'name' => 'required',
             'lastname' => 'required',
+            'company_id' => 'required',
             'user.email' => 'required|email|unique:users,email',
             'user.password' => 'required|min:5',
         ]);
@@ -50,58 +52,61 @@ class AssistantController extends Controller
         $user->name = $validated['name'];
         $user->save();
 
-        $user->assignRole('assistant');
+        $user->assignRole('worker');
 
-        $user->assistant()->create(
+        $user->worker()->create(
                                 collect($validated)
                                 ->except('user')
                                 ->toArray());
 
-        toast('success', 'Asistente creado correctamente');
-        return redirect()->route('assistants.index');
+        toast('success', 'Trabajador creado correctamente');
+        return redirect()->route('workers.index');
     }
 
     public function edit($id)
     {
-        $model = Assistant::findOrFail($id)->load('user');
+        $model = Worker::findOrFail($id)->load('user');
+        $companies = companies()->index();
 
-        return inertia('Backend/Assistants/CreateEdit', compact('model'));
+        return inertia('Backend/Workers/CreateEdit', compact('model','companies'));
     }
 
-    public function update(Request $request, Assistant $assistant)
+    public function update(Request $request, Worker $worker)
     {
         $validated = $request->validate([
             'user.name' => 'required',
             'user.email' => [
                 'required',
                 'email',
-                //Rule::unique('users', 'email')->ignore($doctor->user_id),
+                //Rule::unique('users', 'email'),
             ],
             'user.password' => 'nullable|min:5',
 
             'name' => 'required',
             'lastname' => 'required',
+            'company_id' => 'required',
         ]);
 
         if (isset($validated['user']['password']) && $validated['user']['password'] == '') {
             unset($validated['user']['password']);
         }
 
-        $assistant->fill($validated);
-        $assistant->user->fill(['user']);
-        $assistant->push();
+        $worker->fill($validated);
+        //$worker->user->fill($data['user']);
+        $worker->user->fill(['user']);
+        $worker->push();
 
-        toast('success', 'Asistente actualizado con éxito');
-        return redirect()->route('assistants.index');
+        toast('success', 'Trabajador actualizado con éxito');
+        return redirect()->route('workers.index');
     }
 
-    public function destroy(Assistant $assistant)
+    public function destroy(Worker $worker)
     {
-        $assistant->user->delete();
+        $worker->user->delete();
 
-        $assistant->delete();
+        $worker->delete();
 
-        toast('success', "Asistente '{$assistant->user->name}' eliminado.");
-        return redirect()->route('assistants.index');
+        toast('success', "Trabajador '{$worker->user->name}' eliminado.");
+        return redirect()->route('workers.index');
     }
 }

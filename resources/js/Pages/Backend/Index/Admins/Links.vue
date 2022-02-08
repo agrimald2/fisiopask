@@ -148,6 +148,12 @@
       icon="fa-hospital-alt"
       @click="go('companies.index')"
     />
+
+    <link-item
+      label="Encargados"
+      icon="fa-hands-helping"
+      @click="go('workers.index')"
+    />    
   </link-group>
 </template>
 
