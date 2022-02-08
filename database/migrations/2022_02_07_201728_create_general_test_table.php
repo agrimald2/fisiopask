@@ -20,7 +20,7 @@ class CreateGeneralTestTable extends Migration
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('company_id');
             $table->string('result');
-            $table->string('observations');
+            $table->string('observations')->nullable();
             $table->date('taken_at');
             $table->date('result_at')->nullable();
             $table->timestamps();
