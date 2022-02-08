@@ -71,13 +71,5 @@ export default {
       return list;
     }
   },
-
-  data() {
-    return {
-      //
-    };
-  },
-
-  methods: {},
 };
 </script>
