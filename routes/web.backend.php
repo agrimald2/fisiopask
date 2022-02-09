@@ -396,7 +396,15 @@ Route::post('/testTypes/addResult', [TestTypeController::class, 'addResult'])
     ->name('testTypes.addResult');
 
 Route::resource('tests', TestController::class)
-    ->only('index', 'create', 'edit', 'store', 'update');
+    ->only('index', 'edit', 'store', 'update');
+Route::get('/tests/create/{patient_id}', [TestController::class, 'create'])
+    ->name('tests.create');
+Route::get('/tests/DNILookup', [TestController::class, 'showCheckDNI'])
+    ->name('tests.showCheckDNI');
+Route::post('/tests/CheckDNI', [TestController::class, 'checkDNI'])
+    ->name('tests.checkDNI');
+Route::post('/tests/CreatePatient', [TestController::class, 'createPatient'])
+    ->name('tests.createPatient');
 
 
 Route::get('/downloadPDF/{id}', [TestController::class, 'downloadPDF'])

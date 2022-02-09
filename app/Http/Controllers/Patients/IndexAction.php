@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Patients;
 use App\Domain\Patients\PatientAuthRepositoryContract;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
+use App\Models\Test;
 use Illuminate\Http\Request;
 
 class IndexAction extends Controller
@@ -24,6 +25,8 @@ class IndexAction extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        return inertia('Patients/Index/Index', compact('model', 'appointments', 'rates'));
+        $tests = Test::query()->with('testType', 'doctor')->where('patient_id', $model->id)->get();
+
+        return inertia('Patients/Index/Index', compact('model', 'appointments', 'rates', 'tests'));
     }
 }

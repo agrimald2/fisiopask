@@ -97,7 +97,7 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["model", "doctorsMap", "companiesMap", "testTypesMap", "resultsArray"],
+  props: ["model", "doctorsMap", "companiesMap", "testTypesMap", "resultsArray", "patient_id"],
 
   components: {
     JetActionMessage,
@@ -123,6 +123,7 @@ export default {
         taken_at: null,
         result_at: null,
         observations: null,
+        patient_id: this.patient_id,
 
         ...this.model,
       }),

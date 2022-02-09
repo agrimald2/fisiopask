@@ -13,6 +13,8 @@ use App\Models\TestResultType;
 use PDF;
 
 
+use App\Models\Patient;
+
 class TestController extends Controller
 {
     public function index(Request $request)
@@ -29,7 +31,7 @@ class TestController extends Controller
 
             'title' => 'Lista de Tests',
 
-            'create' => route('tests.create'),
+            'create' => route('tests.showCheckDNI'),
 
             'grid' => 'Backend/GeneralTests/Tests/grid.js',
 
@@ -37,14 +39,55 @@ class TestController extends Controller
         ]);
     }
 
-    public function create()
+    public function showCheckDNI() 
+    {
+        return inertia('Backend/GeneralTests/Tests/PatientLookup');
+    }
+
+    public function checkDNI(Request $request)
+    {
+        $dni = $request['dni'];
+
+        $patient = Patient::query()->where('dni', $dni)->first();
+
+        if($patient)
+        {
+            return redirect()->route('tests.create', ['patient_id' => $patient->id]);
+        }
+        else
+        {
+            return inertia('Backend/GeneralTests/Tests/CreatePatient', compact('dni'));
+        }
+    }
+
+    public function createPatient(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required',
+            'lastname1' => 'required',
+            'lastname2' => 'required',
+            'dni' => 'required',
+            'birth_date' => 'required|date',
+            'phone' => 'required',
+            'email' => 'nullable',
+            'district' => 'nullable',
+            'sex' => 'required',
+            'recommendation_id' => '',
+        ]);
+
+        $patient = patients()->create($validated);
+
+        return redirect()->route('tests.create', ['patient_id' => $patient->id]);
+    }
+
+    public function create($patient_id)
     {
         $doctors = Doctor::query()->get();
         $companies = Company::query()->get();
         $testTypes = TestType::query()->get();
         $resultsArray = TestResultType::query()->get();
 
-        return inertia('Backend/GeneralTests/Tests/CreateEdit', compact('doctors', 'companies', 'testTypes', 'resultsArray'));
+        return inertia('Backend/GeneralTests/Tests/CreateEdit', compact('doctors', 'companies', 'testTypes', 'resultsArray', 'patient_id'));
     }
 
     public function store(Request $request)
@@ -57,6 +100,7 @@ class TestController extends Controller
             'taken_at' => 'required',
             'result_at' => '',
             'observations' => '',
+            'patient_id' => 'required',
         ]);
 
         $resultString = "Pendiente";
@@ -69,7 +113,7 @@ class TestController extends Controller
 
         Test::create([
             'test_type_id' => $validated['test_type_id'],
-            'patient_id' => 1,  //@todo: change
+            'patient_id' => $validated['patient_id'],
             'doctor_id' => $validated['doctor_id'],
             'company_id' => $validated['company_id'],
             'result' => $resultString,
@@ -111,6 +155,7 @@ class TestController extends Controller
             'taken_at' => 'required',
             'result_at' => '',
             'observations' => '',
+            'patient_id' => 'required',
         ]);
 
         $resultString = "Pendiente";
@@ -124,7 +169,7 @@ class TestController extends Controller
         $model = Test::find($id);
 
         $model->test_type_id = $validated['test_type_id'];
-        $model->patient_id = 1;  //@todo: change
+        $model->patient_id = $validated['patient_id'];
         $model->doctor_id = $validated['doctor_id'];
         $model->company_id = $validated['company_id'];
         $model->result = $resultString;
