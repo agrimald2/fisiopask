@@ -22,7 +22,8 @@ class CreateGeneralTestTable extends Migration
             $table->string('result');
             $table->string('observations')->nullable();
             $table->date('taken_at');
-            $table->date('result_at')->nullable();
+            $table->datetime('taken_at');
+            $table->datetime('result_at')->nullable();
             $table->timestamps();
         });
     }

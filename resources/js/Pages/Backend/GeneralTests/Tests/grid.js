@@ -33,6 +33,19 @@ export default (props, { attrs }) => {
         },
       ],
     },
+
+    {
+      type: cells.Buttons,
+      buttons: [
+        {
+          label: "PDF",
+          clicked({ row }) {
+            const url = route("tests.downloadPDF", row.id);
+            Inertia.visit(url);
+          },
+        },
+      ],
+    },
   ];
 
   return { rows, cols };

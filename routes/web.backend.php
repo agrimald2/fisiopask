@@ -398,5 +398,10 @@ Route::post('/testTypes/addResult', [TestTypeController::class, 'addResult'])
 Route::resource('tests', TestController::class)
     ->only('index', 'create', 'edit', 'store', 'update');
 
+
+Route::get('/downloadPDF/{id}', [TestController::class, 'downloadPDF'])
+    ->name('tests.downloadPDF');
+
+
 Route::resource('companies', CompanyController::class)
     ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
