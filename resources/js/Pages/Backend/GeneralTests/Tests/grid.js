@@ -33,19 +33,14 @@ export default (props, { attrs }) => {
         },
       ],
     },
+    c("", "")
+    .extend({
+      html: true,
+    })
+    .format((value, {row}) => {
 
-    {
-      type: cells.Buttons,
-      buttons: [
-        {
-          label: "PDF",
-          clicked({ row }) {
-            const url = route("tests.downloadPDF", row.id);
-            Inertia.visit(url);
-          },
-        },
-      ],
-    },
+      return `<span class="text-black px-2 rounded" style="border: 1px solid red"><a href="/downloadPDF/${row.id}"> PDF  </a> </span>`;
+    }),
   ];
 
   return { rows, cols };

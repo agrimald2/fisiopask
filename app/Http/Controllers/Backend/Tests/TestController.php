@@ -140,9 +140,8 @@ class TestController extends Controller
     public function downloadPDF($id) {
         $test = Test::find($id);
         $pdf = PDF::loadView('pdf.test_results', compact('test'));
-       
-        
-        return $pdf->loadHTML('<h1>Test</h1>');
+
+        return $pdf->download('PruebaDeLaboratorio.pdf');
     }  
 
     public function update(Request $request, $id)

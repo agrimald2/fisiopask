@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginSuccessController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\Tests\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +39,8 @@ Route::namespace(null)
 Route::namespace(null)
     ->prefix('area/patients')
     ->group(base_path('routes/web.patients.php'));
+
+
+
+
+    Route::get('/downloadPDF/{id}', [TestController::class, 'downloadPDF']);

@@ -407,8 +407,7 @@ Route::post('/tests/CreatePatient', [TestController::class, 'createPatient'])
     ->name('tests.createPatient');
 
 
-Route::get('/downloadPDF/{id}', [TestController::class, 'downloadPDF'])
-    ->name('tests.downloadPDF');
+Route::get('/downloadPDF', [TestController::class, 'downloadPDF']);
 
 
 Route::resource('companies', CompanyController::class)
