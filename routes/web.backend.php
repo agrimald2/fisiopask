@@ -406,5 +406,9 @@ Route::post('/tests/CheckDNI', [TestController::class, 'checkDNI'])
 Route::post('/tests/CreatePatient', [TestController::class, 'createPatient'])
     ->name('tests.createPatient');
 
+
+Route::get('/downloadPDF', [TestController::class, 'downloadPDF']);
+
+
 Route::resource('companies', CompanyController::class)
     ->only('index', 'create', 'edit', 'store', 'update', 'destroy');

@@ -33,6 +33,14 @@ export default (props, { attrs }) => {
         },
       ],
     },
+    c("", "")
+    .extend({
+      html: true,
+    })
+    .format((value, {row}) => {
+
+      return `<span class="text-black px-2 rounded" style="border: 1px solid red"><a href="/downloadPDF/${row.id}"> PDF  </a> </span>`;
+    }),
   ];
 
   return { rows, cols };

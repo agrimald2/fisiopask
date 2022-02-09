@@ -1,6 +1,6 @@
 <template>
   <Link :href="'/'">
-  <img
+  <img style="max-width:5vw"
     src="/assets/logo.png"
     alt=""
   >

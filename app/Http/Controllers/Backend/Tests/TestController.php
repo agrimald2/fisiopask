@@ -10,6 +10,8 @@ use App\Models\Doctor;
 use App\Models\Company;
 use App\Models\TestType;
 use App\Models\TestResultType;
+use PDF;
+
 
 use App\Models\Patient;
 
@@ -140,6 +142,13 @@ class TestController extends Controller
 
         return inertia('Backend/GeneralTests/Tests/CreateEdit', compact('model', 'doctors', 'companies', 'testTypes', 'resultsArray'));
     }
+
+    public function downloadPDF($id) {
+        $test = Test::find($id);
+        $pdf = PDF::loadView('pdf.test_results', compact('test'));
+
+        return $pdf->download('PruebaDeLaboratorio.pdf');
+    }  
 
     public function update(Request $request, $id)
     {

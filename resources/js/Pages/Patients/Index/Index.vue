@@ -40,25 +40,27 @@
         </div>
       </div>
 
-      <!-- Ver Tarifas -->
-      <div class="mt-6">
-        <div class="text-4xl font-bold">Tarifas Activas</div>
-        <div class="mt-4">
-          <RatesCmp :rates="rates"/>
+      <div v-if="appointments.length > 0">
+        <!-- Ver Tarifas -->
+        <div class="mt-6">
+          <div class="text-4xl font-bold">Tarifas Activas</div>
+          <div class="mt-4">
+            <RatesCmp :rates="rates"/>
+          </div>
         </div>
-      </div>
 
-      <!-- Ver citas -->
-      <div class="mt-6">
-        <div class="text-4xl font-bold">Citas Pendientes</div>
-        <div class="mt-4">
-          <appointments :appointments="appointments" :past="false"/>
+        <!-- Ver citas -->
+        <div class="mt-6">
+          <div class="text-4xl font-bold">Citas Pendientes</div>
+          <div class="mt-4">
+            <appointments :appointments="appointments" :past="false"/>
+          </div>
         </div>
-      </div>
-      <div class="mt-6">
-        <div class="text-4xl font-bold">Citas Pasadas</div>
-        <div class="mt-4">
-          <appointments :appointments="appointments" :past="true" />
+        <div class="mt-6">
+          <div class="text-4xl font-bold">Citas Pasadas</div>
+          <div class="mt-4">
+            <appointments :appointments="appointments" :past="true" />
+          </div>
         </div>
       </div>
 
