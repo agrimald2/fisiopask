@@ -32,6 +32,14 @@
         </div>
       </div>
 
+      <!-- Ver Pruebas -->
+      <div class="mt-6">
+        <div class="text-4xl font-bold">Últimas Pruebas</div>
+        <div class="mt-4">
+          <TestsCmp :tests="tests"/>
+        </div>
+      </div>
+
       <!-- Ver Tarifas -->
       <div class="mt-6">
         <div class="text-4xl font-bold">Tarifas Activas</div>
@@ -65,9 +73,10 @@ import UiButton from "@/Shared/Frontend/Button";
 
 import Appointments from "./Components/Appointments";
 import RatesCmp from "./Components/Rates";
+import TestsCmp from "./Components/Tests";
 
 export default {
-  props: ["model", "appointments", "rates"],
+  props: ["model", "appointments", "rates", "tests"],
 
   components: {
     Layout,
@@ -76,6 +85,7 @@ export default {
 
     Appointments,
     RatesCmp,
+    TestsCmp,
   },
 };
 //TODO @ IMPROVE CLIENT DESIGN
