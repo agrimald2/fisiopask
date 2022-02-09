@@ -22,6 +22,7 @@
           :companiesMap="companiesMapped"
           :testTypesMap="testTypesMapped"
           :resultsArray="resultsArray"
+          :patient_id="patient_id"
         />
 
       </div>
@@ -36,7 +37,7 @@ import JetSectionBorder from "@/Jetstream/SectionBorder.vue";
 import DefaultForm from "./Components/Form";
 
 export default {
-  props: ["model", "doctors", "companies", "testTypes", "resultsArray"],
+  props: ["model", "doctors", "companies", "testTypes", "resultsArray", "patient_id"],
 
   components: {
     AppLayout,
