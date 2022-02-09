@@ -35,6 +35,17 @@
             </div>
           </div>
         </template>
+        <template v-if="enableCompanySearch">
+          <div class="filter_space px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white grid items-center rounded-l-r-lg">
+            <button @click.prevent.self="toggleDropDownCompanies()" style="font-size:1.15rem"> Filtro Compañías <span v-show="companyFilterQuery" style="font-size:1rem; font-weight:bold"> -  {{companyFilterQuery}} </span> </button>
+            <div v-if="this.showDropDownCompanies">
+              <input type="text" placeholder="Buscar" id="myInput" v-model="companyFilterQuery" style="width:100%" class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-l-lg px-4 py-3">
+              <div v-for="(company, index) in filteredCompanies" :key="index" class="doctors_display rounded-r-lg .rounded-l-lg">
+                <div @click.prevent.self="selectDropDownCompanies(company)"> {{company.name}} </div>
+              </div>
+            </div>
+          </div>
+        </template>
         <form @submit.prevent="onSearch">
           <div class="flex items-stretch">
             <template v-if="enableOfficeSearch">
@@ -135,6 +146,7 @@ export default {
     links: null,
     parameters: null,
     doctors: null,
+    companies: null,
     offices: null,
     // Options
     enableSearch: {
@@ -146,6 +158,10 @@ export default {
       type: Boolean,
     },
     enableDoctorSearch: {
+      default: false,
+      type: Boolean,
+    },
+    enableCompanySearch: {
       default: false,
       type: Boolean,
     },
@@ -173,6 +189,7 @@ export default {
       if(this.parameters.hasOwnProperty("dateQueryFrom")) this.dateQueryFrom = this.parameters.dateQueryFrom;
       if(this.parameters.hasOwnProperty("dateQueryTo")) this.dateQueryTo = this.parameters.dateQueryTo;
       if(this.parameters.hasOwnProperty("doctorQuery")) this.doctorQuery = this.parameters.doctorQuery;
+      if(this.parameters.hasOwnProperty("companyQuery")) this.companyQuery = this.parameters.companyQuery;
     }
   },
 
@@ -182,16 +199,30 @@ export default {
       dateQueryFrom: null,
       dateQueryTo: null,
       doctorQuery: null,
+      companyQuery: null,
       officeQuery: null,
 
       showDropDownDoctors: false,
+      showDropDownCompanies: false,
       showDropDownOffices: false,
       docFilterQuery: null,
+      companyFilterQuery: null,
       docName: null,
     };
   },
 
   computed: {
+    filteredCompanies() {
+      if(this.companyFilterQuery == null || this.companyFilterQuery == '') return this.companies;
+      
+      const filter = this.companyFilterQuery.toLowerCase().trim();
+
+      return this.companies.filter(function(company) {
+        if(company.name.toLowerCase().trim().includes(filter)) return true;
+        return false;
+      });
+    },
+
     filteredDoctors() {
       if(this.docFilterQuery == null || this.docFilterQuery == '') return this.doctors;
 
@@ -209,12 +240,16 @@ export default {
       const dateQueryFrom = this.dateQueryFrom;
       const dateQueryTo = this.dateQueryTo;
       const doctorQuery = this.doctorQuery;
+      const companyQuery = this.companyQuery;
       const officeQuery = this.officeQuery;
-      const data = { searchQuery, dateQueryFrom, dateQueryTo, doctorQuery, officeQuery };
+      const data = { searchQuery, dateQueryFrom, dateQueryTo, doctorQuery, officeQuery, companyQuery };
       this.$inertia.get("", data, { preserveScroll: true });
     },
     toggleDropDownDoctors() {
       this.showDropDownDoctors = !this.showDropDownDoctors;
+    },
+    toggleDropDownCompanies() {
+      this.showDropDownCompanies = !this.showDropDownCompanies;
     },
     toggleDropDownOffices() {
       this.showDropDownOffices = !this.showDropDownOffices;
@@ -223,6 +258,11 @@ export default {
       this.doctorQuery = $doc.id;
       this.docFilterQuery = $doc.name + ' ' + $doc.lastname;
       this.showDropDownDoctors = false;
+    },
+    selectDropDownCompanies($company) {
+      this.companyQuery = $company.id;
+      this.companyFilterQuery = $company.name;
+      this.showDropDownCompanies = false;
     },
     selectDropDownOffice($office) {
       this.officeQuery = $office.name;
