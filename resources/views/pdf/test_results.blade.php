@@ -233,25 +233,32 @@
 
       <table border="0" cellspacing="0" cellpadding="0">
         <tbody>
-            <tr style="background: #FFFFFF!important;">
+            
+          @if($model->company)
+            <tr style="">
+              <td class="si bold">EMPRESA</td>  
+              <td class="si" style="text-transform: uppercase!important;">{{$model->company->name}}</td>              
+            </tr>
+          @endif
+            <tr style="">
               <td class="no bold">DNI</td>  
-              <td class="no">77035606</td>              
+              <td class="no">{{$model->patient->dni}}</td>              
             </tr>
             <tr class="">
               <td class="si bold">NOMBRE Y APELLIDO</td>  
-              <td class="si">ALONSO GRIMALDO PEREZ</td>              
+              <td class="si" style="text-transform: uppercase!important;">{{$model->patient->fullname}}</td>              
             </tr>
             <tr style="background: #FFFFFF!important;">
               <td class="no bold">FECHA DE PRUEBA</td>  
-              <td class="no">07/06/2021</td>              
+              <td class="no">{{$model->taken_at}}</td>              
             </tr>
             <tr class="">
               <td class="si bold">FECHA DE RESULTADO</td>  
-              <td class="si">07/06/2021</td>              
+              <td class="si">{{$model->result_at}}</td>              
             </tr>
             <tr style="background: #FFFFFF!important;">
               <td class="no bold">FECHA DE NACIMIENTO</td>  
-              <td class="no">934094501</td>              
+              <td class="no">{{$model->patient->birth_date}}</td>              
             </tr>
         </tbody>
       </table>
@@ -275,10 +282,10 @@
         </thead>
         <tbody>
             <tr>
-              <td class="tal" style="font-size:0.85rem">26 07 2002</td>
-              <td class="tal">Prueba covid</td>
-              <td class="tal">Positivo</td>  
-              <td class="tal">Reposo</td>              
+              <td class="tal" style="font-size:0.85rem">{{$model->result_at}}</td>
+              <td class="tal">{{$model->test_type_id}}</td>
+              <td class="tal">{{$model->result}}</td>  
+              <td class="tal">{{$model->observations}}</td>              
             </tr>
         </tbody>
       </table>

@@ -33,7 +33,7 @@
       </div>
 
       <!-- Ver Pruebas -->
-      <div class="mt-6">
+      <div class="mt-6" v-if="tests.length > 0">
         <div class="text-4xl font-bold">Últimas Pruebas</div>
         <div class="mt-4">
           <TestsCmp :tests="tests"/>

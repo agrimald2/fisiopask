@@ -66,4 +66,7 @@ interface RepositoryContract
     public function sendConfirmationToPatient($dni, $appointment, $type);
 
     public function getThankYouPageButtonUrl();
+
+    public function getPatientDashboardLink($dni);
+
 }

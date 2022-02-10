@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Backend\Tests;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Domain\BookAppointment\RepositoryContract;
 use App\Models\Test;
 use App\Models\Doctor;
 use App\Models\Company;
 use App\Models\TestType;
 use App\Models\TestResultType;
 use PDF;
+use App\Domain\Patients\PatientAuthRepositoryContract;
 
 
 use App\Models\Patient;
@@ -122,6 +123,8 @@ class TestController extends Controller
             'observations' => $validated['observations'],
         ]);
 
+
+
         return redirect()->route('tests.index');
     }
 
@@ -138,8 +141,14 @@ class TestController extends Controller
     }
 
     public function downloadPDF($id) {
-        $test = Test::find($id);
-        $pdf = PDF::loadView('pdf.test_results', compact('test'));
+        $model = Test::find($id);
+
+        $doctors = Doctor::query()->get();
+        $companies = Company::query()->get();
+        $testTypes = TestType::query()->get();
+        $resultsArray = TestResultType::query()->get();
+
+        $pdf = PDF::loadView('pdf.test_results', compact('model', 'doctors', 'companies', 'testTypes', 'resultsArray'));
 
         return $pdf->download('PruebaDeLaboratorio.pdf');
     }  
@@ -159,11 +168,7 @@ class TestController extends Controller
 
         $resultString = "Pendiente";
 
-        if($validated['result'] != 0)
-        {
-            $resultsArray = TestResultType::query()->where('test_type_id', $validated['test_type_id'])->get();
-            $resultString = $resultsArray[$validated['result'] -1]->result;
-        }
+
 
         $model = Test::find($id);
 
@@ -177,6 +182,22 @@ class TestController extends Controller
         $model->observations = $validated['observations'];
 
         $model->save();
+
+        $patient_dni = $model->patient->dni;
+        $patient_token = $model->patient->token;
+
+        $dashboardlink = "http://anandamida.test/area/patients/login/".$patient_dni."/".$patient_token;
+        // @TODO CHANGE DOMAIN
+
+        $phone = $model->patient->phone;
+        $message = "Hola " . $model->patient->fullname . " los resultados de tu prueba ya están listos, puedes verlos en el siguiente link: " . $dashboardlink ;
+
+        if($validated['result'] != 0)
+        {
+            $resultsArray = TestResultType::query()->where('test_type_id', $validated['test_type_id'])->get();
+            $resultString = $resultsArray[$validated['result'] -1]->result;
+            chatapi($phone, $message);
+        }
 
         return redirect()->route('tests.index');
     }

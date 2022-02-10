@@ -29,6 +29,7 @@
                 </jet-nav-link>
                 
                 <jet-nav-link
+                  v-if="role !== 'worker'"
                   :href="route('doctors.appointments.index')"
                   :active="route().current('doctors.appointments.index')"
                 >

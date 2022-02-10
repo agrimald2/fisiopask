@@ -25,7 +25,7 @@ class IndexAction extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        $tests = Test::query()->with('testType', 'doctor')->where('patient_id', $model->id)->get();
+        $tests = Test::query()->with('testType', 'doctor')->where('patient_id', $model->id)->latest()->take(3)->get();
 
         return inertia('Patients/Index/Index', compact('model', 'appointments', 'rates', 'tests'));
     }

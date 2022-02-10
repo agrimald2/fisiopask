@@ -11,6 +11,18 @@
             {{ model.test_type.name }}
           </div>
         </div>
+        <div>
+          <div class="mt-3 text-sm">
+            {{ model.taken_at }}
+          </div>
+          <div class="mt-3 text-sm">
+            <span class="text-black px-2 rounded" style="border: 1px solid red">
+              <a :href="'/downloadPDF/'+model.id">
+                PDF
+              </a>
+            </span>
+          </div>
+        </div>
       </div>
       <div class="flex gap-4 items-center">
         Doctor: {{ model.doctor.fullname }}

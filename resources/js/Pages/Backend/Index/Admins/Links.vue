@@ -130,7 +130,7 @@
 
   <!-- COV-19 -->
   <link-group style="margin-top:-3rem!important;" 
-    title="COV-19">
+    title="Pruebas">
     <link-item
       label="Tipos de test"
       icon="fa-microscope"

@@ -202,6 +202,7 @@ class FisioNextRepository implements RepositoryContract
             chatapi($appointment->doctor->phone, $doctorText);
         }           
     }
+    
 
     protected function getWhatsappPatientConfirmationText($data, $type)
     {   
@@ -228,4 +229,14 @@ class FisioNextRepository implements RepositoryContract
     {
         return route('bookAppointment.index');
     }
+
+    public function getPatientDashboardLink($dni)
+    {
+        $patient = patients()->getByDni($dni);
+        $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
+        
+        return $dashboardLink;
+    }
+
+
 }
