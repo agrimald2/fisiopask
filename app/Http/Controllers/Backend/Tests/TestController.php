@@ -20,10 +20,20 @@ class TestController extends Controller
 {
     public function index(Request $request)
     {
+        $searchQuery = $request->searchQuery;
+        $companyQuery = $request->companyQuery;
         $model = Test::query()
             ->with('doctor', 'patient', 'company', 'testType')
+            ->whereHas('patient', function($query) use($searchQuery) {
+                $query->when($searchQuery, function ($query, $value) {
+                   $query->where('name', 'LIKE', "%$value%");
+                });
+            })
+            ->where('company_id', 'LIKE', "%$companyQuery%")
             ->orderBy('id', 'desc')
             ->get();
+
+        $companies = Company::query()->get();
         
         return inertia('Backend/Dynamic/Grid', [
             'model' => $model,
@@ -36,7 +46,11 @@ class TestController extends Controller
 
             'grid' => 'Backend/GeneralTests/Tests/grid.js',
 
-            'enableSearch' => false,
+            'enableSearch' => true,
+
+            'companies' => $companies,
+
+            'enableCompanySearch' => true,
         ]);
     }
 
@@ -70,11 +84,17 @@ class TestController extends Controller
             'dni' => 'required',
             'birth_date' => 'required|date',
             'phone' => 'required',
-            'email' => 'nullable',
+            'email' => '',
             'district' => 'nullable',
             'sex' => 'required',
             'recommendation_id' => '',
         ]);
+
+        if($validated['sex'] == 0) $validated['sex'] = 'M';
+        else if($validated['sex'] == 1) $validated['sex'] = 'F';
+        else $validated['sex'] = 'NB';
+
+        $validated['phone'] = '51'.$validated['phone'];
 
         $patient = patients()->create($validated);
 
