@@ -55,6 +55,8 @@ class PatientRate extends Model
 
     function getAppointmentsPaidAttribute()
     {
+        if($this->price == 0) return $this->sessions_total;
+
         $appointmentPrice = $this->price / $this->sessions_total;
         $appointmentsPaid = $this->payed / $appointmentPrice;
 
