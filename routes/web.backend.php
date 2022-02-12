@@ -54,6 +54,9 @@ use App\Http\Controllers\Doctors\Appointments\Rates\MarkAssistedAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\StoreRateAction;
 use App\Http\Controllers\Doctors\Appointments\ShowAppointmentAction;
 use App\Http\Controllers\GoogleCalendar\GoogleCalendarController;
+
+use App\Http\Controllers\Backend\GenerateTokensAction;
+
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -370,3 +373,5 @@ Route::prefix('test')
             return inertia('Test/Dropdown');
         });
     });
+
+Route::get('/generateTokens', GenerateTokensAction::class);
