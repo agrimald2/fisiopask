@@ -18,7 +18,9 @@ class PaymentController extends Controller
         $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo);
 
         return inertia('Backend/Dynamic/Grid', [
-            'model' => $model,
+            'model' => collect($model->items()),
+
+            'links' => $model->linkCollection(),
 
             'parameters' => $request->all(),
 
@@ -46,7 +48,7 @@ class PaymentController extends Controller
                        $query->where('name', 'LIKE', "%$value%");
                     });
                 })
-                ->get();
+                ->paginate(15);
         }
 
         return $payments
@@ -56,6 +58,6 @@ class PaymentController extends Controller
                    $query->where('name', 'LIKE', "%$value%");
                 });
             })
-            ->get();
+            ->paginate(15);
     }
 }
