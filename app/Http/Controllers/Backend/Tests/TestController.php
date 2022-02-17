@@ -115,7 +115,7 @@ class TestController extends Controller
     {
         $validated = $request->validate([
             'doctor_id' => 'required',
-            'company_id' => 'required',
+            'company_id' => '',
             'test_type_id' => 'required',
             'result' => 'required',
             'taken_at' => 'required',

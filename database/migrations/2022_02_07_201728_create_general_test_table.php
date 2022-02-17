@@ -18,7 +18,7 @@ class CreateGeneralTestTable extends Migration
             $table->unsignedInteger('test_type_id');
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('doctor_id');
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->string('result');
             $table->string('observations')->nullable();
             $table->datetime('taken_at');

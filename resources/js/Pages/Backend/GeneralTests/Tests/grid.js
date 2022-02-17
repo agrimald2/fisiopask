@@ -9,7 +9,15 @@ export default (props, { attrs }) => {
     c("test_type.name", "Tipo de Test"),
     c("patient.fullname", "Paciente"),
     c("doctor.fullname", "Doctor"),
-    c("company.name", "Compañía"),
+    c("", "Compañía")
+      .extend({
+        html:true,
+      })
+      .format(function (row){
+        if (row.company.name) return `<span> ${row.company.name} </span>`;
+        else return `<span> NO APLICA </span>`;;
+      })
+    ,
 
     c("result", "Resultado"),
     c("observations", "Observaciones"),
