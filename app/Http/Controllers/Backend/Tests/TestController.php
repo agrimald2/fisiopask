@@ -26,7 +26,7 @@ class TestController extends Controller
             ->with('doctor', 'patient', 'company', 'testType')
             ->whereHas('patient', function($query) use($searchQuery) {
                 $query->when($searchQuery, function ($query, $value) {
-                   $query->where('name', 'LIKE', "%$value%");
+                   $query->where('name', 'LIKE', "%$value%")->orWhere('dni', 'LIKE', "%$value%");
                 });
             })
             ->where('company_id', 'LIKE', "%$companyQuery%")
