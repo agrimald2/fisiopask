@@ -21,7 +21,6 @@ class CreateGeneralTestTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->string('result');
             $table->string('observations')->nullable();
-            $table->date('taken_at');
             $table->datetime('taken_at');
             $table->datetime('result_at')->nullable();
             $table->timestamps();
