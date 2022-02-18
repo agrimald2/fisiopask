@@ -37,6 +37,7 @@ use App\Http\Controllers\Backend\SubfamilyController;
 use App\Http\Controllers\Backend\HistoryGroupController;
 use App\Http\Controllers\Backend\MedicalHistoryController;
 use App\Http\Controllers\Backend\MedicalRevisionController;
+use App\Http\Controllers\Backend\DocumentUpload\UploadPatientDocumentController;
 
 use App\Http\Controllers\Backend\AffectedAreaController;
 use App\Http\Controllers\Backend\AnalysisController;
@@ -285,6 +286,12 @@ Route::prefix('productSelect')
 //History Group
 Route::resource('patients.historygroup', HistoryGroupController::class)
     ->only('index');
+
+Route::post('historygroup/{id}/upload', [UploadPatientDocumentController::class, 'upload'])
+    ->name('patientFiles.upload');
+
+Route::get('historygroup/download/{filename}', [UploadPatientDocumentController::class, 'download'])
+    ->name('patientFiles.download');
 
 Route::get('patients/{patientId}/historygroup/create/{doctorId}', [HistoryGroupController::class, 'store'])
     ->name('patients.historygroup.create');

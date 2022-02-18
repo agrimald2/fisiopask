@@ -53,8 +53,10 @@ class HistoryGroupController extends Controller
 
         $revisions = $group->medicalRevision()->with('doctor')->get();
 
+        $files = $group->medicalHistoryFile()->get();
+
         return inertia(
             'Backend/Patients/HistoryGroups/Show', 
-            compact('id', 'medicalHistory', 'revisions'));
+            compact('id', 'medicalHistory', 'revisions', 'files'));
     }
 }

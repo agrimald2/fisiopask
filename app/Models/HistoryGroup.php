@@ -12,7 +12,7 @@ class HistoryGroup extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     /**
-     * Rleationships
+     * Relationships
      */
 
     public function patient()
@@ -33,5 +33,10 @@ class HistoryGroup extends Model
     public function medicalRevision()
     {
         return $this->hasMany(MedicalRevision::class);
+    }
+
+    public function medicalHistoryFile()
+    {
+        return $this->hasMany(MedicalHistoryFile::class);
     }
 }

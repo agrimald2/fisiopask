@@ -10,6 +10,16 @@
       <ui-button @click="$inertia.visit(route('medicalrevision.create', id))">Crear una revisión</ui-button>
     </div>
 
+    <form :action="route('patientFiles.upload', this.id)" method="post" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="hidden" name="_token" :value="csrf">
+      <ui-button type="submit" name="submit">Subir un archivo</ui-button>
+    </form>
+
+    <div v-for="file in files" :key="file.id">
+      <a href="{{ asset(file.filename) }}" download>{{ file.filename }}</a>
+    </div>
+
     <app-body>
       <div class="py-4 px-1">
         <gridie
@@ -44,7 +54,7 @@ import dates from "@/ui/dates.js";
 import UiButton from "@/Shared/UI/Button";
 
 export default {
-  props: ["id", "medicalHistory", "revisions"],
+  props: ["id", "medicalHistory", "revisions", "files"],
 
   components: {
     AppLayout,
@@ -52,6 +62,12 @@ export default {
 
     UiButton,
     Gridie,
+  },
+
+  data() {
+    return {
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    };
   },
 
   setup() {
