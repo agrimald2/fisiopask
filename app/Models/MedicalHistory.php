@@ -12,7 +12,7 @@ class MedicalHistory extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     /**
-     * Rleationships
+     * Relationships
      */
     public function historyGroup()
     {
