@@ -68,7 +68,7 @@ class RescheduleAppointment extends Controller
 
         if(!$schedule)
         {
-            return $request;
+            return redirect()->route('reschedule.pickTime', compact('appointment', 'date'));
         }
 
         $appointment = Appointment::find($appointment);
