@@ -17,6 +17,7 @@ class CreateRatesTable extends Migration
             $table->id();
 
             $table->string('name');
+            $table->string('description')->default(" ");
             $table->float('price');
 
             $table->boolean('is_product')->default(true);

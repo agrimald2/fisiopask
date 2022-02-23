@@ -29,9 +29,8 @@
         <div
           v-else-if="model.status==2"
           class="px-2 py-1 rounded font-bold text-sm bg-red-500 text-white"
-        >No asistida</div>
+        >No asistida</div>rates
         <div
-          v-else
           v-show="isPendient"
           class="px-2 py-1 rounded font-bold text-sm bg-yellow-400"
         >Pendiente</div>

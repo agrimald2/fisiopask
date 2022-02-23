@@ -2,6 +2,8 @@ import dates from "@/ui/dates.js";
 
 import { Inertia } from "@inertiajs/inertia";
 import { cells, c } from "@ferchoposting/gridie";
+import { parserOptions } from "@vue/compiler-dom";
+import { bindKey } from "lodash";
 
 export default (props, { attrs }) => {
   const rows = props.model;
@@ -17,6 +19,7 @@ export default (props, { attrs }) => {
         if (row.status == 4) className = "bg-red-400";
 
         return `<span class="${className} text-white px-2 rounded">${row.status_label}</span>`;
+  
       }),
 
     c("date", "Fecha")

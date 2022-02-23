@@ -20,7 +20,7 @@
 
       <!-- Search bar -->
       <div
-        class="mt-8 max-w-2xl mx-auto px-4"
+        class="mt-8 max-w-3xl mx-auto px-4"
         v-if="enableSearch"
       >
 

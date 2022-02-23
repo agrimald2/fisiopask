@@ -32,8 +32,15 @@ export default {
             html: true,
         })
         .format(function (row) {
-            let colorClass = (row.state == 0 ? "bg-green-400" : "bg-red-400");
-
+            let colorClass = "bg-green-400";
+            
+            if (row.state == 0){
+              colorClass = "bg-yellow-400";
+            }else if(row.state == 1){
+              colorClass = "bg-green-400";
+            }else{
+              colorClass = "bg-red-400";
+            }
             return `<span class="${colorClass} text-white px-2 rounded">${row.status_label}</span>`;
         }),
       c().type(cells.Buttons)

@@ -108,6 +108,10 @@ class Appointment extends Model
         return $this->belongsTo(Doctor::class);
     }
 
+    public function office()
+    {
+        return $this->belongsTo(office::class);
+    }
 
     public function schedule()
     {

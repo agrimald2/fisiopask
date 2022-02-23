@@ -90,6 +90,8 @@ class IndexAppointmentAction extends Controller
 
     private function getAppointments()
     {
+        $today = date("Y-m-d");
+
         $user = auth()->user();
 
         if ($user->hasRole('admin')) {
@@ -104,4 +106,6 @@ class IndexAppointmentAction extends Controller
             ->doctor
             ->appointments();
     }
+
+    
 }
