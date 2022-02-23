@@ -20,6 +20,13 @@ export default (props, { attrs }) => {
       },
       buttons: [
         {
+          label: "Horario",
+          clicked({ row }) {
+            const url = route("doctors.schedules.index", row.id);
+            Inertia.visit(url);
+          },
+        },
+        {
           label: "Bloqueos Freeze",
           clicked({ row }) {
             const url = route("doctors.freezes.index", row.id);

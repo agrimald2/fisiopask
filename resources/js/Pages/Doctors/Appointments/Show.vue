@@ -112,7 +112,7 @@
 
         <front-button
           color="green"
-          v-show="appointment.status != 4 && rate!=null"
+          v-show="appointment.status != 4"
           @click="markAssisted"
         >
           Marcar Asistencia
