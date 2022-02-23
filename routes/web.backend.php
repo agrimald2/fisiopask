@@ -52,6 +52,7 @@ use App\Http\Controllers\Doctors\Appointments\Rates\ShowRatesIndexAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\ShowRatesAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\MarkAssistedAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\StoreRateAction;
+use App\Http\Controllers\Doctors\Appointments\RescheduleAppointment;
 use App\Http\Controllers\Doctors\Appointments\ShowAppointmentAction;
 use App\Http\Controllers\GoogleCalendar\GoogleCalendarController;
 
@@ -347,6 +348,18 @@ Route::middleware(['role:doctor|admin|assistant'])
         Route::get('/appointments/{appointment}/ticket', GenerateTicketAction::class)
             ->name('doctors.appointments.ticket.index');
     });
+
+Route::get('/reschedule/{appointment}/pickDay', [RescheduleAppointment::class, 'pickDay'])
+    ->name('reschedule.pickDay');
+
+Route::post('/reschedule/{appointment}/postDay', [RescheduleAppointment::class, 'postDay'])
+    ->name('reschedule.postDay');
+
+Route::get('/reschedule/{appointment}/pickTime/{date}', [RescheduleAppointment::class, 'pickTime'])
+    ->name('reschedule.pickTime');
+
+Route::post('/reschedule/{appointment}/postTime', [RescheduleAppointment::class, 'postTime'])
+    ->name('reschedule.postTime');
 
 Route::prefix('test')
     ->group(function () {
