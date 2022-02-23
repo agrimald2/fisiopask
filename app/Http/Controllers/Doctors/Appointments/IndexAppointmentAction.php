@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Office;
+use DateTime;
 use Illuminate\Http\Request;
 
 class IndexAppointmentAction extends Controller
@@ -17,9 +18,30 @@ class IndexAppointmentAction extends Controller
         $dateQueryTo = $request->dateQueryTo;
         $doctorQuery = $request->doctorQuery;
         $officeQuery = $request->officeQuery;
+        $fetchAll = $request->fetchAll;
         $canSearchByDoctor = false;
         $doctors = Doctor::query()->get();
         $offices = Office::query()->get();
+
+        $date = new DateTime();
+
+        $dateFormated = $date->format('Y-m-d');
+
+        $rData = [ 
+            'searchQuery' => $request->searchQuery, 
+            'dateQueryFrom' => $request->dateQueryFrom, 
+            'dateQueryTo' => $request->dateQueryTo, 
+            'doctorQuery' => $request->doctorQuery, 
+            'officeQuery' => $request->officeQuery,
+            'fetchAll' => true,
+        ];
+
+        if(!$fetchAll)
+        {
+            $rData['dateQueryTo'] = $dateFormated;
+            $rData['dateQueryFrom'] = $dateFormated;
+            return redirect()->route('doctors.appointments.index', $rData);
+        }
 
         $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery);
 

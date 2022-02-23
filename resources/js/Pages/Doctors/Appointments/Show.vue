@@ -129,6 +129,13 @@
       <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
 
         <front-button
+          color="yellow"
+          @click="$inertia.visit(route('reschedule.pickDay', appointment.patient.id))"
+        >
+          Reprogramar Cita
+        </front-button>
+
+        <front-button
           color=""
           @click="$inertia.visit(route('doctors.appointments.rates.index', appointment.id))"
         >
