@@ -18,6 +18,7 @@ class IndexAppointmentAction extends Controller
         $dateQueryTo = $request->dateQueryTo;
         $doctorQuery = $request->doctorQuery;
         $officeQuery = $request->officeQuery;
+        $fetchAll = $request->fetchAll;
         $canSearchByDoctor = false;
         $doctors = Doctor::query()->get();
         $offices = Office::query()->get();
@@ -31,16 +32,13 @@ class IndexAppointmentAction extends Controller
             'dateQueryFrom' => $request->dateQueryFrom, 
             'dateQueryTo' => $request->dateQueryTo, 
             'doctorQuery' => $request->doctorQuery, 
-            'officeQuery' => $request->officeQuery
+            'officeQuery' => $request->officeQuery,
+            'fetchAll' => true,
         ];
 
-        if(!$dateQueryTo)
+        if(!$fetchAll)
         {
             $rData['dateQueryTo'] = $dateFormated;
-            return redirect()->route('doctors.appointments.index', $rData);
-        }
-        if(!$dateQueryFrom)
-        {
             $rData['dateQueryFrom'] = $dateFormated;
             return redirect()->route('doctors.appointments.index', $rData);
         }
