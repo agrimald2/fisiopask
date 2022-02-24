@@ -10,7 +10,9 @@ export default (props, { attrs }) => {
 
   const urlParms = new URLSearchParams(queryString);
 
-  const currentPage = urlParms.get('page');
+  let currentPage = urlParms.get('page');
+
+  if(!(currentPage >= 1)) currentPage = 1;
 
   const rows = props.model;
 
