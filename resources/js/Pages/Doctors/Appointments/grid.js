@@ -6,10 +6,28 @@ import { parserOptions } from "@vue/compiler-dom";
 import { bindKey } from "lodash";
 
 export default (props, { attrs }) => {
+  const queryString = window.location.search;
+
+  const urlParms = new URLSearchParams(queryString);
+
+  const currentPage = urlParms.get('page');
+
   const rows = props.model;
 
   const cols = [
-    c("id", "#"),
+    c("", "#")
+    .extend({
+      html: true,
+    })
+    .format(function (row) {
+      let className = "bg-green-400";
+
+      if (row.status == 4) className = "bg-red-400";
+
+      return `<p>${((currentPage - 1) * 15) + (props.model.indexOf(row) + 1)}<p>`;
+
+    }),
+
     c("", "Estado")
       .extend({
         html: true,
