@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Doctor;
 use App\Models\Subfamily;
+use App\Models\Schedule;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -128,6 +129,13 @@ class DoctorController extends Controller
 
     public function destroy(Doctor $doctor)
     {
+        $schedules = Schedule::query()->where('doctor_id', $doctor->id)->get();
+
+        foreach($schedules as $schedule)
+        {
+            $schedule->delete();
+        }
+
         doctors()->destroy($doctor);
         toast('success', "Doctor '{$doctor->user->name}' eliminado.");
         return redirect()->route('doctors.index');
