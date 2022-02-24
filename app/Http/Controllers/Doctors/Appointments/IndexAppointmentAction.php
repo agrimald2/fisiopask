@@ -38,9 +38,12 @@ class IndexAppointmentAction extends Controller
 
         if(!$fetchAll)
         {
-            $rData['dateQueryTo'] = $dateFormated;
-            $rData['dateQueryFrom'] = $dateFormated;
-            return redirect()->route('doctors.appointments.index', $rData);
+            if(!$request->page)
+            {
+                $rData['dateQueryTo'] = $dateFormated;
+                $rData['dateQueryFrom'] = $dateFormated;
+                return redirect()->route('doctors.appointments.index', $rData);
+            }
         }
 
         $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery);
