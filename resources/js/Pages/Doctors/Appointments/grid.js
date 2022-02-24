@@ -26,11 +26,7 @@ export default (props, { attrs }) => {
       .class("capitalize")
       .format((v) => dates.dateForHumans(v)),
 
-    c("", "Paciente")
-     .extend({ html: true})
-     .format((value, {row}) => {
-      return `<button onclick="window.open('http://fisiopask.test/book-appointment/dni/${row.patient.dni}/day', '_blank', 'toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=500,width=600,height=600')">${row.patient.fullname.toUpperCase()} <b style="color:green">${row.patient.is_new}</b></button>`;
-    }),
+    c("patient.name", "Paciente"),
 
     c("office", "Sucursal"),
 
@@ -45,6 +41,19 @@ export default (props, { attrs }) => {
       .extend({
         buttons: [
           {
+            label: "Agendar Multiples Citas",
+            clicked({ row }) {
+              Inertia.visit(route("multipleBooking.pickDay", row.patient.id));
+            },
+          },
+        ],
+      }),
+
+    c()
+      .type(cells.Buttons)
+      .extend({
+        buttons: [
+          {
             label: "Detalles",
             clicked({ row }) {
               Inertia.visit(route("doctors.appointments.show", row.id));
@@ -52,6 +61,7 @@ export default (props, { attrs }) => {
           },
         ],
       }),
+
   ];
   function windowAppointment() {
     window.open("https://fisiosalud.pe/cita", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=500,width=600,height=600");

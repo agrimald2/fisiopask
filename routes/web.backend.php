@@ -56,6 +56,8 @@ use App\Http\Controllers\Doctors\Appointments\RescheduleAppointment;
 use App\Http\Controllers\Doctors\Appointments\ShowAppointmentAction;
 use App\Http\Controllers\GoogleCalendar\GoogleCalendarController;
 
+use App\Http\Controllers\Doctors\Appointments\MultipleBookingController;
+
 use App\Http\Controllers\Backend\GenerateTokensAction;
 
 use App\Models\Doctor;
@@ -388,3 +390,15 @@ Route::prefix('test')
     });
 
 Route::get('/generateTokens', GenerateTokensAction::class);
+
+Route::get('/booking/{patient}/pickDay', [MultipleBookingController::class, 'pickDay'])
+    ->name('multipleBooking.pickDay');
+
+Route::post('/booking/{patient}/postDay', [MultipleBookingController::class, 'postDay'])
+    ->name('multipleBooking.postDay');
+
+Route::get('/booking/{patient}/pickTime/{date}', [MultipleBookingController::class, 'pickTime'])
+    ->name('multipleBooking.pickTime');
+
+Route::post('/booking/{patient}/postTime', [MultipleBookingController::class, 'postTime'])
+    ->name('multipleBooking.postTime');
