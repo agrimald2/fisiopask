@@ -36,10 +36,34 @@ class SendReminderBefore implements ShouldQueue
             if($carbonDate->isTomorrow())
             {
                 $phone = $appointment->patient->phone;
-                $text = "oe";
+                
+                $date = $appointment->date->format('d/m/Y');
+                $startTime = $appointment->start;
+                $patientName = $patient->name;
+                $patientName = $patient->name . " " . $patient->lastname1;
+                $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+                $doctorWorkspace = [];
+                if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
+                $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
+        
+                $data = compact(
+                    'patientName',
+                    'date',
+                    'startTime',
+                    'doctorName',
+                    'dashboardLink',
+                    'doctorWorkspace'
+                );
+                
+                $text = $this->getWhatsappDoctorConfirmationText($data);
                 chatapi($phone, $text);
             }
         }
+    }
+
+    protected function getWhatsappPatientReminderText($data)
+    {   
+        return view('chatapi.reminder', $data)->render();
     }
 
     /**
