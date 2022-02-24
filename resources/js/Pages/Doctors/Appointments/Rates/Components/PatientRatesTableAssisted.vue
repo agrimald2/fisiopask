@@ -37,7 +37,7 @@ export default {
                 {
                   if(confirm("Estás seguro?"))
                   {
-                    const url = route("patients.rates.assited", row.id);
+                    const url = route("patients.rates.assisted", row.id);
                     Inertia.get(url);
                   }
                 }
