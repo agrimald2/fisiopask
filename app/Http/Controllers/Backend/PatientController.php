@@ -12,6 +12,8 @@ class PatientController extends Controller
     {
         $model = patients()->index($request->searchQuery);
 
+        $model->appends($_GET)->links();
+
         return inertia('Backend/Dynamic/Grid', [
             'model' => collect($model->items())->each->append('link'),
 

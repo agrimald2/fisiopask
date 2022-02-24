@@ -17,6 +17,8 @@ class PaymentController extends Controller
 
         $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo);
 
+        $model->appends($_GET)->links();
+
         return inertia('Backend/Dynamic/Grid', [
             'model' => collect($model->items()),
 

@@ -21,6 +21,8 @@ class DoctorController extends Controller
 
         $user = auth()->user();
 
+        $model->appends($_GET)->links();
+
         if ($user->hasRole('assistant')) {
             return inertia('Backend/Dynamic/Grid', [
                 'model' => $model->items(),
