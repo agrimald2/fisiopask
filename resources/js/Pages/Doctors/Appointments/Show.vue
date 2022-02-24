@@ -135,7 +135,7 @@
 
         <front-button
           color="yellow"
-          @click="$inertia.visit(route('reschedule.pickDay', appointment.patient.id))"
+          @click="$inertia.visit(route('reschedule.pickDay', appointment.id))"
         >
           Reprogramar Cita
         </front-button>
