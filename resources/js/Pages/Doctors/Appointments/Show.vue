@@ -42,7 +42,10 @@
         <div class="mt-4">
           <p class="medium-text">
             {{appointment.patient.fullname}}
-          </p>
+          </p> 
+          <p class="medium-text">
+            {{appointment.patient.phone}}
+          </p> 
           <p class="medium-text">
             {{ appointment.patient.dni }} |  {{ appointment.patient.sex }} | {{ dates.moment().year() - dates.moment(appointment.patient.birth_date).year() }} años
           </p>
@@ -104,11 +107,13 @@
 
         <front-button
           color="red"
-          v-show="appointment.status != 4 && appointment.is_pending"
+          
           @click="cancelAppointment"
         >
           Cancelar Cita
         </front-button>
+
+<!-- v-show="appointment.status != 4 && appointment.is_pending" -->
 
         <front-button
           color="green"

@@ -19,10 +19,10 @@ class Appointment extends Model
     const STATUS_CANCELED = 4;
 
     const STATUS_LABEL = [
-        1 => 'CONFIRMADO',
-        2 => 'NO ASISTIÓ',
-        3 => 'ASISTIÓ',
-        4 => 'CANCELADA',
+        1 => 'CONFI',
+        2 => 'N A',
+        3 => 'ASIS',
+        4 => 'CAN',
     ];
 
 

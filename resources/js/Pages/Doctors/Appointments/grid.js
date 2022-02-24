@@ -9,6 +9,7 @@ export default (props, { attrs }) => {
   const rows = props.model;
 
   const cols = [
+    c("id", "#"),
     c("", "Estado")
       .extend({
         html: true,
@@ -26,7 +27,7 @@ export default (props, { attrs }) => {
       .class("capitalize")
       .format((v) => dates.dateForHumans(v)),
 
-    c("patient.name", "Paciente"),
+    c("patient.fullname", "Paciente"),
 
     c("office", "Sucursal"),
 
@@ -41,7 +42,7 @@ export default (props, { attrs }) => {
       .extend({
         buttons: [
           {
-            label: "Agendar Multiples Citas",
+            label: "Multi",
             clicked({ row }) {
               Inertia.visit(route("multipleBooking.pickDay", row.patient.id));
             },
