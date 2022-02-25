@@ -18,14 +18,17 @@ class RateController extends DynamicController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $searchQuery = $request->searchQuery;
+
         $model = Rate::query()
+            ->where('name', 'LIKE', "%$searchQuery%")
             ->orderBy('id', 'desc')
             ->with('subfamily')
             ->paginate(10);
 
-        return $this->grid($model, [], ['enableSearch' => false]);
+        return $this->grid($model, [], ['enableSearch' => true]);
     }
 
     /**
