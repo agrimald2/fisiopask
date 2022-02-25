@@ -38,7 +38,7 @@ class BookAppointmentController extends Controller
     public function indexPost(Request $request)
     {
         $request->validate([
-            'dni' => 'required|string|min:8',
+            'dni' => 'required|string|min:5',
             'office_id' => 'nullable|integer'
         ]);
 

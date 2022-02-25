@@ -36,11 +36,39 @@ class CheckAssistance implements ShouldQueue
             
             if($startTime->diffInHours(Carbon::now()->format('Y-m-d H:i:s'), false) > 1)
             {
+                $phone = $appointment->patient->phone;
+                
+                $date = $appointment->date->format('d/m/Y');
+                $startTime = $appointment->start;
+                $patientName = $patient->name;
+                $patientName = $patient->name . " " . $patient->lastname1;
+                $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+                $doctorWorkspace = [];
+                if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
+                $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
+        
+                $data = compact(
+                    'patientName',
+                    'date',
+                    'startTime',
+                    'doctorName',
+                    'dashboardLink',
+                    'doctorWorkspace'
+                );
+
+                $text = $this->getWhatsappPatientNotAssistedText($data);
+
                 chatapi($phone, $text);
                 $appointment->status = Appointment::STATUS_NOT_ASSISTED;
                 $appointment->save();
             }
         }
+    }
+
+    
+    protected function getWhatsappPatientNotAssistedText($data)
+    {   
+        return view('chatapi.reminder', $data)->render();
     }
 
     /**
