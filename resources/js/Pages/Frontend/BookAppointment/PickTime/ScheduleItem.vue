@@ -7,7 +7,7 @@
       class="grid py-4 px-2
             cursor-pointer"
       :class="{ 'hover:bg-gray-100': !expanded }"
-      @click="expanded = !expanded"
+      @click="pick()"
     >
       <div class="text-gray-700 text-center large-text">
         {{ schedule.doctor }}
