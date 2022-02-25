@@ -117,10 +117,19 @@
 
         <front-button
           color="green"
-          v-show="appointment.status != 4"
+          v-show="appointment.status != 4 && appointment.status != 3"
           @click="markAssisted"
         >
           Marcar Asistencia
+        </front-button>
+
+        <front-button
+          color="red"
+          v-if="role == 'admin'"
+          v-show="appointment.status == 3"
+          @click="markNotAssisted"
+        >
+          Marcar Inasistencia 
         </front-button>
 
         <!--<front-button
@@ -208,13 +217,20 @@ export default {
       {
         if(confirm("Estás seguro?"))
         {
-          const url = route('patients.rates.assisted', this.rate.id);
+          const url = route('patients.rates.assisted', [this.rate.id, this.appointment.id]);
           this.$inertia.visit(url);
         }
       }
       else
       {
         const url = route('patients.rates.pay', this.rate.id);
+        this.$inertia.visit(url);
+      }
+    },
+    markNotAssisted() {
+      if(confirm("Estás seguro?"))
+      {
+        const url = route('patients.rates.notAssisted', [this.rate.id, this.appointment.id]);
         this.$inertia.visit(url);
       }
     },

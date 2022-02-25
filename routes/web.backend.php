@@ -51,6 +51,7 @@ use App\Http\Controllers\Doctors\Appointments\Rates\GenerateTicketAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\ShowRatesIndexAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\ShowRatesAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\MarkAssistedAction;
+use App\Http\Controllers\Doctors\Appointments\Rates\MarkNotAssistedAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\StoreRateAction;
 use App\Http\Controllers\Doctors\Appointments\RescheduleAppointment;
 use App\Http\Controllers\Doctors\Appointments\ShowAppointmentAction;
@@ -124,8 +125,11 @@ Route::get('/dni/{dni}/day/{date}/time/', [PatientAppointmentController::class, 
 Route::delete('/patients/rates/{patientRate}', DestroyPatientRateAction::class)
     ->name('patients.rates.destroy');
 
-Route::get('/patients/rates/{patientRate}/assisted', MarkAssistedAction::class)
+Route::get('/patients/rates/{patientRate}/assisted/{appointment}', MarkAssistedAction::class)
     ->name('patients.rates.assisted');
+
+Route::get('/patients/rates/{patientRate}/notAssisted/{appointment}', MarkNotAssistedAction::class)
+    ->name('patients.rates.notAssisted');
 
 Route::get('/patients/rates/{patientRate}/pay', PayRateAction::class)
     ->name('patients.rates.pay');
