@@ -40,15 +40,15 @@ class CheckAssistance implements ShouldQueue
                 
                 $date = $appointment->date->format('d/m/Y');
                 $startTime = $appointment->start;
-                $patientName = $patient->name;
-                $patientName = $patient->name . " " . $patient->lastname1;
+//                $patientName = $patient->name;
+ //               $patientName = $patient->name . " " . $patient->lastname1;
                 $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
                 $doctorWorkspace = [];
                 if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
-                $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
+//                $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
         
-                $data = compact(
-                    'patientName',
+//                $data = compact(
+//                    'patientName',
                     'date',
                     'startTime',
                     'doctorName',

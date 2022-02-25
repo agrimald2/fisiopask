@@ -5,7 +5,4 @@ Hola, te estuvimos esperando en tu cita, te recordamos que puedes volver a agend
 https://fisiosalud.pe/book-appointment
 
 
-Puedes Ver / Cancelar / Pagar tus citas aquí:
-{{ $dashboardLink }}
-
 Muchas gracias!
