@@ -237,7 +237,7 @@ class BookAppointmentController extends Controller
         if($payments->first())
         {   
             //Create Constant Rate if no rates
-            if(!$this->patientHasActiveRates($patientId))
+            /*if(!$this->patientHasActiveRates($patientId))
             {
                 $constantRate = Rate::find(1);
             
@@ -254,7 +254,7 @@ class BookAppointmentController extends Controller
                     'sessions_left' => 1,
                     'state' => PatientRate::RATE_STATUS_OPEN,
                 ]);
-            }
+            }*/
 
             $credit = true;
 
