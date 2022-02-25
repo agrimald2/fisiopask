@@ -13,6 +13,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+use App\Domain\Patients\PatientAuthRepositoryContract;
+
 class CheckAssistance implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -28,39 +30,46 @@ class CheckAssistance implements ShouldQueue
             ->where('status', Appointment::STATUS_CONFIRMED)
             ->where('date', Carbon::now()->format('Y-m-d'))
             ->get();
+
+        $currentTime = Carbon::now()->format('Y-m-d H:i:s');
+        $currentHour = Carbon::now()->format('H');
         
          //TODO @WHATSAPP 5 estrellas paciente
         foreach($confirmedAppointments as $appointment)
         {
             $startTime = Carbon::parse($appointment->start);
+            $startHour = Carbon::parse($appointment->start)->format('H');
             
-            if($startTime->diffInHours(Carbon::now()->format('Y-m-d H:i:s'), false) > 1)
+            if($startTime->diffInHours($currentTime) > 1)
             {
-                $phone = $appointment->patient->phone;
-                
-                $date = $appointment->date->format('d/m/Y');
-                $startTime = $appointment->start;
-                $patientName = $patient->name;
-                $patientName = $patient->name . " " . $patient->lastname1;
-                $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
-                $doctorWorkspace = [];
-                if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
-                $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
-        
-                $data = compact(
-                    'patientName',
-                    'date',
-                    'startTime',
-                    'doctorName',
-                    'dashboardLink',
-                    'doctorWorkspace'
-                );
+                if($startHour < $currentHour)
+                {
+                    $phone = $appointment->patient->phone;
+                    
+                    $date = $appointment->date->format('d/m/Y');
+                    $startTime = $appointment->start;
+                    $patientName = $appointment->patient->name;
+                    $patientName = $appointment->patient->name . " " . $appointment->patient->lastname1;
+                    $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+                    $doctorWorkspace = [];
+                    if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
+                    $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($appointment->patient);
+                    
+                    $data = compact(
+                        'patientName',
+                        'date',
+                        'startTime',
+                        'doctorName',
+                        'dashboardLink',
+                        'doctorWorkspace'
+                    );
 
-                $text = $this->getWhatsappPatientNotAssistedText($data);
+                    $text = $this->getWhatsappPatientNotAssistedText($data);
 
-                chatapi($phone, $text);
-                $appointment->status = Appointment::STATUS_NOT_ASSISTED;
-                $appointment->save();
+                    chatapi($phone, $text);
+                    $appointment->status = Appointment::STATUS_NOT_ASSISTED;
+                    $appointment->save();
+                }
             }
         }
     }
