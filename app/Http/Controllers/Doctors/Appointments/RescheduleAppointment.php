@@ -30,9 +30,9 @@ class RescheduleAppointment extends Controller
     public function pickTime($appointment, $date)
     {
         $appointment = Appointment::find($appointment);
-        if(now()->parse($date)->lt(now()->toDateString())) {
+        /*if(now()->parse($date)->lt(now()->toDateString())) {
             return redirect()->route('reschedule.pickDay', compact('appointment'));
-        }
+        }*/
 
         $filters = [
             'doctorId' => $appointment->doctor_id,

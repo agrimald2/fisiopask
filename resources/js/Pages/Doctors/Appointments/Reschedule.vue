@@ -19,7 +19,6 @@
                 color="green"
                 :rows="1"
                 is-expanded
-                :min-date="new Date()"
                 v-model="datePickerInput"
                 locale="es"
               />
