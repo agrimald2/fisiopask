@@ -14,11 +14,13 @@ class PatientRate extends Model
     const RATE_STATUS_OPEN = 0;
     const RATE_STATUS_COMPLETE = 1;
     const RATE_STATUS_ABANDONED = 2;
+    const RATE_STATUS_CANCELED = 3;
 
     const RATE_STATUS_LABEL = [
         0 => 'ABIERTA',
         1 => 'COMPLETADA',
-        2 => 'ABANDONADA'
+        2 => 'ABANDONADA',
+        3 => 'ANULADA',
     ];
 
     protected $guarded = [

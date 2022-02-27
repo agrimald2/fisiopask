@@ -59,6 +59,18 @@ export default {
         .extend({
           buttons: [
             {
+              label: "Anular",
+              clicked({ row }) {
+                const url = route("patients.rates.cancel", row.id);
+                Inertia.get(url);
+              },
+            },
+          ],
+        }),
+      c().type(cells.Buttons)
+        .extend({
+          buttons: [
+            {
               label: "Pagar",
               clicked({ row }) {
                 const url = route("patients.rates.pay", row.id);
