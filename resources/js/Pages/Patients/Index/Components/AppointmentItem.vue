@@ -1,5 +1,5 @@
 <template>
-  <div class="border rounded">
+  <div class="border rounded" style="border-width:2px;" @click="cancel" v-show="model.status!=4">
     <!-- Summary -->
     <div
       class="select-none p-2 cursor-pointer hover:bg-gray-50"
@@ -7,45 +7,32 @@
     >
       <div class="flex flex-wrap items-center justify-between">
         <div>
-          <div class="text-gray-500 text-sm">
-            {{ model.office }}
-          </div>
-          <div class="capitalize text-lg font-bold">
-            {{ dates.dateForHumans(model.date) }}
+          <div class="capitalize text-lg ">
+            1
+            <!--@TODO
+              NUMERITOS EN ORDEN
+            -->
           </div>
         </div>
-        <div
-          v-if="appointmentsLeft <= 0"
-          class="px-2 py-1 rounded font-bold text-sm bg-red-500 text-white"
-        >No Pagada</div>
-        <div
-          v-if="model.status==4"
-          class="px-2 py-1 rounded font-bold text-sm bg-red-500 text-white"
-        >Cancelada</div>
-        <div
-          v-else-if="model.status==3"
-          class="px-2 py-1 rounded font-bold text-sm bg-green-500 text-white"
-        >Asistida</div>
-        <div
-          v-else-if="model.status==2"
-          class="px-2 py-1 rounded font-bold text-sm bg-red-500 text-white"
-        >No asistida</div>rates
-        <div
-          v-show="isPendient"
-          class="px-2 py-1 rounded font-bold text-sm bg-yellow-400"
-        >Pendiente</div>
-      </div>
-      <div class="flex gap-4 items-center">
-        {{ model.start }}
-        <i class="fas fa-arrow-right"></i>
-        {{ model.end }}
-      </div>
-      <div class="mt-3 text-sm medium-text">
-        {{ model.doctor.name }} {{ model.doctor.lastname }}
+        <div>
+          <div class="capitalize text-lg ">
+            {{ model.date }}
+          </div>
+        </div>
+        <div>
+          <div class="capitalize text-lg ">
+             {{ model.start }}
+          </div>
+        </div>
+        <div>
+          <div class="capitalize text-lg">
+             {{ model.doctor.name }}
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Body -->
+    <!-- Body 
     <div
       class="border-t py-3 bg-gray-50 text-center"
       v-show="expanded && isPendient && model.status != 4"
@@ -55,9 +42,15 @@
         @click="cancel"
       >Cancelar cita</ui-button>
     </div>
-
+    -->
   </div>
 </template>
+
+<style>
+  .mlr{
+    margin-right:1rem;
+  }
+</style>
 
 <script>
 import UiButton from "@/Shared/Frontend/Button";
