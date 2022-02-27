@@ -113,7 +113,7 @@ class IndexAppointmentAction extends Controller
             ->where('office', 'LIKE', $officeQuery)
             ->orderBy('date', 'desc')
             ->orderBy('start', 'desc')
-            ->paginate(15);
+            ->paginate(120);
     }
 
     private function getAppointments()

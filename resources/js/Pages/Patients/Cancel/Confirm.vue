@@ -2,7 +2,6 @@
   <layout>
     <ui-container>
       <!-- Message -->
-      <div class="text-center text-4xl font-bold">¿Cancelar cita?</div>
 
       <!-- Appointment card -->
       <div class="flex justify-center">
@@ -33,13 +32,6 @@
       <!-- Buttons -->
       <div class="mt-4">
         <div class="grid items-center gap-4">
-          <!-- Back -->
-          <ui-button
-            color="green"
-            @click="$inertia.visit(route('area.patients.index'))"
-          >
-            Volver atrás
-          </ui-button>
 
           <!-- Cancel -->
           <ui-button
@@ -51,12 +43,19 @@
 
           <!-- Logout -->
           <ui-button
-            color="red"
+            color="yellow"
             @click="rebook"
           >
-            Cancelar y Agendar Nueva Cita
+            Reprogramar 
           </ui-button>
 
+          <!-- Back -->
+          <ui-button
+            color="green"
+            @click="$inertia.visit(route('area.patients.index'))"
+          >
+            Volver atrás
+          </ui-button>
         </div>
       </div>
 

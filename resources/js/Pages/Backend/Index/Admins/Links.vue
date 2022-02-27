@@ -140,8 +140,7 @@ export default {
   components: {
     LinkGroup,
     LinkItem,
-  },
-
+  },  
   methods: {
     go(routeName) {
       const url = route(routeName);
