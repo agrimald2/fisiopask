@@ -36,6 +36,7 @@ class SendReminderBefore implements ShouldQueue
             if($carbonDate->isTomorrow())
             {
                 $phone = $appointment->patient->phone;
+                $patient = $appointment->patient;
                 
                 $date = $appointment->date->format('d/m/Y');
                 $startTime = $appointment->start;
@@ -55,7 +56,7 @@ class SendReminderBefore implements ShouldQueue
                     'doctorWorkspace'
                 );
                 
-                $text = $this->getWhatsappDoctorConfirmationText($data);
+                $text = $this->getWhatsappPatientReminderText($data);
                 chatapi($phone, $text);
             }
         }
