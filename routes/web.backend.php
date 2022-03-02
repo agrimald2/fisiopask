@@ -22,6 +22,7 @@ use App\Http\Controllers\Backend\PatientRates\CancelPaymentAction;
 use App\Http\Controllers\Backend\PatientRates\PayRateAction;
 use App\Http\Controllers\Backend\PatientRates\PayConstantRateAction;
 use App\Http\Controllers\Backend\PatientRates\CancelRateAction;
+use App\Http\Controllers\Backend\PatientRates\AbandonRateAction;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\PaymentLinksController;
 use App\Http\Controllers\Backend\PaymentMethodController;
@@ -139,6 +140,9 @@ Route::get('/patients/constantrate/{appointment}/pay', PayConstantRateAction::cl
 
 Route::get('/rate/{rate}/cancel', CancelRateAction::class)
     ->name('patients.rates.cancel');
+
+Route::get('/rate/{rate}/abandon', AbandonRateAction::class)
+    ->name('patients.rates.abandon');
 
 Route::get('/patients/rates/{patientRate}/payments', ShowPaymentsAction::class)
     ->name('patients.rates.payments');

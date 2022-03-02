@@ -59,10 +59,28 @@ export default {
         .extend({
           buttons: [
             {
+              label: "Abandonar",
+              clicked({ row }) {
+                if(confirm("Estás seguro?"))
+                {
+                  const url = route("patients.rates.abandon", row.id);
+                  Inertia.get(url);
+                }
+              },
+            },
+          ],
+        }),
+      c().type(cells.Buttons)
+        .extend({
+          buttons: [
+            {
               label: "Anular",
               clicked({ row }) {
-                const url = route("patients.rates.cancel", row.id);
-                Inertia.get(url);
+                if(confirm("Estás seguro?"))
+                {
+                  const url = route("patients.rates.cancel", row.id);
+                  Inertia.get(url);
+                }
               },
             },
           ],
