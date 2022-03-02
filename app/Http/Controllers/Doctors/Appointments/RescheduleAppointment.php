@@ -75,6 +75,9 @@ class RescheduleAppointment extends Controller
 
         $appointment->start = $schedule->start_time;
         $appointment->end = $schedule->end_time;
+        $appointment->doctor_id = $schedule->doctor->id;
+        $appointment->schedule_id = $schedule->id;
+        $appointment->office = $schedule->office->name;
         $appointment->date = $date;
 
         $appointment->save();
