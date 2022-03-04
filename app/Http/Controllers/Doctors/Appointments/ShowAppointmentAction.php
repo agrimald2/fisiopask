@@ -56,4 +56,10 @@ class ShowAppointmentAction extends Controller
 
         return inertia('Doctors/Appointments/Show', compact('appointment', 'role', 'rate'));
     }
+
+
+
+
+
+    
 }

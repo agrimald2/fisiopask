@@ -45,9 +45,19 @@ class SendSurvey implements ShouldQueue
                 //TODO @TEST
                 if($surveyTime >= $currentTime)
                 {
+                    $patient = $appointment->patient;
+
                     $phone = $appointment->patient->phone;
                     $surveyLink = "www.fisiosalud.pe/area/patients/surveys/appointment/";
                     $surveyLink .= $appointment->id;
+                    $patientName = $patient->name;
+
+                    $data = compact(
+                        'patientName',
+                        'surveyLink',
+                    );
+                    
+                    $text = $this->getWhatsappSurveyText($data);
                     chatapi($phone, $text);
                 }
             }
@@ -61,6 +71,10 @@ class SendSurvey implements ShouldQueue
         }
     }
 
+    protected function getWhatsappSurveyText($data)
+    {   
+        return view('chatapi.survey', $data)->render();
+    }
     /**
      * Execute the job.
      *

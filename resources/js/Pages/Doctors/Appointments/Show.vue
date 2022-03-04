@@ -204,13 +204,13 @@ export default {
 
   methods: {
     cancelAppointment() {
-      if (
-        confirm("Estas seguro?") &&
-        confirm("Esta accion no se puede deshacer, proceder?")
-      ) {
+      //if (
+      //  confirm("Estas seguro?") &&
+      //  confirm("Esta accion no se puede deshacer, proceder?")
+      //) {
         const url = route("doctors.appointments.cancel", this.appointment.id);
         this.$inertia.post(url);
-      }
+      //}
     },
     markAssisted() {
       if(this.rate.can_assist)

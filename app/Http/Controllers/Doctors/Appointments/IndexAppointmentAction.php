@@ -8,6 +8,7 @@ use App\Models\Doctor;
 use App\Models\Office;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class IndexAppointmentAction extends Controller
 {
@@ -92,8 +93,7 @@ class IndexAppointmentAction extends Controller
             ->whereHas('patient', function ($q) use ($searchQuery) {
                 $q->when($searchQuery, function ($q, $value) {
                     $q->where('name', 'LIKE', "%$value%")
-                    ->orWhere('lastname1', 'LIKE', "%$value%")
-                    ->orWhere('lastname2', 'LIKE', "%$value%")
+                    ->orWhere(DB::raw("CONCAT(`name`, ' ', `lastname1`, ' ', `lastname2`)"), 'LIKE', "%$value%")
                     ->orWhere('dni', 'LIKE', "%$value%")
                     ->orWhere('phone', 'LIKE', "%$value%")
                     ->orWhere('office', 'LIKE', "%$value%");

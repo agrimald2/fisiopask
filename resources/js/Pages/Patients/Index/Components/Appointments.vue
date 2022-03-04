@@ -16,10 +16,6 @@
       </template>
     </template>
   </div>
-
-  <div class="mt-6 flex justify-center">
-    <pagination :links="appointments.links" />
-  </div>
 </template>
 
 

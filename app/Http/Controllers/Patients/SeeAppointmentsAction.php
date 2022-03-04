@@ -18,7 +18,7 @@ class SeeAppointmentsAction extends Controller
                 $q->select('id', 'name', 'lastname');
             }])
             ->orderBy('date', 'desc')
-            ->paginate(10);
+            ->paginate(5);
 
             /**
              * 1. La busqueda debe resetear el numero de pagina, pequeño error

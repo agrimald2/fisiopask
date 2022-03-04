@@ -38,6 +38,11 @@ class SendReminderBefore implements ShouldQueue
                 $phone = $appointment->patient->phone;
                 $patient = $appointment->patient;
                 
+                $patientDNI = $patient->dni;
+                $patientToken = $patient->token;
+                $dashboardLink = 'https://fisiosalud.pe/area/patients/login/'.$patientDNI.'/'.$patientToken;
+
+
                 $date = $appointment->date->format('d/m/Y');
                 $startTime = $appointment->start;
                 $patientName = $patient->name;
@@ -45,7 +50,6 @@ class SendReminderBefore implements ShouldQueue
                 $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
                 $doctorWorkspace = [];
                 if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
-                $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
         
                 $data = compact(
                     'patientName',

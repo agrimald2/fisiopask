@@ -11,8 +11,7 @@
               text-align:center;
               font-size: 0.9rem;
               color:black;
-          ">
-  
+          ">  
           Selecciona la cita que deseas eliminar
 
           </div>

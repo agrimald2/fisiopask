@@ -40,7 +40,7 @@
             <template v-if="enableOfficeSearch">
               <div class="filter_space px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white grid items-center rounded-l-r-lg">
                 <button @click.prevent.self="toggleDropDownOffices()" class="px-3 cursor-pointer hover:bg-gray-100 bg-white items-center rounded-l-r-lg" style="font-size:1.2rem">
-                   Filtro Sucursal
+                   Sucursal
                    <br>
                    <span style="font-size:1rem; font-weight:bold">
                    {{officeQuery}} 
@@ -60,6 +60,9 @@
               placeholder="Filtro de busqueda..."
               v-model="searchQuery"
             >
+          </div>
+          <div class="flex items-stretch">
+
             <input
               v-if="enableDateSearch"
               type="date"
@@ -78,6 +81,7 @@
             >
               <i class="fas fa-search"></i>
             </button>
+
           </div>
         </form>
       </div>

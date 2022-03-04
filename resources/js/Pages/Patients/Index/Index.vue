@@ -8,11 +8,12 @@
           <div class="text-lg text-gray-600" style="
               font-weight: bold;
               margin-top: 1rem;
-            
+              text-align:center;
               font-size: 1.2rem;
           ">
   
-          {{ model.lastname1 }} {{ model.lastname2 }} {{ model.dni }}
+          {{ model.lastname1 }} {{ model.lastname2 }} <br>
+          {{ model.dni }}
           </div>
         </div>
       </div>
@@ -61,6 +62,14 @@
             />
           </link-group>
       </div>
+      <div class="container" style="justify-content:center;display:flex">
+          <ui-button
+            color="red"
+            @click="$inertia.visit(route('area.patients.logout'))"
+          >
+            Cerrar Sesión
+          </ui-button>        
+      </div>
     </ui-container>
   </layout>
 </template>
@@ -68,6 +77,10 @@
 <style scoped>
   .mt-2rem{
     margin-top:1rem;
+    font-size: 1.3rem;
+  }
+  .mt-3rem{
+    margin-top:2rem;
     font-size: 1.3rem;
   }
   .container .grid{
