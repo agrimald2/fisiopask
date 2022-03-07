@@ -105,7 +105,7 @@
   </app-layout>
 </template>
 
-<style scoped>
+<style>
   .filter_space{
     --tw-border-opacity: 1;
     border-color: rgba(209, 213, 219, var(--tw-border-opacity));
@@ -123,6 +123,25 @@
     border-color: rgba(209, 213, 219, var(--tw-border-opacity));
     padding: 5px;
   }
+
+  .bg-status-1{
+    background-color: aquamarine;
+}
+
+.bg-status-2{
+    background-color: brown;
+}
+
+
+.bg-status-3{
+    background-color: darkcyan;
+}
+
+
+.bg-status-4{
+    background-color: crimson;
+}
+
   
 </style>
 <script>

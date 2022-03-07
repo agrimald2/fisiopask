@@ -37,8 +37,8 @@ class ChatApiService
             $result = $this->makeRequest($data);
         }
 
-        logs()->debug("CHATAPI: {$phone} -> \n" . $message);
-        logs()->debug($result);
+        //logs()->debug("CHATAPI: {$phone} -> \n" . $message);
+        //logs()->debug($result);
 
         return $result;
     }
