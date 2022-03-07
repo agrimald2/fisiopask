@@ -1,41 +1,42 @@
-*FISIOSALUD: CONFIRMACIÓN DE CITA*
+FISIOSALUD: CONFIRMACIÓN DE CITA
 
-Bienvenido {{ $patientName }}!
+Hola 
+{{ $patientName }}
 
-*Fecha de cita:*
+Tu cita ha sido generada
+
+Fecha de cita:
 {{ $date }}
-
-*Hora de cita:*
+Hora de cita:
 {{ $startTime }}
-
-*Fisioterapeuta:*
+Fisioterapeuta:
 {{ $doctorName }} 
 
 
-*Puedes realizar el pago de tu cita por medio de este link para evitar colas y demoras en recepción:*
+Puedes realizar el pago de tu cita por medio de este link para evitar colas y demoras en recepción:
 
 {{ $dashboardLink }}
 
-Asímismo, si deseas cancelar o reprogramar tu cita, podrás hacerlo desde ahí
+O puedes hacer transferencia bancaria a las siguientes cuentas:
+
+Banco BBVA:
+0011 0023 0200074705
+
+CCI: 
+01102300020007470591
+
+También puedes pagar presencialmente en RECEPCIÓN en Efectivo, con Tarjeta de Crédito o Tarjeta de Débito.
 
 
+Estamos entre San Isidro y San Borja, en la Av. José Gálvez Barrenechea 148.
 
-*DIRECCIÓN:*
-Av. José Gálvez Barnechea 148. San Isidro (límite con San borja).
+Referencia: a dos cuadras de la Clínica Ricardo Palma, a la altura del Puente Quiñones, pasando el Chifa Tití y la Academia de Karate y Taekwondo.
 
-*REFERENCIA:*
-A 2 cuadras de la Clínica Ricardo Palma, esquina con Javier Prado a la altura del *Puente Quiñones*.
-
-
-Ver *mapa* aquí:
+Ver mapa aquí:
 https://goo.gl/maps/hp6fbftYYrdKnkcr7
-
-
-Ver *protocolo sanitario* aquí:
-https://youtu.be/-gCQnhVOsCs
 
 
 Te esperamos, FISIOSALUD:
 https://fisiosalud.pe
 
-*Por favor, agréganos a tus contactos para activar los links*
+Por favor, agréganos a tus contactos para activar los links

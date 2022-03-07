@@ -16,16 +16,22 @@ A 2 cuadras de la Clínica Ricardo Palma, esquina con Javier Prado a la altura d
 *Fisioterapeuta:*
 {{ $doctorName }}
 
-Ver / Cancelar / Pagar tus citas aquí:
-{{ $dashboardLink }}
 
-Ver *mapa* aquí:
-https://goo.gl/maps/hp6fbftYYrdKnkcr7
 
-Ver *protocolo sanitario* aquí:
-https://youtu.be/-gCQnhVOsCs
+*PAGOS, CITAS Y  REPROGRAMACIONES*
+
+Si deseas: 
+- Pagar tus Citas
+- Ver tus Citas Programadas
+- Agendar Nuevas Citas
+- Reprogramar tus Citas
+
+Por favor dar click en el siguiente link:
+
+http://fisiosalud.pe/area/patients/login/41301169/q0Yp3Yxpo2yzLH3SnxP6kgzv0Bil7O2OqaAi9X36
+
 
 Te esperamos, FISIOSALUD:
 https://fisiosalud.pe
 
-*Por favor, agréganos a tus contactos para activar los links*
+Por favor, agréganos a tus contactos para activar los links
