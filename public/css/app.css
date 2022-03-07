@@ -2267,6 +2267,18 @@ select {
 .uppercase{
     text-transform: uppercase;
 }
+.bg-status-1{
+    background-color: aquamarine;
+}
+.bg-status-2{
+    background-color: brown;
+}
+.bg-status-3{
+    background-color: darkcyan;
+}
+.bg-status-4{
+    background-color: crimson;
+}
 .focus-within\:text-gray-500:focus-within {
 	--tw-text-opacity: 1;
 	color: rgba(107, 114, 128, var(--tw-text-opacity));
@@ -2911,3 +2923,5 @@ select {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
 }
+
+

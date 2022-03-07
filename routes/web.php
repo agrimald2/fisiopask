@@ -44,3 +44,13 @@ Route::namespace(null)
 
 
     Route::get('/generateTokens', GenerateTokensAction::class);
+
+
+    Route::get('/cita', function () {
+        return redirect('/book-appointment');
+    });
+        
+        
+        Route::get('/citas', function () {
+        return redirect('/book-appointment');
+    });

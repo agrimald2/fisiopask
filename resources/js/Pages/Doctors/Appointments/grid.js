@@ -35,9 +35,8 @@ export default (props, { attrs }) => {
         html: true,
       })
       .format(function (row) {
-        let className = "bg-green-400";
-
-        if (row.status == 4) className = "bg-red-400";
+        let status = row.status;
+        let className = "bg-status-" + status;
 
         return `<span class="${className} text-white px-2 rounded">${row.status_label}</span>`;
   

@@ -123,6 +123,7 @@
     border-color: rgba(209, 213, 219, var(--tw-border-opacity));
     padding: 5px;
   }
+  
 </style>
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
