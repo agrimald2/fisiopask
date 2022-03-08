@@ -31,6 +31,7 @@ use App\Http\Controllers\Backend\RateController;
 use App\Http\Controllers\Backend\Rates\ProductSelectController;
 use App\Http\Controllers\Backend\ScheduleController;
 use App\Http\Controllers\Backend\ScheduleFreezeController;
+use App\Http\Controllers\Backend\StatisticsController;
 use App\Http\Controllers\Backend\SubfamilyController;
 
 
@@ -413,3 +414,12 @@ Route::get('/booking/{patient}/pickTime/{date}', [MultipleBookingController::cla
 
 Route::post('/booking/{patient}/postTime', [MultipleBookingController::class, 'postTime'])
     ->name('multipleBooking.postTime');
+    
+/**
+ * AREA: Statistics
+ */
+    Route::post('/statistic', [StatisticsController::class, 'statistic'])->name('statistic');    
+    Route::get('/excel', [StatisticsController::class,'excel'])->name('excel');   
+    //Route::post('/excel', [StatisticsController::class,'excel'])->name('excel');    
+    Route::resource('statistics', StatisticsController::class)
+    ->only('index');

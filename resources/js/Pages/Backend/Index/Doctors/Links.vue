@@ -12,6 +12,11 @@
       icon="fa-address-book"
       @click="go('doctors.appointments.index')"
     />
+    <link-item
+      label="Pacientes"
+      icon="fa-hospital-user"
+      @click="go('patients.index')"
+    />
   </link-group>
 </template>
 

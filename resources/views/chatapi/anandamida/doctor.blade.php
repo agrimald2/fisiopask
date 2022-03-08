@@ -1,8 +1,15 @@
-*ANANDAMIDA: CONFIRMACIÓN DE CITA*
+Hola, {{$doctorName }}
+*TE ACABAN DE AGENDAR UNA CITA*
 
-*Paciente:*
-{{ $patientName }}
-*Fecha de cita:*
+*El día:*
 {{ $date }}
-*Hora de cita:*
+*A las:*
 {{ $startTime }}
+*Lugar:*
+{{ $sucursal }}
+*Con el paciente:*
+{{ $patientName }}' '{{ $patientLastName }}
+
+Más Detalles:
+{{$dashboardDoctor}}
+

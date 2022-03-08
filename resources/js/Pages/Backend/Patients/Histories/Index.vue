@@ -9,6 +9,7 @@
     <div class="text-center pt-6">
       <ui-button @click="$inertia.visit(route('patients.histories.create', patientId))">Crear historia clínica</ui-button>
     </div>
+    
 
     <app-body>
       <div class="py-4 px-1">

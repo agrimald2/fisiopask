@@ -79,6 +79,23 @@
       label="Análisis"
       icon="fa-laptop-medical"
       @click="go('analysis.index')"
+
+
+  <!-- System records -->
+  <link-group
+    title="Registros"
+    class=""
+  >
+    <link-item
+      label="Gráficos y Estadística"
+      icon="fa-chart-bar"
+      @click="go('statistics.index')"
+    />
+
+    <link-item
+      label="Historiales Médicos"
+      icon="fa-book-medical"
+      @click="go('')"
     />
 
     <link-item
