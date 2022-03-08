@@ -20,6 +20,46 @@ class CreateMedicalHistoriesTable extends Migration
             $table->unsignedBigInteger("patient_id");
             $table->unsignedBigInteger("doctor_id");
 
+            //@ActualDisease:
+            $table->string("motive")->nullable();
+            $table->string("symptoms")->nullable();
+
+            //@Biological Functions:
+            $table->string("appetite")->nullable();
+            $table->string("thirst")->nullable();
+            $table->string("sleep")->nullable(); 
+            $table->string("mood")->nullable();
+            $table->string("weight_loss")->nullable();
+            $table->string("diuresis")->nullable();     
+            $table->string("depositions")->nullable();       
+
+            //@Background:
+            $table->string("diseases")->nullable();
+            $table->string("meds")->nullable();
+            $table->string("alergies")->nullable();
+
+            //@Phisical Test:
+                //@Vitals:
+                    $table->string("vital1")->nullable();
+                    $table->string("vital2")->nullable();
+                    $table->string("vital3")->nullable();   
+                    $table->string("vital4")->nullable();
+
+                    $table->string("weight")->nullable();
+                    $table->string("height")->nullable();   
+                    $table->string("imc")->nullable(); 
+                //@Others:
+                    $table->string("general_test")->nullable();
+                    $table->string("head_neck")->nullable();
+                    $table->string("respiratory")->nullable();   
+                    $table->string("cardiovascular")->nullable();
+                    $table->string("abs")->nullable();
+                    $table->string("genitourinario")->nullable();
+                    $table->string("nervous_system")->nullable();   
+                    $table->string("extremities")->nullable(); 
+                    $table->string("preferencial_test")->nullable(); 
+
+
             //@Info:
             $table->string("background")->nullable();
             $table->string("warnings")->nullable();

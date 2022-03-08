@@ -40,7 +40,7 @@
         </div>
       </div>
 
-      <div v-if="appointments.length > 0">
+      <div v-if="appointments!=null">
         <!-- Ver Tarifas -->
         <div class="mt-6">
           <div class="text-4xl font-bold">Tarifas Activas</div>

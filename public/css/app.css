@@ -1398,6 +1398,9 @@ select {
 .flex-grow {
 	flex-grow: 1;
 }
+.border-collapse {
+	border-collapse: collapse;
+}
 .origin-top-left {
 	transform-origin: top left;
 }
@@ -2122,6 +2125,10 @@ select {
 .text-blue-600 {
 	--tw-text-opacity: 1;
 	color: rgba(37, 99, 235, var(--tw-text-opacity));
+}
+.text-black {
+	--tw-text-opacity: 1;
+	color: rgba(0, 0, 0, var(--tw-text-opacity));
 }
 .text-red-400 {
 	--tw-text-opacity: 1;

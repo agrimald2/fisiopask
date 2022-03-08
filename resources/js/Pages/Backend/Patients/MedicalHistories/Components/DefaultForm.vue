@@ -13,7 +13,6 @@
         type="text"
         :form="form"
       />
-
       <!-- Advertencias -->
       <FormInput
         label="Advertencias"
@@ -173,6 +172,36 @@ export default {
 
         patient_id: null,
         doctor_id: null,
+
+        appetite: null,
+        thirst: null,
+        sleep: null,
+        mood: null,
+        weight_loss: null,
+        diuresis: null,
+        depositions: null,
+        diseases: null,
+        meds: null,
+        alergies: null,
+
+        vital1: null,
+        vital2: null,
+        vital3: null,
+        vital4: null,
+
+        weight: null,  
+        height: null,  
+        imc: null, 
+
+        general_test: null,  
+        head_neck: null, 
+        respiratory: null, 
+        cardiovascular: null,  
+        abs: null, 
+        genitourinario: null,  
+        nervous_system: null,  
+        extremities: null, 
+        preferencial_test: null, 
 
         background: null,
         warnings: null,

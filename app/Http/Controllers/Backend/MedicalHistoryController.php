@@ -64,6 +64,37 @@ class MedicalHistoryController extends Controller
             'warnings' => 'required',
             'description' => 'required',
     
+
+            'appetite' => '',
+            'thirst' => '',
+            'sleep' => '',
+            'mood' => '',
+            'weight_loss' => '',
+            'diuresis' => '',
+            'depositions' => '',
+            'diseases' => '',
+            'meds' => '',
+            'alergies' => '',
+
+            'vital1' => '',
+            'vital2' => '',
+            'vital3' => '',
+            'vital4' => '',
+            'weight' => '',
+            'height' => '',
+            'imc' => '',
+            'general_test' => '',
+            'head_neck' => '',
+            'respiratory' => '',
+            'cardiovascular' => '',
+            'abs' => '',
+            'genitourinario' => '',
+            'nervous_system' => '',
+            'extremities' => '',
+            'preferencial_test' => '',
+
+
+
             'pain_scale' => 'required',
             'force_scale' => 'required',
             'joint_range' => 'required',
