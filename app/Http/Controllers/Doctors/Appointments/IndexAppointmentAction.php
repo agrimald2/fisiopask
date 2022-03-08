@@ -94,9 +94,10 @@ class IndexAppointmentAction extends Controller
                 $q->when($searchQuery, function ($q, $value) {
                     $q->where('name', 'LIKE', "%$value%")
                     ->orWhere(DB::raw("CONCAT(`name`, ' ', `lastname1`, ' ', `lastname2`)"), 'LIKE', "%$value%")
-                    ->orWhere('dni', 'LIKE', "%$value%")
-                    ->orWhere('phone', 'LIKE', "%$value%")
-                    ->orWhere('office', 'LIKE', "%$value%");
+                    ->orWhere('dni', '=', "%$value%")
+                    ->orWhere('phone', '=', "%$value%")
+                    ->orWhere('office', 'LIKE', "%$value%")
+                    ->orWhere('status', '=', "%$value%");
                 });
             })
             ->whereHas('patient', function ($q) use ($dateQueryFrom, $dateQueryTo) {

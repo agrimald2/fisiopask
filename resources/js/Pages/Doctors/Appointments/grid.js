@@ -44,7 +44,7 @@ export default (props, { attrs }) => {
 
     c("date", "Fecha")
       .class("capitalize")
-      .format((v) => dates.dateForHumans(v)),
+      .format((v) => dates.dateForApp(v)),
 
     c("patient.fullname", "Paciente"),
 
@@ -53,7 +53,7 @@ export default (props, { attrs }) => {
     c("", "Horario")
       .extend({ html: true })
       .format((value, { row }) => {
-        return `${row.start} <i class="fas fa-angle-right"></i> ${row.end}`;
+        return `${row.start} <i class="fas fa-angle-right center-text text-center"></i> ${row.end}`;
       }),
 
     c()

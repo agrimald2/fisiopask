@@ -25,6 +25,15 @@
       >
 
         <template v-if="enableDoctorSearch">
+          <div style="justify-content: center; display: flex;">
+            *Escribe un número en la barra de busqueda para filtrar por estado*
+          </div>          
+          <div style="justify-content: center; display: flex;">
+            <span class="bg-status-1 text-white px-2 rounded leyend-status">1 - CONFI</span>
+            <span class="bg-status-2 text-white px-2 rounded leyend-status">2 - N A</span>
+            <span class="bg-status-3 text-white px-2 rounded leyend-status">3 - ASIS</span>
+            <span class="bg-status-4 text-white px-2 rounded leyend-status">4 - CAN</span>
+          </div>
           <div class="filter_space px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white grid items-center rounded-l-r-lg">
             <button @click.prevent.self="toggleDropDownDoctors()" style="font-size:1.15rem"> Filtro Doctores <span v-show="docFilterQuery" style="font-size:1rem; font-weight:bold"> -  {{docFilterQuery}} </span> </button>
             <div v-if="this.showDropDownDoctors">
@@ -88,7 +97,7 @@
 
       <div class="xl:px-12 mx-auto mt-6">
         <gridie
-          class="text-left bg-white overflow-x-auto w-full"
+          class="text-center bg-white overflow-x-auto w-full"
           :cols="cols"
           :rows="rows"
         />
@@ -142,7 +151,9 @@
     background-color: crimson;
 }
 
-  
+.leyend-status{
+  margin: 3px;
+}
 </style>
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";

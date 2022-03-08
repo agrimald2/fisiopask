@@ -13,6 +13,11 @@ export default {
         return moment(date).format("YYYY-MM-DD");
     },
 
+    
+    dateForApp(date) {
+        return moment(date).locale("es").format("dddd DD/MM");
+    },
+
     hourForHumans(hour) {
         return moment(hour, "HH:mm").format("h:mm A");
     },
