@@ -19,6 +19,7 @@ use App\Http\Controllers\Backend\RateController;
 use App\Http\Controllers\Backend\Rates\ProductSelectController;
 use App\Http\Controllers\Backend\ScheduleController;
 use App\Http\Controllers\Backend\ScheduleFreezeController;
+use App\Http\Controllers\Backend\StatisticsController;
 use App\Http\Controllers\Backend\SubfamilyController;
 use App\Http\Controllers\Doctors\Appointments\CancelAppointmentAction;
 use App\Http\Controllers\Doctors\PatientHistories\PatientHistoriesController;
@@ -220,3 +221,13 @@ Route::prefix('test')
             return inertia('Test/Dropdown');
         });
     });
+
+    
+/**
+ * AREA: Statistics
+ */
+    Route::post('/statistic', [StatisticsController::class, 'statistic'])->name('statistic');    
+    Route::get('/excel', [StatisticsController::class,'excel'])->name('excel');   
+    //Route::post('/excel', [StatisticsController::class,'excel'])->name('excel');    
+    Route::resource('statistics', StatisticsController::class)
+    ->only('index');

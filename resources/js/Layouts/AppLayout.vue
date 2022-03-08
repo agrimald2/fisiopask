@@ -40,7 +40,8 @@
                   Pacientes/Historias C.
                 </jet-nav-link>
                 <jet-nav-link
-
+                :href="route('statistics.index')"
+                  :active="route().current('statistics.index')"
                 >
                   Estadísticas
                 </jet-nav-link>

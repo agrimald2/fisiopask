@@ -1,6 +1,6 @@
 <template>
   <div class="grid gap-4">
-    <div class="grid">
+    <div class="bg-white">
       <div class="font-bold">Familia</div>
       <dropdown
         v-model="input.family_id"

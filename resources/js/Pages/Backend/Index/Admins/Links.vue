@@ -42,7 +42,7 @@
     <link-item
       label="Gráficos y Estadística"
       icon="fa-chart-bar"
-      @click="go('')"
+      @click="go('statistics.index')"
     />
 
     <link-item
