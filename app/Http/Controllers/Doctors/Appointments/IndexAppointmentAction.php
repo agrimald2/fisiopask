@@ -19,6 +19,9 @@ class IndexAppointmentAction extends Controller
         $dateQueryTo = $request->dateQueryTo;
         $doctorQuery = $request->doctorQuery;
         $officeQuery = $request->officeQuery;
+        
+        $statusQuery = $request->statusQuery;
+
         $fetchAll = $request->fetchAll;
         $canSearchByDoctor = false;
         $doctors = Doctor::query()->get();
@@ -34,6 +37,7 @@ class IndexAppointmentAction extends Controller
             'dateQueryTo' => $request->dateQueryTo, 
             'doctorQuery' => $request->doctorQuery, 
             'officeQuery' => $request->officeQuery,
+            'statusQuery' => $request->statusQuery,
             'fetchAll' => true,
         ];
 
@@ -47,7 +51,7 @@ class IndexAppointmentAction extends Controller
             }
         }
 
-        $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery);
+        $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery );
 
         $user = auth()->user();
         if ($user->hasRole('admin')) {
@@ -84,7 +88,7 @@ class IndexAppointmentAction extends Controller
     }
 
 
-    private function getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery)
+    private function getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery)
     {
         $appointments = $this->getAppointments();
 
@@ -94,10 +98,9 @@ class IndexAppointmentAction extends Controller
                 $q->when($searchQuery, function ($q, $value) {
                     $q->where('name', 'LIKE', "%$value%")
                     ->orWhere(DB::raw("CONCAT(`name`, ' ', `lastname1`, ' ', `lastname2`)"), 'LIKE', "%$value%")
-                    ->orWhere('dni', '=', "%$value%")
-                    ->orWhere('phone', '=', "%$value%")
-                    ->orWhere('office', 'LIKE', "%$value%")
-                    ->orWhere('status', '=', "%$value%");
+                    ->orWhere('dni', 'LIKE', "%$value%")
+                    ->orWhere('phone', 'LIKE', "%$value%")
+                    ->orWhere('office', 'LIKE', "%$value%");
                 });
             })
             ->whereHas('patient', function ($q) use ($dateQueryFrom, $dateQueryTo) {
@@ -112,6 +115,7 @@ class IndexAppointmentAction extends Controller
                 });
             })
             ->where('office', 'LIKE', $officeQuery)
+            ->where('status', 'LIKE', $statusQuery)
             ->orderBy('date', 'desc')
             ->orderBy('start', 'desc')
             ->paginate(120);

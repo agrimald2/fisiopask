@@ -25,15 +25,6 @@
       >
 
         <template v-if="enableDoctorSearch">
-          <div style="justify-content: center; display: flex;">
-            *Escribe un número en la barra de busqueda para filtrar por estado*
-          </div>          
-          <div style="justify-content: center; display: flex;">
-            <span class="bg-status-1 text-white px-2 rounded leyend-status">1 - CONFI</span>
-            <span class="bg-status-2 text-white px-2 rounded leyend-status">2 - N A</span>
-            <span class="bg-status-3 text-white px-2 rounded leyend-status">3 - ASIS</span>
-            <span class="bg-status-4 text-white px-2 rounded leyend-status">4 - CAN</span>
-          </div>
           <div class="filter_space px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white grid items-center rounded-l-r-lg">
             <button @click.prevent.self="toggleDropDownDoctors()" style="font-size:1.15rem"> Filtro Doctores <span v-show="docFilterQuery" style="font-size:1rem; font-weight:bold"> -  {{docFilterQuery}} </span> </button>
             <div v-if="this.showDropDownDoctors">
@@ -55,6 +46,7 @@
                    {{officeQuery}} 
                    </span>
                 </button>
+
                 <div v-if="this.showDropDownOffices">
                   <div v-for="(office, index) in offices" :key="index" class="doctors_display rounded-r-lg .rounded-l-lg">
                     <div @click.prevent.self="selectDropDownOffice(office)"> {{office.name}} </div>
@@ -62,7 +54,6 @@
                 </div>
               </div>
             </template>
-
             <input
               type="text"
               class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-l-lg px-4 py-3"
@@ -71,7 +62,48 @@
             >
           </div>
           <div class="flex items-stretch">
-
+            <template  v-if="enableOfficeSearch">
+              <div class="filter_space px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white grid items-center rounded-l-r-lg">             
+                <button @click.prevent.self="toggleDropDownStatus()" class="px-3 cursor-pointer hover:bg-gray-100 bg-white items-center rounded-l-r-lg" style="font-size:1.2rem">
+                   Status
+                   <br>
+                   <span v-if="statusQuery == 1" style="font-size:1rem; font-weight:bold">
+                    CONFI
+                   </span>
+                   <span v-else-if="statusQuery == 2" style="font-size:1rem; font-weight:bold">
+                    N A
+                   </span>
+                   <span v-else-if="statusQuery == 3" style="font-size:1rem; font-weight:bold">
+                    ASIS
+                   </span>                   
+                   <span v-else-if="statusQuery == 4" style="font-size:1rem; font-weight:bold">
+                    CAN
+                   </span>                                     
+                </button>
+                <div v-if="this.showDropDownStatus">
+                  <div key="1" class="doctors_display rounded-r-lg .rounded-l-lg">
+                    <div @click.prevent.self="selectDropDownStatus('1')"> 
+                      CONFI
+                    </div>
+                  </div>
+                  <div key="2" class="doctors_display rounded-r-lg .rounded-l-lg">
+                    <div @click.prevent.self="selectDropDownStatus('2')"> 
+                      N A
+                    </div>
+                  </div>
+                  <div key="3" class="doctors_display rounded-r-lg .rounded-l-lg">
+                    <div @click.prevent.self="selectDropDownStatus('3')"> 
+                      ASIS
+                    </div>
+                  </div>
+                  <div key="4" class="doctors_display rounded-r-lg .rounded-l-lg">
+                    <div @click.prevent.self="selectDropDownStatus('4')"> 
+                     CAN
+                    </div>
+                  </div>                                                      
+                </div>
+              </div>
+            </template>
             <input
               v-if="enableDateSearch"
               type="date"
@@ -171,6 +203,7 @@ export default {
     parameters: null,
     doctors: null,
     offices: null,
+    status: null,
     // Options
     enableSearch: {
       default: true,
@@ -219,8 +252,11 @@ export default {
       doctorQuery: null,
       officeQuery: null,
 
+      statusQuery: null,
+
       showDropDownDoctors: false,
       showDropDownOffices: false,
+      showDropDownStatus: false,
       docFilterQuery: null,
       docName: null,
     };
@@ -245,7 +281,10 @@ export default {
       const dateQueryTo = this.dateQueryTo;
       const doctorQuery = this.doctorQuery;
       const officeQuery = this.officeQuery;
-      const data = { searchQuery, dateQueryFrom, dateQueryTo, doctorQuery, officeQuery };
+
+      const statusQuery = this.statusQuery;
+
+      const data = { searchQuery, dateQueryFrom, dateQueryTo, doctorQuery, officeQuery, statusQuery };
       this.$inertia.get("", data, { preserveScroll: true });
     },
     toggleDropDownDoctors() {
@@ -253,6 +292,9 @@ export default {
     },
     toggleDropDownOffices() {
       this.showDropDownOffices = !this.showDropDownOffices;
+    },
+    toggleDropDownStatus() {
+      this.showDropDownStatus = !this.showDropDownStatus;
     },
     selectDropDownDoctor($doc) {
       this.doctorQuery = $doc.id;
@@ -262,6 +304,10 @@ export default {
     selectDropDownOffice($office) {
       this.officeQuery = $office.name;
       this.showDropDownOffices = false;
+    },
+    selectDropDownStatus($status) {
+      this.statusQuery = $status;
+      this.showDropDownStatus = false;
     },
   },
 };
