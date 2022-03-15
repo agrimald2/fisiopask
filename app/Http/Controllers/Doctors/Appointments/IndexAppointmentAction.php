@@ -89,10 +89,42 @@ class IndexAppointmentAction extends Controller
 
 
     private function getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery)
-    {
-        $appointments = $this->getAppointments();
+    {        
+        $appointments = DB::table('appointments')
+            ->join('patients', 'patients.id', '=', 'appointments.patient_id')
+            ->select(DB::raw("appointments.*, patients.*, appointments.id as id"));
 
-        return $appointments
+        $appointments
+            ->where('status', 'LIKE', $statusQuery);
+        
+        $appointments
+            ->where('dni', 'LIKE', $searchQuery);
+    
+        $appointments
+            ->where('office', 'LIKE', $officeQuery);
+            
+        if(!(empty($dateQueryFrom) || empty($dateQueryTo)))
+        {
+            $appointments
+                ->whereBetween('date', array($dateQueryFrom, $dateQueryTo));
+        }
+
+        if(!empty($doctorQuery)) $appointments->where('doctor_id', $doctorQuery);
+
+        $appointments
+            ->where('name', 'LIKE', $searchQuery)
+            ->orWhere('lastname1', 'LIKE', $searchQuery)
+            ->orWhere('lastname2', 'LIKE', $searchQuery);
+        
+        $appointments
+            ->orderBy('date', 'desc')
+            ->orderBy('start', 'desc');
+
+        $result = $appointments->paginate(120);
+
+        return $result;
+
+        /*return $appointments->paginate(120)
             ->with('patient')
             ->whereHas('patient', function ($q) use ($searchQuery) {
                 $q->when($searchQuery, function ($q, $value) {
@@ -118,7 +150,7 @@ class IndexAppointmentAction extends Controller
             ->where('status', 'LIKE', $statusQuery)
             ->orderBy('date', 'desc')
             ->orderBy('start', 'desc')
-            ->paginate(120);
+            ->paginate(120);*/
     }
 
     private function getAppointments()

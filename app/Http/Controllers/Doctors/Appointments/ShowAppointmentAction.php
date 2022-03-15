@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PatientRate;
 use App\Models\Rate;
+use App\Models\Doctor;
+use App\Models\Patient;
 use App\Models\Subfamily;
 use App\Models\DoctorSubfamily;
 
@@ -22,7 +24,8 @@ class ShowAppointmentAction extends Controller
         $appointment = appointments()->show($id);
         $patient = $appointment->patient;
 
-        $doctor = $appointment->doctor;
+        $doctor = Doctor::withTrashed()->where('id', $appointment["doctor_id"])->first();
+        
         $doctorSubfamilies = DoctorSubfamily::query()->where('doctor_id' , $doctor->id)->get();
 
         $rate = null;
@@ -54,7 +57,7 @@ class ShowAppointmentAction extends Controller
             if($query) $rate = $query;
         }
 
-        return inertia('Doctors/Appointments/Show', compact('appointment', 'role', 'rate'));
+        return inertia('Doctors/Appointments/Show', compact('appointment', 'doctor', 'patient', 'role', 'rate'));
     }
 
 

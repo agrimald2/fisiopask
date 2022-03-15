@@ -2,8 +2,6 @@ import dates from "@/ui/dates.js";
 
 import { Inertia } from "@inertiajs/inertia";
 import { cells, c } from "@ferchoposting/gridie";
-import { parserOptions } from "@vue/compiler-dom";
-import { bindKey } from "lodash";
 
 export default (props, { attrs }) => {
   const queryString = window.location.search;
@@ -26,7 +24,8 @@ export default (props, { attrs }) => {
 
       if (row.status == 4) className = "bg-red-400";
 
-      return `<p>${((currentPage - 1) * 15) + (props.model.indexOf(row) + 1)}<p>`;
+      //return `${row.id}`
+      return `<p>${((currentPage - 1) * 120) + (props.model.indexOf(row) + 1)}<p>`;
 
     }),
 
@@ -38,7 +37,14 @@ export default (props, { attrs }) => {
         let status = row.status;
         let className = "bg-status-" + status;
 
-        return `<span class="${className} text-white px-2 rounded">${row.status_label}</span>`;
+        let statusStr = "undefined";
+
+        if(status == 1) statusStr = "CONFI";
+        else if(status == 2) statusStr = "N A";
+        else if(status == 3) statusStr = "ASIS";
+        else if(status == 4) statusStr = "CAN";
+
+        return `<span class="${className} text-white px-2 rounded">${statusStr}</span>`;
   
       }),
 
@@ -46,7 +52,13 @@ export default (props, { attrs }) => {
       .class("capitalize")
       .format((v) => dates.dateForApp(v)),
 
-    c("patient.fullname", "Paciente"),
+    c("", "Paciente")
+      .extend({
+        html: true,
+      })
+      .format(function (row) {
+        return `${row.name} ${row.lastname1} ${row.lastname2}`;
+      }),
 
     c("office", "Sucursal"),
 
@@ -63,7 +75,7 @@ export default (props, { attrs }) => {
           {
             label: "Multi",
             clicked({ row }) {
-              Inertia.visit(route("multipleBooking.pickDay", row.patient.id));
+              Inertia.visit(route("multipleBooking.pickDay", row.patient_id));
             },
           },
         ],
