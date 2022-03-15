@@ -94,14 +94,17 @@ class IndexAppointmentAction extends Controller
             ->join('patients', 'patients.id', '=', 'appointments.patient_id')
             ->select(DB::raw("appointments.*, patients.*, appointments.id as id"));
 
-        $appointments
-            ->where('status', 'LIKE', $statusQuery);
-        
-        $appointments
-            ->where('dni', 'LIKE', $searchQuery);
-    
-        $appointments
-            ->where('office', 'LIKE', $officeQuery);
+        if(!empty($statusQuery))
+        {
+            $appointments
+                ->where('status', 'LIKE', $statusQuery);
+        }
+
+        if(!empty($officeQuery))
+        {
+            $appointments
+                ->where('office', 'LIKE', $officeQuery);
+        }
             
         if(!(empty($dateQueryFrom) || empty($dateQueryTo)))
         {
@@ -111,10 +114,19 @@ class IndexAppointmentAction extends Controller
 
         if(!empty($doctorQuery)) $appointments->where('doctor_id', $doctorQuery);
 
-        $appointments
-            ->where('name', 'LIKE', $searchQuery)
-            ->orWhere('lastname1', 'LIKE', $searchQuery)
-            ->orWhere('lastname2', 'LIKE', $searchQuery);
+        if(!empty($searchQuery))
+        {
+            $appointments->where(function($q) use ($searchQuery) {
+                $q->where('dni', 'LIKE', $searchQuery)
+                    ->orWhere('name', 'LIKE', $searchQuery)
+                    ->orWhere('lastname1', 'LIKE', $searchQuery)
+                    ->orWhere('lastname2', 'LIKE', $searchQuery)
+                    ->orWhere(DB::raw("CONCAT(`name`, ' ', `lastname1`, ' ', `lastname2`)"), 'LIKE', $searchQuery)
+                    ->orWhere(DB::raw("CONCAT(`name`, ' ', `lastname1`)"), 'LIKE', $searchQuery)
+                    ->orWhere(DB::raw("CONCAT(`name`, ' ', `lastname2`)"), 'LIKE', $searchQuery)
+                    ->orWhere(DB::raw("CONCAT(`lastname1`, ' ', `lastname2`)"), 'LIKE', $searchQuery);
+            });
+        }
         
         $appointments
             ->orderBy('date', 'desc')
