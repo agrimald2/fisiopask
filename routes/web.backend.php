@@ -35,6 +35,9 @@ use App\Http\Controllers\Backend\StatisticsController;
 use App\Http\Controllers\Backend\SubfamilyController;
 
 
+use App\Http\Controllers\TestAssistanceController;
+
+
 use App\Http\Controllers\Backend\HistoryGroupController;
 use App\Http\Controllers\Backend\MedicalHistoryController;
 use App\Http\Controllers\Backend\MedicalRevisionController;
@@ -423,3 +426,6 @@ Route::post('/booking/{patient}/postTime', [MultipleBookingController::class, 'p
     //Route::post('/excel', [StatisticsController::class,'excel'])->name('excel');    
     Route::resource('statistics', StatisticsController::class)
     ->only('index');
+
+
+    Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 

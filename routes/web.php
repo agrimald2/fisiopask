@@ -4,6 +4,7 @@ use App\Http\Controllers\LoginSuccessController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\GenerateTokensAction;
 
+use App\Http\Controllers\TestAssistanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,3 +55,8 @@ Route::namespace(null)
         Route::get('/citas', function () {
         return redirect('/book-appointment');
     });
+
+
+    
+
+    Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 

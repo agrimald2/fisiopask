@@ -107,7 +107,7 @@
 
         <front-button
           color="red"
-          
+          v-if="appointment.status == 1"
           @click="cancelAppointment"
         >
           Cancelar Cita

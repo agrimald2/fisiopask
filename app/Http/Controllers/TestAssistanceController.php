@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 
@@ -13,19 +13,13 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+use Illuminate\Http\Request;
+
 use App\Domain\Patients\PatientAuthRepositoryContract;
 
-class CheckAssistance implements ShouldQueue
+class TestAssistanceController extends Controller
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
+    public function test(){
         $confirmedAppointments = Appointment::query()
             ->where('status', Appointment::STATUS_CONFIRMED)
             ->where('date', Carbon::now()->format('Y-m-d'))
@@ -44,8 +38,8 @@ class CheckAssistance implements ShouldQueue
             {
                 if($startHour < $currentHour)
                 {
-                    $phone = $appointment->patient->phone;
-
+                    //$phone = $appointment->patient->phone;
+                    
                     $date = $appointment->date->format('d/m/Y');
                     $startTime = $appointment->start;
                     $patientName = $appointment->patient->name;
@@ -54,11 +48,12 @@ class CheckAssistance implements ShouldQueue
                     $doctorWorkspace = [];
                     if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
                     $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($appointment->patient);
-
+                    
                     $patientDNI = $appointment->patient->dni;
                     $patientToken = $appointment->patient->token;
                     $dashboardLink = 'https://fisiosalud.pe/area/patients/login/'.$patientDNI.'/'.$patientToken;
     
+
                     $data = compact(
                         'patientName',
                         'date',
@@ -67,10 +62,10 @@ class CheckAssistance implements ShouldQueue
                         'dashboardLink',
                         'doctorWorkspace'
                     );
-
+                    
                     $text = $this->getWhatsappPatientNotAssistedText($data);
-
-                    chatapi($phone, $text);
+                    
+                    //chatapi($phone, $text);
                     $appointment->status = Appointment::STATUS_NOT_ASSISTED;
                     $appointment->save();
                 }
@@ -78,19 +73,8 @@ class CheckAssistance implements ShouldQueue
         }
     }
 
-    
     protected function getWhatsappPatientNotAssistedText($data)
     {   
         return view('chatapi.notAssisted', $data)->render();
-    }
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
-    {
-        //
     }
 }

@@ -84,6 +84,10 @@ class MultipleBookingController extends Controller
 
         appointments()->make($date, $schedule, $patient);
 
+        //$phone = $patient->phone;
+
+        //chatapi($phone, $text);
+
         return redirect()->route('multipleBooking.pickDay', compact('patient'));
 
         return redirect()->route('doctors.appointments.index');

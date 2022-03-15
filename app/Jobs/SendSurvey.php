@@ -28,6 +28,7 @@ class SendSurvey implements ShouldQueue
     {
         $assistedAppointments = Appointment::query()
             ->where('status', Appointment::STATUS_ASSISTED)
+            ->where('date', Carbon::now()->format('Y-m-d'))
             ->with('patient')
             ->get();
 
@@ -39,35 +40,21 @@ class SendSurvey implements ShouldQueue
 
             $currentTime = (int)date("H");
 
-            //TODO @WHATSAPP ENCUESTA
-            if($carbonDate->isToday())
+            if($surveyTime == $currentTime)
             {
-                //TODO @TEST
-                if($surveyTime >= $currentTime)
-                {
-                    $patient = $appointment->patient;
-
-                    $phone = $appointment->patient->phone;
-                    $surveyLink = "www.fisiosalud.pe/area/patients/surveys/appointment/";
-                    $surveyLink .= $appointment->id;
-                    $patientName = $patient->name;
-
-                    $data = compact(
-                        'patientName',
-                        'surveyLink',
-                    );
-                    
-                    $text = $this->getWhatsappSurveyText($data);
-                    chatapi($phone, $text);
-                }
-            }
-            /*if($carbonDate->isYesterday())
-            {
+                $patient = $appointment->patient;
                 $phone = $appointment->patient->phone;
-                $surveyLink = "www.fisiosalud.pe/area/patients/surveys/appointment/";
+                $surveyLink = "www.fisiosalud.pe/area/patients/survey/appointment/";
                 $surveyLink .= $appointment->id;
+                $patientName = $patient->name;
+                $data = compact(
+                    'patientName',
+                    'surveyLink',
+                );
+                
+                $text = $this->getWhatsappSurveyText($data);
                 chatapi($phone, $text);
-            }*/
+            }
         }
     }
 

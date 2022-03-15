@@ -57,7 +57,7 @@ Route::middleware('patients.auth')->group(function () {
 });
 
 Route::get('/survey/appointment/{id}', PatientSurveyController::class)
-->name('survey.take');
+    ->name('survey.take');
 
 Route::resource('/survey', PatientSurveyController::class)
-->only('store');
+    ->only('store');
