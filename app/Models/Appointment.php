@@ -88,4 +88,11 @@ class Appointment extends Model
     {
         return $this->hasMany(PatientRate::class);
     }
+
+    //office
+    public function office()
+    {
+        return $this->belongsTo(Office::class);
+    }
+
 }

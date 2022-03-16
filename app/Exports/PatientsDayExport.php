@@ -18,28 +18,27 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
     /**
      * @return \Illuminate\Support\Collection
      */
+    protected $office;
     protected $start;
     protected $end;
 
-    function __construct($start, $end)
+    function __construct($office,$start,$end)
     {
-
+        $this->office=$office;
         $this->start = $start;
-        $this->end = $end;
+        $this->end = $end;        
+       
     }
 
     public function array(): array
     {
-
-        // return Patient::all();
         $data = DB::select(
-            "
-            SELECT 
+            "SELECT 
             CONCAT(d.name, d.lastname) as doctor,
             DATE_FORMAT(a.date,'%d/%m/%y') AS fecha,
             CONCAT(a.start, ' ',a.end) AS horario,
             CONCAT(p.name,' ',p.lastname1,' ',p.lastname2) AS paciente,
-            ss.service_score,
+            IFNULL(s.service_score,'No calificacion') as score,
             f.name as familias,
             sb.name as subfamilia,
             r.name as tarifa,
@@ -47,10 +46,12 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
             pm.payment_method as metodoPago,
             pr.price as precio,
             pr.payed as pagado,
-            TRUNCATE((pr.sessions_total - pr.sessions_left) * (pr.price/pr.sessions_total),2) as valorEjecutado
-            from doctors d 
-            JOIN appointments a ON d.id=a.doctor_id 
-            join surveys ss on a.id = ss.appointment_id
+            TRUNCATE((pr.sessions_total - pr.sessions_left) * (pr.price/pr.sessions_total),2) as valorEjecutado,
+            o.name
+            FROM appointments a 
+            left join surveys s on s.appointment_id=a.id
+            join doctors d ON d.id=a.doctor_id 
+            join  offices o on a.office_id = o.id
             join patients p 
             join patient_rates pr on p.id=pr.patient_id 
             and a.id=pr.appointment_id
@@ -59,7 +60,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
             join rates r on r.subfamily_id = sb.id
             join patient_payments py on py.patient_rate_id= pr.id
             join payment_methods pm on pm.id = py.payment_method_id
-            where a.status=3 and (a.date BETWEEN '" . $this->start . "' AND '" . $this->end . "')"
+            where a.status=3 and o.id='".$this->office."' and (a.date BETWEEN '" . $this->start . "' AND '" . $this->end . "')"
         );
         
         return $data;
@@ -80,6 +81,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
             'Precio Tarifa',
             'Monto Cobrado',
             'Valor Ejecutado',
+            'Sucursal',
         ];
     }
     public function columnWidths(): array
@@ -98,6 +100,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
             'K' => 20,
             'L' => 20,
             'M' => 20,
+            'N' => 30,
         ];
     }
     public function styles(Worksheet $sheet)
@@ -126,7 +129,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
         );
         return [
             AfterSheet::class => function (AfterSheet $event) use ($styleArray) {
-                $event->sheet->getStyle('A1:M1')->applyFromArray($styleArray);
+                $event->sheet->getStyle('A1:N1')->applyFromArray($styleArray);
                 $event->sheet->getStyle('B1:B300')->applyFromArray($styleArray);
                 $event->sheet->getStyle('C1:C300')->applyFromArray($styleArray);
                 $event->sheet->getStyle('E1:E300')->applyFromArray($styleArray);
