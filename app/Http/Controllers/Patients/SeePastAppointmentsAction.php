@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 
+use Carbon\Carbon;
+
 class SeePastAppointmentsAction extends Controller
 {
     public function __invoke(PatientAuthRepositoryContract $repo, Request $request)
@@ -17,8 +19,9 @@ class SeePastAppointmentsAction extends Controller
             ->with(['doctor' => function ($q) {
                 $q->select('id', 'name', 'lastname');
             }])
+            ->where('date', '<', Carbon::now()->format('Y-m-d'))
             ->orderBy('date', 'desc')
-            ->paginate(5);
+            ->get();
 
             /**
              * 1. La busqueda debe resetear el numero de pagina, pequeño error

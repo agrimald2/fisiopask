@@ -57,7 +57,7 @@ import UiButton from "@/Shared/Frontend/Button";
 import dates from "@/ui/dates.js";
 
 export default {
-  props: ["model", "appointmentsLeft"],
+  props: ["model"],
 
   components: {
     UiButton,

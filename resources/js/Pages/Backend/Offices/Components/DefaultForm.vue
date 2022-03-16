@@ -26,6 +26,32 @@
         :form="form"
       />
 
+       <!-- reference -->
+      <form-input
+        label="Referencia"
+        name="reference"
+        v-model="form.reference"
+        type="text"
+        :form="form"
+      />
+
+       <!-- indications -->
+      <form-input
+        label="Indicaciones"
+        name="indications"
+        v-model="form.indications"
+        type="text"
+        :form="form"
+      />
+       <!-- maps_link -->
+      <form-input
+        label="Link de Google Maps"
+        name="maps_link"
+        v-model="form.maps_link"
+        type="text"
+        :form="form"
+      />
+
     </template>
 
     <template #actions>
@@ -73,6 +99,9 @@ export default {
 
         name: null,
         address: null,
+        reference: null,
+        maps_link: null,
+        indications: null,
 
         ...this.model,
       }),

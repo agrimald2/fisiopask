@@ -12,8 +12,8 @@
               font-size: 1.2rem;
           ">
   
-          {{ model.lastname1 }} {{ model.lastname2 }} <br>
-          {{ model.dni }}
+          {{ model.name }} {{ model.lastname1 }} {{ model.lastname2 }} <br>
+
           </div>
         </div>
       </div>

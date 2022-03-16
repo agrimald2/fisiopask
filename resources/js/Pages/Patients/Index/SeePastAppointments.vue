@@ -54,7 +54,9 @@ export default {
     Appointments,
     RatesCmp,
   },
-
+  mounted (){
+    console.log(this.appointments);
+  },
    methods: {
     go(routeName) {
       const url = route(routeName);

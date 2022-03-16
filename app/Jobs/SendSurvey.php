@@ -51,9 +51,15 @@ class SendSurvey implements ShouldQueue
                     'patientName',
                     'surveyLink',
                 );
-                
-                $text = $this->getWhatsappSurveyText($data);
-                chatapi($phone, $text);
+                //* Send message only to the 30% of the appointments
+                    //? 95% sure there is a better way to do this
+                $dice = rand(1,10);
+                if ($dice <= 3){
+                    $text = $this->getWhatsappSurveyText($data);
+                    chatapi($phone, $text);
+                }else{
+                    return;
+                }       
             }
         }
     }

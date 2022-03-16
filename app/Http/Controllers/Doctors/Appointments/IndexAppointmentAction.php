@@ -118,6 +118,7 @@ class IndexAppointmentAction extends Controller
         {
             $appointments->where(function($q) use ($searchQuery) {
                 $q->where('dni', 'LIKE', $searchQuery)
+                    ->orWhere('phone', 'LIKE', $searchQuery)
                     ->orWhere('name', 'LIKE', $searchQuery)
                     ->orWhere('lastname1', 'LIKE', $searchQuery)
                     ->orWhere('lastname2', 'LIKE', $searchQuery)

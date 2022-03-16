@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 
+use Carbon\Carbon;
+
 class SeeAppointmentsAction extends Controller
 {
     public function __invoke(PatientAuthRepositoryContract $repo, Request $request)
@@ -17,14 +19,14 @@ class SeeAppointmentsAction extends Controller
             ->with(['doctor' => function ($q) {
                 $q->select('id', 'name', 'lastname');
             }])
-            ->orderBy('date', 'desc')
-            ->paginate(5);
+            ->where('date', '>', Carbon::yesterday()->format('Y-m-d'))
+            ->orderBy('date', 'asc')
+            ->get();
 
             /**
              * 1. La busqueda debe resetear el numero de pagina, pequeño error
              * 2. El error, para variar era pq el doctor no tenía ninguna subfamilia
              */
-
             
         $rates = $model->rates()
             ->orderBy('id', 'desc')

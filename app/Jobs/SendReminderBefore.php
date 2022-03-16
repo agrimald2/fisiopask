@@ -26,15 +26,11 @@ class SendReminderBefore implements ShouldQueue
     {
         $confirmedAppointments = Appointment::query()
             ->where('status', Appointment::STATUS_CONFIRMED)
+            ->where('date', Carbon::tomorrow()->format('Y-m-d'))
             ->get();
 
         foreach($confirmedAppointments as $appointment)
         {
-            $carbonDate = Carbon::parse($appointment->date);
-            
-            //TODO @WHATSAPP RECORDATORIO UN DÍA ANTES
-            if($carbonDate->isTomorrow())
-            {
                 $phone = $appointment->patient->phone;
                 $patient = $appointment->patient;
                 
@@ -61,7 +57,6 @@ class SendReminderBefore implements ShouldQueue
                 
                 $text = $this->getWhatsappPatientReminderText($data);
                 chatapi($phone, $text);
-            }
         }
     }
 

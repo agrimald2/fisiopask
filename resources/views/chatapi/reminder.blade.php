@@ -17,7 +17,6 @@ A 2 cuadras de la Clínica Ricardo Palma, esquina con Javier Prado a la altura d
 {{ $doctorName }}
 
 
-
 *PAGOS, CITAS Y  REPROGRAMACIONES*
 
 Si deseas: 
