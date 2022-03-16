@@ -29,6 +29,7 @@ class SendSurvey implements ShouldQueue
         $assistedAppointments = Appointment::query()
             ->where('status', Appointment::STATUS_ASSISTED)
             ->where('date', Carbon::now()->format('Y-m-d'))
+            ->where('survey', '0')
             ->with('patient')
             ->get();
 
@@ -61,6 +62,8 @@ class SendSurvey implements ShouldQueue
                     return;
                 }       
             }
+            $appointment->survey = '1';
+            $appointment->save();
         }
     }
 
