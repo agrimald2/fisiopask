@@ -23,8 +23,40 @@
               class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
             >
               <h4 class="font-semibold text-gray-800">Filtrar por</h4>
-
+              <!--Filtro-->
               <div class="grid sm:px-4 lg:px-6 gap-6 mb-2 md:grid-cols-2">
+                <div>
+                  <select
+                    class="
+                      border-gray-300
+                      focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+                      shadow-sm
+                      w-full
+                      mt-1
+                      py-2.5
+                      px-4
+                      text-gray-700
+                      leading-tight
+                      focus:border-indigo-300
+                      rounded-lg
+                      dark:border-gray-200
+                      dark:border-none
+                      dark:bg-gray-600
+                      dark:text-white
+                      dark:focus:border-blue-500
+                      dark:focus:shadow-outline-blue
+                    "
+                    v-model="paramsFilter.office"
+                  >
+                    <option
+                      v-for="(o, index) in offices"
+                      :key="index"
+                      :value="o.id"
+                    >
+                      {{ o.name }}
+                    </option>
+                  </select>
+                </div>
                 <div>
                   <select
                     class="
@@ -49,75 +81,15 @@
                     @change="clearParams()"
                     v-model="paramsFilter.advances"
                   >
-                    <option disabled selected value="">Seleccionar</option>
-                    <option value="1">Avance del día</option>
                     <option value="2">Evolución mensual</option>
+                    <option value="1">Avance del día</option>
                     <option value="3">Fecha</option>
                     <option value="4">Recomendación</option>
                     <option value="5">Tarifas</option>
                   </select>
                 </div>
-                <div
-                  class="
-                    flex
-                    justify-center
-                    sm:justify-center
-                    md:justify-end
-                    lg:justify-end
-                  "
-                >
-                  <div>
-                    <JetButton
-                      type="button"
-                      class="my-1"
-                      @click.prevent="searchFilter"
-                    >
-                      Buscar
-                      <span class="ml-2 text-white" aria-hidden="true">
-                        <svg
-                          class="h-4 w-4 fill-current"
-                          xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink"
-                          version="1.1"
-                          id="Capa_1"
-                          x="0px"
-                          y="0px"
-                          viewBox="0 0 56.966 56.966"
-                          style="enable-background: new 0 0 56.966 56.966"
-                          xml:space="preserve"
-                          width="512px"
-                          height="512px"
-                        >
-                          <path
-                            d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"
-                          />
-                        </svg>
-                      </span>
-                    </JetButton>
-                  </div>
-                </div>
               </div>
-              <!--loading-->
-              <div
-                v-if="loadingSearch"
-                class="grid grid-cols-1 md:grid-cols-1 md:gap-8"
-              >
-                <div
-                  class="
-                    w-full
-                    bg-gray-200
-                    dark:bg-gray-800
-                    rounded-full
-                    h-1.5
-                    mt-2
-                  "
-                >
-                  <div
-                    class="bg-green-400 dark:bg-purple-600 h-1.5 rounded-full"
-                    style="width: 99%"
-                  ></div>
-                </div>
-              </div>
+
               <!--Avance dia-->
               <div v-show="paramsFilter.advances === '1'">
                 <div
@@ -386,6 +358,62 @@
                   </div>
                 </div>
               </div>
+              <!--loading-->
+              <div
+                v-if="loadingSearch"
+                class="grid grid-cols-1 md:grid-cols-1 md:gap-8"
+              >
+                <div
+                  class="
+                    w-full
+                    bg-gray-200
+                    dark:bg-gray-800
+                    rounded-full
+                    h-1.5
+                    mt-2
+                    mb-4
+                  "
+                >
+                  <div
+                    class="bg-green-400 dark:bg-purple-600 h-1.5 rounded-full"
+                    style="width: 99%"
+                  ></div>
+                </div>
+              </div>
+              <!--Button-->
+              <div class="grid sm:px-4 lg:px-6 gap-6 mb-2 md:grid-cols-1">
+                <div class="flex justify-center sm:justify-center">
+                  <div>
+                    <JetButton
+                      type="button"
+                      class="my-1"
+                      @click.prevent="searchFilter"
+                    >
+                      Buscar
+                      <span class="ml-2 text-white" aria-hidden="true">
+                        <svg
+                          class="h-4 w-4 fill-current"
+                          xmlns="http://www.w3.org/2000/svg"
+                          xmlns:xlink="http://www.w3.org/1999/xlink"
+                          version="1.1"
+                          id="Capa_1"
+                          x="0px"
+                          y="0px"
+                          viewBox="0 0 56.966 56.966"
+                          style="enable-background: new 0 0 56.966 56.966"
+                          xml:space="preserve"
+                          width="512px"
+                          height="512px"
+                        >
+                          <path
+                            d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"
+                          />
+                        </svg>
+                      </span>
+                    </JetButton>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -557,6 +585,44 @@
 
               <!--Fecha-->
               <div>
+                <div>
+                  <div
+                    class="grid sm:px-4 mt-4 lg:px-6 gap-6 mb-2 md:grid-cols-1"
+                  >
+                    <div class="flex justify-center">
+                      <select
+                        class="
+                          border-gray-300
+                          focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+                          shadow-sm
+                          w-full
+                          mt-1
+                          py-2.5
+                          px-4
+                          text-gray-700
+                          leading-tight
+                          focus:border-indigo-300
+                          rounded-lg
+                          dark:border-gray-200
+                          dark:border-none
+                          dark:bg-gray-600
+                          dark:text-white
+                          dark:focus:border-blue-500
+                          dark:focus:shadow-outline-blue
+                        "
+                        v-model="officeExcel"
+                      >
+                        <option
+                          v-for="(o, index) in offices"
+                          :key="index"
+                          :value="o.id"
+                        >
+                          {{ o.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
                 <div
                   class="grid sm:px-4 mt-4 lg:px-6 gap-6 mb-2 md:grid-cols-1"
                 >
@@ -728,10 +794,10 @@ import JetButton from "@/Jetstream/Button";
 import axios from "axios";
 import Dropdown from "@/Shared/Dropdown/Dropdown";
 import { DatePicker } from "v-calendar";
-import moment from "moment";
 
 export default {
   props: {
+    offices: Object,
     recommendation: Object,
     patient: Object,
     sales: Object,
@@ -764,7 +830,8 @@ export default {
       },
       dayList: [],
       paramsFilter: {
-        advances: "",
+        office: this.$props.offices[0].id,
+        advances: "2",
         daySelected: "",
         family_id: "",
         subfamily_id: "",
@@ -799,9 +866,12 @@ export default {
       //
       loadingSearch: false,
       //EXCEL
-      datesExcel: {
+      officeExcel:this.$props.offices[0].id,
+      datesExcel: {      
+
         start: new Date().toISOString().slice(0, 10),
         end: new Date().toISOString().slice(0, 10),
+         
       },
     };
   },
@@ -838,7 +908,6 @@ export default {
       });
       var a = totalGeneral[totalGeneral.length - 2];
       var b = totalGeneral[totalGeneral.length - 1];
-
       if (totalGeneral.length > 1 && a > 0) {
         this.patientPorcentaje = Math.round((+b / a - 1) * 100);
       }
@@ -1190,7 +1259,15 @@ export default {
         .finally(() => (this.loadingSearch = false));
     },
     searchExcel() {
-      let paramString = new URLSearchParams(this.datesExcel);
+
+      let params={
+        start:this.datesExcel.start,
+        end:this.datesExcel.end,
+        office:this.officeExcel
+      };
+      
+     
+      let paramString = new URLSearchParams(params);
 
       window.open(`excel?${paramString.toString()}`);
     },
