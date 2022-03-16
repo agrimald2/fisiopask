@@ -27,6 +27,7 @@ class SendReminderBefore implements ShouldQueue
         $confirmedAppointments = Appointment::query()
             ->where('status', Appointment::STATUS_CONFIRMED)
             ->where('date', Carbon::tomorrow()->format('Y-m-d'))
+            ->where('reminder', '0')
             ->get();
 
         foreach($confirmedAppointments as $appointment)
@@ -54,9 +55,11 @@ class SendReminderBefore implements ShouldQueue
                     'dashboardLink',
                     'doctorWorkspace'
                 );
-                
+               
                 $text = $this->getWhatsappPatientReminderText($data);
                 chatapi($phone, $text);
+                $appointment->reminder = '1';
+                $appointment->save();
         }
     }
 
