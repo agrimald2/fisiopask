@@ -40,7 +40,6 @@ export default {
   components: {
     AppLayout,
     AppBody,
-
     UiButton,
     Gridie,
   },
@@ -56,7 +55,7 @@ export default {
           {
             label: "Editar",
             clicked({ row }) {
-              const url = route("histories.edit", row.id);
+              const url = route("patients.historygroup.show", row.id);
               Inertia.visit(url);
             },
           },

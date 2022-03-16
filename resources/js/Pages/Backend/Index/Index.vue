@@ -15,6 +15,10 @@
       <admin-links />
     </template>
 
+    <template v-if="roles.includes('assistant')">
+      <assistant-links />
+    </template>
+
     <div class="py-24"></div>
 
   </app-layout>
@@ -25,6 +29,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 
 import AdminLinks from "./Admins/Links";
 import DoctorLinks from "./Doctors/Links";
+import AssistantLinks from "./Assistants/Links";
 
 import DoctorAppointments from "./Doctors/Appointments/Appointments.vue";
 
@@ -35,8 +40,9 @@ export default {
     AppLayout,
 
     AdminLinks,
-
     DoctorLinks,
+    AssistantLinks,
+
     DoctorAppointments,
   },
 

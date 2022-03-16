@@ -16,13 +16,21 @@ class CreatePatientRatesTable extends Migration
         Schema::create('patient_rates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedInteger('subfamily_id');
+
+            $table->unsignedInteger('patient_id');
+            $table->unsignedInteger('appointment_id')->nullable();
+
             $table->float('price');
+            $table->float('payed')->default(0);
+
+            $table->boolean('is_product');
             $table->unsignedInteger('qty')->default(1);
 
-            $table->unsignedBigInteger('patient_id');
+            $table->unsignedInteger('sessions_total')->default(1);
+            $table->unsignedInteger('sessions_left')->default(1);
 
-            $table->unsignedBigInteger('rate_id')->nullable();
-            $table->unsignedBigInteger('appointment_id')->nullable();
+            $table->unsignedInteger('state');
 
             $table->softDeletes();
             $table->timestamps();

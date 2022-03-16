@@ -13,7 +13,7 @@ class MercadoPagoGateway
     }
 
 
-    public function generate($reference, $price, $url)
+    public function generate($reference, $name, $qty, $price, $url)
     {
         /**
          * Generate a preferenceId that we will use later
@@ -31,13 +31,16 @@ class MercadoPagoGateway
             "pending" => $url,
         ];
 
+        $preference->auto_return = "approved";
+
         /**
          * List of `MercadoPago\Item` class
          */
 
         $item = new MercadoPago\Item();
-        $item->title = env('APP_NAME');
-        $item->quantity = 1;
+        $item->title = $name;
+        $item->description = $name;
+        $item->quantity = $qty;
         $item->unit_price = $price;
         $preference->items = array($item);
 

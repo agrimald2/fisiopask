@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Domain\Reniec\Datas\PatientData;
 use App\Models\Patient;
 use App\Models\User;
+use App\Models\PatientRate;
+use App\Models\Rate;
 
 class PatientService
 {
@@ -33,7 +35,6 @@ class PatientService
     {
         return $this->create([
             'phone' => null,
-
             'name' => $patientReniec->name,
             'lastname1' => $patientReniec->lastname1,
             'lastname2' => $patientReniec->lastname2,
@@ -53,9 +54,25 @@ class PatientService
 
     public function create($data)
     {
-        return Patient::create(
-            $data
-        );
+        $patient = Patient::create($data);
+
+        $constantRate = Rate::find(1);
+
+        PatientRate::create([
+            'name' => $constantRate->name,
+            'subfamily_id' => $constantRate->subfamily_id,
+            'patient_id' => $patient->id,
+            'price' => $constantRate->price,
+            'appointment_id' => 1,
+            'payed' => 0,
+            'is_product' => false,
+            'qty' => 1,
+            'sessions_total' => 1,
+            'sessions_left' => 1,
+            'state' => PatientRate::RATE_STATUS_OPEN,
+        ]);
+
+        return $patient;
     }
 
 
@@ -64,7 +81,7 @@ class PatientService
         $patient = $this->getByDni($data['dni']);
 
         if (!$patient) {
-            $patient = Patient::create($data);
+            $patient = $this->create($data);
         }
 
         return $patient;

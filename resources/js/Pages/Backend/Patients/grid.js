@@ -35,7 +35,7 @@ export default (props, { attrs }) => {
         {
           label: "Historia Clínica",
           clicked({ row }) {
-            const url = route("patients.histories.index", row.id);
+            const url = route("patients.historygroup.index", row.id);
             Inertia.visit(url);
           },
         },

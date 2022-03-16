@@ -24,7 +24,7 @@ class CreateAppointmentsTable extends Migration
 
             $table->enum('status', [1, 2, 3, 4])
                 ->default(1)
-                ->comment('1-Confirmado, 2-No asistio, 3-Pagada, 4-Cancelada');
+                ->comment('1-Confirmado, 2-No asistio, 3-Asistió, 4-Cancelada');
 
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('patient_id');

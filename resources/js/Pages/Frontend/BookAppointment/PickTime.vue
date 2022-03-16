@@ -54,8 +54,8 @@
             @click="back()"
           >
             <div class="flex items-center justify-center">
-              <i class="fas fa-angle-left pr-3"></i>
-              Cambiar fecha
+              <i class="fas fa-angle-left pr-3 bold uppercase"></i>
+              CAMBIAR FECHA
             </div>
           </ui-button>
         </div>

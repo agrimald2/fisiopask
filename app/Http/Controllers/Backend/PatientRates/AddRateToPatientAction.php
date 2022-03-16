@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\PatientRates;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\Rate;
+use App\Models\PatientRate;
 use Illuminate\Http\Request;
 
 class AddRateToPatientAction extends Controller
@@ -19,16 +20,39 @@ class AddRateToPatientAction extends Controller
             ->map(function ($cartRate) use ($patient, $request) {
                 $rate = Rate::findOrFail($cartRate['id']);
 
-                $patientRate = $patient->rates()
-                    ->create([
-                        'rate_id' => $rate->id,
-                        'name' => $rate->name,
-                        'price' => $rate->price,
-                        'qty' => $cartRate['qty'],
-                        'appointment_id' => $request->appointment_id,
-                    ]);
+                if($rate->is_product)
+                {
+                    $qty = $cartRate['qty'];
 
-                $rate->buy($patientRate->qty);
+                    $patientRate = $patient->rates()
+                        ->create([
+                            'name' => $rate->name,
+                            'subfamily_id' => $rate->subfamily_id,
+                            'price' => $rate->price,
+                            'is_product' => true,
+                            'qty' => $qty,
+                            'state' => PatientRate::RATE_STATUS_OPEN,
+                            'appointment_id' => $request->appointment_id,
+                        ]);
+
+                    $rate->buy($patientRate->qty);
+                }
+                else
+                {
+                    $patientRate = $patient->rates()
+                        ->create([
+                            'name' => $rate->name,
+                            'subfamily_id' => $rate->subfamily_id,
+                            'price' => $rate->price,
+                            'is_product' => false,
+                            'sessions_total' => $rate->stock,
+                            'sessions_left' => $rate->stock,
+                            'state' => PatientRate::RATE_STATUS_OPEN,
+                            'appointment_id' => $request->appointment_id,
+                        ]);
+
+                    $rate->buy($patientRate->qty);
+                }
             });
 
         if ($request->redirect) {

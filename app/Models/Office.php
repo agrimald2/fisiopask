@@ -22,6 +22,12 @@ class Office extends Model
         return $this->hasMany(Schedule::class);
     }
     //appointments
+
+    public function workspace()
+    {
+        return $this->hasMany(Workspace::class);
+    }
+
     public function appointments()
     {
         return $this->hasMany(Appointment::class);

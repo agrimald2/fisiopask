@@ -2,6 +2,10 @@
 
 namespace App\Console;
 
+use App\Jobs\CheckAssistance;
+use App\Jobs\SendReminderBefore;
+use App\Jobs\SendSurvey;
+
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,7 +28,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->job(new CheckAssistance)->everyMinute();
+        $schedule->job(new SendReminderBefore)->daily();
+        $schedule->job(new SendSurvey)->hourly();
     }
 
     /**

@@ -15,7 +15,9 @@ class RenderPaymentFormAction extends Controller
 
         $balance = $patient->getRateBalance();
 
-        return inertia('Backend/PatientRates/AddPayment', compact('patient', 'paymentMethodOptions', 'balance'));
+        $patient_rates = $patient->rates()->get();
+
+        return inertia('Backend/PatientRates/AddPayment', compact('patient', 'paymentMethodOptions', 'balance', 'patient_rates'));
     }
 
     private function getPaymentMethodOptions()

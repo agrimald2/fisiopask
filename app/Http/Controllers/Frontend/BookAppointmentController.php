@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Domain\BookAppointment\RepositoryContract;
 use App\Http\Controllers\Controller;
+use App\Models\PatientPayment;
+use App\Models\PatientRate;
+use App\Models\Rate;
 use Illuminate\Http\Request;
 
 class BookAppointmentController extends Controller
@@ -35,7 +38,7 @@ class BookAppointmentController extends Controller
     public function indexPost(Request $request)
     {
         $request->validate([
-            'dni' => 'required|string|min:8',
+            'dni' => 'required|string|min:5',
             'office_id' => 'nullable|integer'
         ]);
 
@@ -223,12 +226,76 @@ class BookAppointmentController extends Controller
 
         $appointment = $this->repo->makeAppointment($dni, $date, $schedule);
 
-        $this->repo->sendConfirmationToPatient($dni, $appointment);
+        $patientId = $appointment->patient_id;
+
+        $payments = PatientPayment::query()->where('patient_id', $patientId)->get();
+        $products = PatientRate::query()->where('patient_id', $patientId)->get();
 
         $phone = $this->repo->getPatientPhoneByDni($dni);
 
+        //EXISTING PATIENT
+        if($payments->first())
+        {   
+            //Create Constant Rate if no rates
+            /*if(!$this->patientHasActiveRates($patientId))
+            {
+                $constantRate = Rate::find(1);
+            
+                PatientRate::create([
+                    'name' => $constantRate->name,
+                    'subfamily_id' => $constantRate->subfamily_id,
+                    'patient_id' => $patientId,
+                    'price' => $constantRate->price,
+                    'appointment_id' => $appointment->id,
+                    'payed' => 0,
+                    'is_product' => false,
+                    'qty' => 1,
+                    'sessions_total' => 1,
+                    'sessions_left' => 1,
+                    'state' => PatientRate::RATE_STATUS_OPEN,
+                ]);
+            }*/
+
+            $credit = true;
+
+            foreach($products as $product) 
+            {
+                if(!$product->can_assist_bool) 
+                {
+                    $credit = false;
+                    break;
+                }
+            }
+            
+            //TODO @WHATSAPP SALDO A FAVOR 
+            if($credit)
+            {
+                $this->repo->sendConfirmationToPatient($dni, $appointment, 'credit');
+            }
+            else
+            { 
+            //TODO @WHATSAPP SIN SALDO 
+                $this->repo->sendConfirmationToPatient($dni, $appointment, 'no_credit');
+            }
+        }
+        else //NEW PATIENT
+        {
+            //TODO @WHATSAPP PACIENTE NUEVO 
+            $this->repo->sendConfirmationToPatient($dni, $appointment, 'new');
+        }
+
         return redirect()->route('bookAppointment.thanks')
             ->with('phone', $phone);
+    }
+
+    private function patientHasActiveRates($patientId)
+    {
+        $query = PatientRate::query()
+            ->where('patient_id', $patientId)
+            ->where('state', PatientRate::RATE_STATUS_OPEN)
+            ->get();
+
+        return !($query->isEmpty());
     }
 
 

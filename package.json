@@ -28,11 +28,15 @@
     "dependencies": {
         "@ferchoposting/formie": "^1.0.513",
         "@ferchoposting/gridie": "^1.0.54",
+        "jquery": "^3.6.0",
         "apexcharts": "^3.33.1",
         "moment": "^2.29.1",
         "mosha-vue-toastify": "^1.0.20",
+        "qrcode.vue": "^3.3.3",
         "v-calendar": "^3.0.0-alpha.5",
         "vue-tel-input": "^6.0.0-beta.4",
+        "vue3-radial-progress": "^1.0.6",
+        "vue3-star-ratings": "^1.0.7",
         "vue3-apexcharts": "^1.4.1",
         "vue3-popper": "^1.2.1"
     }

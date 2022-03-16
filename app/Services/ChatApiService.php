@@ -14,6 +14,9 @@ class ChatApiService
     {
         $this->token = env('CHATAPI_TOKEN');
         $this->instanceId = env('CHATAPI_INSTANCE_ID');
+
+        //$this->token = 'rway84qnx1zpgzkg';
+        //$this->instanceId = '271955';
     }
 
 
@@ -34,8 +37,8 @@ class ChatApiService
             $result = $this->makeRequest($data);
         }
 
-        logs()->debug("CHATAPI: {$phone} -> \n" . $message);
-        logs()->debug($result);
+        //logs()->debug("CHATAPI: {$phone} -> \n" . $message);
+        //logs()->debug($result);
 
         return $result;
     }

@@ -19,13 +19,31 @@ class Patient extends Model implements Authenticatable
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $hidden = ['token'];
+    protected $appends = ['fullname', 'is_new'];
 
+     /**
+     * Relationships
+     */
+
+    public function historyGroup()
+    {
+        return $this->hasMany(HistoryGroup::class);
+    }
+
+    public function medicalHistory()
+    {
+        return $this->hasMany(MedicalHistory::class);
+    }
+
+    public function medicalRevision()
+    {
+        return $this->hasMany(MedicalRevision::class);
+    }
 
     public function paymentRequests()
     {
         return $this->hasMany(PatientPaymentRequest::class);
     }
-
 
     public function appointments()
     {
@@ -45,6 +63,12 @@ class Patient extends Model implements Authenticatable
     public function payments()
     {
         return $this->hasMany(PatientPayment::class);
+    }
+
+    function getIsNewAttribute()
+    {
+        if($this->payments()->first()) return "";
+        return "(Nuevo)";
     }
 
 
@@ -114,5 +138,10 @@ class Patient extends Model implements Authenticatable
     public function getRememberTokenName()
     {
         return null;
+    }
+
+    public function recommendation()
+    {
+        return $this->belongsTo(Recommendation::class);
     }
 }

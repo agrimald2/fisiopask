@@ -29,6 +29,17 @@
           </div>
 
           <div class="grid">
+            <div class="font-bold">Producto a pagar</div>
+            <select v-model="form.rate_id">
+              <option
+                v-for="item, id in patient_rates"
+                :key="id"
+                :value="item.id"
+              >{{ item.name }}</option>
+            </select>
+          </div>
+
+          <div class="grid">
             <div class="font-bold">Cantidad</div>
             <input
               type="text"
@@ -68,7 +79,7 @@ import AppBody from "@/Shared/Backend/AppBody";
 import UiButton from "@/Shared/Frontend/Button";
 
 export default {
-  props: ["patient", "paymentMethodOptions", "balance"],
+  props: ["patient", "paymentMethodOptions", "balance", "patient_rates"],
 
   components: {
     AppLayout,
@@ -89,6 +100,8 @@ export default {
         ammount: null,
         payment_method_id: null,
         concept: null,
+        rate_id: null,
+        appointment_id: null,
       }),
     };
   },

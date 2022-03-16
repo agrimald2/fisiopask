@@ -5,3 +5,17 @@
 .hide{
     display: none;
 }
+
+.medium-text{
+    font-size: 1.3rem;
+}
+
+.large-text{
+    font-size: 1.5rem;
+}
+.bold{
+    font-weight: bolder;
+}
+.uppercase{
+    text-transform: uppercase;
+}

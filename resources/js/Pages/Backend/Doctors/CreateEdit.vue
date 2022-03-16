@@ -18,17 +18,23 @@
         <default-form
           class="mt-10 sm:mt-0"
           :model="model"
+          :workspaces="workspaceIdOptions"
         />
 
         <div v-if="model">
           <jet-section-border />
+            <specialties-form
+              :model="model"
+              :specialties="specialties"
+            />
 
-          <specialties-form
-            :model="model"
-            :specialties="specialties"
-          />
+            <jet-section-border />
+
+            <subfamilies-form
+              :model="model"
+              :subfamilies="subfamilies"
+            />
         </div>
-
       </div>
     </div>
   </app-layout>
@@ -41,9 +47,10 @@ import JetSectionBorder from "@/Jetstream/SectionBorder.vue";
 import DefaultForm from "./Components/Form";
 
 import SpecialtiesForm from "./Components/SpecialtiesForm";
+import SubfamiliesForm from "./Components/SubfamiliesForm";
 
 export default {
-  props: ["model", "specialties"],
+  props: ["model", "specialties", "subfamilies", "workspaces"],
 
   components: {
     AppLayout,
@@ -52,6 +59,17 @@ export default {
     DefaultForm,
 
     SpecialtiesForm,
+    SubfamiliesForm,
+  },
+
+  computed: {
+    workspaceIdOptions() {
+      let list = {};
+      this.workspaces.map((x) => {
+        list[x.id] = x.name;
+      });
+      return list;
+    }
   },
 
   data() {

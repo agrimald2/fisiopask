@@ -12,15 +12,13 @@ class RenderPatientRatesAction extends Controller
     {
         $patient->load([
             'rates' => function ($q) {
-                return $q->orderBy('id', 'desc');
+                return $q->orderBy('state', 'asc');
             },
             'payments' => function ($q) {
                 return $q->orderBy('id', 'desc');
             },
         ]);
 
-        $balance = $patient->getRateBalance();
-
-        return inertia('Backend/PatientRates/Index', compact('patient', 'balance'));
+        return inertia('Backend/PatientRates/Index', compact('patient'));
     }
 }

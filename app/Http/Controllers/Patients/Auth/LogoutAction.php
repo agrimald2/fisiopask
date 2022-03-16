@@ -13,6 +13,6 @@ class LogoutAction extends Controller
     {
         $repo->logout();
 
-        return redirect()->route('frontend.index');
+        return redirect()->route('landing.index');
     }
 }

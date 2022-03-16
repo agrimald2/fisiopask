@@ -12,13 +12,14 @@
 
       <form @submit.prevent="addRate">
         <ui-product-select v-model="input.product" />
-
-        <div class="mt-8 grid">
-          <div class="font-bold">Cantidad</div>
-          <input
-            type="text"
-            v-model="input.qty"
-          >
+        <div v-if="input.product != null">
+          <div v-if="input.product.is_product == true" class="mt-8 grid">
+            <div class="font-bold">Cantidad</div>
+            <input
+              type="text"
+              v-model="input.qty"
+            >
+          </div>
         </div>
 
         <div v-show="input.product">
@@ -26,7 +27,6 @@
             <ui-button
               color="green"
               @click="addRate"
-              type="submit"
             >Añadir al Carrito</ui-button>
           </div>
 
@@ -141,6 +141,7 @@ export default {
     },
 
     addRate() {
+      if(!this.input.product.is_product) this.input.qty = 1;
       if (this.input.product && !isNaN(this.input.qty) && this.input.qty > 0) {
         const cartRate = {
           id: this.input.product.id,

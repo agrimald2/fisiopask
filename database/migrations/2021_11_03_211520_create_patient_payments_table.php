@@ -21,6 +21,7 @@ class CreatePatientPaymentsTable extends Migration
             $table->string('concept')->nullable();
 
             $table->unsignedBigInteger('payment_method_id')->nullable();
+            $table->unsignedBigInteger('patient_rate_id')->nullable();
             $table->unsignedBigInteger('patient_id');
 
             $table->softDeletes();

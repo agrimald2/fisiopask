@@ -29,4 +29,9 @@ class PatientPaymentRequest extends Model
     {
         return $this->belongsTo(PatientPayment::class, 'patient_payment_id');
     }
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
 }

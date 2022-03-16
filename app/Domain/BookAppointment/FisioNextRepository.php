@@ -169,18 +169,29 @@ class FisioNextRepository implements RepositoryContract
         }
     }
 
-    public function sendConfirmationToPatient($dni, $appointment)
+    public function sendConfirmationToPatient($dni, $appointment, $type)
     {
         $patient = patients()->getByDni($dni);
 
         $date = $appointment->date->format('d/m/Y');
         $startTime = $appointment->start;
+        
         $patientName = $patient->name;
-        $patientLastName = $patient->lastname1 . $patient->lastname2;
-        $doctorName = $appointment->doctor->name. ' ' . $appointment->doctor->lastname;
+        $patientName = $patient->name . " " . $patient->lastname1 . " " . $patient->lastname2;
+        
+        $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+        $doctorWorkspace = [];
+        
+        if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
+        
         $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
         $dashboardDoctor = env('APP_URL').'dashboard/doctors/appointments/'.$appointment->id;
-        $sucursal = $appointment->office;
+        
+        $office = $appointment->schedule->office;
+        $office_indications = $office->indications;
+        $office_address = $office->address;
+        $office_reference = $office->reference;
+        $office_maps_link = $office->maps_link;
 
         $data = compact(
             'patientName',
@@ -188,33 +199,43 @@ class FisioNextRepository implements RepositoryContract
             'startTime',
             'doctorName',
             'dashboardLink',
-            'patientLastName',
-            'dashboardDoctor',
-            'sucursal'
+            'doctorWorkspace',
+            'office_indications',
+            'office_address',
+            'office_reference',
+            'office_maps_link',
         );
 
         // Send message to patient
-        $patientText = $this->getWhatsappPatientConfirmationText($data);
+        $patientText = $this->getWhatsappPatientConfirmationText($data, $type);
         if ($patientText) {
             chatapi($patient->phone, $patientText);
-        }
-
+        } 
         // Send message to doctor
-        $doctorText = $this->getWhatsappDoctorConfirmationText($data);
-        if ($doctorText) {
-            chatapi($appointment->doctor->phone, $doctorText);
-        }
+        //$doctorText = $this->getWhatsappDoctorConfirmationText($data);
+        //if ($doctorText) {
+        //    chatapi($appointment->doctor->phone, $doctorText);
+        //}           
     }
 
+    protected function getWhatsappPatientConfirmationText($data, $type)
+    {   
+        switch ($type) {
+            case "credit":
+                return view('chatapi.confirmation.credit', $data)->render();
+              break;
+            case "no_credit":
+                return view('chatapi.confirmation.no_credit', $data)->render();
+              break;
+            default:
+                return view('chatapi.confirmation.new', $data)->render();
+          }
 
-    protected function getWhatsappPatientConfirmationText($data)
-    {
-        return view('chatapi.fisiosalud', $data)->render();
     }
 
     protected function getWhatsappDoctorConfirmationText($data)
     {
-        return null;
+        return view('chatapi.doctor', $data)->render();ll;
     }
 
 

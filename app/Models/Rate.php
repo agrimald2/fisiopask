@@ -29,4 +29,8 @@ class Rate extends Model
         $buyer = $buyer ?: new RateBuyer;
         return $buyer->buy($this, $qty);
     }
+
+    public function patientRate() {
+        return $this->hasOne(PatientRate::class);
+    }
 }

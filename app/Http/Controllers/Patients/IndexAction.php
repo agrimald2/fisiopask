@@ -20,6 +20,16 @@ class IndexAction extends Controller
             ->orderBy('date', 'desc')
             ->paginate(5);
 
-        return inertia('Patients/Index/Index', compact('model', 'appointments'));
+            /**
+             * 1. La busqueda debe resetear el numero de pagina, pequeño error
+             * 2. El error, para variar era pq el doctor no tenía ninguna subfamilia
+             */
+
+            
+        $rates = $model->rates()
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return inertia('Patients/Index/Index', compact('model', 'appointments', 'rates'));
     }
 }

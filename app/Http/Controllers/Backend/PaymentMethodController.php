@@ -35,6 +35,8 @@ class PaymentMethodController extends DynamicController
 
     public function store(Request $request)
     {
+        if($request['active'] == null) $request['active'] = false;
+
         $validated = $request->validate([
             'payment_method' => 'required',
             'active' => 'required|boolean',

@@ -51,7 +51,7 @@ export default {
 
   methods: {
     deleteSchedule() {
-      if (!confirm("Estas seguro?")) return;
+      //if (!confirm("Estas seguro?")) return;
       this.loading = true;
       this.$inertia.delete(route("schedules.destroy", this.schedule.id), {
         preserveScroll: true,

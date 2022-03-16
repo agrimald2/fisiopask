@@ -12,6 +12,8 @@ class PatientController extends Controller
     {
         $model = patients()->index($request->searchQuery);
 
+        $model->appends($_GET)->links();
+
         return inertia('Backend/Dynamic/Grid', [
             'model' => collect($model->items())->each->append('link'),
 
@@ -28,7 +30,7 @@ class PatientController extends Controller
     }
 
     public function create()
-    {
+    {   
         return inertia('Backend/Dynamic/Form', [
             'title' => [
                 'resource' => 'Pacientes',
@@ -39,6 +41,8 @@ class PatientController extends Controller
             'form' => 'Backend/Patients/form.js',
 
             'sexOptions' => config('doctors.sex'),
+            
+            'recommendations' => recommendations()->index(),
         ]);
     }
 
@@ -54,12 +58,7 @@ class PatientController extends Controller
             'email' => 'nullable',
             'district' => 'nullable',
             'sex' => 'required',
-            'status' => 'nullable',
-            'address' => 'nullable',
-            'insurance' => 'nullable',
-            'ocupation' => 'nullable',
-            'religion' => 'nullable',
-            'birth_place' => 'nullable',
+            'recommendation_id' => '',
         ]);
 
         patients()->create($validated);
@@ -69,7 +68,14 @@ class PatientController extends Controller
     }
 
     public function edit(Patient $patient)
-    {
+    {   
+
+        $recommendations = recommendations()->index();
+
+        $recommendationsMap = [];
+
+        foreach($recommendations as $recommendation) $recommendationsMap[$recommendation->id] = $recommendation->recommendation;
+        
         return inertia('Backend/Dynamic/Form', [
             'title' => [
                 'resource' => 'Pacientes',
@@ -82,6 +88,8 @@ class PatientController extends Controller
             'model' => $patient,
 
             'sexOptions' => config('doctors.sex'),
+
+            'recommendations' => $recommendationsMap,
         ]);
     }
 
@@ -93,17 +101,12 @@ class PatientController extends Controller
             'lastname1' => 'required',
             'lastname2' => 'required',
             'dni' => 'required',
-            'birth_date' => 'required|date',
-            'phone' => 'required',
-            'email' => 'nullable',
-            'district' => 'nullable',
-            'sex' => 'required',
-            'status' => 'nullable',
-            'address' => 'nullable',
-            'insurance' => 'nullable',
-            'ocupation' => 'nullable',
-            'religion' => 'nullable',
-            'birth_place' => 'nullable',
+            'birth_date' => 'required|date:Y-m-d',
+            'sex' => 'required|string',
+            'email' => 'nullable|email',
+            'phone' => 'nullable|integer',
+            'district' => 'nullable|string',
+            'recommendation_id' => '',
         ]);
 
         $patient->update($validated);

@@ -90,6 +90,16 @@
           :form="form"
         />
 
+        <!-- Cubiculo  -->
+        <form-input
+          label="Cubículo"
+          name="workspace"
+          v-model="form.workspace_id"
+          type="select"
+          :options="workspaces"
+          :form="form"
+        />
+
       </template>
 
       <template #actions>
@@ -132,7 +142,7 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["model"],
+  props: ["model", "workspaces"],
 
   components: {
     JetActionMessage,
@@ -162,6 +172,7 @@ export default {
         phone: null,
         document_type: null,
         document_reference: null,
+        workspace_id: null,
 
         ...this.model,
       }),

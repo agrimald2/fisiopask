@@ -45,7 +45,10 @@ export default (props, { attrs }) => [
   {
     name: "stock",
     label: "Stock disponible",
-    type: "text",
+    type: "number",
+    attrs: {
+      type: "number",
+    },
   },
 
   {

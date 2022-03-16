@@ -17,6 +17,11 @@
       <jet-input
         :id="name"
         :type="type"
+        :min ="min"
+        :max ="max"
+        :step ="step"
+        :onkeyup ="onkeyup"
+        :onkeypress ="onkeypress"
         class="mt-1 block w-full"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
@@ -48,6 +53,11 @@ export default {
       default: "text",
     },
     options: null,
+    min : null,
+    max : null,
+    step : null,
+    onkeypress: String,
+    onkeyup: String,
   },
 
   components: {

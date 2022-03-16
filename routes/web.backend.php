@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\Backend\AssistantController;
 use App\Http\Controllers\Backend\DoctorController;
 use App\Http\Controllers\Backend\DoctorSpecialtyController;
+use App\Http\Controllers\Backend\SurveyShowController;
 use App\Http\Controllers\Backend\FamilyController;
 use App\Http\Controllers\Backend\IndexAction;
 use App\Http\Controllers\Backend\OfficeController;
+use App\Http\Controllers\Backend\WorkspaceController;
 use App\Http\Controllers\Backend\PatientController;
+use App\Http\Controllers\Backend\PatientAppointmentController;
 use App\Http\Controllers\Backend\PatientRates\AddPaymentToPatientAction;
 use App\Http\Controllers\Backend\PatientRates\AddRateToPatientAction;
 use App\Http\Controllers\Backend\PatientRates\DestroyPatientRateAction;
@@ -13,23 +17,55 @@ use App\Http\Controllers\Backend\PatientRates\GeneratePaymentRequestLinkAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPatientPosAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPatientRatesAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPaymentFormAction;
-use App\Http\Controllers\Backend\PatientRates\RenderPosAction;
+use App\Http\Controllers\Backend\PatientRates\ShowPaymentsAction;
+use App\Http\Controllers\Backend\PatientRates\CancelPaymentAction;
+use App\Http\Controllers\Backend\PatientRates\PayRateAction;
+use App\Http\Controllers\Backend\PatientRates\PayConstantRateAction;
+use App\Http\Controllers\Backend\PatientRates\CancelRateAction;
+use App\Http\Controllers\Backend\PatientRates\AbandonRateAction;
+use App\Http\Controllers\Backend\PaymentController;
+use App\Http\Controllers\Backend\PaymentLinksController;
 use App\Http\Controllers\Backend\PaymentMethodController;
+use App\Http\Controllers\Backend\RecommendationController;
 use App\Http\Controllers\Backend\RateController;
 use App\Http\Controllers\Backend\Rates\ProductSelectController;
 use App\Http\Controllers\Backend\ScheduleController;
 use App\Http\Controllers\Backend\ScheduleFreezeController;
 use App\Http\Controllers\Backend\StatisticsController;
 use App\Http\Controllers\Backend\SubfamilyController;
+
+
+use App\Http\Controllers\TestAssistanceController;
+
+
+use App\Http\Controllers\Backend\HistoryGroupController;
+use App\Http\Controllers\Backend\MedicalHistoryController;
+use App\Http\Controllers\Backend\MedicalRevisionController;
+
+use App\Http\Controllers\Backend\AffectedAreaController;
+use App\Http\Controllers\Backend\AnalysisController;
+use App\Http\Controllers\Backend\DiagnosticController;
+use App\Http\Controllers\Backend\TreatmentController;
+
+
 use App\Http\Controllers\Doctors\Appointments\CancelAppointmentAction;
 use App\Http\Controllers\Doctors\PatientHistories\PatientHistoriesController;
 use App\Http\Controllers\Doctors\SeeScheduleAction;
 use App\Http\Controllers\Doctors\Appointments\IndexAppointmentAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\GenerateTicketAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\ShowRatesIndexAction;
+use App\Http\Controllers\Doctors\Appointments\Rates\ShowRatesAction;
+use App\Http\Controllers\Doctors\Appointments\Rates\MarkAssistedAction;
+use App\Http\Controllers\Doctors\Appointments\Rates\MarkNotAssistedAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\StoreRateAction;
+use App\Http\Controllers\Doctors\Appointments\RescheduleAppointment;
 use App\Http\Controllers\Doctors\Appointments\ShowAppointmentAction;
 use App\Http\Controllers\GoogleCalendar\GoogleCalendarController;
+
+use App\Http\Controllers\Doctors\Appointments\MultipleBookingController;
+
+use App\Http\Controllers\Backend\GenerateTokensAction;
+
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +73,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', IndexAction::class)
     ->name('dashboard');
 
+/**
+ * Assistants
+*/
+Route::resource('assistants', AssistantController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
 /**
  * Doctors
@@ -49,6 +90,11 @@ Route::prefix('doctors')->group(function () {
         ->name("doctors.specialties.add");
     Route::post('/specialties/remove', [DoctorController::class, 'specialtiesRemove'])
         ->name("doctors.specialties.remove");
+
+    Route::post('/subfamilies/add', [DoctorController::class, 'subfamiliesAdd'])
+        ->name("doctors.subfamilies.add");
+    Route::post('/subfamilies/remove', [DoctorController::class, 'subfamiliesRemove'])
+        ->name("doctors.subfamilies.remove");
 });
 
 
@@ -66,11 +112,47 @@ Route::resource('doctors.freezes', ScheduleFreezeController::class)
  */
 Route::resource('patients', PatientController::class)
     ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
+
+/**
+ * Patient Appointments
+ */
+Route::resource('patients.appointment', PatientAppointmentController::class)
+    ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
+// Pick time
+Route::post('/dni/{dni}/day', [PatientAppointmentController::class, 'pickDatePost'])
+    ->name('patients.appointment.pickDate.post');
+Route::get('/dni/{dni}/day/{date}/time/', [PatientAppointmentController::class, 'pickTime'])
+    ->name('patients.appointment.pickTime');
+
 /**
  * Patient wallet
  */
 Route::delete('/patients/rates/{patientRate}', DestroyPatientRateAction::class)
     ->name('patients.rates.destroy');
+
+Route::get('/patients/rates/{patientRate}/assisted/{appointment}', MarkAssistedAction::class)
+    ->name('patients.rates.assisted');
+
+Route::get('/patients/rates/{patientRate}/notAssisted/{appointment}', MarkNotAssistedAction::class)
+    ->name('patients.rates.notAssisted');
+
+Route::get('/patients/rates/{patientRate}/pay', PayRateAction::class)
+    ->name('patients.rates.pay');
+
+Route::get('/patients/constantrate/{appointment}/pay', PayConstantRateAction::class)
+    ->name('patients.constantrate.pay');
+
+Route::get('/rate/{rate}/cancel', CancelRateAction::class)
+    ->name('patients.rates.cancel');
+
+Route::get('/rate/{rate}/abandon', AbandonRateAction::class)
+    ->name('patients.rates.abandon');
+
+Route::get('/patients/rates/{patientRate}/payments', ShowPaymentsAction::class)
+    ->name('patients.rates.payments');
+
+Route::get('/patients/payments/{payment}/cancel', CancelPaymentAction::class)
+    ->name('patients.rates.payments.cancel');
 
 Route::namespace(null)
     ->name('patients.rates.')
@@ -95,10 +177,26 @@ Route::namespace(null)
     });
 
 /**
+ * Payment Indexer
+ */
+ Route::resource('payments', PaymentController::class)
+    ->only('index');
+/**
+ * Payment Links
+ */
+Route::resource('paymentlinks', PaymentLinksController::class)
+    ->only('index');
+/**
  * Offices
  */
 Route::resource('offices', OfficeController::class)
     ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+/**
+ * Workspaces
+ */
+Route::resource('workspaces', WorkspaceController::class)
+->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
 /**
  * Doctor specialties
@@ -115,6 +213,18 @@ Route::resource('patients.histories', PatientHistoriesController::class)
     ->only('index', 'create', 'store', 'edit', 'update', 'destroy')
     ->shallow();
 
+/**
+ * Surveys
+ */
+
+Route::resource('surveys', SurveyShowController::class)
+    ->only('index', 'destroy');
+
+Route::get('/show/{id}', [SurveyShowController::class, 'show'])
+    ->name("surveys.show");
+
+Route::get('/show}', [SurveyShowController::class, 'showAll'])
+    ->name("surveys.showAll");
 
 /**
  * Payment methods
@@ -122,6 +232,11 @@ Route::resource('patients.histories', PatientHistoriesController::class)
 Route::resource('paymentMethods', PaymentMethodController::class)
     ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
+/**
+ * Recomendations  
+ */
+Route::resource('recommendation', RecommendationController::class)
+->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
 /**
  * Families & subfamilies
@@ -169,12 +284,64 @@ Route::prefix('productSelect')
             ->name('rates');
     });
 
+///////////////////////////////
+/**
+ * CRUD MEDICAL HISTORIES
+ */
+
+//History Group
+Route::resource('patients.historygroup', HistoryGroupController::class)
+    ->only('index');
+
+Route::get('patients/{patientId}/historygroup/create/{doctorId}', [HistoryGroupController::class, 'store'])
+    ->name('patients.historygroup.create');
+
+Route::get('/historygroup/show/{id}', [HistoryGroupController::class, 'show'])
+    ->name('patients.historygroup.show');
+
+//Medical History
+Route::resource('medicalhistory', MedicalHistoryController::class)
+    ->only('store');
+
+Route::get('medicalhistory/create/{id}', [MedicalHistoryController::class, 'create'])
+    ->name('medicalhistory.create');
+
+Route::get('/medicalhistory/show/{id}', [MedicalHistoryController::class, 'show'])
+    ->name('medicalhistory.show');
+
+//Medical Revision
+Route::resource('medicalrevision', MedicalRevisionController::class)
+    ->only('store');
+
+Route::get('medicalrevision/create/{id}', [MedicalRevisionController::class, 'create'])
+    ->name('medicalrevision.create');
+
+Route::get('/medicalrevision/show/{id}', [MedicalRevisionController::class, 'show'])
+    ->name('medicalrevision.show');
+
+//Affected Areas
+Route::resource('affectedarea', AffectedAreaController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//Analysis
+Route::resource('analysis', AnalysisController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//Diagnostic
+Route::resource('diagnostic', DiagnosticController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//Treatment
+Route::resource('treatment', TreatmentController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+////////////////////////////////
 
 /**
  * AREA: Doctors
  */
 
-Route::middleware(['role:doctor|admin'])
+Route::middleware(['role:doctor|admin|assistant'])
     ->prefix('doctors')
     ->group(function () {
         Route::get('/see-schedule', SeeScheduleAction::class)
@@ -192,9 +359,24 @@ Route::middleware(['role:doctor|admin'])
         Route::get('/appointments/{appointment}/rates', ShowRatesIndexAction::class)
             ->name('doctors.appointments.rates.index');
 
+        Route::get('/appointments/{appointment}/selectrate', ShowRatesAction::class)
+            ->name('doctors.appointments.rates.show');
+
         Route::get('/appointments/{appointment}/ticket', GenerateTicketAction::class)
             ->name('doctors.appointments.ticket.index');
     });
+
+Route::get('/reschedule/{appointment}/pickDay', [RescheduleAppointment::class, 'pickDay'])
+    ->name('reschedule.pickDay');
+
+Route::post('/reschedule/{appointment}/postDay', [RescheduleAppointment::class, 'postDay'])
+    ->name('reschedule.postDay');
+
+Route::get('/reschedule/{appointment}/pickTime/{date}', [RescheduleAppointment::class, 'pickTime'])
+    ->name('reschedule.pickTime');
+
+Route::post('/reschedule/{appointment}/postTime', [RescheduleAppointment::class, 'postTime'])
+    ->name('reschedule.postTime');
 
 Route::prefix('test')
     ->group(function () {
@@ -222,6 +404,19 @@ Route::prefix('test')
         });
     });
 
+Route::get('/generateTokens', GenerateTokensAction::class);
+
+Route::get('/booking/{patient}/pickDay', [MultipleBookingController::class, 'pickDay'])
+    ->name('multipleBooking.pickDay');
+
+Route::post('/booking/{patient}/postDay', [MultipleBookingController::class, 'postDay'])
+    ->name('multipleBooking.postDay');
+
+Route::get('/booking/{patient}/pickTime/{date}', [MultipleBookingController::class, 'pickTime'])
+    ->name('multipleBooking.pickTime');
+
+Route::post('/booking/{patient}/postTime', [MultipleBookingController::class, 'postTime'])
+    ->name('multipleBooking.postTime');
     
 /**
  * AREA: Statistics
@@ -231,3 +426,6 @@ Route::prefix('test')
     //Route::post('/excel', [StatisticsController::class,'excel'])->name('excel');    
     Route::resource('statistics', StatisticsController::class)
     ->only('index');
+
+
+    Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 

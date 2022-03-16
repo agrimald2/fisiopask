@@ -25,9 +25,8 @@ class ServiceProvider extends BaseProvider
     public function boot()
     {
         $repo = app(ClinicHistoriesRepo::class);
-        
-        //@note:HERE WE CAN ADD NEW FORMS
-        $formLists = explode(',', trim(env('FORMS_ENABLED', 'anandamida,fisioRevision')));
+
+        $formLists = explode(',', trim(env('FORMS_ENABLED', 'fisio,fisioRevision')));
 
         $repo->enableForms(
             $formLists

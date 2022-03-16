@@ -8,6 +8,12 @@
     />
 
     <link-item
+      label="Asistentes"
+      icon="fa-hands-helping"
+      @click="go('assistants.index')"
+    />
+
+    <link-item
       label="Pacientes"
       icon="fa-hospital-user"
       @click="go('patients.index')"
@@ -17,6 +23,12 @@
       label="Sucursales"
       icon="fa-building"
       @click="go('offices.index')"
+    />
+
+    <link-item
+      label="Cubículos"
+      icon="fa-kaaba"
+      @click="go('workspaces.index')"
     />
 
     <link-item
@@ -32,13 +44,40 @@
     />
   </link-group>
 
+  <link-group style="margin-top:-3rem!important;" 
+    title="Registros">
+    <link-item
+        label="Pagos recibidos"
+        icon="fa-receipt"
+        @click="go('payments.index')"
+      />
 
+      <link-item
+        label="Links de Pagos"
+        icon="fa-credit-card"
+        @click="go('paymentlinks.index')"
+      />
+
+      <link-item
+        label="Encuestas"
+        icon="fa-comment-medical"
+        @click="go('surveys.index')"
+      />
+
+      <link-item
+        label="Recomendaciones"
+        icon="fas fa-handshake"
+        @click="go('recommendation.index')"
+      />
+  </link-group>
 
   <!-- System records -->
   <link-group
     title="Registros"
     class=""
   >
+
+  
     <link-item
       label="Gráficos y Estadística"
       icon="fa-chart-bar"
@@ -46,32 +85,38 @@
     />
 
     <link-item
+      label="Análisis"
+      icon="fa-laptop-medical"
+      @click="go('analysis.index')"
+    />
+    <link-item
       label="Historiales Médicos"
       icon="fa-book-medical"
       @click="go('')"
     />
 
     <link-item
-      label="Pagos recibidos"
-      icon="fa-receipt"
-      @click="go('')"
+      label="Áreas afectadas"
+      icon="fa-child"
+      @click="go('affectedarea.index')"
     />
 
     <link-item
       label="Diagnósticos"
-      icon="fa-stethoscope"
-      @click="go('')"
+      icon="fa-file-medical-alt"
+      @click="go('diagnostic.index')"
     />
 
     <link-item
-      label="Encuestas"
-      icon="fa-comment-medical"
-      @click="go('')"
+      label="Tratamientos"
+      icon="fa-stethoscope"
+      @click="go('treatment.index')"
     />
   </link-group>
 
   <!-- Categorias -->
-  <link-group title="Tarifas y Pagos">
+  <link-group style="margin-top:-3rem!important;" 
+    title="Tarifas">
     <link-item
       label="Tarifas"
       icon="fa-dollar-sign"
@@ -109,8 +154,7 @@ export default {
   components: {
     LinkGroup,
     LinkItem,
-  },
-
+  },  
   methods: {
     go(routeName) {
       const url = route(routeName);
