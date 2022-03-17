@@ -60,8 +60,9 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
             join rates r on r.subfamily_id = sb.id
             join patient_payments py on py.patient_rate_id= pr.id
             join payment_methods pm on pm.id = py.payment_method_id
-            where a.status=3 and o.id='".$this->office."' and (a.date BETWEEN '" . $this->start . "' AND '" . $this->end . "')"
+            where a.status=3 and o.id='".$this->office."' and (DATE_FORMAT(py.created_at,'%Y-%m-%d') BETWEEN '" . $this->start . "' AND '" . $this->end . "')"
         );
+        
         
         return $data;
     }
