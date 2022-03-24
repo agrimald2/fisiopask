@@ -9,6 +9,7 @@ use App\Models\Appointment;
 use App\Models\AssistedAppointments;
 use App\Models\Office;
 use App\Models\Patient;
+use App\Models\PatientPayment;
 use App\Models\Rate;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -135,13 +136,42 @@ class StatisticsController extends Controller
     {
         $this->nullEverything();
 
-        $patients = Patient::query()->with('payments')->where('id', '>', '5000')->get();
-
         $previousStart = clone $start;
         $previousEnd = clone $end;
 
         $previousStart->subMonth(1);
         $previousEnd->subMonth(1);
+
+        $payments = PatientPayment::query()
+            ->whereBetween(
+                'created_at', [
+                    $start, 
+                    $end
+                ])
+            ->orWhereBetween(
+                'created_at', [
+                    $previousStart,
+                    $previousEnd
+                ])
+            ->get();
+
+        $patients = [];
+        $patientIds = [];
+
+        foreach($payments as $payment)
+        {
+            if(!in_array($payment->patient_id, $patientIds))
+            {
+                $patient = Patient::with('payments')->find($payment->patient_id);
+                if($patient != null)
+                {
+                    array_push($patients, $patient);
+                }
+                array_push($patientIds, $payment->patient_id);
+            }
+        }
+
+        //$patients = Patient::query()->with('payments')->where('id', '>', '5000')->get();
 
         $appointmentsThis = Appointment::query()
             ->where('status', Appointment::STATUS_ASSISTED)
@@ -229,12 +259,6 @@ class StatisticsController extends Controller
                 $end])
             ->with('appointment.patient')
             ->get();
-
-        if($recommendation != null)
-        {
-            //foreach()
-            //necessary???
-        }
     }
 
     public function getSalesNServices($start, $family_id, $subfamily_id, $rate_id)
