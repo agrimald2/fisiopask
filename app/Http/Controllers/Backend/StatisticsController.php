@@ -9,6 +9,7 @@ use App\Models\Appointment;
 use App\Models\AssistedAppointments;
 use App\Models\Office;
 use App\Models\Patient;
+use App\Models\Rate;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +38,7 @@ class StatisticsController extends Controller
         $end = Carbon::now()->endOfMonth();
         $this->setDataRange($start, $end, false);
 
-        $salesNServices = $this->getSalesNServices(clone $start);
+        $salesNServices = $this->getSalesNServices(clone $start, null, null, null);
 
         $sales[0] = $salesNServices[0];
         $sales[1] = $salesNServices[1];
@@ -59,6 +60,9 @@ class StatisticsController extends Controller
         $start = null;
         $end = null;
         $recommendation = null;
+        $family_id = null;
+        $subfamily_id = null;
+        $rate_id = null;
 
         //params["family_id"], params["subfamily_id"], params["rate_id"]
         
@@ -91,12 +95,18 @@ class StatisticsController extends Controller
                 $recommendation = $request->paramsRecommendations["recommendations"];
                 break;
             case self::STATS_REQUEST_RATE:
+                $family_id = $request->params["family_id"];
+                $subfamily_id = $request->params["subfamily_id"];
+                $rate_id = $request->params["rate_id"];
+
+                $start = Carbon::now()->startOfMonth();
+                $end = Carbon::now()->endOfMonth();
                 break;
         }
 
         $this->setDataRange($start, $end, $recommendation);
 
-        $salesNServices = $this->getSalesNServices(clone $start);
+        $salesNServices = $this->getSalesNServices(clone $start, $family_id, $subfamily_id, $rate_id);
 
         $sales[0] = $salesNServices[0];
         $sales[1] = $salesNServices[1];
@@ -227,7 +237,7 @@ class StatisticsController extends Controller
         }
     }
 
-    public function getSalesNServices($start)
+    public function getSalesNServices($start, $family_id, $subfamily_id, $rate_id)
     {
         $previousStart = clone $start;
         $servicesPrevious = null;
@@ -248,15 +258,30 @@ class StatisticsController extends Controller
         $thisMonth["ValorEjecutadoRecurrentes"] = 0;
         $thisMonth["ValorEjecutadoNuevos"] = 0;
 
+        $rateFound = null;
+        if($rate_id != null)
+        {
+            $rateFound = Rate::find($rate_id);
+        }
+
         foreach($this->ratesPrevious as $rate)
         {
             foreach($this->oldPatientsPrevious as $patient)
             {
                 if($rate->appointment->patient_id == $patient)
                 {
-                    $previousMonth["ValorEjecutadoRecurrentes"] += $rate->consumed;
-                    $servicesPrevious["ServiciosRecurrentes"]++;
-                    break;
+                    if($family_id == null || $family_id == $rate->patientRate->subfamily->family_id)
+                    {
+                        if($subfamily_id == null || $subfamily_id == $rate->patientRate->subfamily_id)
+                        {
+                            if($rateFound == null || $rateFound->name == $rate->patientRate->name)
+                            {
+                                $previousMonth["ValorEjecutadoRecurrentes"] += $rate->consumed;
+                                $servicesPrevious["ServiciosRecurrentes"]++;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -264,9 +289,18 @@ class StatisticsController extends Controller
             {
                 if($rate->appointment->patient_id == $patient)
                 {
-                    $previousMonth["ValorEjecutadoNuevos"] += $rate->consumed;
-                    $servicesPrevious["ServiciosNuevos"]++;
-                    break;
+                    if($family_id == null || $family_id == $rate->patientRate->subfamily->family_id)
+                    {
+                        if($subfamily_id == null || $subfamily_id == $rate->patientRate->subfamily_id)
+                        {
+                            if($rateFound == null || $rateFound->name == $rate->patientRate->name)
+                            {
+                                $previousMonth["ValorEjecutadoNuevos"] += $rate->consumed;
+                                $servicesPrevious["ServiciosNuevos"]++;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -277,9 +311,18 @@ class StatisticsController extends Controller
             {
                 if($rate->appointment->patient_id == $patient)
                 {
-                    $thisMonth["ValorEjecutadoRecurrentes"] += $rate->consumed;
-                    $servicesThis["ServiciosRecurrentes"]++;
-                    break;
+                    if($family_id == null || $family_id == $rate->patientRate->subfamily->family_id)
+                    {
+                        if($subfamily_id == null || $subfamily_id == $rate->patientRate->subfamily_id)
+                        {
+                            if($rateFound == null || $rateFound->name == $rate->patientRate->name)
+                            {
+                                $thisMonth["ValorEjecutadoRecurrentes"] += $rate->consumed;
+                                $servicesThis["ServiciosRecurrentes"]++;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -287,9 +330,18 @@ class StatisticsController extends Controller
             {
                 if($rate->appointment->patient_id == $patient)
                 {
-                    $thisMonth["ValorEjecutadoNuevos"] += $rate->consumed;
-                    $servicesThis["ServiciosNuevos"]++;
-                    break;
+                    if($family_id == null || $family_id == $rate->patientRate->subfamily->family_id)
+                    {
+                        if($subfamily_id == null || $subfamily_id == $rate->patientRate->subfamily_id)
+                        {
+                            if($rateFound == null || $rateFound->name == $rate->patientRate->name)
+                            {
+                                $thisMonth["ValorEjecutadoNuevos"] += $rate->consumed;
+                                $servicesThis["ServiciosNuevos"]++;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
