@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\LoginSuccessController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Backend\Tests\TestController;
+use App\Http\Controllers\Backend\GenerateTokensAction;
+
+use App\Http\Controllers\TestAssistanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,5 +44,19 @@ Route::namespace(null)
 
 
 
+    Route::get('/generateTokens', GenerateTokensAction::class);
 
-    Route::get('/downloadPDF/{id}', [TestController::class, 'downloadPDF']);
+
+    Route::get('/cita', function () {
+        return redirect('/book-appointment');
+    });
+        
+        
+        Route::get('/citas', function () {
+        return redirect('/book-appointment');
+    });
+
+
+    
+
+    Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 

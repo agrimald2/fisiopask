@@ -4,37 +4,81 @@ import { Inertia } from "@inertiajs/inertia";
 import { cells, c } from "@ferchoposting/gridie";
 
 export default (props, { attrs }) => {
+  const queryString = window.location.search;
+
+  const urlParms = new URLSearchParams(queryString);
+
+  let currentPage = urlParms.get('page');
+
+  if(!(currentPage >= 1)) currentPage = 1;
+
   const rows = props.model;
 
   const cols = [
+    c("", "#")
+    .extend({
+      html: true,
+    })
+    .format(function (row) {
+      let className = "bg-green-400";
+
+      if (row.status == 4) className = "bg-red-400";
+
+      //return `${row.id}`
+      return `<p>${((currentPage - 1) * 120) + (props.model.indexOf(row) + 1)}<p>`;
+
+    }),
+
     c("", "Estado")
       .extend({
         html: true,
       })
       .format(function (row) {
-        let className = "bg-green-400";
+        let status = row.status;
+        let className = "bg-status-" + status;
 
-        if (row.status == 4) className = "bg-red-400";
+        let statusStr = "undefined";
 
-        return `<span class="${className} text-white px-2 rounded">${row.status_label}</span>`;
+        if(status == 1) statusStr = "CONFI";
+        else if(status == 2) statusStr = "N A";
+        else if(status == 3) statusStr = "ASIS";
+        else if(status == 4) statusStr = "CAN";
+
+        return `<span class="${className} text-white px-2 rounded">${statusStr}</span>`;
+  
       }),
 
     c("date", "Fecha")
       .class("capitalize")
-      .format((v) => dates.dateForHumans(v)),
+      .format((v) => dates.dateForApp(v)),
 
     c("", "Paciente")
-     .extend({ html: true})
-     .format((value, {row}) => {
-      return `<button onclick="window.open('http://fisiopask.test/book-appointment/dni/${row.patient.dni}/day', '_blank', 'toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=500,width=600,height=600')">${row.patient.fullname.toUpperCase()} <b style="color:green">${row.patient.is_new}</b></button>`;
-    }),
+      .extend({
+        html: true,
+      })
+      .format(function (row) {
+        return `${row.name} ${row.lastname1} ${row.lastname2}`;
+      }),
 
     c("office", "Sucursal"),
 
     c("", "Horario")
       .extend({ html: true })
       .format((value, { row }) => {
-        return `${row.start} <i class="fas fa-angle-right"></i> ${row.end}`;
+        return `${row.start} <i class="fas fa-angle-right center-text text-center"></i> ${row.end}`;
+      }),
+
+    c()
+      .type(cells.Buttons)
+      .extend({
+        buttons: [
+          {
+            label: "Multi",
+            clicked({ row }) {
+              Inertia.visit(route("multipleBooking.pickDay", row.patient_id));
+            },
+          },
+        ],
       }),
 
     c()
@@ -49,6 +93,7 @@ export default (props, { attrs }) => {
           },
         ],
       }),
+
   ];
   function windowAppointment() {
     window.open("https://fisiosalud.pe/cita", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=500,width=600,height=600");

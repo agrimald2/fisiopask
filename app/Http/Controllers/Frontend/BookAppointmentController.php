@@ -38,7 +38,7 @@ class BookAppointmentController extends Controller
     public function indexPost(Request $request)
     {
         $request->validate([
-            'dni' => 'required|string|min:8',
+            'dni' => 'required|string|min:5',
             'office_id' => 'nullable|integer'
         ]);
 
@@ -237,7 +237,7 @@ class BookAppointmentController extends Controller
         if($payments->first())
         {   
             //Create Constant Rate if no rates
-            if(!$this->patientHasActiveRates($patientId))
+            /*if(!$this->patientHasActiveRates($patientId))
             {
                 $constantRate = Rate::find(1);
             
@@ -254,7 +254,7 @@ class BookAppointmentController extends Controller
                     'sessions_left' => 1,
                     'state' => PatientRate::RATE_STATUS_OPEN,
                 ]);
-            }
+            }*/
 
             $credit = true;
 

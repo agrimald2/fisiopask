@@ -32,6 +32,15 @@ class CreatePatientsTable extends Migration
 
             $table->string('token')->nullable();
 
+            //@note: New Values for Anandamida Clinical Histories
+            $table->string('status')->nullable();
+            $table->string('address')->nullable();
+            $table->string('insurance')->nullable();
+            $table->string('ocupation')->nullable();
+            $table->string('religion')->nullable();
+            $table->string('birth_place')->nullable();
+
+
             $table->softDeletes();
             $table->timestamps();
         });

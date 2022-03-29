@@ -1,24 +1,20 @@
 <template>
   <div class="grid gap-4">
     <template
-      v-for="appointment in appointments.data"
+      v-for="appointment in appointments"
       :key="appointment.id"
     >
       <template v-if="past">
         <template v-if="isPast(appointment)">
-          <item :model="appointment" :appointmentsLeft="appointments_left[appointment.id]"/>
+          <item :model="appointment"/>
         </template>
       </template>
       <template v-else>
         <template v-if="!isPast(appointment)">
-          <item :model="appointment" :appointmentsLeft="appointments_left[appointment.id]"/>
+          <item :model="appointment"/>
         </template>
       </template>
     </template>
-  </div>
-
-  <div class="mt-6 flex justify-center">
-    <pagination :links="appointments.links" />
   </div>
 </template>
 
@@ -44,31 +40,16 @@ export default {
 
   methods: {
     isPast($appointment) {
-      return !dates.moment($appointment.date).isAfter();
+      let app_date = dates.moment($appointment.date).format("YYYY-M-DD");
+      let today = new Date;
+      let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      let isPast = app_date<date;
+      return isPast;
     },
   },
 
   computed: {
-    appointments_left() {
-      let list = {};
-      let countList = {};
-
-      let reversed = this.appointments.data;
-      reversed.reverse();
-
-      reversed.map((x) => {
-        countList[x.main_rate.id] = 0;
-      });
-
-      reversed.map((x) => {
-        list[x.id] = x.appointments_paid - countList[x.main_rate.id];
-        countList[x.main_rate.id] += 1;
-      });
-
-      reversed.reverse();
-
-      return list;
-    },
+    
   },
 };
 </script>

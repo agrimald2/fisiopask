@@ -28,6 +28,8 @@ class SendSurvey implements ShouldQueue
     {
         $assistedAppointments = Appointment::query()
             ->where('status', Appointment::STATUS_ASSISTED)
+            ->where('date', Carbon::now()->format('Y-m-d'))
+            ->where('survey', '0')
             ->with('patient')
             ->get();
 
@@ -39,28 +41,36 @@ class SendSurvey implements ShouldQueue
 
             $currentTime = (int)date("H");
 
-            //TODO @WHATSAPP ENCUESTA
-            if($carbonDate->isToday())
+            if($surveyTime == $currentTime)
             {
-                //TODO @TEST
-                if($surveyTime >= $currentTime)
-                {
-                    $phone = $appointment->patient->phone;
-                    $surveyLink = "www.fisiosalud.pe/area/patients/surveys/appointment/";
-                    $surveyLink .= $appointment->id;
-                    chatapi($phone, $text);
-                }
-            }
-            /*if($carbonDate->isYesterday())
-            {
+                $patient = $appointment->patient;
                 $phone = $appointment->patient->phone;
-                $surveyLink = "www.fisiosalud.pe/area/patients/surveys/appointment/";
+                $surveyLink = "www.fisiosalud.pe/area/patients/survey/appointment/";
                 $surveyLink .= $appointment->id;
-                chatapi($phone, $text);
-            }*/
+                $patientName = $patient->name;
+                $data = compact(
+                    'patientName',
+                    'surveyLink',
+                );
+                //* Send message only to the 30% of the appointments
+                    //? 95% sure there is a better way to do this
+                $dice = rand(1,10);
+                if ($dice <= 3){
+                    $text = $this->getWhatsappSurveyText($data);
+                    chatapi($phone, $text);
+                }else{
+                    return;
+                }       
+            }
+            $appointment->survey = '1';
+            $appointment->save();
         }
     }
 
+    protected function getWhatsappSurveyText($data)
+    {   
+        return view('chatapi.survey', $data)->render();
+    }
     /**
      * Execute the job.
      *

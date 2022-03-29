@@ -50,6 +50,9 @@ Route::namespace(null)
         // Thanks
         Route::get('/thanks', [BookAppointmentController::class, 'thanks'])
             ->name('thanks');
+
+        Route::get('/dni/{dni}/day/err', [BookAppointmentController::class, 'pickDayAgain'])
+            ->name('pickDayAgain');
     });
 
 

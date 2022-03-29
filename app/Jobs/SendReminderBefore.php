@@ -26,20 +26,46 @@ class SendReminderBefore implements ShouldQueue
     {
         $confirmedAppointments = Appointment::query()
             ->where('status', Appointment::STATUS_CONFIRMED)
+            ->where('date', Carbon::tomorrow()->format('Y-m-d'))
+            ->where('reminder', '0')
             ->get();
 
         foreach($confirmedAppointments as $appointment)
         {
-            $carbonDate = Carbon::parse($appointment->date);
-            
-            //TODO @WHATSAPP RECORDATORIO UN DÍA ANTES
-            if($carbonDate->isTomorrow())
-            {
                 $phone = $appointment->patient->phone;
-                $text = "oe";
+                $patient = $appointment->patient;
+                
+                $patientDNI = $patient->dni;
+                $patientToken = $patient->token;
+                $dashboardLink = 'https://fisiosalud.pe/area/patients/login/'.$patientDNI.'/'.$patientToken;
+
+
+                $date = $appointment->date->format('d/m/Y');
+                $startTime = $appointment->start;
+                $patientName = $patient->name . " " . $patient->lastname1 . " ". $patient->lastname2;
+                $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+                $doctorWorkspace = [];
+                if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
+        
+                $data = compact(
+                    'patientName',
+                    'date',
+                    'startTime',
+                    'doctorName',
+                    'dashboardLink',
+                    'doctorWorkspace'
+                );
+               
+                $text = $this->getWhatsappPatientReminderText($data);
                 chatapi($phone, $text);
-            }
+                $appointment->reminder = '1';
+                $appointment->save();
         }
+    }
+
+    protected function getWhatsappPatientReminderText($data)
+    {   
+        return view('chatapi.reminder', $data)->render();
     }
 
     /**

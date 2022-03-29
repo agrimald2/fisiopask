@@ -16,6 +16,7 @@
         "laravel/jetstream": "^2.3",
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
+        "maatwebsite/excel": "^3.1",
         "mercadopago/dx-php": "2.4",
         "spatie/data-transfer-object": "^2.8",
         "spatie/laravel-permission": "^4.4",
@@ -44,7 +45,7 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        } 
     },
     "scripts": {
         "post-autoload-dump": [

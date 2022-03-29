@@ -32,8 +32,15 @@ export default {
             html: true,
         })
         .format(function (row) {
-            let colorClass = (row.state == 0 ? "bg-green-400" : "bg-red-400");
-
+            let colorClass = "bg-green-400";
+            
+            if (row.state == 0){
+              colorClass = "bg-yellow-400";
+            }else if(row.state == 1){
+              colorClass = "bg-green-400";
+            }else{
+              colorClass = "bg-red-400";
+            }
             return `<span class="${colorClass} text-white px-2 rounded">${row.status_label}</span>`;
         }),
       c().type(cells.Buttons)
@@ -44,6 +51,36 @@ export default {
               clicked({ row }) {
                 const url = route("patients.rates.payments", row.id);
                 Inertia.get(url);
+              },
+            },
+          ],
+        }),
+      c().type(cells.Buttons)
+        .extend({
+          buttons: [
+            {
+              label: "Abandonar",
+              clicked({ row }) {
+                if(confirm("Estás seguro?"))
+                {
+                  const url = route("patients.rates.abandon", row.id);
+                  Inertia.get(url);
+                }
+              },
+            },
+          ],
+        }),
+      c().type(cells.Buttons)
+        .extend({
+          buttons: [
+            {
+              label: "Anular",
+              clicked({ row }) {
+                if(confirm("Estás seguro?"))
+                {
+                  const url = route("patients.rates.cancel", row.id);
+                  Inertia.get(url);
+                }
               },
             },
           ],

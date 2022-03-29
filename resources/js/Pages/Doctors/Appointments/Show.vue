@@ -8,19 +8,19 @@
             @click="$inertia.visit(dashboardLink)"
           >Citas</span>
           <i class="fas fa-angle-right"></i>
-          {{ appointment.patient.name }}
+          {{ patient.name }}
         </div>
       </h2>
     </template>
 
     <app-body>
       <div class="mt-4 capitalize text-center text-xl">
-        {{ appointment.status_label}} -  <span v-if="appointment.patient.is_new" style="color:green"> {{ appointment.patient.is_new}} </span>
+        {{ appointment.status_label}} -  <span v-if="patient.is_new" style="color:green"> {{ patient.is_new}} </span>
         <br>
         {{ dates.dateForHumans(appointment.date) }}
       </div>
       <div class="mt-4 capitalize text-center text-xl large-text bold">
-          {{appointment.doctor.name}} {{appointment.doctor.lastname}}
+          {{doctor.name}} {{doctor.lastname}}
       </div>
       <div class="mt-4">
         <div class="flex items-center gap-4 justify-center text-xl">
@@ -41,10 +41,13 @@
         </div>
         <div class="mt-4">
           <p class="medium-text">
-            {{appointment.patient.fullname}}
-          </p>
+            {{patient.fullname}}
+          </p> 
           <p class="medium-text">
-            {{ appointment.patient.dni }} |  {{ appointment.patient.sex }} | {{ dates.moment().year() - dates.moment(appointment.patient.birth_date).year() }} años
+            {{patient.phone}}
+          </p> 
+          <p class="medium-text">
+            {{ patient.dni }} |  {{ patient.sex }} | {{ dates.moment().year() - dates.moment(patient.birth_date).year() }} años
           </p>
         </div>
       </div>
@@ -97,25 +100,36 @@
         <front-button
           color="yellow"
           v-if="role == 'admin'"
-          @click="$inertia.visit(route('patients.historygroup.index', appointment.patient.id))"
+          @click="$inertia.visit(route('patients.historygroup.index', appointment.patient_id))"
         >
           Ver Historial Clínico
         </front-button>
 
         <front-button
           color="red"
-          v-show="appointment.status != 4 && appointment.is_pending"
+          v-if="appointment.status == 1"
           @click="cancelAppointment"
         >
           Cancelar Cita
         </front-button>
 
+<!-- v-show="appointment.status != 4 && appointment.is_pending" -->
+
         <front-button
           color="green"
-          v-show="appointment.status != 4"
+          v-show="appointment.status != 4 && appointment.status != 3"
           @click="markAssisted"
         >
           Marcar Asistencia
+        </front-button>
+
+        <front-button
+          color="red"
+          v-if="role == 'admin'"
+          v-show="appointment.status == 3"
+          @click="markNotAssisted"
+        >
+          Marcar Inasistencia 
         </front-button>
 
         <!--<front-button
@@ -129,6 +143,13 @@
       <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
 
         <front-button
+          color="yellow"
+          @click="$inertia.visit(route('reschedule.pickDay', appointment.id))"
+        >
+          Reprogramar Cita
+        </front-button>
+
+        <front-button
           color=""
           @click="$inertia.visit(route('doctors.appointments.rates.index', appointment.id))"
         >
@@ -137,7 +158,7 @@
 
         <front-button
           color=""
-          @click="$inertia.visit(route('patients.rates.index', appointment.patient.id))"
+          @click="$inertia.visit(route('patients.rates.index', appointment.patient_id))"
         >
           Añadir Pagos
         </front-button>
@@ -167,7 +188,7 @@ import FrontButton from "@/Shared/Frontend/Button";
 import dates from "@/ui/dates";
 
 export default {
-  props: ["appointment", "role", "rate"],
+  props: ["appointment", "doctor", "patient", "role", "rate"],
 
   components: {
     AppLayout,
@@ -183,26 +204,33 @@ export default {
 
   methods: {
     cancelAppointment() {
-      if (
-        confirm("Estas seguro?") &&
-        confirm("Esta accion no se puede deshacer, proceder?")
-      ) {
+      //if (
+      //  confirm("Estas seguro?") &&
+      //  confirm("Esta accion no se puede deshacer, proceder?")
+      //) {
         const url = route("doctors.appointments.cancel", this.appointment.id);
         this.$inertia.post(url);
-      }
+      //}
     },
     markAssisted() {
       if(this.rate.can_assist)
       {
         if(confirm("Estás seguro?"))
         {
-          const url = route('patients.rates.assisted', this.rate.id);
+          const url = route('patients.rates.assisted', [this.rate.id, this.appointment.id]);
           this.$inertia.visit(url);
         }
       }
       else
       {
         const url = route('patients.rates.pay', this.rate.id);
+        this.$inertia.visit(url);
+      }
+    },
+    markNotAssisted() {
+      if(confirm("Estás seguro?"))
+      {
+        const url = route('patients.rates.notAssisted', [this.rate.id, this.appointment.id]);
         this.$inertia.visit(url);
       }
     },

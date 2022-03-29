@@ -20,7 +20,7 @@
 
       <!-- Search bar -->
       <div
-        class="mt-8 max-w-2xl mx-auto px-4"
+        class="mt-8 max-w-3xl mx-auto px-4"
         v-if="enableSearch"
       >
 
@@ -35,28 +35,18 @@
             </div>
           </div>
         </template>
-        <template v-if="enableCompanySearch">
-          <div class="filter_space px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white grid items-center rounded-l-r-lg">
-            <button @click.prevent.self="toggleDropDownCompanies()" style="font-size:1.15rem"> Filtro Compañías <span v-show="companyFilterQuery" style="font-size:1rem; font-weight:bold"> -  {{companyFilterQuery}} </span> </button>
-            <div v-if="this.showDropDownCompanies">
-              <input type="text" placeholder="Buscar" id="myInput" v-model="companyFilterQuery" style="width:100%" class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-l-lg px-4 py-3">
-              <div v-for="(company, index) in filteredCompanies" :key="index" class="doctors_display rounded-r-lg .rounded-l-lg">
-                <div @click.prevent.self="selectDropDownCompanies(company)"> {{company.name}} </div>
-              </div>
-            </div>
-          </div>
-        </template>
         <form @submit.prevent="onSearch">
           <div class="flex items-stretch">
             <template v-if="enableOfficeSearch">
               <div class="filter_space px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white grid items-center rounded-l-r-lg">
                 <button @click.prevent.self="toggleDropDownOffices()" class="px-3 cursor-pointer hover:bg-gray-100 bg-white items-center rounded-l-r-lg" style="font-size:1.2rem">
-                   Filtro Sucursal
+                   Sucursal
                    <br>
                    <span style="font-size:1rem; font-weight:bold">
                    {{officeQuery}} 
                    </span>
                 </button>
+
                 <div v-if="this.showDropDownOffices">
                   <div v-for="(office, index) in offices" :key="index" class="doctors_display rounded-r-lg .rounded-l-lg">
                     <div @click.prevent.self="selectDropDownOffice(office)"> {{office.name}} </div>
@@ -64,13 +54,56 @@
                 </div>
               </div>
             </template>
-
             <input
               type="text"
               class="flex-grow border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-l-lg px-4 py-3"
               placeholder="Filtro de busqueda..."
               v-model="searchQuery"
             >
+          </div>
+          <div class="flex items-stretch">
+            <template  v-if="enableOfficeSearch">
+              <div class="filter_space px-3 border cursor-pointer hover:bg-gray-100 border-l-transparent bg-white grid items-center rounded-l-r-lg">             
+                <button @click.prevent.self="toggleDropDownStatus()" class="px-3 cursor-pointer hover:bg-gray-100 bg-white items-center rounded-l-r-lg" style="font-size:1.2rem">
+                   Status
+                   <br>
+                   <span v-if="statusQuery == 1" style="font-size:1rem; font-weight:bold">
+                    CONFI
+                   </span>
+                   <span v-else-if="statusQuery == 2" style="font-size:1rem; font-weight:bold">
+                    N A
+                   </span>
+                   <span v-else-if="statusQuery == 3" style="font-size:1rem; font-weight:bold">
+                    ASIS
+                   </span>                   
+                   <span v-else-if="statusQuery == 4" style="font-size:1rem; font-weight:bold">
+                    CAN
+                   </span>                                     
+                </button>
+                <div v-if="this.showDropDownStatus">
+                  <div key="1" class="doctors_display rounded-r-lg .rounded-l-lg">
+                    <div @click.prevent.self="selectDropDownStatus('1')"> 
+                      CONFI
+                    </div>
+                  </div>
+                  <div key="2" class="doctors_display rounded-r-lg .rounded-l-lg">
+                    <div @click.prevent.self="selectDropDownStatus('2')"> 
+                      N A
+                    </div>
+                  </div>
+                  <div key="3" class="doctors_display rounded-r-lg .rounded-l-lg">
+                    <div @click.prevent.self="selectDropDownStatus('3')"> 
+                      ASIS
+                    </div>
+                  </div>
+                  <div key="4" class="doctors_display rounded-r-lg .rounded-l-lg">
+                    <div @click.prevent.self="selectDropDownStatus('4')"> 
+                     CAN
+                    </div>
+                  </div>                                                      
+                </div>
+              </div>
+            </template>
             <input
               v-if="enableDateSearch"
               type="date"
@@ -89,13 +122,14 @@
             >
               <i class="fas fa-search"></i>
             </button>
+
           </div>
         </form>
       </div>
 
       <div class="xl:px-12 mx-auto mt-6">
         <gridie
-          class="text-left bg-white overflow-x-auto w-full"
+          class="text-center bg-white overflow-x-auto w-full"
           :cols="cols"
           :rows="rows"
         />
@@ -112,7 +146,7 @@
   </app-layout>
 </template>
 
-<style scoped>
+<style>
   .filter_space{
     --tw-border-opacity: 1;
     border-color: rgba(209, 213, 219, var(--tw-border-opacity));
@@ -130,6 +164,28 @@
     border-color: rgba(209, 213, 219, var(--tw-border-opacity));
     padding: 5px;
   }
+
+  .bg-status-1{
+    background-color: aquamarine;
+}
+
+.bg-status-2{
+    background-color: brown;
+}
+
+
+.bg-status-3{
+    background-color: darkcyan;
+}
+
+
+.bg-status-4{
+    background-color: crimson;
+}
+
+.leyend-status{
+  margin: 3px;
+}
 </style>
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -146,8 +202,8 @@ export default {
     links: null,
     parameters: null,
     doctors: null,
-    companies: null,
     offices: null,
+    status: null,
     // Options
     enableSearch: {
       default: true,
@@ -158,10 +214,6 @@ export default {
       type: Boolean,
     },
     enableDoctorSearch: {
-      default: false,
-      type: Boolean,
-    },
-    enableCompanySearch: {
       default: false,
       type: Boolean,
     },
@@ -189,7 +241,6 @@ export default {
       if(this.parameters.hasOwnProperty("dateQueryFrom")) this.dateQueryFrom = this.parameters.dateQueryFrom;
       if(this.parameters.hasOwnProperty("dateQueryTo")) this.dateQueryTo = this.parameters.dateQueryTo;
       if(this.parameters.hasOwnProperty("doctorQuery")) this.doctorQuery = this.parameters.doctorQuery;
-      if(this.parameters.hasOwnProperty("companyQuery")) this.companyQuery = this.parameters.companyQuery;
     }
   },
 
@@ -199,30 +250,19 @@ export default {
       dateQueryFrom: null,
       dateQueryTo: null,
       doctorQuery: null,
-      companyQuery: null,
       officeQuery: null,
 
+      statusQuery: null,
+
       showDropDownDoctors: false,
-      showDropDownCompanies: false,
       showDropDownOffices: false,
+      showDropDownStatus: false,
       docFilterQuery: null,
-      companyFilterQuery: null,
       docName: null,
     };
   },
 
   computed: {
-    filteredCompanies() {
-      if(this.companyFilterQuery == null || this.companyFilterQuery == '') return this.companies;
-      
-      const filter = this.companyFilterQuery.toLowerCase().trim();
-
-      return this.companies.filter(function(company) {
-        if(company.name.toLowerCase().trim().includes(filter)) return true;
-        return false;
-      });
-    },
-
     filteredDoctors() {
       if(this.docFilterQuery == null || this.docFilterQuery == '') return this.doctors;
 
@@ -240,33 +280,34 @@ export default {
       const dateQueryFrom = this.dateQueryFrom;
       const dateQueryTo = this.dateQueryTo;
       const doctorQuery = this.doctorQuery;
-      const companyQuery = this.companyQuery;
       const officeQuery = this.officeQuery;
-      const data = { searchQuery, dateQueryFrom, dateQueryTo, doctorQuery, officeQuery, companyQuery };
+
+      const statusQuery = this.statusQuery;
+
+      const data = { searchQuery, dateQueryFrom, dateQueryTo, doctorQuery, officeQuery, statusQuery };
       this.$inertia.get("", data, { preserveScroll: true });
     },
     toggleDropDownDoctors() {
       this.showDropDownDoctors = !this.showDropDownDoctors;
     },
-    toggleDropDownCompanies() {
-      this.showDropDownCompanies = !this.showDropDownCompanies;
-    },
     toggleDropDownOffices() {
       this.showDropDownOffices = !this.showDropDownOffices;
+    },
+    toggleDropDownStatus() {
+      this.showDropDownStatus = !this.showDropDownStatus;
     },
     selectDropDownDoctor($doc) {
       this.doctorQuery = $doc.id;
       this.docFilterQuery = $doc.name + ' ' + $doc.lastname;
       this.showDropDownDoctors = false;
     },
-    selectDropDownCompanies($company) {
-      this.companyQuery = $company.id;
-      this.companyFilterQuery = $company.name;
-      this.showDropDownCompanies = false;
-    },
     selectDropDownOffice($office) {
       this.officeQuery = $office.name;
       this.showDropDownOffices = false;
+    },
+    selectDropDownStatus($status) {
+      this.statusQuery = $status;
+      this.showDropDownStatus = false;
     },
   },
 };

@@ -1,23 +1,28 @@
 *ANANDAMIDA: CONFIRMACIÓN DE CITA*
 
+Hola!
 *Paciente:*
-{{ $patientName }}
-*Fecha de cita:*
-{{ $date }}
-*Hora de cita:*
-{{ $startTime }}
+{{ $patientName }}' '{{ $patientLastName }}
+Te informamos que tienes una cita con nosotros el:
+*{{ $date }}*
+A las
+*{{ $startTime }}*
+
+Con el doctor:
+*{{ $doctorName }}*
+
 *DIRECCIÓN:*
-???
+Av. Alfredo Benavides 2854, Miraflores 15048, Peru
+
 *REFERENCIA:*
-???
-*Fisioterapeuta:*
-{{ $doctorName }}
+A una cuadra del Óvalo Higuereta
+
 Ver / Cancelar tus citas aquí:
 {{ $dashboardLink }}
+
+
 Ver *mapa* aquí:
-???
-Ver *protocolo sanitario* aquí:
-???
+https://goo.gl/maps/7kVkRxwR21HB2ZU78
 
 Te esperamos, Anandamida.
 

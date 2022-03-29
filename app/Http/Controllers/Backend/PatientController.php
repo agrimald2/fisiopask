@@ -12,6 +12,8 @@ class PatientController extends Controller
     {
         $model = patients()->index($request->searchQuery);
 
+        $model->appends($_GET)->links();
+
         return inertia('Backend/Dynamic/Grid', [
             'model' => collect($model->items())->each->append('link'),
 
@@ -78,8 +80,9 @@ class PatientController extends Controller
             'title' => [
                 'resource' => 'Pacientes',
                 'action' => 'Editar',
-                'url' => route('patients.index'),
+                'url' => route('patients.index')
             ],
+
 
             'form' => 'Backend/Patients/form.js',
             'model' => $patient,
@@ -94,9 +97,9 @@ class PatientController extends Controller
     public function update(Patient $patient, Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string',
-            'lastname1' => 'required|string',
-            'lastname2' => 'required|string',
+            'name' => 'required',
+            'lastname1' => 'required',
+            'lastname2' => 'required',
             'dni' => 'required',
             'birth_date' => 'required|date:Y-m-d',
             'sex' => 'required|string',

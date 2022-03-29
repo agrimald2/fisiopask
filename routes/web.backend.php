@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Backend\AssistantController;
-use App\Http\Controllers\Backend\WorkerController;
 use App\Http\Controllers\Backend\DoctorController;
 use App\Http\Controllers\Backend\DoctorSpecialtyController;
 use App\Http\Controllers\Backend\SurveyShowController;
@@ -18,11 +17,12 @@ use App\Http\Controllers\Backend\PatientRates\GeneratePaymentRequestLinkAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPatientPosAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPatientRatesAction;
 use App\Http\Controllers\Backend\PatientRates\RenderPaymentFormAction;
-use App\Http\Controllers\Backend\PatientRates\RenderPosAction;
 use App\Http\Controllers\Backend\PatientRates\ShowPaymentsAction;
 use App\Http\Controllers\Backend\PatientRates\CancelPaymentAction;
 use App\Http\Controllers\Backend\PatientRates\PayRateAction;
 use App\Http\Controllers\Backend\PatientRates\PayConstantRateAction;
+use App\Http\Controllers\Backend\PatientRates\CancelRateAction;
+use App\Http\Controllers\Backend\PatientRates\AbandonRateAction;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\PaymentLinksController;
 use App\Http\Controllers\Backend\PaymentMethodController;
@@ -31,13 +31,16 @@ use App\Http\Controllers\Backend\RateController;
 use App\Http\Controllers\Backend\Rates\ProductSelectController;
 use App\Http\Controllers\Backend\ScheduleController;
 use App\Http\Controllers\Backend\ScheduleFreezeController;
+use App\Http\Controllers\Backend\StatisticsController;
 use App\Http\Controllers\Backend\SubfamilyController;
+
+
+use App\Http\Controllers\TestAssistanceController;
 
 
 use App\Http\Controllers\Backend\HistoryGroupController;
 use App\Http\Controllers\Backend\MedicalHistoryController;
 use App\Http\Controllers\Backend\MedicalRevisionController;
-use App\Http\Controllers\Backend\DocumentUpload\UploadPatientDocumentController;
 
 use App\Http\Controllers\Backend\AffectedAreaController;
 use App\Http\Controllers\Backend\AnalysisController;
@@ -53,14 +56,16 @@ use App\Http\Controllers\Doctors\Appointments\Rates\GenerateTicketAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\ShowRatesIndexAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\ShowRatesAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\MarkAssistedAction;
+use App\Http\Controllers\Doctors\Appointments\Rates\MarkNotAssistedAction;
 use App\Http\Controllers\Doctors\Appointments\Rates\StoreRateAction;
+use App\Http\Controllers\Doctors\Appointments\RescheduleAppointment;
 use App\Http\Controllers\Doctors\Appointments\ShowAppointmentAction;
-
-use App\Http\Controllers\Backend\Tests\TestTypeController;
-use App\Http\Controllers\Backend\Tests\TestController;
-use App\Http\Controllers\Backend\Tests\CompanyController;
-
 use App\Http\Controllers\GoogleCalendar\GoogleCalendarController;
+
+use App\Http\Controllers\Doctors\Appointments\MultipleBookingController;
+
+use App\Http\Controllers\Backend\GenerateTokensAction;
+
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -73,14 +78,6 @@ Route::get('/', IndexAction::class)
 */
 Route::resource('assistants', AssistantController::class)
     ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
-
-
-/**
- * Workers
-*/
-Route::resource('workers', WorkerController::class)
-    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
-
 
 /**
  * Doctors
@@ -133,14 +130,23 @@ Route::get('/dni/{dni}/day/{date}/time/', [PatientAppointmentController::class, 
 Route::delete('/patients/rates/{patientRate}', DestroyPatientRateAction::class)
     ->name('patients.rates.destroy');
 
-Route::get('/patients/rates/{patientRate}/assisted', MarkAssistedAction::class)
+Route::get('/patients/rates/{patientRate}/assisted/{appointment}', MarkAssistedAction::class)
     ->name('patients.rates.assisted');
+
+Route::get('/patients/rates/{patientRate}/notAssisted/{appointment}', MarkNotAssistedAction::class)
+    ->name('patients.rates.notAssisted');
 
 Route::get('/patients/rates/{patientRate}/pay', PayRateAction::class)
     ->name('patients.rates.pay');
 
 Route::get('/patients/constantrate/{appointment}/pay', PayConstantRateAction::class)
     ->name('patients.constantrate.pay');
+
+Route::get('/rate/{rate}/cancel', CancelRateAction::class)
+    ->name('patients.rates.cancel');
+
+Route::get('/rate/{rate}/abandon', AbandonRateAction::class)
+    ->name('patients.rates.abandon');
 
 Route::get('/patients/rates/{patientRate}/payments', ShowPaymentsAction::class)
     ->name('patients.rates.payments');
@@ -287,12 +293,6 @@ Route::prefix('productSelect')
 Route::resource('patients.historygroup', HistoryGroupController::class)
     ->only('index');
 
-Route::post('historygroup/{id}/upload', [UploadPatientDocumentController::class, 'upload'])
-    ->name('patientFiles.upload');
-
-Route::get('historygroup/download/{filename}', [UploadPatientDocumentController::class, 'download'])
-    ->name('patientFiles.download');
-
 Route::get('patients/{patientId}/historygroup/create/{doctorId}', [HistoryGroupController::class, 'store'])
     ->name('patients.historygroup.create');
 
@@ -341,7 +341,7 @@ Route::resource('treatment', TreatmentController::class)
  * AREA: Doctors
  */
 
-Route::middleware(['role:doctor|admin|assistant|worker'])
+Route::middleware(['role:doctor|admin|assistant'])
     ->prefix('doctors')
     ->group(function () {
         Route::get('/see-schedule', SeeScheduleAction::class)
@@ -365,6 +365,18 @@ Route::middleware(['role:doctor|admin|assistant|worker'])
         Route::get('/appointments/{appointment}/ticket', GenerateTicketAction::class)
             ->name('doctors.appointments.ticket.index');
     });
+
+Route::get('/reschedule/{appointment}/pickDay', [RescheduleAppointment::class, 'pickDay'])
+    ->name('reschedule.pickDay');
+
+Route::post('/reschedule/{appointment}/postDay', [RescheduleAppointment::class, 'postDay'])
+    ->name('reschedule.postDay');
+
+Route::get('/reschedule/{appointment}/pickTime/{date}', [RescheduleAppointment::class, 'pickTime'])
+    ->name('reschedule.pickTime');
+
+Route::post('/reschedule/{appointment}/postTime', [RescheduleAppointment::class, 'postTime'])
+    ->name('reschedule.postTime');
 
 Route::prefix('test')
     ->group(function () {
@@ -392,30 +404,28 @@ Route::prefix('test')
         });
     });
 
+Route::get('/generateTokens', GenerateTokensAction::class);
+
+Route::get('/booking/{patient}/pickDay', [MultipleBookingController::class, 'pickDay'])
+    ->name('multipleBooking.pickDay');
+
+Route::post('/booking/{patient}/postDay', [MultipleBookingController::class, 'postDay'])
+    ->name('multipleBooking.postDay');
+
+Route::get('/booking/{patient}/pickTime/{date}', [MultipleBookingController::class, 'pickTime'])
+    ->name('multipleBooking.pickTime');
+
+Route::post('/booking/{patient}/postTime', [MultipleBookingController::class, 'postTime'])
+    ->name('multipleBooking.postTime');
+    
 /**
- * Tests
-*/
-
-Route::resource('testTypes', TestTypeController::class)
-    ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
-
-Route::post('/testTypes/addResult', [TestTypeController::class, 'addResult'])
-    ->name('testTypes.addResult');
-
-Route::resource('tests', TestController::class)
-    ->only('index', 'edit', 'store', 'update');
-Route::get('/tests/create/{patient_id}', [TestController::class, 'create'])
-    ->name('tests.create');
-Route::get('/tests/DNILookup', [TestController::class, 'showCheckDNI'])
-    ->name('tests.showCheckDNI');
-Route::post('/tests/CheckDNI', [TestController::class, 'checkDNI'])
-    ->name('tests.checkDNI');
-Route::post('/tests/CreatePatient', [TestController::class, 'createPatient'])
-    ->name('tests.createPatient');
+ * AREA: Statistics
+ */
+    Route::post('/statistic', [StatisticsController::class, 'statistic'])->name('statistic');    
+    Route::get('/excel', [StatisticsController::class,'excel'])->name('excel');   
+    //Route::post('/excel', [StatisticsController::class,'excel'])->name('excel');    
+    Route::resource('statistics', StatisticsController::class)
+    ->only('index');
 
 
-Route::get('/downloadPDF', [TestController::class, 'downloadPDF']);
-
-
-Route::resource('companies', CompanyController::class)
-    ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
+    Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 

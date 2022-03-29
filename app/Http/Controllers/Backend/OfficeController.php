@@ -26,6 +26,9 @@ class OfficeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string',
             'address' => 'required|string',
+            'reference' => 'required|string',
+            'indications' => 'required|string',
+            'maps_link' => 'required|string',
         ]);
 
         offices()->create($validated);
@@ -47,6 +50,9 @@ class OfficeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string',
             'address' => 'required|string',
+            'reference' => 'required|string',
+            'indications' => 'required|string',
+            'maps_link' => 'required|string',
         ]);
 
         offices()->update($office, $validated);

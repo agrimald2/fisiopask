@@ -25,6 +25,7 @@ class PatientSurveyController extends Controller
 
     public function store(Request $request) 
     {
+        //Store Survey details
         $validated = $request->validate([
             'office_score' => 'required',
             'doctor_score' => 'required',
@@ -38,29 +39,43 @@ class PatientSurveyController extends Controller
 
         $patient = $appointment->patient()->first();
 
-        $patientPhone = $patient->phone;
+        //Survey Message Variables
+        $phone = $patient->phone;
         $patientName = $patient->name;
+        
+        //Get Random Link
+        $dice = rand(1,5);
+        $facebook_link = 'https://www.facebook.com/fisiosaludperu/reviews/?ref=page_internal';
+        $google_link = 'https://g.page/r/CXWZUJP5kbUKEAU/review';
+        $review_link = '';
 
+        if ($dice <= 2){
+            $review_link = $google_link;
+        }else{
+            $review_link = $facebook_link;
+        }      
+    
         $data = compact(
             'patientName',
+            'review_link',
         );
 
-        $text = $this->getWhatsappPatientReseña($data);
+        $text = $this->getWhatsappPatientReview($data);
 
-        if($validated['office_score'] == 5 && 
+        if( $validated['office_score'] == 5 && 
             $validated['doctor_score'] == 5 && 
             $validated['service_score'] == 5)
         {
-            chatapi($patientPhone, $text);
+            logs()->error("$text");
+            chatapi($phone, $text);
         }
 
         Survey::create($validated);
-
         return inertia('Patients/Survey/Thanks');
     }
 
-    protected function getWhatsappPatientReseña($data)
+    protected function getWhatsappPatientReview($data)
     {
-        return view('chatapi.reseña', $data)->render();
+        return view('chatapi.review', $data)->render();
     }
 }

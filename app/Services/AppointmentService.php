@@ -31,6 +31,7 @@ class AppointmentService
             'end' => $schedule->end_time,
 
             'office' => $schedule->office->name,
+            'office_id' => $schedule->office->id,
             'doctor_id' => $schedule->doctor->id,
         ]);
     }

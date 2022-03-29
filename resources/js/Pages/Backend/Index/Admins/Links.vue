@@ -72,13 +72,27 @@
   </link-group>
 
   <!-- System records -->
-  <link-group style="margin-top:-3rem!important;"
-    title="Historias Clínicas"
+  <link-group
+    title="Registros"
+    class=""
   >
+
+  
+    <link-item
+      label="Gráficos y Estadística"
+      icon="fa-chart-bar"
+      @click="go('statistics.index')"
+    />
+
     <link-item
       label="Análisis"
       icon="fa-laptop-medical"
       @click="go('analysis.index')"
+    />
+    <link-item
+      label="Historiales Médicos"
+      icon="fa-book-medical"
+      @click="go('')"
     />
 
     <link-item
@@ -168,8 +182,7 @@ export default {
   components: {
     LinkGroup,
     LinkItem,
-  },
-
+  },  
   methods: {
     go(routeName) {
       const url = route(routeName);

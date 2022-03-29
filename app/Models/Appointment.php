@@ -19,10 +19,10 @@ class Appointment extends Model
     const STATUS_CANCELED = 4;
 
     const STATUS_LABEL = [
-        1 => 'CONFIRMADO',
-        2 => 'NO ASISTIÓ',
-        3 => 'ASISTIÓ',
-        4 => 'CANCELADA',
+        1 => 'CONFI',
+        2 => 'N A',
+        3 => 'ASIS',
+        4 => 'CAN',
     ];
 
 
@@ -108,7 +108,6 @@ class Appointment extends Model
         return $this->belongsTo(Doctor::class);
     }
 
-
     public function schedule()
     {
         return $this->belongsTo(Schedule::class);
@@ -125,10 +124,24 @@ class Appointment extends Model
     {
         return $this->hasMany(PatientRate::class);
     }
+
+    //office
+    public function office()
+    {
+        return $this->belongsTo(Office::class);
+    }
+
     
 
     public function survey()
     {
         return $this->hasOne(Survey::class);
     }
+
+
+    public function assistedAppointments()
+    {
+        return $this->hasMany(AssistedAppointments::class);
+    }
+
 }

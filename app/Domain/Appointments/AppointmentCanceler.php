@@ -8,7 +8,39 @@ class AppointmentCanceler
 {
     public function cancel(Appointment $appointment)
     {
+
+        $appointment->load('patient');
+        $phone = $appointment->patient->phone;
+
+        $patient = $appointment->patient;
+
+        $patientDNI = $patient->dni;
+        $patientToken = $patient->token;
+        $dashboardLink = 'https://fisiosalud.pe/area/patients/login/'.$patientDNI.'/'.$patientToken;
+
+        $date = $appointment->date->format('d/m/Y');
+        $startTime = $appointment->start;
+        $patientName = $patient->name . " " . $patient->lastname1 . " ". $patient->lastname2;
+        $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+
+        $data = compact(
+            'dashboardLink',
+            'date',
+            'startTime',
+            'patientName'
+        );
+
+        $text = $this->getWhatsappPatientCancelText($data);
+
+        chatapi($phone, $text);
+
         $appointment->status = Appointment::STATUS_CANCELED;
+        $appointment->schedule_id = NULL;
         $appointment->save();
+    }
+
+    protected function getWhatsappPatientCancelText($data)
+    {   
+        return view('chatapi.cancel', $data)->render();
     }
 }

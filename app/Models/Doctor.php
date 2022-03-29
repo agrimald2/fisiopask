@@ -18,7 +18,8 @@ class Doctor extends Model
      * Attributes
      */
 
-    public function getFullnameAttribute() {
+    public function getFullnameAttribute()
+    {
         return "{$this->name} {$this->lastname}";
     }
 

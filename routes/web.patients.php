@@ -3,6 +3,11 @@
 use App\Http\Controllers\Patients\Auth\LoginAction;
 use App\Http\Controllers\Patients\Auth\LogoutAction;
 use App\Http\Controllers\Patients\IndexAction;
+use App\Http\Controllers\Patients\SeeRatesAction;
+use App\Http\Controllers\Patients\SeeAppointmentsAction;
+use App\Http\Controllers\Patients\SeePastAppointmentsAction;
+use App\Http\Controllers\Patients\ReprogramAppointmentsAction;
+use App\Http\Controllers\Patients\CancelAppointmentsAction;
 use App\Http\Controllers\Patients\RebookAction;
 use App\Http\Controllers\Patients\CancelAction;
 use App\Http\Controllers\Patients\PayAction;
@@ -24,6 +29,21 @@ Route::middleware('patients.auth')->group(function () {
     Route::get('/', IndexAction::class)
         ->name('area.patients.index');
 
+        Route::get('/seeRates', SeeRatesAction::class)
+        ->name('area.patients.rates');        
+
+        Route::get('/seeAppointments', SeeAppointmentsAction::class)
+        ->name('area.patients.appointments');      
+
+        Route::get('/seePastAppointments', SeePastAppointmentsAction::class)
+        ->name('area.patients.appointments.past');      
+
+        Route::get('/reprogramAppointments', ReprogramAppointmentsAction::class)
+        ->name('area.patients.appointments.reprogram');      
+
+        Route::get('/cancelAppointments', CancelAppointmentsAction::class)
+        ->name('area.patients.appointments.cancel');              
+
     Route::get('/rebook', RebookAction::class)
         ->name('area.patients.rebook');
 
@@ -37,7 +57,7 @@ Route::middleware('patients.auth')->group(function () {
 });
 
 Route::get('/survey/appointment/{id}', PatientSurveyController::class)
-->name('survey.take');
+    ->name('survey.take');
 
 Route::resource('/survey', PatientSurveyController::class)
-->only('store');
+    ->only('store');

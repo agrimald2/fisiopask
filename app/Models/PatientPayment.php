@@ -38,4 +38,8 @@ class PatientPayment extends Model
     public function patient() {
         return $this->belongsTo(Patient::class);
     }
+
+    public function paymentMethod() {
+        return $this->belongsTo(PaymentMethod::class);
+    }
 }

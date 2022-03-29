@@ -4,6 +4,7 @@ namespace App\Domain\BookAppointment;
 
 use App\Domain\BookAppointment\Datas\ScheduleGroupCollection;
 use App\Domain\Patients\PatientAuthRepositoryContract;
+use App\Models\Appointment;
 use Illuminate\Support\Str;
 
 class FisioNextRepository implements RepositoryContract
@@ -139,6 +140,11 @@ class FisioNextRepository implements RepositoryContract
 
         $this->makeGoogleCalendarAppointment($date, $schedule, $patient);
 
+        $appointment = Appointment::query()->where('date', $date)->where('status', '!=', Appointment::STATUS_CANCELED)->where('patient_id', $patient->id)->get();
+        
+
+        if(!$appointment->isEmpty()) return $appointment;
+
         return appointments()->make(
             $date,
             $schedule,
@@ -175,12 +181,23 @@ class FisioNextRepository implements RepositoryContract
 
         $date = $appointment->date->format('d/m/Y');
         $startTime = $appointment->start;
+        
         $patientName = $patient->name;
-        $patientName = $patient->name . " " . $patient->lastname1;
+        $patientName = $patient->name . " " . $patient->lastname1 . " " . $patient->lastname2;
+        
         $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
         $doctorWorkspace = [];
+        
         if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
+        
         $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
+        $dashboardDoctor = env('APP_URL').'dashboard/doctors/appointments/'.$appointment->id;
+        
+        $office = $appointment->schedule->office;
+        $office_indications = $office->indications;
+        $office_address = $office->address;
+        $office_reference = $office->reference;
+        $office_maps_link = $office->maps_link;
 
         $data = compact(
             'patientName',
@@ -188,7 +205,11 @@ class FisioNextRepository implements RepositoryContract
             'startTime',
             'doctorName',
             'dashboardLink',
-            'doctorWorkspace'
+            'doctorWorkspace',
+            'office_indications',
+            'office_address',
+            'office_reference',
+            'office_maps_link',
         );
 
         // Send message to patient
@@ -197,10 +218,10 @@ class FisioNextRepository implements RepositoryContract
             chatapi($patient->phone, $patientText);
         } 
         // Send message to doctor
-        $doctorText = $this->getWhatsappDoctorConfirmationText($data);
-        if ($doctorText) {
-            chatapi($appointment->doctor->phone, $doctorText);
-        }           
+        //$doctorText = $this->getWhatsappDoctorConfirmationText($data);
+        //if ($doctorText) {
+        //    chatapi($appointment->doctor->phone, $doctorText);
+        //}           
     }
     
 
@@ -221,7 +242,7 @@ class FisioNextRepository implements RepositoryContract
 
     protected function getWhatsappDoctorConfirmationText($data)
     {
-        return view('chatapi.doctor', $data)->render();ll;
+        return view('chatapi.doctor', $data)->render();
     }
 
 
