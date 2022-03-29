@@ -61,7 +61,7 @@ import { DatePicker } from "v-calendar";
 import dates from "@/ui/dates.js";
 
 export default {
-  props: ["dni", "name"],
+  props: ["dni", "name", "alert"],
 
   components: {
     Layout,
@@ -80,6 +80,25 @@ export default {
 
       datePickerInput: null,
     };
+  },
+
+  mounted() {
+    console.log(this.alert);
+    if(this.alert == true)
+    {
+      if(confirm("Usted ya cuenta una cita agendada para este día, por favor eliga otra fecha. O envíe un whatsapp al 987327809 para atender su solicitud") == true){
+        window.location.href = "https://wa.me/51987327809";
+      };
+    }
+  },
+
+  updated() {
+    if(this.alert == true)
+    {
+      if(confirm("Usted ya cuenta una cita agendada para este día, por favor eliga otra fecha. O envíe un whatsapp al 987327809 para atender su solicitud") == true){
+        window.location.href = "https://wa.me/51987327809";
+      };
+    }
   },
 
   watch: {

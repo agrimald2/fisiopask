@@ -65,7 +65,7 @@
       <div class="container" style="justify-content:center;display:flex">
           <ui-button
             color="red"
-            @click="$inertia.visit(route('area.patients.logout'))"
+            @click="go('area.patients.logout')"
           >
             Cerrar Sesión
           </ui-button>        

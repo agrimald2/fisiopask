@@ -137,4 +137,11 @@ class Appointment extends Model
     {
         return $this->hasOne(Survey::class);
     }
+
+
+    public function assistedAppointments()
+    {
+        return $this->hasMany(AssistedAppointments::class);
+    }
+
 }

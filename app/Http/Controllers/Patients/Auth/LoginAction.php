@@ -12,6 +12,7 @@ class LoginAction extends Controller
 
     public function __invoke(PatientAuthRepositoryContract $repo, Request $request, $dni, $token)
     {
+
         $patient = patients()->getByDni($dni);
 
         if ($patient && $patient->isTokenValid($token)) {

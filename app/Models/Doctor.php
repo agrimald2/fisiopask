@@ -12,7 +12,16 @@ class Doctor extends Model
     use SoftDeletes;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $appends = ['fullname'];
 
+    /**
+     * Attributes
+     */
+
+    public function getFullnameAttribute()
+    {
+        return "{$this->name} {$this->lastname}";
+    }
 
     /**
      * Relationships

@@ -26,8 +26,7 @@ Si deseas:
 - Reprogramar tus Citas
 
 Por favor dar click en el siguiente link:
-
-http://fisiosalud.pe/area/patients/login/41301169/q0Yp3Yxpo2yzLH3SnxP6kgzv0Bil7O2OqaAi9X36
+{{ $dashboardLink }}
 
 
 Te esperamos, FISIOSALUD:

@@ -22,5 +22,9 @@ export default {
         return moment(hour, "HH:mm").format("h:mm A");
     },
 
+    hourForPC(hour) {
+        return moment(hour, "HH:mm").format("HH:mm");
+    },
+
     moment,
 };

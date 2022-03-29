@@ -4,6 +4,7 @@ namespace App\Domain\BookAppointment;
 
 use App\Domain\BookAppointment\Datas\ScheduleGroupCollection;
 use App\Domain\Patients\PatientAuthRepositoryContract;
+use App\Models\Appointment;
 use Illuminate\Support\Str;
 
 class FisioNextRepository implements RepositoryContract
@@ -139,6 +140,11 @@ class FisioNextRepository implements RepositoryContract
 
         $this->makeGoogleCalendarAppointment($date, $schedule, $patient);
 
+        $appointment = Appointment::query()->where('date', $date)->where('status', '!=', Appointment::STATUS_CANCELED)->where('patient_id', $patient->id)->get();
+        
+
+        if(!$appointment->isEmpty()) return $appointment;
+
         return appointments()->make(
             $date,
             $schedule,
@@ -235,7 +241,7 @@ class FisioNextRepository implements RepositoryContract
 
     protected function getWhatsappDoctorConfirmationText($data)
     {
-        return view('chatapi.doctor', $data)->render();ll;
+        return view('chatapi.doctor', $data)->render();
     }
 
 

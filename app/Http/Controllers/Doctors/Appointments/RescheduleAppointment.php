@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Doctors\Appointments;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Domain\Patients\PatientAuthRepositoryContract;
 
 use App\Models\Appointment;
 
@@ -72,6 +73,17 @@ class RescheduleAppointment extends Controller
         }
 
         $appointment = Appointment::find($appointment);
+        $patient = $appointment->patient;
+
+        $patientName = $patient->name;
+        $patientName = $patient->name . " " . $patient->lastname1 . " " . $patient->lastname2;
+        
+        $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+        $doctorWorkspace = [];
+
+        $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
+        $dashboardDoctor = env('APP_URL').'dashboard/doctors/appointments/'.$appointment->id;
+        
 
         $appointment->start = $schedule->start_time;
         $appointment->end = $schedule->end_time;
@@ -80,8 +92,39 @@ class RescheduleAppointment extends Controller
         $appointment->office = $schedule->office->name;
         $appointment->date = $date;
 
+        $startTime = $appointment->start;
+
+        $office = $appointment->schedule->office;
+        $office_indications = $office->indications;
+        $office_address = $office->address;
+        $office_reference = $office->reference;
+        $office_maps_link = $office->maps_link;
+
         $appointment->save();
 
+        $data = compact(
+            'patientName',
+            'date',
+            'startTime',
+            'doctorName',
+            'dashboardLink',
+            'doctorWorkspace',
+            'office_indications',
+            'office_address',
+            'office_reference',
+            'office_maps_link',
+        );
+
+        $phone = $patient->phone;
+        $text = $this->getWhatsappPatientReprogram($data);
+
+        chatapi($phone, $text);
+
         return redirect()->route('doctors.appointments.index');
+    }
+
+        protected function getWhatsappPatientReprogram($data)
+    {   
+        return view('chatapi.reprogram', $data)->render();
     }
 }

@@ -40,7 +40,11 @@ export default {
 
   methods: {
     isPast($appointment) {
-      return !dates.moment($appointment.date).isAfter();
+      let app_date = dates.moment($appointment.date).format("YYYY-M-DD");
+      let today = new Date;
+      let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      let isPast = app_date<date;
+      return isPast;
     },
   },
 

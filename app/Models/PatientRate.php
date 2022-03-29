@@ -86,8 +86,23 @@ class PatientRate extends Model
      * Relationships
      */
 
-     public function patientPayment()
-     {
-         return $this->hasMany(PatientPayment::class);
-     }
+    public function patientPayment()
+    {
+        return $this->hasMany(PatientPayment::class);
+    }
+
+    public function appointment()
+    {
+        return $this->belongsTo(Appointment::class);
+    }
+
+    public function subfamily()
+    {
+        return $this->belongsTo(Subfamily::class);
+    }
+    
+    public function assistedAppointments()
+    {
+        return $this->hasMany(AssistedAppointments::class);
+    }
 }

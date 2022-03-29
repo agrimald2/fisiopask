@@ -6,7 +6,10 @@ use App\Models\Appointment;
 use App\Models\PatientRate;
 
 use App\Http\Controllers\Controller;
+use App\Models\AssistedAppointments;
 use Illuminate\Http\Request;
+
+use function PHPUnit\Framework\isEmpty;
 
 class MarkNotAssistedAction extends Controller
 {
@@ -14,6 +17,13 @@ class MarkNotAssistedAction extends Controller
     {
         if($appointment->status == Appointment::STATUS_ASSISTED)
         {
+            $pog = AssistedAppointments::query()->where('appointment_id', $appointment->id)->first();
+
+            if($pog)
+            {
+                $pog->delete();
+            }
+
             if($patientRate != null)
             {
                 $sessions_left = $patientRate->sessions_left;

@@ -24,7 +24,7 @@ class AppointmentCanceler
         $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
 
         $data = compact(
-            'dashboardLink'
+            'dashboardLink',
             'date',
             'startTime',
             'patientName'
@@ -35,6 +35,7 @@ class AppointmentCanceler
         chatapi($phone, $text);
 
         $appointment->status = Appointment::STATUS_CANCELED;
+        $appointment->schedule_id = NULL;
         $appointment->save();
     }
 

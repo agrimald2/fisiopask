@@ -37,7 +37,7 @@ class StatisticsController extends Controller
     {
         $start = Carbon::now()->startOfMonth();
         $end = Carbon::now()->endOfMonth();
-        $this->setDataRange($start, $end, false);
+        $this->setDataRange($start, $end, false, null, null, null);
 
         $salesNServices = $this->getSalesNServices(clone $start, null, null, null);
 
@@ -105,7 +105,7 @@ class StatisticsController extends Controller
                 break;
         }
 
-        $this->setDataRange($start, $end, $recommendation);
+        $this->setDataRange($start, $end, $recommendation, $family_id, $subfamily_id, $rate_id);
 
         $salesNServices = $this->getSalesNServices(clone $start, $family_id, $subfamily_id, $rate_id);
 
@@ -132,7 +132,7 @@ class StatisticsController extends Controller
         $this->ratesThis = null;
     }
 
-    public function setDataRange($start, $end, $recommendation)
+    public function setDataRange($start, $end, $recommendation, $family_id, $subfamily_id, $rate_id)
     {
         $this->nullEverything();
 
@@ -143,6 +143,7 @@ class StatisticsController extends Controller
         $previousEnd->subMonth(1);
 
         $payments = PatientPayment::query()
+            ->with("patientRate.subfamily")
             ->whereBetween(
                 'created_at', [
                     $start, 
@@ -158,16 +159,34 @@ class StatisticsController extends Controller
         $patients = [];
         $patientIds = [];
 
+        $rateFound = null;
+        if($rate_id != null)
+        {
+            $rateFound = Rate::find($rate_id);
+        }
+
         foreach($payments as $payment)
         {
             if(!in_array($payment->patient_id, $patientIds))
             {
-                $patient = Patient::with('payments')->find($payment->patient_id);
-                if($patient != null)
+                if($payment->patientRate != null)
                 {
-                    array_push($patients, $patient);
+                    if($family_id == null || $family_id == $payment->patientRate->subfamily->family_id)
+                    {
+                        if($subfamily_id == null || $subfamily_id == $payment->patientRate->subfamily_id)
+                        {
+                            if($rateFound == null || $rateFound->name == $payment->patientRate->name)
+                            {
+                                $patient = Patient::with('payments')->find($payment->patient_id);
+                                if($patient != null)
+                                {
+                                    array_push($patients, $patient);
+                                }
+                                array_push($patientIds, $payment->patient_id);
+                            }
+                        }
+                    }
                 }
-                array_push($patientIds, $payment->patient_id);
             }
         }
 
