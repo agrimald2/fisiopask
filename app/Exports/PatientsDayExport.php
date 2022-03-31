@@ -106,6 +106,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
                     "Valor Ejecutado" => $sessionsAssisted,
                     "Mes Origen" => $monthName,
                     "Sucursal" => $appointment->office,
+                    "Historial Medico" => ($appointment->history_created ? "Sí" : "No"),
                 ));
             }
             else
@@ -213,6 +214,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
                     "Valor Ejecutado" => $sessionsAssisted,
                     "Mes Origen" => $monthName,
                     "Sucursal" => $appointment->office,
+                    "Historial Medico" => ($appointment->history_created ? "Sí" : "No"),
                 ));
             }
             else
@@ -274,6 +276,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
                 "Valor Ejecutado",
                 "Mes Origen",
                 "Sucursal",
+                "Historial Medico",
             ];
         }
 
