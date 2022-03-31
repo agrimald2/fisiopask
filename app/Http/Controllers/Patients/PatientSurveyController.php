@@ -66,7 +66,7 @@ class PatientSurveyController extends Controller
             $validated['doctor_score'] == 5 && 
             $validated['service_score'] == 5)
         {
-            logs()->error("$text");
+            //logs()->error("$text");
             chatapi($phone, $text);
         }
 

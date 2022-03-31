@@ -2,9 +2,9 @@
   <!-- Usuarios y Personas -->
   <link-group title="Usuarios y Personas">
     <link-item
-      label="Doctores"
-      icon="fa-user-md"
-      @click="go('doctors.index')"
+      label="Gráficos y Estadística"
+      icon="fa-chart-bar"
+      @click="go('statistics.index')"
     />
 
     <link-item

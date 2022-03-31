@@ -34,12 +34,14 @@
                 >
                   Citas
                 </jet-nav-link>
+                <!--
                 <jet-nav-link
                   :href="route('patients.index')"
                   :active="route().current('patients.index')"
                 >
                   Pacientes/Historias C.
                 </jet-nav-link>
+                -->
                 <jet-nav-link
                 :href="route('statistics.index')"
                   :active="route().current('statistics.index')"

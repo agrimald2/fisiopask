@@ -18,13 +18,25 @@ class CancelPaymentAction extends Controller
      */
     public function __invoke(Request $request, PatientPayment $payment)
     {
-        $rate = PatientRate::find($payment->patient_rate_id);
 
-        $rate->payed -= $payment->ammount;
-        $rate->save();
+        $user = auth()->user();
+        
+        $role = "admin";
 
-        $payment->delete();
+        if ($user->hasRole('assistant')) $role = "assistant";
 
-        return redirect()->back();
+        if($role ==  'admin'){
+            $rate = PatientRate::find($payment->patient_rate_id);
+
+            $rate->payed -= $payment->ammount;
+            $rate->save();
+
+            $payment->delete();
+
+            return redirect()->back();
+        }else{
+            toast('warning', "Contactate con el administrador para realizar esta función");
+            return redirect()->back();
+        }
     }
 }

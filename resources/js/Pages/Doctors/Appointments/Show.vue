@@ -43,11 +43,11 @@
           <p class="medium-text">
             {{patient.fullname}}
           </p> 
-          <p class="medium-text">
+          <p v-if="role !== 'assistant'" class="medium-text">
             {{patient.phone}}
           </p> 
           <p class="medium-text">
-            {{ patient.dni }} |  {{ patient.sex }} | {{ dates.moment().year() - dates.moment(patient.birth_date).year() }} años
+            <span v-if="role !== 'assistant'"> {{ patient.dni }} | </span>  {{ patient.sex }} | {{ dates.moment().year() - dates.moment(patient.birth_date).year() }} años
           </p>
         </div>
       </div>
@@ -99,7 +99,7 @@
       <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
         <front-button
           color="yellow"
-          v-if="role == 'admin'"
+          v-if="role !== 'assistant'"
           @click="$inertia.visit(route('patients.historygroup.index', appointment.patient_id))"
         >
           Ver Historial Clínico
@@ -107,7 +107,7 @@
 
         <front-button
           color="red"
-          v-if="appointment.status == 1"
+          v-if="appointment.status == 1 && role !== 'assistant'"
           @click="cancelAppointment"
         >
           Cancelar Cita
