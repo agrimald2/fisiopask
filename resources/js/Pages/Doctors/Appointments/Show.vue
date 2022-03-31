@@ -43,11 +43,11 @@
           <p class="medium-text">
             {{patient.fullname}}
           </p> 
-          <p v-if="role !== 'assistant'" class="medium-text">
+          <p v-if="role == 'admin'" class="medium-text">
             {{patient.phone}}
           </p> 
           <p class="medium-text">
-            <span v-if="role !== 'assistant'"> {{ patient.dni }} | </span>  {{ patient.sex }} | {{ dates.moment().year() - dates.moment(patient.birth_date).year() }} años
+            <span v-if="role == 'admin'"> {{ patient.dni }} | </span>  {{ patient.sex }} | {{ dates.moment().year() - dates.moment(patient.birth_date).year() }} años
           </p>
         </div>
       </div>
@@ -150,6 +150,7 @@
         </front-button>
 
         <front-button
+          v-if="role == 'admin' || role == 'assistant' "
           color=""
           @click="$inertia.visit(route('doctors.appointments.rates.index', appointment.id))"
         >
@@ -157,6 +158,7 @@
         </front-button>
 
         <front-button
+          v-if="role == 'admin'"
           color=""
           @click="$inertia.visit(route('patients.rates.index', appointment.patient_id))"
         >

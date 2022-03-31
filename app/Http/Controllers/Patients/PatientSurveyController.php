@@ -77,10 +77,9 @@ class PatientSurveyController extends Controller
 
             if(count($appointments) >= 6)
             {
-                //send message of recommendation
+                chatapi($phone, $text);
             }
 
-            chatapi($phone, $text);
         }
 
         Survey::create($validated);

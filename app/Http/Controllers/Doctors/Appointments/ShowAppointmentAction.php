@@ -19,7 +19,11 @@ class ShowAppointmentAction extends Controller
 
         $role = "admin";
 
-        if ($user->hasRole('assistant')) $role = "assistant";
+        if ($user->hasRole('assistant')) {
+            $role = "assistant";
+        }elseif($user->hasRole('doctor')){
+            $role = "doctor";
+        }
 
         $appointment = appointments()->show($id);
         $patient = $appointment->patient;

@@ -62,6 +62,15 @@ class SendSurvey implements ShouldQueue
                     return;
                 //}       
             }
+
+            if(!$appointment->history_created){
+                $doc_phone = $appointment->doctor->phone;
+                if(substr($doc_phone , 0, 1) == 9){
+                    $doc_phone = '51'.$doc_phone;
+                }
+                $text = $this->getWhatsappDoctorHCText();
+                chatapi($doc_phone, $text);
+            }
             $appointment->survey = '1';
             $appointment->save();
         }
@@ -70,6 +79,10 @@ class SendSurvey implements ShouldQueue
     protected function getWhatsappSurveyText($data)
     {   
         return view('chatapi.survey', $data)->render();
+    }
+    protected function getWhatsappDoctorHCText()
+    {   
+        return view('chatapi.doctorHC');
     }
     /**
      * Execute the job.

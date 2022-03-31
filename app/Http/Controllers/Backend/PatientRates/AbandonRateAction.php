@@ -14,7 +14,11 @@ class AbandonRateAction extends Controller
         
         $role = "admin";
 
-        if ($user->hasRole('assistant')) $role = "assistant";
+        if ($user->hasRole('assistant')) {
+            $role = "assistant";
+        }elseif($user->hasRole('doctor')){
+            $role = "doctor";
+        }
 
         if($role ==  'admin'){
             $rate->state = PatientRate::RATE_STATUS_ABANDONED;
