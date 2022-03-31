@@ -12,6 +12,8 @@ use App\Models\Analysis;
 use App\Models\AffectedArea;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 
 class MedicalHistoryController extends Controller
@@ -76,6 +78,11 @@ class MedicalHistoryController extends Controller
     
             'history_group_id' => 'required',
         ]);
+
+        $appointment = Appointment::query()->where('patient_id', $validated["patient_id"])->where('status', Appointment::STATUS_ASSISTED)->orderBy('date', 'desc')->first();
+
+        $appointment->history_created = true;
+        $appointment->save();
 
         MedicalHistory::create($validated);
 

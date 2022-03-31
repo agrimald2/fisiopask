@@ -14,7 +14,7 @@ class AddHistoryBoolToAppointmentsTable extends Migration
     public function up()
     {
         Schema::table('appointments', function (Blueprint $table) {
-            //
+            $table->boolean('history_created')->default(false);
         });
     }
 
@@ -25,8 +25,5 @@ class AddHistoryBoolToAppointmentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('appointments', function (Blueprint $table) {
-            $table->boolean('history_created')->default(false);
-        });
     }
 }

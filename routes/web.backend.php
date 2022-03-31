@@ -65,7 +65,7 @@ use App\Http\Controllers\GoogleCalendar\GoogleCalendarController;
 use App\Http\Controllers\Doctors\Appointments\MultipleBookingController;
 
 use App\Http\Controllers\Backend\GenerateTokensAction;
-
+use App\Http\Controllers\Backend\PatientRecNDistrictController;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -132,6 +132,9 @@ Route::delete('/patients/rates/{patientRate}', DestroyPatientRateAction::class)
 
 Route::get('/patients/rates/{patientRate}/assisted/{appointment}', MarkAssistedAction::class)
     ->name('patients.rates.assisted');
+
+Route::post('/patient/{id}/appointment/{appointment_id}/fillData', [PatientRecNDistrictController::class, 'post'])
+    ->name('patients.fillData');
 
 Route::get('/patients/rates/{patientRate}/notAssisted/{appointment}', MarkNotAssistedAction::class)
     ->name('patients.rates.notAssisted');

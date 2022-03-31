@@ -9,6 +9,7 @@ use App\Models\Treatment;
 use App\Models\HistoryTreatment;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 
 class MedicalRevisionController extends Controller
@@ -63,6 +64,11 @@ class MedicalRevisionController extends Controller
                 'medical_revision_id' => $model->id,
             ]);
         }
+
+        $appointment = Appointment::query()->where('patient_id', $validated["patient_id"])->where('status', Appointment::STATUS_ASSISTED)->orderBy('date', 'desc')->first();
+
+        $appointment->history_created = true;
+        $appointment->save();
 
         return redirect()->route('patients.historygroup.show', $request->history_group_id);
     }
