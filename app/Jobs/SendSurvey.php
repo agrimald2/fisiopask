@@ -54,13 +54,13 @@ class SendSurvey implements ShouldQueue
                 );
                 //* Send message only to the 30% of the appointments
                     //? 95% sure there is a better way to do this
-                $dice = rand(1,10);
-                if ($dice <= 3){
+                //$dice = rand(1,10);
+                //if ($dice <= 3){
                     $text = $this->getWhatsappSurveyText($data);
                     chatapi($phone, $text);
-                }else{
+                //}else{
                     return;
-                }       
+                //}       
             }
             $appointment->survey = '1';
             $appointment->save();
