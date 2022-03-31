@@ -188,34 +188,16 @@ class StatisticsController extends Controller
         $patients = [];
         $patientIds = [];
 
-        $rateFound = null;
-        if($rate_id != null)
-        {
-            $rateFound = Rate::find($rate_id);
-        }
-
         foreach($payments as $payment)
         {
             if(!in_array($payment->patient_id, $patientIds))
             {
-                if($payment->patientRate != null)
+                $patient = Patient::with('payments')->find($payment->patient_id);
+                if($patient != null)
                 {
-                    if($family_id == null || $family_id == $payment->patientRate->subfamily->family_id)
-                    {
-                        if($subfamily_id == null || $subfamily_id == $payment->patientRate->subfamily_id)
-                        {
-                            if($rateFound == null || $rateFound->name == $payment->patientRate->name)
-                            {
-                                $patient = Patient::with('payments')->find($payment->patient_id);
-                                if($patient != null)
-                                {
-                                    array_push($patients, $patient);
-                                }
-                                array_push($patientIds, $payment->patient_id);
-                            }
-                        }
-                    }
+                    array_push($patients, $patient);
                 }
+                array_push($patientIds, $payment->patient_id);
             }
         }
 
