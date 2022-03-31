@@ -77,7 +77,14 @@ class PatientSurveyController extends Controller
 
             if(count($appointments) >= 6)
             {
-                chatapi($phone, $text);
+                if(!$patient->history_created)
+                {
+                    $patient->history_created = true;
+                    $patient->save();
+                    
+                    chatapi($phone, $text);
+                    //@send message to rate on google n shit
+                }
             }
 
         }

@@ -27,6 +27,8 @@ class StatisticsController extends Controller
     protected $ratesPrevious = null;
     protected $ratesThis = null;
 
+    protected $user = null;
+
     const STATS_REQUEST_DAY = 1;
     const STATS_REQUEST_MONTH = 2;
     const STATS_REQUEST_RANGE = 3;
@@ -35,8 +37,15 @@ class StatisticsController extends Controller
     
     public function index()
     {
+        $this->user = auth()->user();
+        
         $start = Carbon::now()->startOfMonth();
         $end = Carbon::now()->endOfMonth();
+        if(!$this->user->hasRole('admin'))
+        {
+            $start = Carbon::now()->subDay(3);
+            $end = Carbon::now();
+        }
         $this->setDataRange($start, $end, false, null, null, null);
 
         $salesNServices = $this->getSalesNServices(clone $start, null, null, null);
@@ -58,14 +67,14 @@ class StatisticsController extends Controller
 
     public function statistic(Request $request)
     {
+        $this->user = auth()->user();
+
         $start = null;
         $end = null;
         $recommendation = null;
         $family_id = null;
         $subfamily_id = null;
         $rate_id = null;
-
-        //params["family_id"], params["subfamily_id"], params["rate_id"]
         
         switch($request->params["advances"])
         {
@@ -105,17 +114,37 @@ class StatisticsController extends Controller
                 break;
         }
 
+        if($request->params["advances"] != self::STATS_REQUEST_DAY)
+        {
+            if(!$this->user->hasRole('admin'))
+            {
+                $start = Carbon::now()->subDay(3);
+                $end = Carbon::now();
+            }
+        }
+
         $this->setDataRange($start, $end, $recommendation, $family_id, $subfamily_id, $rate_id);
 
         $salesNServices = $this->getSalesNServices(clone $start, $family_id, $subfamily_id, $rate_id);
 
-        $sales[0] = $salesNServices[0];
-        $sales[1] = $salesNServices[1];
-        $nServices[0] = $salesNServices[2];
-        $nServices[1] = $salesNServices[3];
-        
-        $patients = $this->getPatientsCount(clone $start);
-        $tickets = $this->getAverageTicket($sales, $nServices, clone $start);
+        if($this->user->hasRole('admin'))
+        {
+            $sales[0] = $salesNServices[0];
+            $sales[1] = $salesNServices[1];
+            $nServices[0] = $salesNServices[2];
+            $nServices[1] = $salesNServices[3];
+
+            $patients = $this->getPatientsCount(clone $start);
+            $tickets = $this->getAverageTicket($sales, $nServices, clone $start);
+        }
+        else
+        {
+            $sales[0] = $salesNServices[1];
+            $nServices[0] = $salesNServices[3];
+
+            $patients = $this->getPatientsCount(clone $start)[1];
+            $tickets = $this->getAverageTicket($sales, $nServices, clone $start)[1];
+        }
 
         return response()->json(['patients' => $patients, 'sales' => $sales,'tickets' => $tickets, 'nServices' => $nServices]);
     }
@@ -159,34 +188,16 @@ class StatisticsController extends Controller
         $patients = [];
         $patientIds = [];
 
-        $rateFound = null;
-        if($rate_id != null)
-        {
-            $rateFound = Rate::find($rate_id);
-        }
-
         foreach($payments as $payment)
         {
             if(!in_array($payment->patient_id, $patientIds))
             {
-                if($payment->patientRate != null)
+                $patient = Patient::with('payments')->find($payment->patient_id);
+                if($patient != null)
                 {
-                    if($family_id == null || $family_id == $payment->patientRate->subfamily->family_id)
-                    {
-                        if($subfamily_id == null || $subfamily_id == $payment->patientRate->subfamily_id)
-                        {
-                            if($rateFound == null || $rateFound->name == $payment->patientRate->name)
-                            {
-                                $patient = Patient::with('payments')->find($payment->patient_id);
-                                if($patient != null)
-                                {
-                                    array_push($patients, $patient);
-                                }
-                                array_push($patientIds, $payment->patient_id);
-                            }
-                        }
-                    }
+                    array_push($patients, $patient);
                 }
+                array_push($patientIds, $payment->patient_id);
             }
         }
 
@@ -432,17 +443,33 @@ class StatisticsController extends Controller
         $previousMonth["TicketPromedioRecurrentes"] = intval(($sales[0]["ValorEjecutadoRecurrentes"] / 1.18) / ($services[0]["ServiciosRecurrentes"] > 0 ? $services[0]["ServiciosRecurrentes"] : 1));
         $previousMonth["TicketPromedioNuevos"] = intval(($sales[0]["ValorEjecutadoNuevos"] / 1.18) / ($services[0]["ServiciosNuevos"] > 0 ? $services[0]["ServiciosNuevos"] : 1));
 
-        $thisMonth["TicketPromedioRecurrentes"] = intval(($sales[1]["ValorEjecutadoRecurrentes"] / 1.18) / ($services[1]["ServiciosRecurrentes"] > 0 ? $services[1]["ServiciosRecurrentes"] : 1));
-        $thisMonth["TicketPromedioNuevos"] = intval(($sales[1]["ValorEjecutadoNuevos"] / 1.18) / ($services[1]["ServiciosNuevos"] > 0 ? $services[1]["ServiciosNuevos"] : 1));
+        if($this->user->hasRole('admin'))
+        {
+            $thisMonth["TicketPromedioRecurrentes"] = intval(($sales[1]["ValorEjecutadoRecurrentes"] / 1.18) / ($services[1]["ServiciosRecurrentes"] > 0 ? $services[1]["ServiciosRecurrentes"] : 1));
+            $thisMonth["TicketPromedioNuevos"] = intval(($sales[1]["ValorEjecutadoNuevos"] / 1.18) / ($services[1]["ServiciosNuevos"] > 0 ? $services[1]["ServiciosNuevos"] : 1));
+            $thisMonth["TotalGeneral"] = $thisMonth["TicketPromedioRecurrentes"] + $thisMonth["TicketPromedioNuevos"];
+        }
 
         $previousMonth["TotalGeneral"] = $previousMonth["TicketPromedioRecurrentes"] + $previousMonth["TicketPromedioNuevos"];
-        $thisMonth["TotalGeneral"] = $thisMonth["TicketPromedioRecurrentes"] + $thisMonth["TicketPromedioNuevos"];
 
         return [$previousMonth, $thisMonth];
     }
 
     public function excel(Request $request)
     {
+        $carbonStart = new Carbon($request->start);
+        $carbonEnd = new Carbon($request->end);
+
+        $this->user = auth()->user();
+
+        if(!$this->user->hasRole('admin'))
+        {
+            if($carbonEnd->diffInDays($carbonStart) > 4)
+            {
+                return redirect()->back();
+            }
+        }
+
         return Excel::download(new PatientsDayExport($request->office,$request->start,$request->end), 'FISIO-Pacientes-Atendidos.xlsx');
     }
 }
