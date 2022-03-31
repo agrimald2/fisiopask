@@ -105,12 +105,62 @@
         :options="treatments"
         :form="form"
       />
+      
+      <FormInput
+        label="Tratamiento"
+        name="treatments"
+        v-model="form.t1"
+        type="select"
+        :options="treatments"
+        :form="form"
+      />
+      <FormInput
+        label="Tratamiento"
+        name="treatments"
+        v-model="form.t2"
+        type="select"
+        :options="treatments"
+        :form="form"
+      />
+      <FormInput
+        label="Tratamiento"
+        name="treatments"
+        v-model="form.t3"
+        type="select"
+        :options="treatments"
+        :form="form"
+      />      
 
       <!-- Analysis -->
       <FormInput
         label="Análisis"
         name="analysis"
         v-model="form.analysis_id"
+        type="select"
+        :options="analysis"
+        :form="form"
+      />
+
+      <FormInput
+        label="Análisis"
+        name="analysis"
+        v-model="form.a1"
+        type="select"
+        :options="analysis"
+        :form="form"
+      />
+      <FormInput
+        label="Análisis"
+        name="analysis"
+        v-model="form.a2"
+        type="select"
+        :options="analysis"
+        :form="form"
+      />
+      <FormInput
+        label="Análisis"
+        name="analysis"
+        v-model="form.a3"
         type="select"
         :options="analysis"
         :form="form"
@@ -187,12 +237,23 @@ export default {
         treatment_id: null,
         analysis_id: null,
         affected_area_id: null,
+        
+        t1: null,
+        t2: null,        
+        t3: null,
 
+        a1: null,
+        a2: null,
+        a3: null,
+        
         history_group_id: null,
 
         treatments: [],
       }),
     };
+  },
+  mounted() {
+    treatments.sort();
   },
 
   methods: {

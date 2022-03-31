@@ -4,6 +4,8 @@ use App\Http\Controllers\LoginSuccessController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\GenerateTokensAction;
 
+use Inertia\Inertia;
+
 use App\Http\Controllers\TestAssistanceController;
 
 /*
@@ -60,3 +62,10 @@ Route::namespace(null)
     
 
     Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 
+
+    Route::get('/', function () {
+        return Inertia::render('Welcome', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+        ]);
+    }); 

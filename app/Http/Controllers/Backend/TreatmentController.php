@@ -11,7 +11,7 @@ class TreatmentController extends Controller
 {
     public function index(Request $request)
     {
-        $model = Treatment::query()->orderBy('id', 'desc')->get();
+        $model = Treatment::query()->orderBy('name', 'asc')->get();
 
         return inertia('Backend/MedicalHistories/Treatments/Index', compact('model'));
     }

@@ -34,7 +34,7 @@ class MedicalHistoryController extends Controller
             ->get();
 
         $treatments = Treatment::query()
-            ->orderBy('id', 'desc')
+            ->orderBy('name', 'asc')
             ->get();
 
         $analysis = Analysis::query()
@@ -75,6 +75,14 @@ class MedicalHistoryController extends Controller
             'treatment_id' => 'required',
             'analysis_id' => 'required',
             'affected_area_id' => 'required',
+
+            't1' => '',
+            't2' => '',
+            't3' => '',
+
+            'a1' => '',
+            'a2' => '',
+            'a3' => '',
     
             'history_group_id' => 'required',
         ]);

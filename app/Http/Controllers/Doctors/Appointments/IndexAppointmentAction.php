@@ -54,7 +54,7 @@ class IndexAppointmentAction extends Controller
         $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery );
 
         $user = auth()->user();
-        if ($user->hasRole('admin')) {
+        if ($user->hasRole('admin') || $user->hasRole('assistant')) {
             $canSearchByDoctor = true;
         }
 

@@ -47,7 +47,7 @@
             {{patient.phone}}
           </p> 
           <p class="medium-text">
-            <span v-if="role == 'admin'"> {{ patient.dni }} | </span>  {{ patient.sex }} | {{ dates.moment().year() - dates.moment(patient.birth_date).year() }} años
+            {{ patient.dni }} |  {{ patient.sex }} | {{ dates.moment().year() - dates.moment(patient.birth_date).year() }} años
           </p>
         </div>
       </div>
