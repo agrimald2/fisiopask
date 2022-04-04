@@ -18,7 +18,9 @@ class MedicalRevisionController extends Controller
     {
         $model = MedicalRevision::with('patient','doctor', 'historyTreatments.treatment')->get()->find($id);
 
-        return inertia('Backend/Patients/MedicalRevisions/Index', compact('model'));
+        $treatments = HistoryTreatment::query()->where('medical_revision_id', $model->id)->get();
+
+        return inertia('Backend/Patients/MedicalRevisions/Index', compact('model', 'treatments'));
     }
 
     public function create($id)
@@ -51,24 +53,40 @@ class MedicalRevisionController extends Controller
             'recovery_progress' => 'required',
     
             'treatment_id' => 'required',
+
+            't1' => '',
+            't2' => '',
+            't3' => '',
     
             'history_group_id' => 'required',
         ]);
 
+        $treatments = [];
+        array_push($treatments, $validated["treatment_id"]);
+        array_push($treatments, $validated["t1"]);
+        array_push($treatments, $validated["t2"]);
+        array_push($treatments, $validated["t3"]);
+
         $model = MedicalRevision::create($validated);
 
-        foreach($request->treatments as $treatment)
+        foreach($treatments as $treatment)
         {
-            HistoryTreatment::Create([
-                'treatment_id' => $treatment,
-                'medical_revision_id' => $model->id,
-            ]);
+            if($treatment != null)
+            {
+                HistoryTreatment::Create([
+                    'treatment_id' => $treatment,
+                    'medical_revision_id' => $model->id,
+                ]);
+            }
         }
 
         $appointment = Appointment::query()->where('patient_id', $validated["patient_id"])->where('status', Appointment::STATUS_ASSISTED)->orderBy('date', 'desc')->first();
 
-        $appointment->history_created = true;
-        $appointment->save();
+        if($appointment)
+        {
+            $appointment->history_created = true;
+            $appointment->save();
+        }
 
         return redirect()->route('patients.historygroup.show', $request->history_group_id);
     }

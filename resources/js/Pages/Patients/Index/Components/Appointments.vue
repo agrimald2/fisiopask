@@ -4,16 +4,7 @@
       v-for="appointment in appointments"
       :key="appointment.id"
     >
-      <template v-if="past">
-        <template v-if="isPast(appointment)">
-          <item :model="appointment"/>
-        </template>
-      </template>
-      <template v-else>
-        <template v-if="!isPast(appointment)">
-          <item :model="appointment"/>
-        </template>
-      </template>
+      <item :model="appointment"/>
     </template>
   </div>
 </template>
@@ -36,20 +27,6 @@ export default {
     return {
       count: 0,
     };
-  },
-
-  methods: {
-    isPast($appointment) {
-      let app_date = dates.moment($appointment.date).format("YYYY-M-DD");
-      let today = new Date;
-      let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      let isPast = app_date<date;
-      return isPast;
-    },
-  },
-
-  computed: {
-    
   },
 };
 </script>

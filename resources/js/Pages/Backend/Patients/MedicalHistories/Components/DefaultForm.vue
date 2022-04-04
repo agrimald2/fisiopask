@@ -141,7 +141,7 @@
         :form="form"
       />
 
-      <FormInput
+      <!--FormInput
         label="Análisis"
         name="analysis"
         v-model="form.a1"
@@ -164,7 +164,7 @@
         type="select"
         :options="analysis"
         :form="form"
-      />
+      /-->
 
       <!-- Afected Areas -->
       <FormInput
@@ -241,10 +241,6 @@ export default {
         t1: null,
         t2: null,        
         t3: null,
-
-        a1: null,
-        a2: null,
-        a3: null,
         
         history_group_id: null,
 

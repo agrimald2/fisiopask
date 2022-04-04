@@ -138,11 +138,10 @@ class FisioNextRepository implements RepositoryContract
     {
         $patient = patients()->getByDni($dni);
 
-        $this->makeGoogleCalendarAppointment($date, $schedule, $patient);
+        //$this->makeGoogleCalendarAppointment($date, $schedule, $patient);
 
         $appointment = Appointment::query()->where('date', $date)->where('status', '!=', Appointment::STATUS_CANCELED)->where('patient_id', $patient->id)->get();
         
-
         if(!$appointment->isEmpty()) return $appointment;
 
         return appointments()->make(

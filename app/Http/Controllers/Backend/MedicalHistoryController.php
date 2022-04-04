@@ -22,7 +22,9 @@ class MedicalHistoryController extends Controller
     {
         $model = MedicalHistory::with('patient','treatment','diagnostic','analysis','doctor','affectedArea', 'historyTreatments.treatment')->get()->find($id);
 
-        return inertia('Backend/Patients/MedicalHistories/Index', compact('model'));
+        $treatments = HistoryTreatment::query()->where('medical_history_id', $model->id)->get();
+
+        return inertia('Backend/Patients/MedicalHistories/Index', compact('model', 'treatments'));
     }
 
     public function create($id)
@@ -79,20 +81,36 @@ class MedicalHistoryController extends Controller
             't1' => '',
             't2' => '',
             't3' => '',
-
-            'a1' => '',
-            'a2' => '',
-            'a3' => '',
     
             'history_group_id' => 'required',
         ]);
 
+        $treatments = [];
+        array_push($treatments, $validated["treatment_id"]);
+        array_push($treatments, $validated["t1"]);
+        array_push($treatments, $validated["t2"]);
+        array_push($treatments, $validated["t3"]);
+
         $appointment = Appointment::query()->where('patient_id', $validated["patient_id"])->where('status', Appointment::STATUS_ASSISTED)->orderBy('date', 'desc')->first();
 
-        $appointment->history_created = true;
-        $appointment->save();
+        if($appointment)
+        {
+            $appointment->history_created = true;
+            $appointment->save();
+        }
 
-        MedicalHistory::create($validated);
+        $model = MedicalHistory::create($validated);
+
+        foreach($treatments as $treatment)
+        {
+            if($treatment != null)
+            {
+                HistoryTreatment::Create([
+                    'treatment_id' => $treatment,
+                    'medical_history_id' => $model->id,
+                ]);
+            }
+        }
 
         return redirect()->route('patients.historygroup.show', $request->history_group_id);
     }

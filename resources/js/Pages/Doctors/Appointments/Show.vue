@@ -43,7 +43,8 @@
           <p class="medium-text">
             {{patient.fullname}}
           </p> 
-          <p v-if="role == 'admin'" class="medium-text">
+          <!--<p v-if="role == 'admin'" class="medium-text">-->
+          <p class="medium-text">
             {{patient.phone}}
           </p> 
           <p class="medium-text">
@@ -158,7 +159,7 @@
         </front-button>
 
         <front-button
-          v-if="role == 'admin'"
+          v-if="role == 'admin' || role == 'assistant'"
           color=""
           @click="$inertia.visit(route('patients.rates.index', appointment.patient_id))"
         >

@@ -77,6 +77,36 @@
         :options="treatments"
         :form="form"
       />
+
+      <!-- Treatments -->
+      <FormInput
+        label="Tratamiento"
+        name="treatments1"
+        v-model="form.t1"
+        type="select"
+        :options="treatments"
+        :form="form"
+      />
+
+      <!-- Treatments -->
+      <FormInput
+        label="Tratamiento"
+        name="treatments2"
+        v-model="form.t2"
+        type="select"
+        :options="treatments"
+        :form="form"
+      />
+
+      <!-- Treatments -->
+      <FormInput
+        label="Tratamiento"
+        name="treatments3"
+        v-model="form.t3"
+        type="select"
+        :options="treatments"
+        :form="form"
+      />
     </template>
 
     <template #actions>
@@ -133,6 +163,10 @@ export default {
         recovery_progress: null,
 
         treatment_id: null,
+
+        t1: null,
+        t2: null,
+        t3: null,
 
         history_group_id: null,
 

@@ -16,15 +16,25 @@ class HistoryGroupController extends Controller
         $patientId = $patient->id;
         $doctor = $request->user()->doctor;
 
-        $rows = $patient->historyGroup()
+        $hgs = $patient->historyGroup()
             ->select('id', 'patient_id', 'created_at')
             ->orderBy('created_at', 'desc')
             ->with([
                 'patient' => function ($q) {
                     $q->select('id', 'name', 'lastname1', 'lastname2');
-                }
+                }, 'medicalHistory'
             ])
             ->get();
+
+        $rows = [];
+
+        foreach($hgs as $hg)
+        {
+            if($hg->medicalHistory)
+            {
+                array_push($rows, $hg);
+            }
+        }
 
         return inertia(
             'Backend/Patients/HistoryGroups/Index',

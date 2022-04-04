@@ -91,6 +91,7 @@ class RescheduleAppointment extends Controller
         $appointment->schedule_id = $schedule->id;
         $appointment->office = $schedule->office->name;
         $appointment->date = $date;
+        $appointment->status = Appointment::STATUS_CONFIRMED;
 
         $startTime = $appointment->start;
 
