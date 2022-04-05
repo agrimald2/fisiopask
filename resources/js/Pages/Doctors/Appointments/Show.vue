@@ -146,7 +146,7 @@
         <front-button
           color="yellow"
           v-show="appointment.status != 4 && appointment.status != 3"
-          @click="$inertia.visit(route('reschedule.pickDay', appointment.id))"
+          @click="$inertia.visit(route('reschedule.pickOffice', appointment.id))"
         >
           Reprogramar Cita
         </front-button>

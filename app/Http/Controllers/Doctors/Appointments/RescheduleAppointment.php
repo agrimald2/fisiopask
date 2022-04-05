@@ -10,14 +10,27 @@ use App\Models\Appointment;
 
 class RescheduleAppointment extends Controller
 {
-    public function pickDay($appointment) 
+    public function pickOffice($appointment)
+    {
+        $appointment = Appointment::with('patient')->find($appointment);
+        $officeOptions = offices()->options();
+
+        return inertia('Doctors/Appointments/RescheduleOffice', compact('appointment', 'officeOptions'));
+    }
+
+    public function postOffice($appointment, $office)
+    {
+        return redirect()->route('reschedule.pickDay', compact('appointment', 'office'));
+    }
+
+    public function pickDay($appointment, $office) 
     {
         $appointment = Appointment::with('patient')->find($appointment);
 
-        return inertia('Doctors/Appointments/Reschedule', compact('appointment'));
+        return inertia('Doctors/Appointments/Reschedule', compact('appointment', 'office'));
     }
 
-    public function postDay(Request $request, $appointment) 
+    public function postDay(Request $request, $appointment, $office) 
     {
         $request->validate([
             'date' => 'required|date|date_format:Y-m-d'
@@ -25,10 +38,10 @@ class RescheduleAppointment extends Controller
 
         $date = $request->date;
 
-        return redirect()->route('reschedule.pickTime', compact('appointment', 'date'));
+        return redirect()->route('reschedule.pickTime', compact('appointment', 'date', 'office'));
     }
 
-    public function pickTime($appointment, $date)
+    public function pickTime($appointment, $office, $date)
     {
         $appointment = Appointment::find($appointment);
         /*if(now()->parse($date)->lt(now()->toDateString())) {
@@ -39,7 +52,7 @@ class RescheduleAppointment extends Controller
             'doctorId' => $appointment->doctor_id,
         ];
 
-        $schedules = schedules()->getAvailableSchedulesFor($date, null);
+        $schedules = schedules()->getAvailableSchedulesFor($date, $office);
         $schedules = schedules()->scheduleCollectionToData($schedules);
         $groupedSchedules = schedules()->groupSchedulesByStartTime($schedules)->toArray();
         
@@ -50,7 +63,8 @@ class RescheduleAppointment extends Controller
             'filters',
             'groupedSchedules',
             'specialtyOptions',
-            'date'
+            'date',
+            'office'
         ));
     }
 

@@ -61,7 +61,7 @@ import { DatePicker } from "v-calendar";
 import dates from "@/ui/dates.js";
 
 export default {
-    props: ['appointment'],
+    props: ['appointment', 'office'],
 
     components: {
         AppLayout,
@@ -97,7 +97,7 @@ export default {
         submitFormWithDate(datePickerModel) {
             this.loading = true;
 
-            const url = route('reschedule.postDay', this.appointment);
+            const url = route('reschedule.postDay', [this.appointment, this.office]);
 
             const date = dates.dateForLaravel(datePickerModel);
             const data = {date};

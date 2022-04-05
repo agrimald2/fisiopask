@@ -369,13 +369,19 @@ Route::middleware(['role:doctor|admin|assistant'])
             ->name('doctors.appointments.ticket.index');
     });
 
-Route::get('/reschedule/{appointment}/pickDay', [RescheduleAppointment::class, 'pickDay'])
+Route::get('/reschedule/{appointment}/pickOffice', [RescheduleAppointment::class, 'pickOffice'])
+    ->name('reschedule.pickOffice');
+
+Route::post('/reschedule/{appointment}/postOffice/{office}', [RescheduleAppointment::class, 'postOffice'])
+    ->name('reschedule.postOffice');
+
+Route::get('/reschedule/{appointment}/office/{office}/pickDay', [RescheduleAppointment::class, 'pickDay'])
     ->name('reschedule.pickDay');
 
-Route::post('/reschedule/{appointment}/postDay', [RescheduleAppointment::class, 'postDay'])
+Route::post('/reschedule/{appointment}/office/{office}/postDay', [RescheduleAppointment::class, 'postDay'])
     ->name('reschedule.postDay');
 
-Route::get('/reschedule/{appointment}/pickTime/{date}', [RescheduleAppointment::class, 'pickTime'])
+Route::get('/reschedule/{appointment}/office/{office}/pickTime/{date}', [RescheduleAppointment::class, 'pickTime'])
     ->name('reschedule.pickTime');
 
 Route::post('/reschedule/{appointment}/postTime', [RescheduleAppointment::class, 'postTime'])
