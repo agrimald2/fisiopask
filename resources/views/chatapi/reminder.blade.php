@@ -8,10 +8,10 @@ Hola, te recordamos que tienes una cita pendiente con nostros el día:
 {{ $startTime }}
 
 *DIRECCIÓN:*
-Av. José Gálvez Barnechea 148. San Isidro (límite con Sanborja).
+{{ $address }}
 
 *REFERENCIA:*
-A 2 cuadras de la Clínica Ricardo Palma, esquina con Javier Prado a la altura del *Puente Quiñones*.
+{{ $reference }}
 
 *Fisioterapeuta:*
 {{ $doctorName }}

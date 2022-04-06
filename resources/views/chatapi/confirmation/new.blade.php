@@ -28,12 +28,12 @@ CCI:
 También puedes pagar presencialmente en RECEPCIÓN en Efectivo, con Tarjeta de Crédito o Tarjeta de Débito.
 
 
-Estamos entre San Isidro y San Borja, en la Av. José Gálvez Barrenechea 148.
+Estamos {{ $office_indications }}, en la {{ $office_address }}.
 
-Referencia: a dos cuadras de la Clínica Ricardo Palma, a la altura del Puente Quiñones, pasando el Chifa Tití y la Academia de Karate y Taekwondo.
+Referencia: {{ $office_reference }}
 
 Ver mapa aquí:
-https://goo.gl/maps/hp6fbftYYrdKnkcr7
+{{ $office_maps_link }}
 
 
 Te esperamos, FISIOSALUD:
