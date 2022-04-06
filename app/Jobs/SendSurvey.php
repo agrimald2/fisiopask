@@ -30,7 +30,7 @@ class SendSurvey implements ShouldQueue
             ->where('status', Appointment::STATUS_ASSISTED)
             ->where('date', Carbon::now()->format('Y-m-d'))
             ->where('survey', '0')
-            ->with('patient')
+            ->with('patient', 'doctor')
             ->get();
 
         foreach($assistedAppointments as $appointment)
@@ -52,15 +52,9 @@ class SendSurvey implements ShouldQueue
                     'patientName',
                     'surveyLink',
                 );
-                //* Send message only to the 30% of the appointments
-                    //? 95% sure there is a better way to do this
-                //$dice = rand(1,10);
-                //if ($dice <= 3){
-                    $text = $this->getWhatsappSurveyText($data);
-                    chatapi($phone, $text);
-                //}else{
-                    return;
-                //}       
+
+                $text = $this->getWhatsappSurveyText($data);
+                chatapi($phone, $text);
             }
 
             if(!$appointment->history_created){
@@ -69,9 +63,10 @@ class SendSurvey implements ShouldQueue
                     $doc_phone = '51'.$doc_phone;
                 }
                 $text = $this->getWhatsappDoctorHCText();
-                chatapi($doc_phone, $text);
+                //chatapi($doc_phone, $text);
             }
-            $appointment->survey = '1';
+
+            $appointment->survey = 1;
             $appointment->save();
         }
     }

@@ -11,7 +11,7 @@ Por favor, muestra este mensaje al momento de ingresar a la recepción y diríge
 
 
 Ver *mapa* aquí:
-https://goo.gl/maps/hp6fbftYYrdKnkcr7
+{{ $office_maps_link }}
 
 Puedes pagar y agendar tus proximas citas aquí:
 
