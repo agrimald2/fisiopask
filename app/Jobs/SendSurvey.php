@@ -55,19 +55,19 @@ class SendSurvey implements ShouldQueue
 
                 $text = $this->getWhatsappSurveyText($data);
                 chatapi($phone, $text);
-            }
-
-            if(!$appointment->history_created){
-                $doc_phone = $appointment->doctor->phone;
-                if(substr($doc_phone , 0, 1) == 9){
-                    $doc_phone = '51'.$doc_phone;
+                
+                $appointment->survey = 1;
+                $appointment->save();
+                
+                if(!$appointment->history_created){
+                    $doc_phone = $appointment->doctor->phone;
+                    if(substr($doc_phone , 0, 1) == 9){
+                        $doc_phone = '51'.$doc_phone;
+                    }
+                    $text = $this->getWhatsappDoctorHCText();
+                    //chatapi($doc_phone, $text);
                 }
-                $text = $this->getWhatsappDoctorHCText();
-                //chatapi($doc_phone, $text);
             }
-
-            $appointment->survey = 1;
-            $appointment->save();
         }
     }
 
