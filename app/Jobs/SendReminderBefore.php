@@ -47,13 +47,24 @@ class SendReminderBefore implements ShouldQueue
                 $doctorWorkspace = [];
                 if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
         
+                $office = $appointment->schedule->office;
+                $office_indications = $office->indications;
+                $office_address = $office->address;
+                $office_reference = $office->reference;
+                $office_maps_link = $office->maps_link;
+
+
                 $data = compact(
                     'patientName',
                     'date',
                     'startTime',
                     'doctorName',
                     'dashboardLink',
-                    'doctorWorkspace'
+                    'doctorWorkspace',
+                    'office_indications',
+                    'office_address',
+                    'office_reference',
+                    'office_maps_link',
                 );
                
                 $text = $this->getWhatsappPatientReminderText($data);
