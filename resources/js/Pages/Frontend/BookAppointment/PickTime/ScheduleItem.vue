@@ -27,6 +27,15 @@
           {{ dates.hourForHumans(schedule.end_time) }}
         </div>
       </div>
+      <div
+        class="flex items-center justify-center gap-4
+      text-sm text-gray-500 pt-2"
+        :class="{'': !expanded }"
+      >
+        <div class="large-text">
+          CLICK AQUÍ PARA AGENDAR
+        </div>
+      </div>
     </div>
     <div
       v-show="expanded"
