@@ -8,10 +8,12 @@ Hola, te recordamos que tienes una cita pendiente con nostros el día:
 {{ $startTime }}
 
 *DIRECCIÓN:*
-{{ $address }}
+Estamos {{$office_indications}}, en {{$office_address}}.
 
-*REFERENCIA:*
-{{ $reference }}
+Referencia: {{$office_reference}}.
+
+Ver mapa aquí:
+{{$office_maps_link}}
 
 *Fisioterapeuta:*
 {{ $doctorName }}

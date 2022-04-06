@@ -49,6 +49,13 @@ class SendReminderBefore implements ShouldQueue
                 $reference = Office::find($appointment->office_id)->reference;
                 if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
         
+                $office = $appointment->schedule->office;
+                $office_indications = $office->indications;
+                $office_address = $office->address;
+                $office_reference = $office->reference;
+                $office_maps_link = $office->maps_link;
+
+
                 $data = compact(
                     'patientName',
                     'date',
@@ -56,8 +63,10 @@ class SendReminderBefore implements ShouldQueue
                     'doctorName',
                     'dashboardLink',
                     'doctorWorkspace',
-                    'address',
-                    'reference'
+                    'office_indications',
+                    'office_address',
+                    'office_reference',
+                    'office_maps_link',
                 );
                
                 $text = $this->getWhatsappPatientReminderText($data);
