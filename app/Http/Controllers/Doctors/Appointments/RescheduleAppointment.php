@@ -92,13 +92,11 @@ class RescheduleAppointment extends Controller
         $patientName = $patient->name;
         $patientName = $patient->name . " " . $patient->lastname1 . " " . $patient->lastname2;
         
-        $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
-        $doctorWorkspace = [];
-
+        
         $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
         $dashboardDoctor = env('APP_URL').'dashboard/doctors/appointments/'.$appointment->id;
         
-
+        
         $appointment->start = $schedule->start_time;
         $appointment->end = $schedule->end_time;
         $appointment->doctor_id = $schedule->doctor->id;
@@ -106,17 +104,20 @@ class RescheduleAppointment extends Controller
         $appointment->office = $schedule->office->name;
         $appointment->date = $date;
         $appointment->status = Appointment::STATUS_CONFIRMED;
-
+        
+        $appointment->save();
+        
         $startTime = $appointment->start;
-
+        
         $office = $appointment->schedule->office;
         $office_indications = $office->indications;
         $office_address = $office->address;
         $office_reference = $office->reference;
         $office_maps_link = $office->maps_link;
 
-        $appointment->save();
-
+        $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+        $doctorWorkspace = [];
+        
         $data = compact(
             'patientName',
             'date',
