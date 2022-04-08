@@ -225,6 +225,11 @@ class BookAppointmentController extends Controller
         }
 
         $appointment = $this->repo->makeAppointment($dni, $date, $schedule);
+
+        if(empty($appointment->patient_id))
+        {
+            $appointment = $appointment[0];
+        }
         
         $patientId = $appointment->patient_id;
 
