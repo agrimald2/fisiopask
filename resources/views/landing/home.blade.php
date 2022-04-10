@@ -21,9 +21,9 @@
         <div class="st-hero-social-group">
             <div class="container">
                 <ul class="st-social-btn st-style1 st-mp0">
-                    <li><a href="#"><i class="fab fa-facebook-square social-links"></i></a></li>
-                    <li><a href="#"><i class="fab fa-whatsapp social-links"></i></a></li>
-                    <li><a href="#"><i class="fab fa-instagram social-links"></i></a></li>
+                    <li><a href="https://es-la.facebook.com/fisiosaludperu/"><i class="fab fa-facebook-square social-links"></i></a></li>
+                    <li><a href="https://wa.me/51987327809"><i class="fab fa-whatsapp social-links"></i></a></li>
+                    <li><a href="https://www.instagram.com/fisiosalud.pe/"><i class="fab fa-instagram social-links"></i></a></li>
                 </ul>
             </div>
         </div>

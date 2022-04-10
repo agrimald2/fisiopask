@@ -24,7 +24,7 @@
                             </div>
                             <!-- .st-pricing-head -->
                             <div class="st-pricing-feature">
-                                <h2 class="st-pricing-feature-title">Av. Primavera 248</h2>
+                                <h2 class="st-pricing-feature-title">Av. Primavera 1277</h2>
                                 <div class="st-pricing-btn">
                                     <a href="#" class="st-btn st-style2 st-color1 st-size-medium">Agendar Cita</a>
                                 </div>
@@ -40,7 +40,7 @@
                             </div>
                             <!-- .st-pricing-head -->
                             <div class="st-pricing-feature">
-                                <h2 class="st-pricing-feature-title">Av. José Galvez Barrenechea 156</h2>
+                                <h2 class="st-pricing-feature-title">Av. José Galvez Barrenechea 148</h2>
                                 <div class="st-pricing-btn">
                                     <a href="#" class="st-btn st-style2 st-color1 st-size-medium">Agendar Cita</a>
                                 </div>

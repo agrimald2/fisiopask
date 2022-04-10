@@ -4,7 +4,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="e-pask.com">
 
-
     <!-- META TAGS -->
     <!-- Primary Meta Tags -->
         <title>Fisiosalud - Centro de rehabilitación y fisioterapia</title>
@@ -53,4 +52,13 @@
         <script src="landing/js/select2.min.js"></script>
         <script src="landing/js/main.js"></script>
 
+        <!-- Global site tag (gtag.js) - Google Ads: 761287326 -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-761287326"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'AW-761287326');
+        </script>
 
