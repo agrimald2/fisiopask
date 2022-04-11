@@ -62,7 +62,7 @@
         label="Nivel de Fuerza (-5 a 5)"
         name="force_scale"
         v-model="form.force_scale"
-        type="number"
+        type="text"
         min="-5"
         max="5"
         step="1"
@@ -72,7 +72,7 @@
 
       <!-- Joint Range -->
       <FormInput
-        label="Rango Articular (0 a 180) (5*)"
+        label="Rango Articular (0° a 180°) (5*) en Grados °"
         name="joint_range"
         v-model="form.joint_range"
         type="number"
@@ -98,7 +98,7 @@
 
       <!-- Treatments -->
       <FormInput
-        label="Tratamiento"
+        label="Tratamiento 2"
         name="treatments"
         v-model="form.treatment_id"
         type="select"

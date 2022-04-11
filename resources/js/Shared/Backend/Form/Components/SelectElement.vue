@@ -1,5 +1,5 @@
 <template>
-  <select
+  <multiselect
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
     ref="input"
@@ -10,7 +10,7 @@
       :key="key"
       :value="key"
     >{{ option }}</option>
-  </select>
+  </multiselect>
 </template>
 
 

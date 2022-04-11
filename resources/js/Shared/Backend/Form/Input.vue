@@ -7,12 +7,13 @@
     <div v-if="type === 'select'">
       <input-select
         :id="name"
+        :list="name"
         :options="options"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
         class="mt-1 block w-full"
       />
-    </div>
+    </div>    
     <div v-else>
       <jet-input
         :id="name"
