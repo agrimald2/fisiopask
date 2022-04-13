@@ -57,7 +57,17 @@ export default (props, { attrs }) => {
         html: true,
       })
       .format(function (row) {
+        console.log(row);
         return `${row.name} ${row.lastname1} ${row.lastname2}`;
+      }),
+
+    c("", "Licenciado")
+      .extend({
+        html: true,
+      })
+      .format(function (row) {
+        let doc = props.doctors.find(element => element.id == row.doctor_id);
+        return `${doc.name}`;
       }),
 
     c("office", "Sucursal"),
