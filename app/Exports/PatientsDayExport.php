@@ -42,8 +42,6 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
                 ))
             ->with('patientRate.appointment.patient', 'patientRate.appointment.doctor', 'patientRate.subfamily.family', 'paymentMethod', 'patient')
             ->get();
-
-        //logs()->warning($this->office);
             
         $data = array();
 
@@ -55,9 +53,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
 
             if($rate == null) continue;
 
-            //if($rate->appointment_id == 0) continue;
-
-            $appointment = Appointment::query()->where('date', substr($payment->created_at, 0, 10))->where('status', Appointment::STATUS_ASSISTED)->where('patient_id', $payment->patient_id)->first();//$rate->appointment;
+            $appointment = Appointment::query()->where('date', substr($payment->created_at, 0, 10))->where('status', Appointment::STATUS_ASSISTED)->where('patient_id', $payment->patient_id)->first();
 
             if(!$appointment) continue;
 
@@ -142,8 +138,6 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
                 ));
             }
 
-            if($appointment->id == 62444) logs()->warning("push 62444");
-
             array_push($kchiAppointments, $appointment->id);
         }
 
@@ -163,7 +157,6 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
             {
                 if($assistance->appointment_id == $kchiAppointment)
                 {
-                    if($assistance->appointment_id == 62444) logs()->warning("mark 62444");
                     $wasMarked = true;
                     break;
                 }
