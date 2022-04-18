@@ -12,13 +12,13 @@ import { Gridie, c, cells } from "@ferchoposting/gridie";
 import { Inertia } from "@inertiajs/inertia";
 
 export default {
-  props: ["patientRates"],
+  props: ["patientRates", "appointment"],
 
   components: {
     Gridie,
   },
 
-  setup() {
+  setup(props) {
     const cols = [
       c("name", "Nombre"),
       c("price", "Precio"),
@@ -36,9 +36,9 @@ export default {
             
             if (row.state == 0){
               colorClass = "bg-yellow-400";
-            }else if(row.state == 1){
+            } else if(row.state == 1){
               colorClass = "bg-green-400";
-            }else{
+            } else{
               colorClass = "bg-red-400";
             }
             return `<span class="${colorClass} text-white px-2 rounded">${row.status_label}</span>`;
@@ -59,10 +59,26 @@ export default {
         .extend({
           buttons: [
             {
+              label: "Consumir",
+              clicked({ row }) {
+                if(confirm("Estás seguro?"))
+                {
+                  const url = route('patients.rates.assisted', [row.id, props.appointment.id]);
+                  Inertia.get(url);
+                }
+              },
+            },
+          ],
+        }),
+      c().type(cells.Buttons)
+        .extend({
+          buttons: [
+            {
               label: "Abandonar",
               clicked({ row }) {
                 if(confirm("Estás seguro?"))
                 {
+                  if(row.can_assist)
                   const url = route("patients.rates.abandon", row.id);
                   Inertia.get(url);
                 }

@@ -162,7 +162,7 @@
         <front-button
           v-if="role == 'admin' || role == 'assistant'"
           color=""
-          @click="$inertia.visit(route('patients.rates.index', appointment.patient_id))"
+          @click="$inertia.visit(route('patients.rates.index', [appointment.patient_id, appointment.id]))"
         >
           Añadir Pagos
         </front-button>
