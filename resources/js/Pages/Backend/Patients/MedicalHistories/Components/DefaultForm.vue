@@ -95,86 +95,33 @@
         onkeyup="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}"
         :form="form"
       />
-
-      <!-- Treatments -->
       <FormInput
-        label="Tratamiento 2"
+        label="Tratamiento"
         name="treatments"
         v-model="form.treatment_id"
-        type="select"
+        type="checkbox"
         :options="treatments"
         :form="form"
-      />
-      
-      <FormInput
-        label="Tratamiento"
-        name="treatments"
-        v-model="form.t1"
-        type="select"
-        :options="treatments"
-        :form="form"
-      />
-      <FormInput
-        label="Tratamiento"
-        name="treatments"
-        v-model="form.t2"
-        type="select"
-        :options="treatments"
-        :form="form"
-      />
-      <FormInput
-        label="Tratamiento"
-        name="treatments"
-        v-model="form.t3"
-        type="select"
-        :options="treatments"
-        :form="form"
-      />      
-
-      <!-- Analysis -->
-      <FormInput
-        label="Análisis"
-        name="analysis"
-        v-model="form.analysis_id"
-        type="select"
-        :options="analysis"
-        :form="form"
-      />
-
-      <!--FormInput
-        label="Análisis"
-        name="analysis"
-        v-model="form.a1"
-        type="select"
-        :options="analysis"
-        :form="form"
-      />
-      <FormInput
-        label="Análisis"
-        name="analysis"
-        v-model="form.a2"
-        type="select"
-        :options="analysis"
-        :form="form"
-      />
-      <FormInput
-        label="Análisis"
-        name="analysis"
-        v-model="form.a3"
-        type="select"
-        :options="analysis"
-        :form="form"
-      /-->
+      /> 
 
       <!-- Afected Areas -->
       <FormInput
         label="Área Afectada"
         name="affected_areas"
         v-model="form.affected_area_id"
-        type="select"
+        type="checkbox"
         :options="affected_areas"
         :form="form"
-      />
+      /> 
+
+      <FormInput
+        label="Análisis "
+        name="analysis"
+        v-model="form.analysis"
+        type="checkbox"
+        :options="analysis"
+        :form="form"
+      /> 
 
     </template>
 
@@ -193,10 +140,13 @@
         Guardar
       </JetButton>
     </template>
+
+    
   </JetFormSection>
 </template>
 
 <script>
+  import Multiselect from '@vueform/multiselect'
 import JetButton from "@/Jetstream/Button.vue";
 import JetFormSection from "@/Jetstream/FormSection.vue";
 import JetActionMessage from "@/Jetstream/ActionMessage.vue";
@@ -205,7 +155,7 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["history_group", "diagnostics", "treatments", "analysis", "affected_areas"],
+  props: ["history_group", "diagnostics", "treatments", "analysis", "affected_areas", "checkedNames"],
 
   components: {
     JetActionMessage,
@@ -214,6 +164,7 @@ export default {
     JetSecondaryButton,
 
     FormInput,
+    Multiselect,
   },
 
   data() {
@@ -244,12 +195,14 @@ export default {
         
         history_group_id: null,
 
-        treatments: [],
+        treatments: [], 
+        value: []
       }),
     };
   },
   mounted() {
     treatments.sort();
+    dc.sort();
   },
 
   methods: {
@@ -271,3 +224,4 @@ export default {
   },
 };
 </script>
+<style src="@vueform/multiselect/themes/default.css"></style>

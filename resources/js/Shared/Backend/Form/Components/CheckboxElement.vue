@@ -1,4 +1,8 @@
 <template>
+  <input v-for="item in items" :key="item.message">
+    {{ item.message }}
+  <label for="jack">Jack</label>
+
   <select
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"

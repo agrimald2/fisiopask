@@ -151,7 +151,7 @@ class IndexAppointmentAction extends Controller
             ->orderBy('start', 'desc');
 
         $result = $appointments->paginate(120);
-
+        
         return $result;
     }    
 }

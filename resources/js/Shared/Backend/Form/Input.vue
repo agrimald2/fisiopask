@@ -12,8 +12,22 @@
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
         class="mt-1 block w-full"
+    />
+    </div>   
+    <div v-else-if="type === 'checkbox'">
+      <Multiselect
+          mode="tags"
+          :close-on-select="false"
+          :searchable="true"
+          :create-option="false"
+
+          :id="name"
+          :options="options"
+
+          :value="modelValue"
+          @input="$emit('update:modelValue', $event.target.value)"
       />
-    </div>    
+    </div>  
     <div v-else>
       <jet-input
         :id="name"
@@ -39,6 +53,8 @@
 
 <script>
 import InputSelect from "./Components/SelectElement";
+import Multiselect from '@vueform/multiselect'
+
 
 import JetInput from "@/Jetstream/Input";
 import JetLabel from "@/Jetstream/Label";
@@ -59,6 +75,7 @@ export default {
     step : null,
     onkeypress: String,
     onkeyup: String,
+    
   },
 
   components: {
@@ -66,6 +83,8 @@ export default {
     JetInputError,
     JetLabel,
     InputSelect,
+    Multiselect
   },
 };
 </script>
+<style src="@vueform/multiselect/themes/default.css"></style>
