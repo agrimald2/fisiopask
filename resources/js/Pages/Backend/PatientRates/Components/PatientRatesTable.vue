@@ -63,8 +63,15 @@ export default {
               clicked({ row }) {
                 if(confirm("Estás seguro?"))
                 {
-                  const url = route('patients.rates.assisted', [row.id, props.appointment.id]);
-                  Inertia.get(url);
+                  if(!row.can_assist)
+                  {
+                    alert("el paciente no puede asistir");
+                  }
+                  else
+                  {
+                    const url = route('patients.rates.assisted', [row.id, props.appointment.id]);
+                    Inertia.get(url);
+                  }
                 }
               },
             },
@@ -78,8 +85,7 @@ export default {
               clicked({ row }) {
                 if(confirm("Estás seguro?"))
                 {
-                  if(row.can_assist)
-                  const url = route("patients.rates.abandon", row.id);
+                  const url = route('patients.rates.abandon', row.id);
                   Inertia.get(url);
                 }
               },
