@@ -159,7 +159,7 @@ Route::get('/patients/payments/{payment}/cancel', CancelPaymentAction::class)
 
 Route::namespace(null)
     ->name('patients.rates.')
-    ->prefix('/patients/{patient}/rates')
+    ->prefix('/patients/{patient}/appointment/{appointment}/rates')
     ->group(function () {
         Route::get('/', RenderPatientRatesAction::class)
             ->name('index');
