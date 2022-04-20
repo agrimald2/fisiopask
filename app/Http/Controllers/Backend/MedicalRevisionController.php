@@ -16,9 +16,9 @@ class MedicalRevisionController extends Controller
 {
     public function show($id)
     {
-        $model = MedicalRevision::with('patient','doctor', 'historyTreatments.treatment')->get()->find($id);
+        $model = MedicalRevision::with('patient','doctor')->find($id);
 
-        $treatments = HistoryTreatment::query()->where('medical_revision_id', $model->id)->get();
+        $treatments = HistoryTreatment::query()->with('treatment')->where('history_id', $model->id)->where('isRevision', true)->get();
 
         return inertia('Backend/Patients/MedicalRevisions/Index', compact('model', 'treatments'));
     }
@@ -75,7 +75,8 @@ class MedicalRevisionController extends Controller
             {
                 HistoryTreatment::Create([
                     'treatment_id' => $treatment,
-                    'medical_revision_id' => $model->id,
+                    'history_id' => $model->id,
+                    'isRevision' => true,
                 ]);
             }
         }

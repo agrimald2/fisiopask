@@ -119,7 +119,7 @@ import vue3starRatings from "vue3-star-ratings";
 import RadialProgressBar from "vue3-radial-progress";
 
 export default {
-  props: ["model"],
+  props: ["model", 'treatments'],
   data: () => {
     return {
       rating: 2.5,

@@ -102,15 +102,17 @@
           <br>
           <tr>
             <th>ANÁLISIS SUGERIDOS:</th>
-            <td>
-              {{ model.analysis.name }} / {{ model.analysis.description}}
-            </td>
-            <th>ARÉA AFECTADA:</th>
-            <td>
-              {{ model.affected_area.category }} /
-              {{ model.affected_area.sub_category }}
-              
-            </td>
+            <template v-for="anal in analyses" :key="anal.id">
+              <tr>
+                {{ anal.analysis.name}} - {{ anal.analysis.description}}
+              </tr>
+            </template>
+            <th>ARÉAS AFECTADAS:</th>
+            <template v-for="area in areas" :key="area.id">
+              <tr>
+                {{ area.affected_area.category }} - {{ area.affected_area.sub_category }}
+              </tr>
+            </template>
           </tr>
         </table>
       </div>
@@ -151,7 +153,7 @@ import vue3starRatings from "vue3-star-ratings";
 import RadialProgressBar from "vue3-radial-progress";
 
 export default {
-  props: ["model"],
+  props: ["model", 'treatments', 'areas', 'analyses'],
   data: () => {
     return {
       rating: 2.5,

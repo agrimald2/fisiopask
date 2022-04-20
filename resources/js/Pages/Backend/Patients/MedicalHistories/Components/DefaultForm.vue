@@ -97,102 +97,52 @@
       />
 
       <!-- Treatments -->
-      <FormInput
-        label="Tratamiento 2"
-        name="treatments"
-        v-model="form.treatment_id"
-        type="select"
-        :options="treatments"
-        :form="form"
-      />
-      
-      <FormInput
-        label="Tratamiento"
-        name="treatments"
-        v-model="form.t1"
-        type="select"
-        :options="treatments"
-        :form="form"
-      />
-      <FormInput
-        label="Tratamiento"
-        name="treatments"
-        v-model="form.t2"
-        type="select"
-        :options="treatments"
-        :form="form"
-      />
-      <FormInput
-        label="Tratamiento"
-        name="treatments"
-        v-model="form.t3"
-        type="select"
-        :options="treatments"
-        :form="form"
-      />      
-
-      <!-- Analysis
-      <FormInput
-        label="Análisis"
-        name="analysis"
-        v-model="form.analysis_id"
-        type="select"
-        :options="analysis"
-        :form="form"
-      />
-
-      <FormInput
-        label="Análisis"
-        name="analysis"
-        v-model="form.a1"
-        type="select"
-        :options="analysis"
-        :form="form"
-      />
-      <FormInput
-        label="Análisis"
-        name="analysis"
-        v-model="form.a2"
-        type="select"
-        :options="analysis"
-        :form="form"
-      />
-      <FormInput
-        label="Análisis"
-        name="analysis"
-        v-model="form.a3"
-        type="select"
-        :options="analysis"
-        :form="form"
-      /
-      Afected Areas 
-      <FormInput
-        label="Área Afectada"
-        name="affected_areas"
-        v-model="form.affected_area_id"
-        type="select"
-        :options="affected_areas"
-        :form="form"
-      /> 
-      -->
       <div class="col-span-6 sm:col-span-4">
         <jet-label
-          for="affected_areas"
+          for="treatments"
+          value="Tratamientos"
+        />
+        <Multiselect
+          id="treatments"
+          v-model="form.treatment_id"
+          mode="tags"
+          :close-on-select="false"
+          :searchable="true"
+          :create-option="false"
+          :options="treatments"
+        />
+      </div>
+
+      <div class="col-span-6 sm:col-span-4">
+        <jet-label
+          for="analysis"
           value="Análisis"
         />
         <Multiselect
-          id="affected_areas"
-          v-model="form.analysis"
+          id="analysis"
+          v-model="form.analysis_id"
           mode="tags"
           :close-on-select="false"
           :searchable="true"
           :create-option="false"
           :options="analysis"
         />
+      </div>
 
-        <span>
-          {{form.analysis}}
-        </span>
+      <div class="col-span-6 sm:col-span-4">
+        <jet-label
+          for="affected_areas"
+          value="Áreas Afectadas"
+        />
+        <Multiselect
+          id="affected_areas"
+          v-model="form.affected_area_id"
+          mode="tags"
+          :close-on-select="false"
+          :searchable="true"
+          :create-option="false"
+          :options="affected_areas"
+        />
       </div>
 
     </template>
@@ -263,10 +213,6 @@ export default {
         treatment_id: null,
         analysis_id: null,
         affected_area_id: null,
-        
-        t1: null,
-        t2: null,        
-        t3: null,
         
         history_group_id: null,
 

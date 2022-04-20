@@ -13,6 +13,8 @@ use App\Models\AffectedArea;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Models\HistoryAnalysis;
+use App\Models\HistoryArea;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 
@@ -20,11 +22,13 @@ class MedicalHistoryController extends Controller
 {
     public function show($id)
     {
-        $model = MedicalHistory::with('patient','treatment','diagnostic','analysis','doctor','affectedArea', 'historyTreatments.treatment')->get()->find($id);
+        $model = MedicalHistory::with('patient','treatment','diagnostic','analysis','doctor','affectedArea')->find($id);
 
-        $treatments = HistoryTreatment::query()->where('medical_history_id', $model->id)->get();
+        $treatments = HistoryTreatment::query()->with('treatment')->where('history_id', $model->id)->where('isRevision', false)->get();
+        $analyses = HistoryAnalysis::query()->with('analysis')->where('history_id', $model->id)->where('isRevision', false)->get();
+        $areas = HistoryArea::query()->with('affectedArea')->where('history_id', $model->id)->where('isRevision', false)->get();
 
-        return inertia('Backend/Patients/MedicalHistories/Index', compact('model', 'treatments'));
+        return inertia('Backend/Patients/MedicalHistories/Index', compact('model', 'treatments', 'analyses', 'areas'));
     }
 
     public function create($id)
@@ -67,7 +71,7 @@ class MedicalHistoryController extends Controller
             'background' => 'required',
             'warnings' => 'required',
             'description' => 'required',
-    
+            
             'pain_scale' => 'required',
             'force_scale' => 'required',
             'joint_range' => 'required',
@@ -77,29 +81,42 @@ class MedicalHistoryController extends Controller
             'treatment_id' => 'required',
             'analysis_id' => 'required',
             'affected_area_id' => 'required',
-
-            't1' => '',
-            't2' => '',
-            't3' => '',
-    
+            
             'history_group_id' => 'required',
         ]);
 
         $treatments = [];
-        array_push($treatments, $validated["treatment_id"]);
-        array_push($treatments, $validated["t1"]);
-        array_push($treatments, $validated["t2"]);
-        array_push($treatments, $validated["t3"]);
-
+        $analyses = [];
+        $areas = [];
+        
         $appointment = Appointment::query()->where('patient_id', $validated["patient_id"])->where('status', Appointment::STATUS_ASSISTED)->orderBy('date', 'desc')->first();
-
+        
         if($appointment)
         {
             $appointment->history_created = true;
             $appointment->save();
         }
+        
+        $model = MedicalHistory::create([
+            'patient_id' => $validated["patient_id"],
+            'doctor_id' => $validated["doctor_id"],
+            'background' => $validated["background"],
+            'warnings' => $validated["warnings"],
+            'description' => $validated["description"],
+            'pain_scale' => $validated["pain_scale"],
+            'force_scale' => $validated["force_scale"],
+            'joint_range' => $validated["joint_range"],
+            'recovery_progress' => $validated["recovery_progress"],
+            'history_group_id' => $validated["history_group_id"],
+            'diagnostic_id' => $validated["diagnostic_id"],
+            'analysis_id' => 0,
+            'treatment_id' => 0,
+            'affected_area_id' => 0,
+        ]);
 
-        $model = MedicalHistory::create($validated);
+        foreach($validated["analysis_id"] as $anal) array_push($analyses, $anal);
+        foreach($validated["treatment_id"] as $treat) array_push($treatments, $treat);
+        foreach($validated["affected_area_id"] as $area) array_push($areas, $area);
 
         foreach($treatments as $treatment)
         {
@@ -107,7 +124,32 @@ class MedicalHistoryController extends Controller
             {
                 HistoryTreatment::Create([
                     'treatment_id' => $treatment,
-                    'medical_history_id' => $model->id,
+                    'history_id' => $model->id,
+                    'isRevision' => false,
+                ]);
+            }
+        }
+
+        foreach($areas as $area)
+        {
+            if($area != null)
+            {
+                HistoryArea::Create([
+                    'affected_area_id' => $area,
+                    'history_id' => $model->id,
+                    'isRevision' => false,
+                ]);
+            }
+        }
+
+        foreach($analyses as $anal)
+        {
+            if($anal != null)
+            {
+                HistoryAnalysis::Create([
+                    'analisis_id' => $anal,
+                    'history_id' => $model->id,
+                    'isRevision' => false,
                 ]);
             }
         }
