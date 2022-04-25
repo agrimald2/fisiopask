@@ -32,16 +32,6 @@
         :form="form"
       />
 
-      <!-- Diagnostic -->
-      <FormInput
-        label="Diagnósticos"
-        name="diagnostics"
-        v-model="form.diagnostic_id"
-        type="select"
-        :options="diagnostics"
-        :form="form"
-      />
-
       <!-- Pain Scale -->
       <FormInput
         label="Nivel de Dolor (0 a 10)"
@@ -145,6 +135,20 @@
         />
       </div>
 
+      <div class="col-span-6 sm:col-span-4">
+        <jet-label
+          for="diagnostics"
+          value="Diagnósticos"
+        />
+        <Multiselect
+          id="diagnostics"
+          v-model="form.diagnostic_id"
+          :close-on-select="true"          
+          :searchable="true"
+          :options="diagnostics"
+        />
+      </div>
+
     </template>
 
     <template #actions>
@@ -223,7 +227,6 @@ export default {
   },
   mounted() {
     treatments.sort();
-    dc.sort();
   },
 
   methods: {

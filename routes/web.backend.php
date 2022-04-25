@@ -163,7 +163,12 @@ Route::namespace(null)
     ->group(function () {
         Route::get('/', RenderPatientRatesAction::class)
             ->name('index');
+    });
 
+Route::namespace(null)
+    ->name('patients.rates.')
+    ->prefix('/patients/{patient}/rates')
+    ->group(function () {
         Route::get('/link', GeneratePaymentRequestLinkAction::class)
             ->name('link');
 

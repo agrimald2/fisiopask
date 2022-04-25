@@ -94,19 +94,23 @@
                 {{ treatment.treatment.name}} - {{ treatment.treatment.description}}
               </tr>
             </template>
+          </tr>
+          <tr class="mt-4">
             <th>DIAGNÓSTICO:</th>
             <td>
               {{ model.diagnostic.cie_10 }} - {{ model.diagnostic.name }}
             </td>
-          </tr>
+          </tr>          
           <br>
-          <tr>
+          <tr class="mt-4">
             <th>ANÁLISIS SUGERIDOS:</th>
             <template v-for="anal in analyses" :key="anal.id">
               <tr>
                 {{ anal.analysis.name}} - {{ anal.analysis.description}}
               </tr>
-            </template>
+            </template>`
+          </tr>
+          <tr class="mt-4">
             <th>ARÉAS AFECTADAS:</th>
             <template v-for="area in areas" :key="area.id">
               <tr>
@@ -121,12 +125,18 @@
           <tr class="ranges">
             <th>ESCALA DE DOLOR</th>
             <th>ESCALA DE FUERZA</th>
-            <th>RANGO ARTICULAR</th>
-            <th>PROGRESO RECUPERACIÓN</th>
           </tr>
           <tr class="ranges">
             <td>{{model.pain_scale}}</td>
             <td>{{model.force_scale}}</td>
+          </tr>
+        </table>
+        <table class="w-full mt-4" style="text-align:left">
+          <tr class="ranges">
+            <th>RANGO ARTICULAR</th>
+            <th>PROGRESO RECUPERACIÓN</th>
+          </tr>
+          <tr class="ranges">
             <td>{{model.joint_range}}</td>
             <td>{{model.recovery_progress}} %</td>
           </tr>

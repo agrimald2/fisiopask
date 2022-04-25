@@ -45,7 +45,7 @@ export default {
     diagnosticsOptions() {
       let list = {};
       this.diagnostics.map((x) => {
-        list[x.id] = x.cie_10;
+        list[x.id] = x.cie_10 + " - " + x.name;
       });
       return list;
     },

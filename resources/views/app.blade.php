@@ -22,6 +22,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <script src="https://kit.fontawesome.com/2e9575839f.js" crossorigin="anonymous"></script>
 
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TF6PTM7"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+
     <!-- Global site tag (gtag.js) - Google Ads: 761287326 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-761287326"></script>
     <script>
@@ -34,6 +41,10 @@
 </head>
 
 <body class="font-sans antialiased">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TF6PTM7"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     @inertia
 
     @env ('local')
