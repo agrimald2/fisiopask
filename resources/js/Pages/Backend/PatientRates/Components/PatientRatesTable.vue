@@ -61,6 +61,12 @@ export default {
             {
               label: "Consumir",
               clicked({ row }) {
+                if(props.appointment.id == 1)
+                {
+                  alert("Esta acción solo es posible dentro de una cita.")
+                  return;
+                }
+
                 if(confirm("Estás seguro?"))
                 {
                   if(!row.can_assist)

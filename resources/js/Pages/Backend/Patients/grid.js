@@ -43,7 +43,7 @@ export default (props, { attrs }) => {
         {
           label: "Servicios y Pagos",
           clicked({ row }) {
-            const url = route("patients.rates.index", row.id);
+            const url = route("patients.rates.index", [row.id, 1]);
             Inertia.visit(url);
           },
         },
