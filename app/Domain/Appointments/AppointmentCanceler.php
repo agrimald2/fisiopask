@@ -36,6 +36,7 @@ class AppointmentCanceler
 
         $appointment->status = Appointment::STATUS_CANCELED;
         $appointment->schedule_id = NULL;
+        $appointment->cancel_by = auth()->user()->name;
         $appointment->save();
     }
 

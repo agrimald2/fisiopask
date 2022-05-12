@@ -30,6 +30,9 @@ class CreateAppointmentsTable extends Migration
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('schedule_id')->nullable();
 
+            $table->string("reeschedule_by")->nullable();
+            $table->string("cancel_by")->nullable();
+
             $table->timestamps();
         });
     }

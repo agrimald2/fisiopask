@@ -62,10 +62,3 @@ Route::namespace(null)
     
 
     Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 
-
-    Route::get('/', function () {
-        return Inertia::render('Welcome', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-        ]);
-    }); 
