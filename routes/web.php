@@ -61,4 +61,4 @@ Route::namespace(null)
 
     
 
-    Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 
+    //Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 

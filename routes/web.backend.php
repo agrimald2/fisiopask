@@ -66,6 +66,10 @@ use App\Http\Controllers\Doctors\Appointments\MultipleBookingController;
 
 use App\Http\Controllers\Backend\GenerateTokensAction;
 use App\Http\Controllers\Backend\PatientRecNDistrictController;
+use App\Http\Controllers\Backend\Tests\CompanyController;
+use App\Http\Controllers\Backend\Tests\TestController;
+use App\Http\Controllers\Backend\Tests\TestTypeController;
+use App\Http\Controllers\Backend\WorkerController;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -349,7 +353,7 @@ Route::resource('treatment', TreatmentController::class)
  * AREA: Doctors
  */
 
-Route::middleware(['role:doctor|admin|assistant'])
+Route::middleware(['role:doctor|admin|assistant|worker'])
     ->prefix('doctors')
     ->group(function () {
         Route::get('/see-schedule', SeeScheduleAction::class)
@@ -443,3 +447,30 @@ Route::post('/booking/{patient}/postTime', [MultipleBookingController::class, 'p
 
 
     Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 
+
+/**
+ * Tests
+ */
+Route::resource('testTypes', TestTypeController::class)
+    ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
+
+Route::post('/testTypes/addResult', [TestTypeController::class, 'addResult'])
+    ->name('testTypes.addResult');
+
+Route::resource('tests', TestController::class)
+    ->only('index', 'edit', 'store', 'update');
+
+Route::get('/tests/create/{patient_id}', [TestController::class, 'create'])
+    ->name('tests.create');
+Route::get('/tests/DNILookup', [TestController::class, 'showCheckDNI'])
+    ->name('tests.showCheckDNI');
+Route::post('/tests/CheckDNI', [TestController::class, 'checkDNI'])
+    ->name('tests.checkDNI');
+Route::post('/tests/CreatePatient', [TestController::class, 'createPatient'])
+    ->name('tests.createPatient');
+
+Route::resource('companies', CompanyController::class)
+    ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
+
+    Route::resource('workers', WorkerController::class)
+    ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
