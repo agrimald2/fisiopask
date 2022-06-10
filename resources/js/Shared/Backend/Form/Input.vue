@@ -14,7 +14,7 @@
         class="mt-1 block w-full"
     />
     </div>   
-    <div v-else-if="type === 'checkbox'">
+    <div v-else-if="type === 'multselect'">
       <Multiselect
           mode="tags"
           :close-on-select="false"
