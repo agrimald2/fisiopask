@@ -9,11 +9,15 @@ use App\Models\Office;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\VarDumper\VarDumper;
 
 class IndexAppointmentAction extends Controller
 {
     public function __invoke(Request $request)
     {
+        $user = auth()->user();
+        $isDoctor = $user->hasRole('doctor');
+
         $searchQuery = $request->searchQuery;
         $dateQueryFrom = $request->dateQueryFrom;
         $dateQueryTo = $request->dateQueryTo;
@@ -22,9 +26,22 @@ class IndexAppointmentAction extends Controller
         
         $statusQuery = $request->statusQuery;
 
+
         $fetchAll = $request->fetchAll;
         $canSearchByDoctor = false;
-        $doctors = Doctor::query()->get();
+
+        $doctors = null;
+
+        if($isDoctor)
+        {
+            $doctors = Doctor::query()->where('user_id', $user->id)->get();
+            $doctorQuery = $doctors[0]->id;
+        }
+        else
+        {
+            $doctors = Doctor::query()->get();
+        }
+
         $offices = Office::query()->get();
 
         $date = new DateTime();
@@ -54,7 +71,7 @@ class IndexAppointmentAction extends Controller
         $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery );
 
         $user = auth()->user();
-        if ($user->hasRole('admin')) {
+        if ($user->hasRole('admin') || $user->hasRole('assistant')) {
             $canSearchByDoctor = true;
         }
 
@@ -134,7 +151,7 @@ class IndexAppointmentAction extends Controller
             ->orderBy('start', 'desc');
 
         $result = $appointments->paginate(120);
-
+        
         return $result;
     }    
 }

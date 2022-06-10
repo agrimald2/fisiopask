@@ -9,7 +9,11 @@ class HistoryTreatment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['treatment_id', 'medical_history_id', 'medical_revision_id'];
+    protected $fillable = ['treatment_id', 'history_id', 'isRevision'];
+
+    protected $table = "history_has_treatment";
+
+    public $timestamps = false;
 
     /**
      * Relationships
@@ -22,6 +26,11 @@ class HistoryTreatment extends Model
 
      public function medicalHistory()
      {
-         return $this->belongsTo(MedicalHistory::class);
+         return MedicalHistory::find($this->history_id);
+     }
+
+     public function medicalRevision()
+     {
+         return MedicalRevision::find($this->history_id);
      }
 }

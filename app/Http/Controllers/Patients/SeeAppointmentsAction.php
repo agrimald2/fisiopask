@@ -19,7 +19,7 @@ class SeeAppointmentsAction extends Controller
             ->with(['doctor' => function ($q) {
                 $q->select('id', 'name', 'lastname');
             }])
-            ->where('date', '>', Carbon::yesterday()->format('Y-m-d'))
+            ->where('date', '>', Carbon::now()->subDay(1)->format('Y-m-d'))
             ->orderBy('date', 'asc')
             ->get();
 

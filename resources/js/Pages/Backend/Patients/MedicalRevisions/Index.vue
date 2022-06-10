@@ -73,7 +73,7 @@
         <table class="w-full mt-4" style="text-align:left">
           <tr>
             <th>TRATAMIENTOS:</th>
-            <template v-for="treatment in model.history_treatments" :key="treatment.id">
+            <template v-for="treatment in treatments" :key="treatment.id">
               <tr>
                 {{ treatment.treatment.name}} - {{ treatment.treatment.description}}
               </tr>
@@ -119,7 +119,7 @@ import vue3starRatings from "vue3-star-ratings";
 import RadialProgressBar from "vue3-radial-progress";
 
 export default {
-  props: ["model"],
+  props: ["model", 'treatments'],
   data: () => {
     return {
       rating: 2.5,

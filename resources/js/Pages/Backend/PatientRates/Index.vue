@@ -14,7 +14,7 @@
         <div class="mt-4 pt-4 border-t">
           <div class="text-xl">Tarifas del Paciente:</div>
           <div class="py-4">
-            <patient-rates-table :patientRates="patient.rates" />
+            <patient-rates-table :patientRates="patient.rates" :appointment="appointment" style="overflow-x: auto;"/>
           </div>
         </div>
 
@@ -32,7 +32,7 @@ import UiCheckout from "@/Pages/Backend/PatientRates/Components/Checkout.vue";
 import PatientRatesTable from "./Components/PatientRatesTable.vue";
 
 export default {
-  props: ["patient"],
+  props: ["patient", "appointment"],
 
   components: {
     AppLayout,

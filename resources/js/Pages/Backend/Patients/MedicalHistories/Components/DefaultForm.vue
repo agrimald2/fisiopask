@@ -31,16 +31,6 @@
         :form="form"
       />
 
-      <!-- Diagnostic -->
-      <FormInput
-        label="Diagnósticos"
-        name="diagnostics"
-        v-model="form.diagnostic_id"
-        type="select"
-        :options="diagnostics"
-        :form="form"
-      />
-
       <!-- Pain Scale -->
       <FormInput
         label="Nivel de Dolor (0 a 10)"
@@ -61,7 +51,7 @@
         label="Nivel de Fuerza (-5 a 5)"
         name="force_scale"
         v-model="form.force_scale"
-        type="number"
+        type="text"
         min="-5"
         max="5"
         step="1"
@@ -71,7 +61,7 @@
 
       <!-- Joint Range -->
       <FormInput
-        label="Rango Articular (0 a 180) (5*)"
+        label="Rango Articular (0° a 180°) (5*) en Grados °"
         name="joint_range"
         v-model="form.joint_range"
         type="number"
@@ -96,34 +86,67 @@
       />
 
       <!-- Treatments -->
-      <FormInput
-        label="Tratamiento"
-        name="treatments"
-        v-model="form.treatment_id"
-        type="select"
-        :options="treatments"
-        :form="form"
-      />
+      <div class="col-span-6 sm:col-span-4">
+        <jet-label
+          for="treatments"
+          value="Tratamientos"
+        />
+        <Multiselect
+          id="treatments"
+          v-model="form.treatment_id"
+          mode="tags"
+          :close-on-select="false"
+          :searchable="true"
+          :create-option="false"
+          :options="treatments"
+        />
+      </div>
 
-      <!-- Analysis -->
-      <FormInput
-        label="Análisis"
-        name="analysis"
-        v-model="form.analysis_id"
-        type="select"
-        :options="analysis"
-        :form="form"
-      />
+      <div class="col-span-6 sm:col-span-4">
+        <jet-label
+          for="analysis"
+          value="Análisis"
+        />
+        <Multiselect
+          id="analysis"
+          v-model="form.analysis_id"
+          mode="tags"
+          :close-on-select="false"
+          :searchable="true"
+          :create-option="false"
+          :options="analysis"
+        />
+      </div>
 
-      <!-- Afected Areas -->
-      <FormInput
-        label="Área Afectada"
-        name="affected_areas"
-        v-model="form.affected_area_id"
-        type="select"
-        :options="affected_areas"
-        :form="form"
-      />
+      <div class="col-span-6 sm:col-span-4">
+        <jet-label
+          for="affected_areas"
+          value="Áreas Afectadas"
+        />
+        <Multiselect
+          id="affected_areas"
+          v-model="form.affected_area_id"
+          mode="tags"
+          :close-on-select="false"
+          :searchable="true"
+          :create-option="false"
+          :options="affected_areas"
+        />
+      </div>
+
+      <div class="col-span-6 sm:col-span-4">
+        <jet-label
+          for="diagnostics"
+          value="Diagnósticos"
+        />
+        <Multiselect
+          id="diagnostics"
+          v-model="form.diagnostic_id"
+          :close-on-select="true"          
+          :searchable="true"
+          :options="diagnostics"
+        />
+      </div>
 
     </template>
 
@@ -142,10 +165,15 @@
         Guardar
       </JetButton>
     </template>
+
+    
   </JetFormSection>
 </template>
 
 <script>
+  import Multiselect from '@vueform/multiselect'
+  import JetLabel from "@/Jetstream/Label";
+
 import JetButton from "@/Jetstream/Button.vue";
 import JetFormSection from "@/Jetstream/FormSection.vue";
 import JetActionMessage from "@/Jetstream/ActionMessage.vue";
@@ -154,15 +182,17 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["history_group", "diagnostics", "treatments", "analysis", "affected_areas"],
+  props: ["history_group", "diagnostics", "treatments", "analysis", "affected_areas", "checkedNames"],
 
   components: {
+    JetLabel,
     JetActionMessage,
     JetButton,
     JetFormSection,
     JetSecondaryButton,
 
     FormInput,
+    Multiselect,
   },
 
   data() {
@@ -216,12 +246,16 @@ export default {
         treatment_id: null,
         analysis_id: null,
         affected_area_id: null,
-
+        
         history_group_id: null,
 
-        treatments: [],
+        treatments: [], 
+        value: []
       }),
     };
+  },
+  mounted() {
+    treatments.sort();
   },
 
   methods: {
@@ -243,3 +277,4 @@ export default {
   },
 };
 </script>
+<style src="@vueform/multiselect/themes/default.css"></style>

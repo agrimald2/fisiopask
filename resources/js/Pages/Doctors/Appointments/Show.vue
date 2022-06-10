@@ -43,6 +43,7 @@
           <p class="medium-text">
             {{patient.fullname}}
           </p> 
+          <!--<p v-if="role == 'admin'" class="medium-text">-->
           <p class="medium-text">
             {{patient.phone}}
           </p> 
@@ -99,7 +100,7 @@
       <div class="mt-8 text-center flex flex-wrap gap-4 justify-center">
         <front-button
           color="yellow"
-          v-if="role == 'admin'"
+          v-if="role !== 'assistant'"
           @click="$inertia.visit(route('patients.historygroup.index', appointment.patient_id))"
         >
           Ver Historial Clínico
@@ -107,7 +108,7 @@
 
         <front-button
           color="red"
-          v-if="appointment.status == 1"
+          v-if="appointment.status == 1 && role !== 'assistant'"
           @click="cancelAppointment"
         >
           Cancelar Cita
@@ -144,12 +145,14 @@
 
         <front-button
           color="yellow"
-          @click="$inertia.visit(route('reschedule.pickDay', appointment.id))"
+          v-show="appointment.status != 4 && appointment.status != 3"
+          @click="$inertia.visit(route('reschedule.pickOffice', appointment.id))"
         >
           Reprogramar Cita
         </front-button>
 
         <front-button
+          v-if="role == 'admin' || role == 'assistant' "
           color=""
           @click="$inertia.visit(route('doctors.appointments.rates.index', appointment.id))"
         >
@@ -157,8 +160,9 @@
         </front-button>
 
         <front-button
+          v-if="role == 'admin' || role == 'assistant'"
           color=""
-          @click="$inertia.visit(route('patients.rates.index', appointment.patient_id))"
+          @click="$inertia.visit(route('patients.rates.index', [appointment.patient_id, appointment.id]))"
         >
           Añadir Pagos
         </front-button>

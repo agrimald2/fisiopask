@@ -89,11 +89,6 @@
       icon="fa-laptop-medical"
       @click="go('analysis.index')"
     />
-    <link-item
-      label="Historiales Médicos"
-      icon="fa-book-medical"
-      @click="go('')"
-    />
 
     <link-item
       label="Áreas afectadas"

@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use \App\Models\Appointment;
-
+use App\Models\Office;
 use \Carbon\Carbon;
 
 use Illuminate\Bus\Queueable;
@@ -45,15 +45,28 @@ class SendReminderBefore implements ShouldQueue
                 $patientName = $patient->name . " " . $patient->lastname1 . " ". $patient->lastname2;
                 $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
                 $doctorWorkspace = [];
+                $address = Office::find($appointment->office_id)->address;
+                $reference = Office::find($appointment->office_id)->reference;
                 if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
         
+                $office = $appointment->schedule->office;
+                $office_indications = $office->indications;
+                $office_address = $office->address;
+                $office_reference = $office->reference;
+                $office_maps_link = $office->maps_link;
+
+
                 $data = compact(
                     'patientName',
                     'date',
                     'startTime',
                     'doctorName',
                     'dashboardLink',
-                    'doctorWorkspace'
+                    'doctorWorkspace',
+                    'office_indications',
+                    'office_address',
+                    'office_reference',
+                    'office_maps_link',
                 );
                
                 $text = $this->getWhatsappPatientReminderText($data);

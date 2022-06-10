@@ -42,8 +42,6 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
                 ))
             ->with('patientRate.appointment.patient', 'patientRate.appointment.doctor', 'patientRate.subfamily.family', 'paymentMethod', 'patient')
             ->get();
-
-        //logs()->warning($this->office);
             
         $data = array();
 
@@ -53,9 +51,15 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
         {
             $rate = $payment->patientRate;
 
-            if($rate->appointment_id == 0) continue;
+            if($rate == null) continue;
 
-            $appointment = $rate->appointment;
+            $appointment = Appointment::query()->where('date', substr($payment->created_at, 0, 10))->where('status', Appointment::STATUS_ASSISTED)->where('patient_id', $payment->patient_id)->first();
+
+            if(!$appointment) continue;
+
+            $aa = AssistedAppointments::query()->where('appointment_id', $appointment->id)->first();
+
+            if($aa->patient_rate_id != $rate->id) continue;
 
             if($appointment->office_id != $this->office) continue;
 
@@ -76,31 +80,63 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
 
             $monthName = date('F', mktime(0, 0, 0, $monthNum, 10));
 
-            array_push($data, array(
-                "Nombres y Apellidos del Doctor" => $appointment->doctor->fullname,
-                "Año" => substr($date, 0, 4),
-                "Mes" => substr($date, 5, 2),
-                "Día" => substr($date, 8, 2),
-                "Fecha" => substr($date, 0, 10),
-                "Hora de Atención" => strval($appointment->start)." - ".strval($appointment->end),
-                "Nombres y Apellidos Paciente" => $patient->fullname,
-                "C. Ofi" => $survey ? $survey->office_score : "n/a",
-                "C. Ser" => $survey ? $survey->service_score : "n/a",
-                "C. Doc" => $survey ? $survey->doctor_score : "n/a",
-                "Comentario" => $survey ? $survey->comment : "n/a",
-                "Dni del Paciente" => $patient->dni,
-                "Celular del paciente" => $patient->phone,
-                "Familia" => $rate->subfamily->family->name,
-                "Sub Familia" => $rate->subfamily->name,
-                "Tipo de Tarifa" => $rate->name,
-                "Forma de Pago" => $payment->paymentMethod->payment_method,
-                "Precio Tarifa"	 => $rate->price,
-                "Monto Cobrado"	=> $payment->ammount,
-                "Saldo Cobrado" => $rate->appointment_price,
-                "Valor Ejecutado" => $sessionsAssisted,
-                "Mes Origen" => $monthName,
-                "Sucursal" => $appointment->office,
-            ));
+            $user = auth()->user();
+
+            if($user->hasRole('admin'))
+            {
+                array_push($data, array(
+                    "Nombres y Apellidos del Doctor" => $appointment->doctor->fullname,
+                    "Año" => substr($date, 0, 4),
+                    "Mes" => substr($date, 5, 2),
+                    "Día" => substr($date, 8, 2),
+                    "Fecha" => substr($date, 0, 10),
+                    "Hora de Atención" => strval($appointment->start)." - ".strval($appointment->end),
+                    "Nombres y Apellidos Paciente" => $patient->fullname,
+                    "C. Ofi" => $survey ? $survey->office_score : "n/a",
+                    "C. Ser" => $survey ? $survey->service_score : "n/a",
+                    "C. Doc" => $survey ? $survey->doctor_score : "n/a",
+                    "Comentario" => $survey ? $survey->comment : "n/a",
+                    "Dni del Paciente" => $patient->dni,
+                    "Celular del paciente" => $patient->phone,
+                    "Familia" => $rate->subfamily->family->name,
+                    "Sub Familia" => $rate->subfamily->name,
+                    "Tipo de Tarifa" => $rate->name,
+                    "Forma de Pago" => $payment->paymentMethod->payment_method,
+                    "Precio Tarifa"	 => $rate->price,
+                    "Monto Cobrado"	=> $payment->ammount,
+                    "Saldo Cobrado" => $rate->appointment_price,
+                    "Valor Ejecutado" => $sessionsAssisted,
+                    "Mes Origen" => $monthName,
+                    "Sucursal" => $appointment->office,
+                    "Historial Medico" => ($appointment->history_created ? "Sí" : "No"),
+                ));
+            }
+            else
+            {
+                array_push($data, array(
+                    "Nombres y Apellidos del Doctor" => $appointment->doctor->fullname,
+                    "Año" => substr($date, 0, 4),
+                    "Mes" => substr($date, 5, 2),
+                    "Día" => substr($date, 8, 2),
+                    "Fecha" => substr($date, 0, 10),
+                    "Hora de Atención" => strval($appointment->start)." - ".strval($appointment->end),
+                    "Nombres y Apellidos Paciente" => $patient->fullname,
+                    "C. Ofi" => $survey ? $survey->office_score : "n/a",
+                    "C. Ser" => $survey ? $survey->service_score : "n/a",
+                    "C. Doc" => $survey ? $survey->doctor_score : "n/a",
+                    "Comentario" => $survey ? $survey->comment : "n/a",
+                    "Familia" => $rate->subfamily->family->name,
+                    "Sub Familia" => $rate->subfamily->name,
+                    "Tipo de Tarifa" => $rate->name,
+                    "Forma de Pago" => $payment->paymentMethod->payment_method,
+                    "Precio Tarifa"	 => $rate->price,
+                    "Monto Cobrado"	=> $payment->ammount,
+                    "Saldo Cobrado" => $rate->appointment_price,
+                    "Valor Ejecutado" => $sessionsAssisted,
+                    "Mes Origen" => $monthName,
+                    "Sucursal" => $appointment->office,
+                ));
+            }
 
             array_push($kchiAppointments, $appointment->id);
         }
@@ -113,8 +149,6 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
                     $this->end." 23:59:59"
                 ))
             ->get();
-
-        //logs()->warning($assistances);
 
         foreach($assistances as $assistance)
         {
@@ -152,37 +186,100 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
                 $monthName = date('F', mktime(0, 0, 0, $monthNum, 10));
             }
 
-            array_push($data, array(
-                "Nombres y Apellidos del Doctor" => $appointment->doctor->fullname,
-                "Año" => substr($date, 0, 4),
-                "Mes" => substr($date, 5, 2),
-                "Día" => substr($date, 8, 2),
-                "Fecha" => substr($date, 0, 10),
-                "Hora de Atención" => strval($appointment->start)." - ".strval($appointment->end),
-                "Nombres y Apellidos Paciente" => $appointment->patient->fullname,
-                "C. Ofi" => $survey ? $survey->office_score : "n/a",
-                "C. Ser" => $survey ? $survey->service_score : "n/a",
-                "C. Doc" => $survey ? $survey->doctor_score : "n/a",
-                "Comentario" => $survey ? $survey->comment : "n/a",
-                "Dni del Paciente" => $appointment->patient->dni,
-                "Celular del paciente" => $appointment->patient->phone,
-                "Familia" => $rate->subfamily->family->name,
-                "Sub Familia" => $rate->subfamily->name,
-                "Tipo de Tarifa" => $rate->name,
-                "Forma de Pago" => "Contra saldo a favor",
-                "Precio Tarifa"	 => $rate->price,
-                "Monto Cobrado"	=> "0",
-                "Saldo Cobrado" => $rate->appointment_price,
-                "Valor Ejecutado" => $sessionsAssisted,
-                "Mes Origen" => $monthName,
-                "Sucursal" => $appointment->office,
-            ));
+            $user = auth()->user();
+
+            if($user->hasRole('admin'))
+            {
+                array_push($data, array(
+                    "Nombres y Apellidos del Doctor" => $appointment->doctor->fullname,
+                    "Año" => substr($date, 0, 4),
+                    "Mes" => substr($date, 5, 2),
+                    "Día" => substr($date, 8, 2),
+                    "Fecha" => substr($date, 0, 10),
+                    "Hora de Atención" => strval($appointment->start)." - ".strval($appointment->end),
+                    "Nombres y Apellidos Paciente" => $appointment->patient->fullname,
+                    "C. Ofi" => $survey ? $survey->office_score : "n/a",
+                    "C. Ser" => $survey ? $survey->service_score : "n/a",
+                    "C. Doc" => $survey ? $survey->doctor_score : "n/a",
+                    "Comentario" => $survey ? $survey->comment : "n/a",
+                    "Dni del Paciente" => $appointment->patient->dni,
+                    "Celular del paciente" => $appointment->patient->phone,
+                    "Familia" => $rate->subfamily->family->name,
+                    "Sub Familia" => $rate->subfamily->name,
+                    "Tipo de Tarifa" => $rate->name,
+                    "Forma de Pago" => "Contra saldo a favor",
+                    "Precio Tarifa"	 => $rate->price,
+                    "Monto Cobrado"	=> "0",
+                    "Saldo Cobrado" => $rate->appointment_price,
+                    "Valor Ejecutado" => $sessionsAssisted,
+                    "Mes Origen" => $monthName,
+                    "Sucursal" => $appointment->office,
+                    "Historial Medico" => ($appointment->history_created ? "Sí" : "No"),
+                ));
+            }
+            else
+            {
+                array_push($data, array(
+                    "Nombres y Apellidos del Doctor" => $appointment->doctor->fullname,
+                    "Año" => substr($date, 0, 4),
+                    "Mes" => substr($date, 5, 2),
+                    "Día" => substr($date, 8, 2),
+                    "Fecha" => substr($date, 0, 10),
+                    "Hora de Atención" => strval($appointment->start)." - ".strval($appointment->end),
+                    "Nombres y Apellidos Paciente" => $appointment->patient->fullname,
+                    "C. Ofi" => $survey ? $survey->office_score : "n/a",
+                    "C. Ser" => $survey ? $survey->service_score : "n/a",
+                    "C. Doc" => $survey ? $survey->doctor_score : "n/a",
+                    "Comentario" => $survey ? $survey->comment : "n/a",
+                    "Familia" => $rate->subfamily->family->name,
+                    "Sub Familia" => $rate->subfamily->name,
+                    "Tipo de Tarifa" => $rate->name,
+                    "Forma de Pago" => "Contra saldo a favor",
+                    "Precio Tarifa"	 => $rate->price,
+                    "Monto Cobrado"	=> "0",
+                    "Saldo Cobrado" => $rate->appointment_price,
+                    "Valor Ejecutado" => $sessionsAssisted,
+                    "Mes Origen" => $monthName,
+                    "Sucursal" => $appointment->office,
+                ));
+            }
         }
 
         return $data;
     }
     public function headings(): array
     {
+        $user = auth()->user();
+        if($user->hasRole('admin'))
+        {
+            return [
+                "Nombres y Apellidos del Doctor",
+                "Año",
+                "Mes",
+                "Día",
+                "Fecha",
+                "Hora de Atención",
+                "Nombres y Apellidos Paciente",
+                "C. Ofi",
+                "C. Ser",
+                "C. Doc",
+                "Comentario",
+                "Dni del Paciente",
+                "Celular del paciente",
+                "Familia",
+                "Sub Familia",
+                "Tipo de Tarifa",
+                "Forma de Pago",
+                "Precio Tarifa",
+                "Monto Cobrado",
+                "Saldo Cobrado",
+                "Valor Ejecutado",
+                "Mes Origen",
+                "Sucursal",
+                "Historial Medico",
+            ];
+        }
+
         return [
             "Nombres y Apellidos del Doctor",
             "Año",
@@ -195,8 +292,6 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
             "C. Ser",
             "C. Doc",
             "Comentario",
-            "Dni del Paciente",
-            "Celular del paciente",
             "Familia",
             "Sub Familia",
             "Tipo de Tarifa",

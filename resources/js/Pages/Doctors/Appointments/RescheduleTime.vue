@@ -77,7 +77,7 @@ import Schedules from "../../Frontend/BookAppointment/PickTime/Schedules.vue";
 import dates from "@/ui/dates.js";
 
 export default {
-    props: ['filters', 'date', 'groupedSchedules', 'appointment'],
+    props: ['filters', 'date', 'groupedSchedules', 'appointment', 'office'],
 
     components: {
         Layout,
@@ -152,13 +152,13 @@ export default {
         },
 
         back() {
-            this.$inertia.visit(route("reschedule.pickDay", this.appointment));
+            this.$inertia.visit(route("reschedule.pickDay", [this.appointment, this.office]));
         },
 
         onPicked(scheduleItem) {
             this.loading = true;
 
-            const url = route("reschedule.postTime", this.appointment);
+            const url = route("reschedule.postTime", [this.appointment, this.office]);
 
             const schedule_id = scheduleItem.id;
             const data = { 

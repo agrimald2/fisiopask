@@ -9,7 +9,7 @@
       class="py-4 text-xl flex items-center gap-5
         cursor-pointer"
       :class="{ 'text-white bg-green-400': expanded, 'text-gray-400 hover:bg-gray-100': !expanded }"
-      @click="expanded = !expanded"
+      @click="expand()"
     >
       <div class="text-center pl-4">
         {{ dates.hourForHumans(startTime) }}
@@ -57,6 +57,23 @@ export default {
     return {
       expanded: false,
     };
+  },
+
+  mounted()
+  {
+    if(this.schedules.length == 1) this.expanded = true;
+  },
+
+  methods: {
+    expand()
+    {
+      if(this.schedules.length > 1) {
+        this.expanded = !this.expanded;
+      }
+      else {
+        this.$emit("picked", this.schedules[0]);
+      }
+    }
   },
 
   watch: {

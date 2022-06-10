@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Survey;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PatientSurveyController extends Controller
@@ -66,11 +67,30 @@ class PatientSurveyController extends Controller
             $validated['doctor_score'] == 5 && 
             $validated['service_score'] == 5)
         {
-            logs()->error("$text");
-            chatapi($phone, $text);
+            //logs()->error("$text");
+
+            $now = Carbon::now();
+            $before = clone $now;
+            $before->subMonth(1);
+
+            $appointments = Appointment::query()->whereBetween('date', [$before, $now])->where('status', Appointment::STATUS_ASSISTED)->get();
+
+            if(count($appointments) >= 6)
+            {
+                if(!$patient->history_created)
+                {
+                    $patient->history_created = true;
+                    $patient->save();
+                    
+                    chatapi($phone, $text);
+                    //@send message to rate on google n shit
+                }
+            }
+
         }
 
         Survey::create($validated);
+
         return inertia('Patients/Survey/Thanks');
     }
 
