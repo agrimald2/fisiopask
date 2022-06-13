@@ -5,149 +5,63 @@
     </template>
 
     <template #form>
-      <!-- Antecedentes -->
-      <FormInput
-        label="Antecedentes"
-        name="background"
-        v-model="form.background"
-        type="text"
-        :form="form"
-      />
-      <!-- Advertencias -->
-      <FormInput
-        label="Advertencias"
-        name="warnings"
-        v-model="form.warnings"
-        type="text"
-        :form="form"
-      />
-
-      <!-- Description -->
-      <FormInput
-        label="Descripción"
-        name="description"
-        v-model="form.description"
-        type="text"
-        :form="form"
-      />
-
-      <!-- Pain Scale -->
-      <FormInput
-        label="Nivel de Dolor (0 a 10)"
-        name="pain_scale"
-        v-model="form.pain_scale"
-        type="number"
-        min="0"
-        max="10"
-        value="0"
-        step="1"
-        onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"
-        onkeyup="if(this.value>10){this.value='10';}else if(this.value<0){this.value='0';}"
-        :form="form"
-      />
-
-      <!-- Force Scale -->
-      <FormInput
-        label="Nivel de Fuerza (-5 a 5)"
-        name="force_scale"
-        v-model="form.force_scale"
-        type="text"
-        min="-5"
-        max="5"
-        step="1"
-        onkeyup="if(this.value>5){this.value='5';}else if(this.value<-5){this.value='-5';}"
-        :form="form"
-      />
-
-      <!-- Joint Range -->
-      <FormInput
-        label="Rango Articular (0° a 180°) (5*) en Grados °"
-        name="joint_range"
-        v-model="form.joint_range"
-        type="number"
-        min="0"
-        max="180"
-        step="5"
-        onkeyup="if(this.value>180){this.value='180';}else if(this.value<0){this.value='0';}"
-        :form="form"
-      />
-
-      <!-- Recovery Progress -->
-      <FormInput
-        label="Avance de Recuperación % (5*)"
-        name="recovery_progress"
-        v-model="form.recovery_progress"
-        type="number"
-        min="0"
-        max="100"
-        step="5"
-        onkeyup="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}"
-        :form="form"
-      />
-
-      <!-- Treatments -->
-      <div class="col-span-6 sm:col-span-4">
-        <jet-label
-          for="treatments"
-          value="Tratamientos"
+      <template v-for="attribute in attributes" :key="attribute.id">
+        <div v-if="attribute.input_type == 0" class="col-span-6 sm:col-span-4">
+          <jet-label
+            :for="attribute.input_name"
+            :value="attribute.input_name"
+          />
+          <jet-input
+            :id="attribute.input_name"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.attributes[attribute.input_name]"
+            @input="updateValue($event, attribute.input_name, $event.target.value)"
+          />
+        </div>
+        <!--form-input
+          v-if="attribute.input_type == 0"
+          :label="attribute.input_name"
+          :name="attribute.input_name"
+          v-model="form.attributes[attribute.input_name]"
+          type="text"
+          :form="form"
+        /-->
+        <!--form-input
+          v-else-if="attribute.input_type == 1"
+          :label="attribute.input_name"
+          :name="attribute.input_name"
+          v-model="form.attributes[attribute.input_name]"
+          type="numeric"
+          :form="form"
         />
-        <Multiselect
-          id="treatments"
-          v-model="form.treatment_id"
-          mode="tags"
-          :close-on-select="false"
-          :searchable="true"
-          :create-option="false"
-          :options="treatments"
+        <form-input
+          v-else-if="attribute.input_type == 2"
+          :label="attribute.input_name"
+          :name="attribute.input_name"
+          v-model="form.attributes[attribute.input_name]"
+          type="select"
+          :options="options(attribute.related_model)"
+          :form="form"
         />
-      </div>
-
-      <div class="col-span-6 sm:col-span-4">
-        <jet-label
-          for="analysis"
-          value="Análisis"
+        <form-input
+          v-else-if="attribute.input_type == 3"
+          :label="attribute.input_name"
+          :name="attribute.input_name"
+          v-model="form.attributes[attribute.input_name]"
+          type="multselect"
+          :options="options(attribute.related_model)"
+          :form="form"
         />
-        <Multiselect
-          id="analysis"
-          v-model="form.analysis_id"
-          mode="tags"
-          :close-on-select="false"
-          :searchable="true"
-          :create-option="false"
-          :options="analysis"
-        />
-      </div>
-
-      <div class="col-span-6 sm:col-span-4">
-        <jet-label
-          for="affected_areas"
-          value="Áreas Afectadas"
-        />
-        <Multiselect
-          id="affected_areas"
-          v-model="form.affected_area_id"
-          mode="tags"
-          :close-on-select="false"
-          :searchable="true"
-          :create-option="false"
-          :options="affected_areas"
-        />
-      </div>
-
-      <div class="col-span-6 sm:col-span-4">
-        <jet-label
-          for="diagnostics"
-          value="Diagnósticos"
-        />
-        <Multiselect
-          id="diagnostics"
-          v-model="form.diagnostic_id"
-          :close-on-select="true"          
-          :searchable="true"
-          :options="diagnostics"
-        />
-      </div>
-
+        <form-input
+          v-else-if="attribute.input_type == 4"
+          :label="attribute.input_name"
+          :name="attribute.input_name"
+          v-model="form.attributes[attribute.input_name]"
+          type="checkbox"
+          :form="form"
+        /-->
+      </template>
     </template>
 
     <template #actions>
@@ -171,9 +85,10 @@
 </template>
 
 <script>
-  import Multiselect from '@vueform/multiselect'
-  import JetLabel from "@/Jetstream/Label";
+import Multiselect from '@vueform/multiselect'
+import JetLabel from "@/Jetstream/Label";
 
+import JetInput from "@/Jetstream/Input";
 import JetButton from "@/Jetstream/Button.vue";
 import JetFormSection from "@/Jetstream/FormSection.vue";
 import JetActionMessage from "@/Jetstream/ActionMessage.vue";
@@ -182,10 +97,11 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["history_group", "diagnostics", "treatments", "analysis", "affected_areas", "checkedNames"],
+  props: ["history_group", "diagnostics", "treatments", "analysis", "affected_areas", "checkedNames", "attributes"],
 
   components: {
     JetLabel,
+    JetInput,
     JetActionMessage,
     JetButton,
     JetFormSection,
@@ -197,65 +113,19 @@ export default {
 
   data() {
     return {
+      //map inside form with names of attributes
+      attrs: null,
       form: this.$inertia.form({
         _method: "POST",
 
         patient_id: null,
         doctor_id: null,
-
-        appetite: null,
-        thirst: null,
-        sleep: null,
-        mood: null,
-        weight_loss: null,
-        diuresis: null,
-        depositions: null,
-        diseases: null,
-        meds: null,
-        alergies: null,
-
-        vital1: null,
-        vital2: null,
-        vital3: null,
-        vital4: null,
-
-        weight: null,  
-        height: null,  
-        imc: null, 
-
-        general_test: null,  
-        head_neck: null, 
-        respiratory: null, 
-        cardiovascular: null,  
-        abs: null, 
-        genitourinario: null,  
-        nervous_system: null,  
-        extremities: null, 
-        preferencial_test: null, 
-
-        background: null,
-        warnings: null,
-        description: null,
-
-        pain_scale: null,
-        force_scale: null,
-        joint_range: null,
-        recovery_progress: null,
-
-        diagnostic_id: null,
-        treatment_id: null,
-        analysis_id: null,
-        affected_area_id: null,
-        
         history_group_id: null,
 
-        treatments: [], 
-        value: []
+        attributes: {},
+        values: {},
       }),
     };
-  },
-  mounted() {
-    treatments.sort();
   },
 
   methods: {
@@ -273,6 +143,20 @@ export default {
         preserveScroll: true,
         onSuccess: this.onSuccess,
       });
+    },
+    updateValue(e, i, v) {
+      console.log(v);
+      this.form.attributes[i] = v;
+      console.log(this.form.attributes[i]);
+      //let x = this.form.values[i];
+      //this.form.values[i] = v;
+    },
+    options(id) {
+      if(id == 1) return this.affected_areas;
+      else if(id == 2) return this.diagnostics;
+      else if(id == 3) return this.treatments;
+      
+      return null;
     },
   },
 };

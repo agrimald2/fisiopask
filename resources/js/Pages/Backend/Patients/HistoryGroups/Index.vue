@@ -7,7 +7,7 @@
     </template>
 
     <div class="text-center pt-6">
-      <ui-button @click="$inertia.visit(route('patients.historygroup.create', {'patientId' : patientId, 'doctorId' : doctor.id}))">Crear historia clínica</ui-button>
+      <ui-button @click="$inertia.visit(route('historygroup.select', {'patientId' : patientId, 'doctorId' : doctor.id}))">Crear historia clínica</ui-button>
     </div>
 
     <app-body>

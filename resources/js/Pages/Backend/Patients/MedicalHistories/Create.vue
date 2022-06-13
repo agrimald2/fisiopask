@@ -8,7 +8,7 @@
             @click="$inertia.visit(route('patients.historygroup'))"
           >Historia Médica</span>
           <i class="fas fa-angle-right"></i>
-          Crear una Revisión Médica
+          Crear una Historia Médica
         </div>
       </h2>
     </template>
@@ -23,6 +23,7 @@
           :treatments="treatmentsOptions"
           :analysis="analysisOptions"
           :affected_areas="affectedAreasOptions"
+          :attributes="attributes"
         />
       </div>
     </div>
@@ -34,7 +35,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import DefaultForm from "./Components/DefaultForm";
 
 export default {
-  props: ["history_group", "diagnostics", "treatments", "analysis", "affected_areas"],
+  props: ["history_group", "diagnostics", "treatments", "analysis", "affected_areas", "attributes"],
 
   components: {
     AppLayout,

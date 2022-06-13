@@ -12,6 +12,8 @@ use App\Models\Analysis;
 use App\Models\AffectedArea;
 
 use App\Http\Controllers\Controller;
+use App\Models\HCAttribute;
+use App\Models\HCType;
 use Illuminate\Http\Request;
 
 class MedicalHistoryController extends Controller
@@ -23,9 +25,23 @@ class MedicalHistoryController extends Controller
         return inertia('Backend/Patients/MedicalHistories/Index', compact('model'));
     }
 
-    public function create($id)
+    public function selectType($id)
+    {
+        $types = HCType::all();
+
+        return inertia('Backend/Patients/MedicalHistories/SelectType', compact(
+            'types',
+            'id'
+        ));
+    }
+
+    public function create($id, $type)
     {
         $history_group = HistoryGroup::find($id);
+
+        $attributes = HCAttribute::query()
+            ->where('history_type_id', $type)
+            ->get();
 
         $diagnostics = Diagnostic::query()
             ->orderBy('id', 'desc')
@@ -50,12 +66,14 @@ class MedicalHistoryController extends Controller
                 'diagnostics', 
                 'treatments', 
                 'analysis',
-                'affected_areas'
+                'affected_areas',
+                'attributes'
             ));
     }
 
     public function store(Request $request)
     {
+        return $request;
         $validated = $request->validate([
             'patient_id' => 'required',
             'doctor_id' => 'required',

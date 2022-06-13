@@ -7,6 +7,7 @@ use App\Models\HistoryGroup;
 use App\Models\MedicalRevision;
 
 use App\Http\Controllers\Controller;
+use App\Models\HCType;
 use Illuminate\Http\Request;
 
 class HistoryGroupController extends Controller
@@ -42,17 +43,30 @@ class HistoryGroupController extends Controller
         );
     }
 
-    public function store($patientId, $doctorId)
+    public function selectType($patientId, $doctorId)
+    {
+        $types = HCType::all();
+
+        return inertia('Backend/Patients/MedicalHistories/SelectType', compact(
+            'patientId',
+            'doctorId',
+            'types',
+        ));
+    }
+
+    public function store(Request $request)//$patientId, $doctorId)
     {
         $group = HistoryGroup::create([
-            'patient_id' => $patientId,
-            'doctor_id' => $doctorId,
+            'patient_id' => $request->patient_id,
+            'doctor_id' => $request->doctor_id,
+            'type_id' => $request->type_id,
             'closed' => false,
         ]);
 
         $id = $group->id;
+        $type = $group->type_id;
 
-        return redirect()->route('medicalhistory.create', compact('id'));
+        return redirect()->route('medicalhistory.create', compact('id', 'type'));
     }
 
     public function show($id)

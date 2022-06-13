@@ -70,6 +70,8 @@ use App\Http\Controllers\Backend\Tests\CompanyController;
 use App\Http\Controllers\Backend\Tests\TestController;
 use App\Http\Controllers\Backend\Tests\TestTypeController;
 use App\Http\Controllers\Backend\WorkerController;
+use App\Http\Controllers\HC\HCAttributesController;
+use App\Http\Controllers\HC\HCTypesController;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -120,13 +122,13 @@ Route::resource('patients', PatientController::class)
 /**
  * Patient Appointments
  */
-Route::resource('patients.appointment', PatientAppointmentController::class)
+/*Route::resource('patients.appointment', PatientAppointmentController::class)
     ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
 // Pick time
 Route::post('/dni/{dni}/day', [PatientAppointmentController::class, 'pickDatePost'])
     ->name('patients.appointment.pickDate.post');
 Route::get('/dni/{dni}/day/{date}/time/', [PatientAppointmentController::class, 'pickTime'])
-    ->name('patients.appointment.pickTime');
+    ->name('patients.appointment.pickTime');*/
 
 /**
  * Patient wallet
@@ -305,8 +307,12 @@ Route::prefix('productSelect')
 Route::resource('patients.historygroup', HistoryGroupController::class)
     ->only('index');
 
-Route::get('patients/{patientId}/historygroup/create/{doctorId}', [HistoryGroupController::class, 'store'])
-    ->name('patients.historygroup.create');
+Route::get('patients/{patientId}/historygroup/create/{doctorId}', [HistoryGroupController::class, 'selectType'])
+    ->name('historygroup.select');
+
+Route::post('historygroup/create', [HistoryGroupController::class, 'store'])
+    ->name('patients.historygroup.store');
+
 
 Route::get('/historygroup/show/{id}', [HistoryGroupController::class, 'show'])
     ->name('patients.historygroup.show');
@@ -315,7 +321,7 @@ Route::get('/historygroup/show/{id}', [HistoryGroupController::class, 'show'])
 Route::resource('medicalhistory', MedicalHistoryController::class)
     ->only('store');
 
-Route::get('medicalhistory/create/{id}', [MedicalHistoryController::class, 'create'])
+Route::get('medicalhistory/create/{id}/{type}', [MedicalHistoryController::class, 'create'])
     ->name('medicalhistory.create');
 
 Route::get('/medicalhistory/show/{id}', [MedicalHistoryController::class, 'show'])
@@ -474,3 +480,22 @@ Route::resource('companies', CompanyController::class)
 
     Route::resource('workers', WorkerController::class)
     ->only('index', 'create', 'edit', 'store', 'update', 'destroy');
+
+/**
+ * NEW HC
+ */
+
+Route::resource('hc', HCTypesController::class)
+    ->only('index', 'create', 'store', 'destroy');
+
+Route::get('/hc/{id}/attributes', [HCAttributesController::class, 'index'])
+    ->name('hc.attributes.index');
+
+Route::get('/hc/{id}/attributes/create', [HCAttributesController::class, 'create'])
+    ->name('hc.attributes.create');
+
+Route::post('hc/attributes/store', [HCAttributesController::class, 'store'])
+    ->name('hc.attributes.store');
+
+Route::resource('hc.attributes', HCAttributesController::class)
+    ->only('destroy');

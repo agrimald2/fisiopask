@@ -47,28 +47,28 @@
   <link-group style="margin-top:-3rem!important;" 
     title="Registros">
     <link-item
-        label="Pagos recibidos"
-        icon="fa-receipt"
-        @click="go('payments.index')"
-      />
+      label="Pagos recibidos"
+      icon="fa-receipt"
+      @click="go('payments.index')"
+    />
 
-      <link-item
-        label="Links de Pagos"
-        icon="fa-credit-card"
-        @click="go('paymentlinks.index')"
-      />
+    <link-item
+      label="Links de Pagos"
+      icon="fa-credit-card"
+      @click="go('paymentlinks.index')"
+    />
 
-      <link-item
-        label="Encuestas"
-        icon="fa-comment-medical"
-        @click="go('surveys.index')"
-      />
+    <link-item
+      label="Encuestas"
+      icon="fa-comment-medical"
+      @click="go('surveys.index')"
+    />
 
-      <link-item
-        label="Recomendaciones"
-        icon="fas fa-handshake"
-        @click="go('recommendation.index')"
-      />
+    <link-item
+      label="Recomendaciones"
+      icon="fas fa-handshake"
+      @click="go('recommendation.index')"
+    />
   </link-group>
 
   <!-- System records -->
@@ -76,8 +76,12 @@
     title="Registros"
     class=""
   >
+    <link-item
+      label="Historias Clínicas"
+      icon="fa-hospital-symbol"
+      @click="go('hc.index')"
+    />
 
-  
     <link-item
       label="Gráficos y Estadística"
       icon="fa-chart-bar"

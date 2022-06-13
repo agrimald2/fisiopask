@@ -4,10 +4,6 @@ use App\Http\Controllers\LoginSuccessController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\GenerateTokensAction;
 
-use Inertia\Inertia;
-
-use App\Http\Controllers\TestAssistanceController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
