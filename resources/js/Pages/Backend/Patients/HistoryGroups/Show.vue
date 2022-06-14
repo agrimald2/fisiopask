@@ -10,11 +10,11 @@
       <ui-button @click="$inertia.visit(route('medicalrevision.create', id))">Crear una revisión</ui-button>
     </div>
 
-    <form :action="route('patientFiles.upload', this.id)" method="post" enctype="multipart/form-data">
+    <!--form :action="route('patientFiles.upload', this.id)" method="post" enctype="multipart/form-data">
       <input type="file" name="file">
       <input type="hidden" name="_token" :value="csrf">
       <ui-button type="submit" name="submit">Subir un archivo</ui-button>
-    </form>
+    </form-->
 
     <div v-for="file in files" :key="file.id">
       <a href="{{ asset(file.filename) }}" download>{{ file.filename }}</a>

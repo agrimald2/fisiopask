@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMedicalHistoriesTable extends Migration
+class CreateHistoryDataTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,12 @@ class CreateMedicalHistoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('medical_histories', function (Blueprint $table) {
+        Schema::create('history_data', function (Blueprint $table) {
             $table->id();
-
-            //@Patient - Doctor Relationships:
-            $table->unsignedBigInteger("patient_id");
-            $table->unsignedBigInteger("doctor_id");
-
-            $table->unsignedBigInteger("history_group_id");
-
+            $table->unsignedBigInteger("history_id");
+            $table->boolean('is_revision')->default(false);
+            $table->string('data');
+            $table->unsignedBigInteger('attribute_id');
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ class CreateMedicalHistoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('medical_histories');
+        Schema::dropIfExists('history_data');
     }
 }

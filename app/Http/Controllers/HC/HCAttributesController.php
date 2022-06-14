@@ -27,7 +27,7 @@ class HCAttributesController extends Controller
             1 => 'Numérico',
             2 => 'Select',
             3 => 'Multi-Select',
-            4 => 'Checkbox',
+            //4 => 'Checkbox',
         ];
 
         $models = [

@@ -14,15 +14,26 @@ use App\Models\AffectedArea;
 use App\Http\Controllers\Controller;
 use App\Models\HCAttribute;
 use App\Models\HCType;
+use App\Models\HistoryData;
 use Illuminate\Http\Request;
 
 class MedicalHistoryController extends Controller
 {
     public function show($id)
     {
-        $model = MedicalHistory::with('patient','treatment','diagnostic','analysis','doctor','affectedArea', 'historyTreatments.treatment')->get()->find($id);
+        $model = MedicalHistory::with('patient', 'doctor')->get()->find($id);
 
-        return inertia('Backend/Patients/MedicalHistories/Index', compact('model'));
+        $data = HistoryData::query()
+            ->with('attribute')
+            ->where('history_id', $id)
+            ->where('is_revision', false)
+            ->get();
+
+        $areas = AffectedArea::all();
+        $treatments = Treatment::all();
+        $diagnostics = Diagnostic::all();
+
+        return inertia('Backend/Patients/MedicalHistories/Index', compact('model', 'data', 'areas', 'treatments', 'diagnostics'));
     }
 
     public function selectType($id)
@@ -73,60 +84,40 @@ class MedicalHistoryController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
         $validated = $request->validate([
-            'patient_id' => 'required',
-            'doctor_id' => 'required',
-
-            'background' => 'required',
-            'warnings' => 'required',
-            'description' => 'required',
-    
-
-            'appetite' => '',
-            'thirst' => '',
-            'sleep' => '',
-            'mood' => '',
-            'weight_loss' => '',
-            'diuresis' => '',
-            'depositions' => '',
-            'diseases' => '',
-            'meds' => '',
-            'alergies' => '',
-
-            'vital1' => '',
-            'vital2' => '',
-            'vital3' => '',
-            'vital4' => '',
-            'weight' => '',
-            'height' => '',
-            'imc' => '',
-            'general_test' => '',
-            'head_neck' => '',
-            'respiratory' => '',
-            'cardiovascular' => '',
-            'abs' => '',
-            'genitourinario' => '',
-            'nervous_system' => '',
-            'extremities' => '',
-            'preferencial_test' => '',
-
-
-
-            'pain_scale' => 'required',
-            'force_scale' => 'required',
-            'joint_range' => 'required',
-            'recovery_progress' => 'required',
-    
-            'diagnostic_id' => 'required',
-            'treatment_id' => 'required',
-            'analysis_id' => 'required',
-            'affected_area_id' => 'required',
-    
-            'history_group_id' => 'required',
+            'patient_id' => ['required', 'numeric'],
+            'doctor_id' => ['required', 'numeric'],    
+            'history_group_id' => ['required', 'numeric'],
+            'attributes' => ['required']
+        ]);
+        
+        $history = MedicalHistory::create([
+            'patient_id' => $validated['patient_id'],
+            'doctor_id' => $validated['doctor_id'],
+            'history_group_id' => $validated['history_group_id'],
         ]);
 
-        MedicalHistory::create($validated);
+        $attributes = $validated["attributes"];
+        foreach($attributes as $key => $item)
+        {
+            //Nice hack to have multiple attributes in one single column
+            $attr = HCAttribute::find($key);
+            if($attr->input_type == HCAttribute::ATTRIBUTE_MULTI)
+            {
+                $newItem = "";
+                foreach($item as $i)
+                {
+                    $newItem .= $i."^";
+                }
+                $item = $newItem;
+            }
+
+            HistoryData::create([
+                'history_id' => $history->id,
+                'data' => $item,
+                'attribute_id' => $key
+            ]);
+        }
 
         return redirect()->route('patients.historygroup.show', $request->history_group_id);
     }

@@ -6,61 +6,63 @@
 
     <template #form>
       <template v-for="attribute in attributes" :key="attribute.id">
-        <div v-if="attribute.input_type == 0" class="col-span-6 sm:col-span-4">
+        <div class="col-span-6 sm:col-span-4">
           <jet-label
             :for="attribute.input_name"
             :value="attribute.input_name"
           />
-          <jet-input
+          <div v-if="attribute.input_type == 0">
+            <jet-input
+              :id="attribute.input_name"
+              type="text"
+              class="mt-1 block w-full"
+              v-model="form.attributes[attribute.id]"
+              @input="updateValue($event, attribute.id, $event.target.value)"
+            />
+          </div>
+          <div v-else-if="attribute.input_type == 1">
+            <jet-input
+              :id="attribute.input_name"
+              type="numeric"
+              class="mt-1 block w-full"
+              v-model="form.attributes[attribute.id]"
+              @input="updateValue($event, attribute.id, $event.target.value)"
+            />
+          </div>
+          <div v-else-if="attribute.input_type == 2">
+            <jet-input
+              :id="attribute.input_name"
+              type="select"
+              :options="options(attribute.related_model)"
+              class="mt-1 block w-full"
+              v-model="form.attributes[attribute.id]"
+              @input="updateValue($event, attribute.id, $event.target.value)"
+            />
+          </div>
+          <div v-else-if="attribute.input_type == 3">
+            <Multiselect
+              mode="tags"
+              :close-on-select="false"
+              :searchable="true"
+              :create-option="false"
+
+              :id="attribute.input_name"
+              :options="options(attribute.related_model)"
+
+
+              @input="updateMulti($event, attribute.id)"
+            />
+          </div>
+        </div>
+        <!--div v-else-if="attribute.input_type == 4" class="col-span-6 sm:col-span-4">
+          <input
             :id="attribute.input_name"
-            type="text"
+            type="checkbox"
             class="mt-1 block w-full"
             v-model="form.attributes[attribute.input_name]"
             @input="updateValue($event, attribute.input_name, $event.target.value)"
           />
-        </div>
-        <!--form-input
-          v-if="attribute.input_type == 0"
-          :label="attribute.input_name"
-          :name="attribute.input_name"
-          v-model="form.attributes[attribute.input_name]"
-          type="text"
-          :form="form"
-        /-->
-        <!--form-input
-          v-else-if="attribute.input_type == 1"
-          :label="attribute.input_name"
-          :name="attribute.input_name"
-          v-model="form.attributes[attribute.input_name]"
-          type="numeric"
-          :form="form"
-        />
-        <form-input
-          v-else-if="attribute.input_type == 2"
-          :label="attribute.input_name"
-          :name="attribute.input_name"
-          v-model="form.attributes[attribute.input_name]"
-          type="select"
-          :options="options(attribute.related_model)"
-          :form="form"
-        />
-        <form-input
-          v-else-if="attribute.input_type == 3"
-          :label="attribute.input_name"
-          :name="attribute.input_name"
-          v-model="form.attributes[attribute.input_name]"
-          type="multselect"
-          :options="options(attribute.related_model)"
-          :form="form"
-        />
-        <form-input
-          v-else-if="attribute.input_type == 4"
-          :label="attribute.input_name"
-          :name="attribute.input_name"
-          v-model="form.attributes[attribute.input_name]"
-          type="checkbox"
-          :form="form"
-        /-->
+        </div-->
       </template>
     </template>
 
@@ -113,8 +115,6 @@ export default {
 
   data() {
     return {
-      //map inside form with names of attributes
-      attrs: null,
       form: this.$inertia.form({
         _method: "POST",
 
@@ -123,7 +123,6 @@ export default {
         history_group_id: null,
 
         attributes: {},
-        values: {},
       }),
     };
   },
@@ -145,11 +144,10 @@ export default {
       });
     },
     updateValue(e, i, v) {
-      console.log(v);
       this.form.attributes[i] = v;
-      console.log(this.form.attributes[i]);
-      //let x = this.form.values[i];
-      //this.form.values[i] = v;
+    },
+    updateMulti(e, i) {
+      this.form.attributes[i] = e;
     },
     options(id) {
       if(id == 1) return this.affected_areas;

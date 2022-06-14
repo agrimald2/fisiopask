@@ -59,90 +59,25 @@
         </table>
       </div>
       <div class="mt-4 text-center text-xl">
-          INFORMACIÓN MÉDICA:
+          INFORMACIÓN:
       </div>
-      <div class="mt-8 text-center flex-wrap gap-4 justify-center">
-          <h4 style="font-weight:bold"> ANTECEDENTES </h4>
-          <br>
-          <p>
-            {{ model.background }}
-          </p>
-      </div>
-
-      <div class="mt-8 text-center flex-wrap gap-4 justify-center">
-          <h4 style="font-weight:bold"> ADVERTENCIAS </h4>
-          <br>
-          <p>
-            {{ model.warnings }}
-          </p>
-      </div>
-
-      <div class="mt-8 text-center flex-wrap gap-4 justify-center">
-          <h4 style="font-weight:bold"> DESCRIPCIÓN </h4>
-          <br>
-          <p>
-            {{ model.description}}
-          </p>
-      </div>
-
-      <div class="mt-4 border rounded p-3">
-        <table class="w-full mt-4" style="text-align:left">
-          <tr>
-            <th>TRATAMIENTOS:</th>
-            <template v-for="treatment in treatments" :key="treatment.id">
-              <tr>
-                {{ treatment.treatment.name}} - {{ treatment.treatment.description}}
-              </tr>
+      <template v-for="d in data" :key="d.id">
+        <div class="mt-8 text-center flex-wrap gap-4 justify-center">
+          <h4 style="font-weight:bold"> {{ d.attribute.input_name }} </h4>
+          <template v-if="d.attribute.input_type == 0 || d.attribute.input_type == 1">
+            <p> {{ d.data }} </p>
+          </template>
+          <template v-else-if="d.attribute.input_type == 2">
+            {{ options(d.data, d.attribute.related_model) }}
+          </template>
+          <template v-else-if="d.attribute.input_type == 3">
+            <template v-for="(opt, index) in splitMult(d.data)" :key="index">
+              {{ options(opt, d.attribute.related_model) }}
+              <br>
             </template>
-          </tr>
-          <tr class="mt-4">
-            <th>DIAGNÓSTICO:</th>
-            <td>
-              {{ model.diagnostic.cie_10 }} - {{ model.diagnostic.name }}
-            </td>
-          </tr>          
-          <br>
-          <tr class="mt-4">
-            <th>ANÁLISIS SUGERIDOS:</th>
-            <template v-for="anal in analyses" :key="anal.id">
-              <tr>
-                {{ anal.analysis.name}} - {{ anal.analysis.description}}
-              </tr>
-            </template>`
-          </tr>
-          <tr class="mt-4">
-            <th>ARÉAS AFECTADAS:</th>
-            <template v-for="area in areas" :key="area.id">
-              <tr>
-                {{ area.affected_area.category }} - {{ area.affected_area.sub_category }}
-              </tr>
-            </template>
-          </tr>
-        </table>
-      </div>
-      <div class="mt-4 border rounded p-3">
-        <table class="w-full mt-4" style="text-align:left">
-          <tr class="ranges">
-            <th>ESCALA DE DOLOR</th>
-            <th>ESCALA DE FUERZA</th>
-          </tr>
-          <tr class="ranges">
-            <td>{{model.pain_scale}}</td>
-            <td>{{model.force_scale}}</td>
-          </tr>
-        </table>
-        <table class="w-full mt-4" style="text-align:left">
-          <tr class="ranges">
-            <th>RANGO ARTICULAR</th>
-            <th>PROGRESO RECUPERACIÓN</th>
-          </tr>
-          <tr class="ranges">
-            <td>{{model.joint_range}}</td>
-            <td>{{model.recovery_progress}} %</td>
-          </tr>
-        </table>
-      </div>
-
+          </template>
+        </div>
+      </template>
       <div class="pb-12"></div>
     </app-body>
   </app-layout>
@@ -163,7 +98,7 @@ import vue3starRatings from "vue3-star-ratings";
 import RadialProgressBar from "vue3-radial-progress";
 
 export default {
-  props: ["model", 'treatments', 'areas', 'analyses'],
+  props: ["model", 'data', 'treatments', 'areas', 'diagnostics'],
   data: () => {
     return {
       rating: 2.5,
@@ -176,20 +111,37 @@ export default {
     RadialProgressBar,
     Grid,
   },
-
-  mounted()
-  {
-    console.log(this.model);
-  },
   setup() {
     const dashboardLink = route("dashboard");
 
-      const completedSteps = 5;
-      const totalSteps = 10;
-      const name = "Hola";
-      const description = "Bola";
+    return { dates, dashboardLink };
+  },
+  methods: {
+    splitMult(str) {
+      let arr = str.split("^");
+      arr.splice(-1);
+      return arr;
+    },
+    options(id, modelId) {
+      let str = "";
+      if(modelId == 1) 
+      {
+        const model = this.areas.filter(x => x.id === id);
+        str = model[0].category + " " + model[0].sub_category;
+      }
+      else if(modelId == 2) 
+      {
+        const model = this.diagnostics.filter(x => x.id === id);
+        str = model[0].cie_10 + " - " + model[0].name;
+      }
+      else if(modelId == 3) 
+      {
+        const model = this.treatments.filter(x => x.id == id);
+        str = model[0].name;
+      }
 
-    return { dates, dashboardLink, completedSteps,totalSteps,name,description  };
+      return str;
+    },
   },
 };
 </script>

@@ -28,29 +28,4 @@ class MedicalHistory extends Model
     {
         return $this->belongsTo(Patient::class);
     }
-
-    public function diagnostic()
-    {
-        return $this->belongsTo(Diagnostic::class);
-    }
-
-    public function treatment()
-    {
-        return $this->belongsTo(Treatment::class);
-    }
-
-    public function analysis()
-    {
-        return $this->belongsTo(Analysis::class);
-    }
-
-    public function affectedArea()
-    {
-        return $this->belongsTo(AffectedArea::class);
-    }
-
-    public function historyTreatments()
-    {
-        return $this->hasMany(HistoryTreatment::class);
-    }
 }
