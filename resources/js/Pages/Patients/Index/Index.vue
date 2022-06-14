@@ -23,6 +23,13 @@
         <p style="text-align:center">Dale click en una acción</p>
         <i class="fas fa-angle-down mx-4" style="justify-content: center; display: flex;font-size: 2rem;"></i>
       </div>
+      
+      <div class="mt-6" v-if="tests.length > 0">
+        <div class="text-4xl font-bold">Últimas Pruebas</div>
+        <div class="mt-4">
+          <TestsCmp :tests="tests"/>
+        </div>
+      </div>
 
       <div class="container" style="margin-top: -2rem;">
           <link-group style="display: block!important;">
@@ -96,9 +103,10 @@ import UiButton from "@/Shared/Frontend/Button";
 
 import Appointments from "./Components/Appointments";
 import RatesCmp from "./Components/Rates";
+import TestsCmp from "./Components/Tests";
 
 export default {
-  props: ["model", "appointments", "rates"],
+  props: ["model", "appointments", "rates", "tests"],
 
   components: {
     Layout,
@@ -110,6 +118,7 @@ export default {
 
     Appointments,
     RatesCmp,
+    TestsCmp,
   },
 
    methods: {
