@@ -7,7 +7,7 @@
     </template>
     <app-body>
       <div class="mt-4 capitalize text-center text-xl">
-        <span style="font-size: 1.5rem;"> REVISIÓN MÉDICA </span> 
+        HISTORIA CLÍNICA (REVISIÓN)
         <br>
         {{ dates.dateForHumans(model.created_at) }}
           -
@@ -16,7 +16,7 @@
 
 
       <div class="mt-4">
-        <div class="flex items-center gap-4 justify-center text-xl" style="text-transform:uppercase" > 
+        <div class="flex items-center gap-4 justify-center text-xl" style="text-transform:uppercase">
           <span style="font-weight:bold"> DOCTOR </span>
           <i class="fas fa-angle-right"></i>
           {{model.doctor.name}} {{model.doctor.lastname}}
@@ -24,7 +24,7 @@
       </div>
 
       <div class="mt-4">
-        <div class="flex items-center gap-4 justify-center text-xl">
+        <div class="flex items-center gap-4 justify-center text-xl" style="text-transform:uppercase">
           <span style="font-weight:bold"> PACIENTE </span>
           <i class="fas fa-angle-right"></i>
           {{model.patient.name}} {{model.patient.lastname1}} {{model.patient.lastname2}}
@@ -59,45 +59,25 @@
         </table>
       </div>
       <div class="mt-4 text-center text-xl">
-          INFORMACIÓN MÉDICA:
+          INFORMACIÓN:
       </div>
-      <div class="mt-8 text-center flex-wrap gap-4 justify-center">
-          <h4 style="font-weight:bold"> DESCRIPCIÓN </h4>
-          <br>
-          <p>
-            {{ model.description}}
-          </p>
-      </div>
-
-      <div class="mt-4 border rounded p-3">
-        <table class="w-full mt-4" style="text-align:left">
-          <tr>
-            <th>TRATAMIENTOS:</th>
-            <template v-for="treatment in treatments" :key="treatment.id">
-              <tr>
-                {{ treatment.treatment.name}} - {{ treatment.treatment.description}}
-              </tr>
+      <template v-for="d in data" :key="d.id">
+        <div class="mt-8 text-center flex-wrap gap-4 justify-center">
+          <h4 style="font-weight:bold"> {{ d.attribute.input_name }} </h4>
+          <template v-if="d.attribute.input_type == 0 || d.attribute.input_type == 1">
+            <p> {{ d.data }} </p>
+          </template>
+          <template v-else-if="d.attribute.input_type == 2">
+            {{ options(d.data, d.attribute.related_model) }}
+          </template>
+          <template v-else-if="d.attribute.input_type == 3">
+            <template v-for="(opt, index) in splitMult(d.data)" :key="index">
+              {{ options(opt, d.attribute.related_model) }}
+              <br>
             </template>
-          </tr>
-        </table>
-      </div>
-
-      <div class="mt-4 border rounded p-3">
-        <table class="w-full mt-4" style="text-align:left">
-          <tr class="ranges">
-            <th>ESCALA DE DOLOR</th>
-            <th>ESCALA DE FUERZA</th>
-            <th>RANGO ARTICULAR</th>
-            <th>PROGRESO RECUPERACIÓN</th>
-          </tr>
-          <tr class="ranges">
-            <td>{{model.pain_scale}}</td>
-            <td>{{model.force_scale}}</td>
-            <td>{{model.joint_range}}</td>
-            <td>{{model.recovery_progress}} %</td>
-          </tr>
-        </table>
-      </div>
+          </template>
+        </div>
+      </template>
       <div class="pb-12"></div>
     </app-body>
   </app-layout>
@@ -109,7 +89,6 @@
     font-size: 1.2rem;
   }
 </style>
-
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AppBody from "@/Shared/Backend/AppBody";
@@ -119,7 +98,7 @@ import vue3starRatings from "vue3-star-ratings";
 import RadialProgressBar from "vue3-radial-progress";
 
 export default {
-  props: ["model", 'treatments'],
+  props: ["model", 'data', 'treatments', 'areas', 'diagnostics'],
   data: () => {
     return {
       rating: 2.5,
@@ -135,12 +114,34 @@ export default {
   setup() {
     const dashboardLink = route("dashboard");
 
-      const completedSteps = 5;
-      const totalSteps = 10;
-      const name = "Hola";
-      const description = "Bola";
+    return { dates, dashboardLink };
+  },
+  methods: {
+    splitMult(str) {
+      let arr = str.split("^");
+      arr.splice(-1);
+      return arr;
+    },
+    options(id, modelId) {
+      let str = "";
+      if(modelId == 1) 
+      {
+        const model = this.areas.filter(x => x.id == id);
+        str = model[0].category + " " + model[0].sub_category;
+      }
+      else if(modelId == 2) 
+      {
+        const model = this.diagnostics.filter(x => x.id == id);
+        str = model[0].cie_10 + " - " + model[0].name;
+      }
+      else if(modelId == 3) 
+      {
+        const model = this.treatments.filter(x => x.id == id);
+        str = model[0].name;
+      }
 
-    return { dates, dashboardLink, completedSteps,totalSteps,name,description  };
+      return str;
+    },
   },
 };
 </script>

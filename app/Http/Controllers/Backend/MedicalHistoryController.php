@@ -33,7 +33,8 @@ class MedicalHistoryController extends Controller
         $treatments = Treatment::all();
         $diagnostics = Diagnostic::all();
 
-        return inertia('Backend/Patients/MedicalHistories/Index', compact('model', 'data', 'areas', 'treatments', 'diagnostics'));
+        return inertia('Backend/Patients/MedicalHistories/Index', 
+            compact('model', 'data', 'areas', 'treatments', 'diagnostics'));
     }
 
     public function selectType($id)
