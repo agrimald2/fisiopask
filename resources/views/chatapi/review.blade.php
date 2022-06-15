@@ -1,6 +1,6 @@
 *Hola {{ $patientName }}! Muchas gracias por tus 5 estrellas!*
 
-Esperamos que hayas disfrutado tu atención en *FISIOSALUD*
+Esperamos que hayas disfrutado tu atención en *ANANDAMIDA*
 
 Estimad@, por favor ayúdanos a seguir creciendo dando click en el siguiente enlace y dejándonos tu recomendación:
 
@@ -10,4 +10,4 @@ Seguiremos trabajando en mejorar nuestro servicio para tu pronta y segura rehabi
 
 Atentamente,
 
-*FISIOSALUD*
+*ANANDAMIDA*

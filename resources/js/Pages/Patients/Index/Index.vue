@@ -23,16 +23,16 @@
         <p style="text-align:center">Dale click en una acción</p>
         <i class="fas fa-angle-down mx-4" style="justify-content: center; display: flex;font-size: 2rem;"></i>
       </div>
-      
-      <div class="mt-6" v-if="tests.length > 0">
-        <div class="text-4xl font-bold">Últimas Pruebas</div>
-        <div class="mt-4">
-          <TestsCmp :tests="tests"/>
-        </div>
-      </div>
 
       <div class="container" style="margin-top: -2rem;">
           <link-group style="display: block!important;">
+            <link-item 
+              class="mt-2rem"
+              label="Ver mis resultados"
+              icon="fas fa-microscope"
+              @click="go('area.patients.tests')"
+            />
+            
             <link-item 
               class="mt-2rem"
               label="Pagar Mis Citas"
@@ -69,6 +69,7 @@
             />
           </link-group>
       </div>
+
       <div class="container" style="justify-content:center;display:flex">
           <ui-button
             color="red"

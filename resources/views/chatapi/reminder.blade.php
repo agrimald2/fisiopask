@@ -1,4 +1,4 @@
-*FISIOSALUD: RECORDATORIO DE CITA*
+*ANANDAMIDA: RECORDATORIO DE CITA*
 
 Hola, te recordamos que tienes una cita pendiente con nostros el día:
 
@@ -31,7 +31,7 @@ Por favor dar click en el siguiente link:
 {{ $dashboardLink }}
 
 
-Te esperamos, FISIOSALUD:
-https://fisiosalud.pe
+Te esperamos, ANANDAMIDA:
+https://anandamida.com
 
 Por favor, agréganos a tus contactos para activar los links

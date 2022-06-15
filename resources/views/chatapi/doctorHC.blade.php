@@ -4,4 +4,4 @@ Le recordamos que servicio profesional de salud sólo estará completo si regist
 
 Atentamente,
 
-*FISIOSALUD*
+*ANANDAMIDA*

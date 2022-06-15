@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoginSuccessController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\GenerateTokensAction;
+use App\Http\Controllers\Backend\Tests\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,3 +59,8 @@ Route::namespace(null)
     
 
     //Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 
+
+
+/*DOWNLOAD PDF*/
+Route::get('/downloadPDF/{id}', [TestController::class, 'downloadPDF'])
+    ->name('tests.downloadPDF');  

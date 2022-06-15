@@ -46,8 +46,8 @@ class PatientSurveyController extends Controller
         
         //Get Random Link
         $dice = rand(1,5);
-        $facebook_link = 'https://www.facebook.com/fisiosaludperu/reviews/?ref=page_internal';
-        $google_link = 'https://g.page/r/CXWZUJP5kbUKEAU/review';
+        $facebook_link = 'facebook.anandamida.com';
+        $google_link = 'google.anandamida.com';
         $review_link = '';
 
         if ($dice <= 2){

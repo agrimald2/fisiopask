@@ -16,7 +16,7 @@ class AppointmentCanceler
 
         $patientDNI = $patient->dni;
         $patientToken = $patient->token;
-        $dashboardLink = 'https://fisiosalud.pe/area/patients/login/'.$patientDNI.'/'.$patientToken;
+        $dashboardLink = env('APP_URL').'area/patients/login/'.$patientDNI.'/'.$patientToken;
 
         $date = $appointment->date->format('d/m/Y');
         $startTime = $appointment->start;

@@ -106,7 +106,7 @@ export default (props, { attrs }) => {
 
   ];
   function windowAppointment() {
-    window.open("https://fisiosalud.pe/cita", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=500,width=600,height=600");
+    window.open("https://anandamida.com/cita", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=500,width=600,height=600");
   }
   return { rows, cols };
 };

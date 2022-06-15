@@ -1,4 +1,4 @@
-*FISIOSALUD: TIENES UNA NUEVA CITA*
+*ANANDAMIDA: TIENES UNA NUEVA CITA*
 
 *Paciente:*
 {{ $patientName }}

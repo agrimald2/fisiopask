@@ -18,7 +18,7 @@
           <div class="mt-3 text-sm">
             <span class="text-black px-2 rounded" style="border: 1px solid red">
               <a :href="'/downloadPDF/'+model.id">
-                PDF
+                VER PDF
               </a>
             </span>
           </div>

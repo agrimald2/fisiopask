@@ -45,7 +45,7 @@ class SendSurvey implements ShouldQueue
             {
                 $patient = $appointment->patient;
                 $phone = $appointment->patient->phone;
-                $surveyLink = "www.fisiosalud.pe/area/patients/survey/appointment/";
+                $surveyLink = env('APP_URL')."area/patients/survey/appointment/";
                 $surveyLink .= $appointment->id;
                 $patientName = $patient->name;
                 $data = compact(

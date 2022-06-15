@@ -473,7 +473,8 @@ Route::get('/tests/DNILookup', [TestController::class, 'showCheckDNI'])
 Route::post('/tests/CheckDNI', [TestController::class, 'checkDNI'])
     ->name('tests.checkDNI');
 Route::post('/tests/CreatePatient', [TestController::class, 'createPatient'])
-    ->name('tests.createPatient');
+    ->name('tests.createPatient');  
+
 
 Route::resource('companies', CompanyController::class)
     ->only('index', 'create', 'edit', 'store', 'update', 'destroy');

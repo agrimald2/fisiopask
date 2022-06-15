@@ -51,7 +51,7 @@ class TestAssistanceController extends Controller
                     
                     $patientDNI = $appointment->patient->dni;
                     $patientToken = $appointment->patient->token;
-                    $dashboardLink = 'https://fisiosalud.pe/area/patients/login/'.$patientDNI.'/'.$patientToken;
+                    $dashboardLink = env('APP_URL').'area/patients/login/'.$patientDNI.'/'.$patientToken;
     
 
                     $data = compact(

@@ -78,7 +78,7 @@ export default (props, { attrs }) => [
 
   {
     name: "recommendation_id",
-    label: "¿Cómo llegó a Fisiosalud?",
+    label: "¿Cómo llegó a Anandamida?",
     type: inputs.Select,
     options: attrs.recommendations,
   },

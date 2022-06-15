@@ -25,14 +25,16 @@
             <ResultsForm
               :model="model"
             />
-        </div>
-
-        <span> {{ resultStrings }} </span>
+        </div>  
+        <div class="flex">
+          <div v-for="result in resultStrings" :key="result" class="results_div">
+            {{result}}
+          </div>
+        </div> 
       </div>
     </div>
   </app-layout>
 </template>
-
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import JetSectionBorder from "@/Jetstream/SectionBorder.vue";
@@ -68,3 +70,14 @@ export default {
   },
 };
 </script>
+<style scoped>
+  .results_div{
+    margin: 5px 10px;
+    padding: 2px 5px;
+    background-color: darkcyan;
+    border-radius: 10%;
+    font-size: 1.1rem;
+    color: white;
+    font-weight: bolder;
+  }
+</style>

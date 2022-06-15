@@ -1,4 +1,4 @@
-*FISIOSALUD: REPROGRAMACIÓN DE CITA*
+*ANANDAMIDA: REPROGRAMACIÓN DE CITA*
 
 Hola {{$patientName}},
 Tu cita ha sido reprogramada
@@ -33,7 +33,7 @@ Ver mapa aquí:
 {{$office_maps_link}}
 
 
-Te esperamos, FISIOSALUD:
-https://fisiosalud.pe
+Te esperamos, ANANDAMIDA:
+https://anandamida.com
 
 *Por favor, agréganos a tus contactos para activar los links*

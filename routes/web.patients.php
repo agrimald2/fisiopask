@@ -5,6 +5,7 @@ use App\Http\Controllers\Patients\Auth\LogoutAction;
 use App\Http\Controllers\Patients\IndexAction;
 use App\Http\Controllers\Patients\SeeRatesAction;
 use App\Http\Controllers\Patients\SeeAppointmentsAction;
+use App\Http\Controllers\Patients\SeeTestsAction;
 use App\Http\Controllers\Patients\SeePastAppointmentsAction;
 use App\Http\Controllers\Patients\ReprogramAppointmentsAction;
 use App\Http\Controllers\Patients\CancelAppointmentsAction;
@@ -33,7 +34,10 @@ Route::middleware('patients.auth')->group(function () {
         ->name('area.patients.rates');        
 
         Route::get('/seeAppointments', SeeAppointmentsAction::class)
-        ->name('area.patients.appointments');      
+        ->name('area.patients.appointments');  
+        
+        Route::get('/seeTests', SeeTestsAction::class)
+        ->name('area.patients.tests');  
 
         Route::get('/seePastAppointments', SeePastAppointmentsAction::class)
         ->name('area.patients.appointments.past');      

@@ -1,4 +1,4 @@
-*FISIOSALUD: CONFIRMACIÓN DE CITA*
+*ANANDAMIDA: CONFIRMACIÓN DE CITA*
 
 Hola, bienvenido de vuelta, estos son los detalles de tu nueva cita:
 
@@ -17,7 +17,7 @@ Puedes pagar y agendar tus proximas citas aquí:
 
 {{ $dashboardLink }}
 
-Te esperamos, FISIOSALUD:
-https://fisiosalud.pe
+Te esperamos, ANANDAMIDA:
+https://anandamida.com
 
 *Por favor, agréganos a tus contactos para activar los links*

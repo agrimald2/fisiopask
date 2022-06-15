@@ -338,7 +338,7 @@ class FisioLegacyRepository implements RepositoryContract
         $patientName = $patient->first_name . ' ' . $patient->last_name;
         $doctorName = $doctor->first_name . ' ' . $doctor->last_name;
 
-        $s = "\n*FISIOSALUD:  CONFIRMACIÓN DE CITA*";
+        $s = "\n*ANANDAMIDA:  CONFIRMACIÓN DE CITA*";
         $s .= "\n";
         $s .= "\n*Paciente:*";
         $s .= "\n$patientName";
