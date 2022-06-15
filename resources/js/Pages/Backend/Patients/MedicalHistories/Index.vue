@@ -126,12 +126,12 @@ export default {
       let str = "";
       if(modelId == 1) 
       {
-        const model = this.areas.filter(x => x.id === id);
+        const model = this.areas.filter(x => x.id == id);
         str = model[0].category + " " + model[0].sub_category;
       }
       else if(modelId == 2) 
       {
-        const model = this.diagnostics.filter(x => x.id === id);
+        const model = this.diagnostics.filter(x => x.id == id);
         str = model[0].cie_10 + " - " + model[0].name;
       }
       else if(modelId == 3) 
