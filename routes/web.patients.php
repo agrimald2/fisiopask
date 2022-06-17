@@ -13,6 +13,7 @@ use App\Http\Controllers\Patients\CancelAction;
 use App\Http\Controllers\Patients\PayAction;
 use App\Http\Controllers\Patients\CancelConfirmAction;
 use App\Http\Controllers\Patients\PatientSurveyController;
+use App\Http\Controllers\RateMenuAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +55,8 @@ Route::middleware('patients.auth')->group(function () {
 
     Route::post('/pay', PayAction::class)
         ->name('area.patients.pay');
+
+    Route::get('/addRatePatient/{id}', RateMenuAction::class);
 });
 
 Route::get('/survey/appointment/{id}', PatientSurveyController::class)
