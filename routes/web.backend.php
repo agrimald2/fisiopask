@@ -498,5 +498,11 @@ Route::get('/hc/{id}/attributes/create', [HCAttributesController::class, 'create
 Route::post('hc/attributes/store', [HCAttributesController::class, 'store'])
     ->name('hc.attributes.store');
 
-Route::resource('hc.attributes', HCAttributesController::class)
-    ->only('destroy');
+Route::get('/hc/attributes/edit/{id}', [HCAttributesController::class, 'edit'])
+    ->name('hc.attributes.edit');
+
+Route::put('/hc/attributes/update/{id}', [HCAttributesController::class, 'update'])
+    ->name('hc.attributes.update');
+
+Route::delete('hc/attributes/delete/{id}', [HCAttributesController::class, 'destroy'])
+    ->name('hc.attributes.destroy');

@@ -1,14 +1,14 @@
 <template>
   <JetFormSection @submitted="onSubmitted">
     <template #title>
-      {{ model ? 'Editar' : 'Crear' }} un Área Afectada
+      {{ model ? 'Editar' : 'Crear' }} un Atributo
     </template>
 
     <template #form>
       <form-input 
         label="Nombre"
         name="name"
-        v-model="form.name"
+        v-model="form.input_name"
         :form="form"
       />
 
@@ -74,7 +74,7 @@ export default {
         form: this.$inertia.form({
             _method: "POST",
 
-            name: null,
+            input_name: null,
             input_type: null,
             type_id: this.id,
             related_model: null,

@@ -37,6 +37,27 @@ export default (props, { attrs }) => {
             else if(model == 3) str = "Tratamientos";
 
             return `<span>${str}</span>`;
+        }),
+    c().type(cells.Buttons)
+        .extend({
+            buttons: [
+                {
+                    label: "Editar",
+                    clicked({ row }) {
+                        Inertia.visit(route("hc.attributes.edit", row.id));
+                    }
+                },
+                {
+                    label: "Eliminar",
+                    clicked({ row }) {
+                        if(confirm("Esta acción no se puede deshacer."))
+                        {
+                            const url = route("hc.attributes.destroy", row.id);
+                            Inertia.delete(url);
+                        }
+                    }
+                }
+            ]
         })
   ];
 
