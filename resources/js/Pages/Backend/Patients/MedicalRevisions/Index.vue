@@ -139,9 +139,11 @@ export default {
         const model = this.treatments.filter(x => x.id == id);
         str = model[0].name;
       }
-      else
+      else //Hard coded, client asked major changes later...
       {
-        str = id;
+        if(id == "0") str = "Sí";
+        else if(id == "1") str = "No";
+        else str = id;
       }
 
       return str;

@@ -160,6 +160,11 @@ export default {
         let arr = ["Eutímico", "Distímico"];
         return arr;
       }
+      else if(id == 11)
+      {
+        let arr = ["Sí", "No"];
+        return arr;
+      }
       else
       {
         let arr = ["Aumentado", "Conservado", "Disminuido"];

@@ -44,6 +44,8 @@ class HCAttributesController extends Controller
             9 => 'Deposiciones',
 
             10 => 'Estado de Ánimo',
+
+            11 => 'Antecedentes',
         ];
 
         return inertia('Backend/HC/Attributes/CreateEdit', compact('id', 'models', 'types'));
@@ -95,6 +97,8 @@ class HCAttributesController extends Controller
             9 => 'Deposiciones',
 
             10 => 'Estado de Ánimo',
+
+            11 => 'Antecedentes',
         ];
 
         $model = HCAttribute::find($id);

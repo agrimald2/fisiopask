@@ -30,7 +30,7 @@
             />
           </div>
           <div v-else-if="attribute.input_type == 2">
-            <jet-input
+            <input-select
               :id="attribute.input_name"
               type="select"
               :options="options(attribute.related_model)"
@@ -97,11 +97,13 @@ import JetActionMessage from "@/Jetstream/ActionMessage.vue";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 
 import FormInput from "@/Shared/Backend/Form/Input";
+import InputSelect from "@/Shared/Backend/Form/Components/SelectElement.vue";
 
 export default {
   props: ["history_group", "diagnostics", "treatments", "analysis", "affected_areas", "checkedNames", "attributes"],
 
   components: {
+    InputSelect,
     JetLabel,
     JetInput,
     JetActionMessage,
@@ -156,6 +158,11 @@ export default {
       else if (id == 10) 
       {
         let arr = ["Eutímico", "Distímico"];
+        return arr;
+      }
+      else if(id == 11)
+      {
+        let arr = ["Sí", "No"];
         return arr;
       }
       else
