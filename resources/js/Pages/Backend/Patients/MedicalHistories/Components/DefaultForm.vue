@@ -153,6 +153,16 @@ export default {
       if(id == 1) return this.affected_areas;
       else if(id == 2) return this.diagnostics;
       else if(id == 3) return this.treatments;
+      else if (id == 10) 
+      {
+        let arr = ["Eutímico", "Distímico"];
+        return arr;
+      }
+      else
+      {
+        let arr = ["Aumentado", "Conservado", "Disminuido"];
+        return arr;
+      }
       
       return null;
     },

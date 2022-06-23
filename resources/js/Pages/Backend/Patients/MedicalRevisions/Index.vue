@@ -139,6 +139,10 @@ export default {
         const model = this.treatments.filter(x => x.id == id);
         str = model[0].name;
       }
+      else
+      {
+        str = id;
+      }
 
       return str;
     },

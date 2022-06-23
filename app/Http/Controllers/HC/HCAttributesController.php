@@ -35,6 +35,15 @@ class HCAttributesController extends Controller
             1 => 'Áreas Afectadas',
             2 => 'Diagnósticos',
             3 => 'Tratamientos',
+            
+            4 => 'Apetito',
+            5 => 'Sed',
+            6 => 'Sueño',
+            7 => 'Variación de peso',
+            8 => 'Diuresis',
+            9 => 'Deposiciones',
+
+            10 => 'Estado de Ánimo',
         ];
 
         return inertia('Backend/HC/Attributes/CreateEdit', compact('id', 'models', 'types'));
@@ -77,6 +86,15 @@ class HCAttributesController extends Controller
             1 => 'Áreas Afectadas',
             2 => 'Diagnósticos',
             3 => 'Tratamientos',
+            
+            4 => 'Apetito',
+            5 => 'Sed',
+            6 => 'Sueño',
+            7 => 'Variación de peso',
+            8 => 'Diuresis',
+            9 => 'Deposiciones',
+
+            10 => 'Estado de Ánimo',
         ];
 
         $model = HCAttribute::find($id);
