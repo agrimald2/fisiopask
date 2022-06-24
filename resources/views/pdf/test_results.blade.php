@@ -304,20 +304,15 @@
           </tr>
         </thead>
         <tbody>
-            <tr>
-              <td class="tal bold">NEGATIVO</td>  
-              <td class="tal">
-              Indica que no se ha detectado presente antígenos del virus SARS - CoV-2. Todos los resultados deben ser interpretados por su médico tratante. Vigilancia de síntomas y seguimiento.
-              </td>  
-              <td class="tal">Sin infección</td>              
-            </tr>
-            <tr>
-              <td class="si bold">POSITIVO</td>  
-              <td class="si">
-              Indica que se ha detectado presente antígenos del virus SARS - CoV-2. Todos los resultados deben de ser interpretados por su médico tratante.
-              </td>  
-              <td class="si">Fase inicial de la infección</td>              
-            </tr>
+          @foreach ($resultsArray as $result)
+          <tr>
+            <td class="tal bold">{{ $result->result }}</td>  
+            <td class="tal">
+            {{ $result->interpretation }}
+            </td>  
+            <td class="tal">{{ $result->certificate }}</td>              
+          </tr>   
+          @endforeach
         </tbody>
       </table>
 

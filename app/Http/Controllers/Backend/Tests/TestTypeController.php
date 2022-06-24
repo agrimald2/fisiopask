@@ -103,6 +103,8 @@ class TestTypeController extends Controller
     {
         $validated = $request->validate([
             'result' => 'required',
+            'interpretation' => '',
+            'certificate' => '',
         ]);
 
         $query = TestResultType::query()->where('test_type_id', $request->id)->get();
@@ -119,6 +121,8 @@ class TestTypeController extends Controller
             TestResultType::create([
                 'test_type_id' => $request->id,
                 'result' => $validated['result'],
+                'interpretation' => $validated['interpretation'],
+                'certificate' => $validated['certificate'],
            ]);
         }
 

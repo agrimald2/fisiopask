@@ -180,7 +180,7 @@ class TestController extends Controller
         $doctors = Doctor::query()->get();
         $companies = Company::query()->get();
         $testType = TestType::query()->where('id', $model->test_type_id)->first();
-        $resultsArray = TestResultType::query()->get();
+        $resultsArray = TestResultType::query()->where('test_type_id', $model->test_type_id)->get();
 
         $data = TestData::query()->where('test_id', $id)->get();
 

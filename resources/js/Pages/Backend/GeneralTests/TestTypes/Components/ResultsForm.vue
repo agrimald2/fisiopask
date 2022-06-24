@@ -13,6 +13,22 @@
           v-model="form.result"
           :form="form"
         />
+
+        <!-- interpretation -->
+        <form-input
+          label="Interpretación"
+          name="interpretation"
+          v-model="form.interpretation"
+          :form="form"
+        />
+
+        <!-- certificate -->
+        <form-input
+          label="Certificado"
+          name="certificate"
+          v-model="form.certificate"
+          :form="form"
+        />
       </template>
 
       <template #actions>
@@ -63,6 +79,8 @@ export default {
         _method: "POST",
 
         result: null,
+        interpretation: null,
+        certificate: null,
 
         ...this.model,
       }),

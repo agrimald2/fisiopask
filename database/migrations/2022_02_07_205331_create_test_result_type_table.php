@@ -16,6 +16,8 @@ class CreateTestResultTypeTable extends Migration
         Schema::create('test_result_type', function (Blueprint $table) {
             $table->unsignedBigInteger('test_type_id');
             $table->string('result');
+            $table->text('interpretation');
+            $table->string('certificate');
         });
     }
 
