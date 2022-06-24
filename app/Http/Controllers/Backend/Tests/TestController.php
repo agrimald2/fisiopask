@@ -15,6 +15,7 @@ use App\Domain\Patients\PatientAuthRepositoryContract;
 
 
 use App\Models\Patient;
+use App\Models\TestData;
 
 class TestController extends Controller
 {
@@ -23,7 +24,7 @@ class TestController extends Controller
         $searchQuery = $request->searchQuery;
         $companyQuery = $request->companyQuery;
         $model = Test::query()
-            ->with('doctor', 'patient', 'company', 'testType')
+            ->with('doctor', 'patient', 'company', 'testType', 'results')
             ->whereHas('patient', function($query) use($searchQuery) {
                 $query->when($searchQuery, function ($query, $value) {
                    $query->where('name', 'LIKE', "%$value%")->orWhere('dni', 'LIKE', "%$value%");
@@ -117,33 +118,46 @@ class TestController extends Controller
             'doctor_id' => 'required',
             'company_id' => '',
             'test_type_id' => 'required',
-            'result' => 'required',
+            'results' => 'required',
+            'resultCount' => 'required',
+            'testResultType' => 'required',
             'taken_at' => 'required',
             'result_at' => '',
             'observations' => '',
             'patient_id' => 'required',
         ]);
 
-        $resultString = "Pendiente";
-
-        if($validated['result'] != 0)
-        {
-            $resultsArray = TestResultType::query()->where('test_type_id', $validated['test_type_id'])->get();
-            $resultString = $resultsArray[$validated['result'] -1]->result;
-        }
-
-        Test::create([
+        $test = Test::create([
             'test_type_id' => $validated['test_type_id'],
             'patient_id' => $validated['patient_id'],
             'doctor_id' => $validated['doctor_id'],
             'company_id' => $validated['company_id'],
-            'result' => $resultString,
             'taken_at' => $validated['taken_at'],
             'result_at' => $validated['result_at'],
             'observations' => $validated['observations'],
         ]);
 
+        $results = $validated['results'];
 
+        foreach($results as $key => $item)
+        {
+            $resultString = $item;
+            if($validated["testResultType"] == 0)
+            {
+                $resultString = "Pendiente";
+                if($item != 0)
+                {
+                    $resultsArray = TestResultType::query()->where('test_type_id', $validated['test_type_id'])->get();
+                    $resultString = $resultsArray[$item -1]->result;
+                }
+            }
+
+            TestData::create([
+                'test_id' => $test->id,
+                'data' => $resultString,
+                'index' => $key,
+            ]);
+        }
 
         return redirect()->route('tests.index');
     }
@@ -165,10 +179,21 @@ class TestController extends Controller
 
         $doctors = Doctor::query()->get();
         $companies = Company::query()->get();
-        $testTypes = TestType::query()->get();
+        $testType = TestType::query()->where('id', $model->test_type_id)->first();
         $resultsArray = TestResultType::query()->get();
 
-        $pdf = PDF::loadView('pdf.test_results', compact('model', 'doctors', 'companies', 'testTypes', 'resultsArray'));
+        $data = TestData::query()->where('test_id', $id)->get();
+
+        $resultsData = "";
+
+        foreach($data as $r)
+        {
+            $resultsData .= $r->data." / ";
+        }
+
+        $resultsData = substr($resultsData, 0, -2);
+
+        $pdf = PDF::loadView('pdf.test_results', compact('model', 'resultsData', 'doctors', 'companies', 'testType', 'resultsArray'));
 
         return $pdf->download('PruebaDeLaboratorio.pdf');
     }  
@@ -179,16 +204,14 @@ class TestController extends Controller
             'doctor_id' => 'required',
             'company_id' => 'required',
             'test_type_id' => 'required',
-            'result' => 'required',
+            'results' => 'required',
+            'resultCount' => 'required',
+            'testResultType' => 'required',
             'taken_at' => 'required',
             'result_at' => '',
             'observations' => '',
             'patient_id' => 'required',
         ]);
-
-        $resultString = "Pendiente";
-
-
 
         $model = Test::find($id);
 
@@ -196,12 +219,18 @@ class TestController extends Controller
         $model->patient_id = $validated['patient_id'];
         $model->doctor_id = $validated['doctor_id'];
         $model->company_id = $validated['company_id'];
-        $model->result = $resultString;
         $model->taken_at = $validated['taken_at'];
         $model->result_at = $validated['result_at'];
         $model->observations = $validated['observations'];
 
         $model->save();
+
+        $oldData = TestData::query()->where('test_id', $id)->get();
+
+        foreach($oldData as $old)
+        {
+            TestData::destroy($old->id);
+        }
 
         $patient_dni = $model->patient->dni;
         $patient_token = $model->patient->token;
@@ -212,13 +241,29 @@ class TestController extends Controller
         $phone = $model->patient->phone;
         $message = "Hola " . $model->patient->fullname . " los resultados de tu prueba ya están listos, puedes verlos en el siguiente link: " . $dashboardlink ;
 
-        if($validated['result'] != 0)
-        {
-            $resultsArray = TestResultType::query()->where('test_type_id', $validated['test_type_id'])->get();
-            $resultString = $resultsArray[$validated['result'] -1]->result;
-            chatapi($phone, $message);
-        }
+        $results = $validated['results'];
 
+        foreach($results as $key => $item)
+        {
+            $resultString = $item;
+            if($validated["testResultType"] == 0)
+            {
+                $resultString = "Pendiente";
+                if($item != 0)
+                {
+                    $resultsArray = TestResultType::query()->where('test_type_id', $validated['test_type_id'])->get();
+                    $resultString = $resultsArray[$item -1]->result;
+                }
+            }
+
+            TestData::create([
+                'test_id' => $id,
+                'data' => $resultString,
+                'index' => $key,
+            ]);
+        }
+        
+        chatapi($phone, $message);
         return redirect()->route('tests.index');
     }
 }

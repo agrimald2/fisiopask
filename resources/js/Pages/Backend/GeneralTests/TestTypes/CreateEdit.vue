@@ -18,6 +18,7 @@
         <DefaultForm
           class="mt-10 sm:mt-0"
           :model="model"
+          :types="types"
         />
 
         <div v-if="model">
@@ -44,7 +45,7 @@ import DefaultForm from "./Components/Form";
 import ResultsForm from "./Components/ResultsForm";
 
 export default {
-  props: ["model", "results"],
+  props: ["model", "results", "types"],
 
   components: {
     AppLayout,

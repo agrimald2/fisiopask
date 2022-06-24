@@ -13,16 +13,41 @@
             type="select"
             :options="testTypesMap"
             :form="form"
+            @input="check()"
         />
-
-        <form-input
-            label="Resultado"
-            name="result"
-            v-model="form.result"
-            type="select"
-            :options="resultOptions"
-            :form="form"
-        />
+        <div v-show="form.test_type_id != null" class="col-span-6 sm:col-span-4">
+          <template v-if="form.testResultType == 0">
+            <template v-for="item in form.resultCount" :key="item">
+              <jet-label
+                :for="'result' + item"
+                :value="'Resultado ' + item"
+              />
+              <input-select
+                :id="'result'+item"
+                type="select"
+                :options="resultOptions"
+                class="mt-1 block w-full"
+                v-model="form.results[item]"
+              />
+            </template>
+          </template>
+          <template v-else>
+            <template v-for="item in form.resultCount" :key="item">
+              <jet-label
+                :for="'result' + item"
+                :value="'Resultado ' + item"
+              />
+              <jet-input
+                :label="'Resultado ' + item"
+                :name="'result' + item"
+                v-model="form.results[item]"
+                type="text"
+                class="mt-1 block w-full"
+                :form="form"
+              />
+            </template>
+          </template>
+        </div>
 
         <form-input
           label="Fecha del Test"
@@ -33,7 +58,6 @@
         />
 
         <form-input
-          v-if="form.result != null && form.result != 0"
           label="Fecha del Resultado"
           name="result_date"
           v-model="form.result_at"
@@ -89,17 +113,24 @@
 
 <script>
 import JetButton from "@/Jetstream/Button.vue";
+import JetInput from "@/Jetstream/Input";
+import JetLabel from "@/Jetstream/Label";
 import JetDangerButton from "@/Jetstream/DangerButton.vue";
 import JetFormSection from "@/Jetstream/FormSection.vue";
 import JetActionMessage from "@/Jetstream/ActionMessage.vue";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 
+import InputSelect from "@/Shared/Backend/Form/Components/SelectElement.vue";
+
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["model", "doctorsMap", "companiesMap", "testTypesMap", "resultsArray", "patient_id"],
+  props: ["model", "doctorsMap", "companiesMap", "testTypesMap", "testTypes", "resultsArray", "patient_id"],
 
   components: {
+    InputSelect,
+    JetInput,
+    JetLabel,
     JetActionMessage,
     JetButton,
     JetFormSection,
@@ -116,10 +147,12 @@ export default {
       form: this.$inertia.form({
         _method: "POST",
 
+        testResultType: null,
+        resultCount: 1,
         doctor_id: null,
         company_id: null,
         test_type_id: null,
-        result: null,
+        results: {},
         taken_at: null,
         result_at: null,
         observations: null,
@@ -149,6 +182,13 @@ export default {
             this.previousTestType = this.form.test_type_id;
         }
 
+        const model = this.testTypes.filter((x) => {
+          return x.id == this.form.test_type_id;
+        });
+
+        this.form.testResultType = model[0].type;
+        this.form.resultCount = model[0].result_count;
+
         let list = {};
 
         var newArray = this.resultsArray.filter((x) => {
@@ -167,6 +207,14 @@ export default {
   },
   
   methods: {
+    check() {
+        const model = this.testTypes.filter((x) => {
+          return x.id == this.form.test_type_id;
+        });
+
+        this.form.testResultType = model[0].type;
+        this.form.resultCount = model[0].result_count;
+    },
     onSubmitted() {
       const model = this.model;
       let url = route("tests.store");

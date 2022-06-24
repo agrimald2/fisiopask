@@ -22,6 +22,25 @@
           :form="form"
         />
 
+        <!-- type -->
+        <form-input
+          label="Tipo"
+          name="type"
+          v-model="form.type"
+          type="select"
+          :form="form"
+          :options="types"
+        />
+
+        <!-- count -->
+        <form-input
+          label="Cantidad de resultados"
+          name="quantity"
+          v-model="form.result_count"
+          type="numeric"
+          :form="form"
+        />
+
       </template>
 
       <template #actions>
@@ -64,7 +83,7 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["model"],
+  props: ["model", "types"],
 
   components: {
     JetActionMessage,
@@ -84,6 +103,8 @@ export default {
 
         name: null,
         description: null,
+        type: 0,
+        result_count: 1,
 
         ...this.model,
       }),

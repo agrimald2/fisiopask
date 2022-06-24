@@ -19,7 +19,22 @@ export default (props, { attrs }) => {
       })
     ,
 
-    c("result", "Resultado"),
+    c("", "Resultado")
+      .extend({
+        html: true,
+      })
+      .format(function (row) {
+        let output = `<span>`;
+        row.results.forEach(element => {
+          output += element.data + " / ";
+        });
+
+        output = output.slice(0, output.length - 2);
+
+        output += `</span>`;
+
+        return output;
+      }),
     c("observations", "Observaciones"),
 
     c("taken_at", "Tomado el").format((value, { row }) =>

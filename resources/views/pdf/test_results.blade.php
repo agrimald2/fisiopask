@@ -283,8 +283,8 @@
         <tbody>
             <tr>
               <td class="tal" style="font-size:0.85rem">{{$model->result_at}}</td>
-              <td class="tal">{{$model->test_type_id}}</td>
-              <td class="tal">{{$model->result}}</td>  
+              <td class="tal">{{$testType->name}}</td>
+              <td class="tal">{{$resultsData}}</td>  
               <td class="tal">{{$model->observations}}</td>              
             </tr>
         </tbody>

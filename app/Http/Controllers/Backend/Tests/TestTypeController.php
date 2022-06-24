@@ -33,7 +33,12 @@ class TestTypeController extends Controller
 
     public function create()
     {
-        return inertia('Backend/GeneralTests/TestTypes/CreateEdit');
+        $types = [
+            0 => 'Cualitativa',
+            1 => 'Cuantitativa',
+        ];
+
+        return inertia('Backend/GeneralTests/TestTypes/CreateEdit', compact('types'));
     }
 
     public function store(Request $request)
@@ -41,11 +46,15 @@ class TestTypeController extends Controller
         $validated = $request->validate([
             'name' => 'required',
             'description' => 'required',
+            'type' => 'required',
+            'result_count' => 'numeric|required',
         ]);
 
         TestType::create([
             'name' => $validated['name'],
             'description' => $validated['description'],
+            'type' => $validated['type'],
+            'result_count' => $validated['result_count'],
         ]);
 
         return redirect()->route('testTypes.index');
@@ -57,7 +66,12 @@ class TestTypeController extends Controller
 
         $results = TestResultType::query()->where('test_type_id', $id)->get();
 
-        return inertia('Backend/GeneralTests/TestTypes/CreateEdit', compact('model', 'results'));
+        $types = [
+            0 => 'Cualitativa',
+            1 => 'Cuantitativa',
+        ];
+
+        return inertia('Backend/GeneralTests/TestTypes/CreateEdit', compact('model', 'results', 'types'));
     }
 
     public function update(Request $request, $id)

@@ -35,5 +35,10 @@ class Test extends Model
     {
         return $this->belongsTo(TestType::class);
     }
+
+    public function results() 
+    {
+        return $this->hasMany(TestData::class);
+    }
     
 }

@@ -21,6 +21,7 @@
           :doctorsMap="doctorsMapped"
           :companiesMap="companiesMapped"
           :testTypesMap="testTypesMapped"
+          :testTypes="testTypes"
           :resultsArray="resultsArray"
           :patient_id="patient_id"
         />
