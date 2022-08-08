@@ -10,6 +10,7 @@ use App\Models\HistoryTreatment;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 
 class MedicalRevisionController extends Controller
@@ -66,8 +67,15 @@ class MedicalRevisionController extends Controller
         array_push($treatments, $validated["t1"]);
         array_push($treatments, $validated["t2"]);
         array_push($treatments, $validated["t3"]);
+        $user = auth()->user();
+        $doc = Doctor::query()->where('user_id', $user->id)->first();
 
         $model = MedicalRevision::create($validated);
+        if($doc)
+        {
+            $model->doctor_id = $doc->id;
+            $model->save();
+        }
 
         foreach($treatments as $treatment)
         {

@@ -7,26 +7,17 @@ use App\Exports\PatientsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\AssistedAppointments;
-use App\Models\Office;
 use App\Models\Patient;
 use App\Models\PatientPayment;
-use App\Models\Rate;
+use App\Models\PatientRate;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StatisticsController extends Controller
 {
-    protected $newPatientsPrevious = [];
-    protected $oldPatientsPrevious = [];
-
-    protected $newPatientsThis = [];
-    protected $oldPatientsThis = [];
-
-    protected $ratesPrevious = null;
-    protected $ratesThis = null;
-
     protected $user = null;
 
     const STATS_REQUEST_DAY = 1;
@@ -37,32 +28,30 @@ class StatisticsController extends Controller
     
     public function index()
     {
-        $this->user = auth()->user();
-        
-        $start = Carbon::now()->startOfMonth();
-        $end = Carbon::now()->endOfMonth();
-        if(!$this->user->hasRole('admin'))
-        {
-            $start = Carbon::now()->subDay(3);
-            $end = Carbon::now();
-        }
-        $this->setDataRange($start, $end, false, null, null, null);
-
-        $salesNServices = $this->getSalesNServices(clone $start, null, null, null);
-
-        $sales[0] = $salesNServices[0];
-        $sales[1] = $salesNServices[1];
-        $nServices[0] = $salesNServices[2];
-        $nServices[1] = $salesNServices[3];
-        
-        $patients = $this->getPatientsCount(clone $start);
-        $tickets = $this->getAverageTicket($sales, $nServices, clone $start);
-
         $recommendation = DB::select("SELECT id,recommendation FROM recommendations");
-        $offices=DB::select("SELECT id, name FROM offices");
-      
+        $offices=DB::select("SELECT id, name FROM offices"); 
 
-        return inertia('Backend/Statistics/statistics', ['offices'=>$offices,'recommendation'=>$recommendation,'patient' => $patients, 'sales' => $sales, 'ticket' => $tickets, 'nServices' => $nServices]);
+        $patients = [];
+        $tickets = [];
+        $sales = [];
+        $services = [];
+
+        $start = Carbon::now()->startOfMonth()->subMonth(5);
+        $end = Carbon::now()->endOfMonth()->subMonth(5);
+        for($i = 0; $i < 6; $i++)
+        {
+            $data = $this->getData($start, $end);
+            
+            array_push($patients, $data['patients']);
+            array_push($tickets, $data['tickets']);
+            array_push($sales, $data['sales']);
+            array_push($services, $data['services']);
+            
+            $start = $start->addMonth(1);
+            $end = $end->addMonth(1);
+        }
+    
+        return inertia('Backend/Statistics/statistics', ['offices'=>$offices,'recommendation'=>$recommendation,'patient' => $patients, 'sales' => $sales, 'ticket' => $tickets, 'nServices' => $services]);
     }
 
     public function statistic(Request $request)
@@ -75,12 +64,29 @@ class StatisticsController extends Controller
         $family_id = null;
         $subfamily_id = null;
         $rate_id = null;
+
+        $patients = [];
+        $tickets = [];
+        $sales = [];
+        $services = [];
         
         switch($request->params["advances"])
         {
             case self::STATS_REQUEST_MONTH:
-                $start = Carbon::now()->startOfMonth();
-                $end = Carbon::now()->endOfMonth();
+                $start = Carbon::now()->startOfMonth()->subMonth(5);
+                $end = Carbon::now()->endOfMonth()->subMonth(5);
+                for($i = 0; $i < 6; $i++)
+                {
+                    $data = $this->getData($start, $end);
+
+                    array_push($patients, $data['patients']);
+                    array_push($tickets, $data['tickets']);
+                    array_push($sales, $data['sales']);
+                    array_push($services, $data['services']);
+
+                    $start = $start->addMonth(1);
+                    $end = $end->addMonth(1);
+                }
                 break;
             case self::STATS_REQUEST_DAY:
             {
@@ -93,16 +99,58 @@ class StatisticsController extends Controller
                 $curr = substr($curr, 0, 8);
                 $curr = $curr.$nxt;
                 $end = new Carbon($curr);
+
+                for($i = 0; $i < 10; $i++)
+                {
+                    $data = $this->getData($start, $end);
+
+                    array_push($patients, $data['patients']);
+                    array_push($tickets, $data['tickets']);
+                    array_push($sales, $data['sales']);
+                    array_push($services, $data['services']);
+
+                    $start = $start->addDay(1);
+                    $end = $end->addDay(1);
+                }
                 break;
             }
             case self::STATS_REQUEST_RANGE:
                 $start = new Carbon($request->dates["start"]);
                 $end = new Carbon($request->dates["end"]);
+                $start = $start->subDay();
+                $start = $start->subMonths(4);
+                $end = $end->subMonths(4);
+
+                for($i = 0; $i < 5; $i++)
+                {
+                    $data = $this->getData($start, $end);
+
+                    array_push($patients, $data['patients']);
+                    array_push($tickets, $data['tickets']);
+                    array_push($sales, $data['sales']);
+                    array_push($services, $data['services']);
+
+                    $start = $start->addMonth(1);
+                    $end = $end->addMonth(1);
+                }
                 break;
             case self::STATS_REQUEST_RECOMMENDATION:
-                $start = Carbon::now()->startOfCentury();
-                $end = Carbon::now()->endOfCentury();
                 $recommendation = $request->paramsRecommendations["recommendations"];
+
+                $start = Carbon::now()->startOfMonth();
+                $end = Carbon::now()->endOfMonth();
+                for($i = 0; $i < 2; $i++)
+                {
+                    $data = $this->getData($start, $end);
+
+                    array_push($patients, $data['patients']);
+                    array_push($tickets, $data['tickets']);
+                    array_push($sales, $data['sales']);
+                    array_push($services, $data['services']);
+
+                    $start = $start->addMonth(1);
+                    $end = $end->addMonth(1);
+                }
                 break;
             case self::STATS_REQUEST_RATE:
                 $family_id = $request->params["family_id"];
@@ -111,348 +159,149 @@ class StatisticsController extends Controller
 
                 $start = Carbon::now()->startOfMonth();
                 $end = Carbon::now()->endOfMonth();
+                for($i = 0; $i < 2; $i++)
+                {
+                    $data = $this->getData($start, $end);
+
+                    array_push($patients, $data['patients']);
+                    array_push($tickets, $data['tickets']);
+                    array_push($sales, $data['sales']);
+                    array_push($services, $data['services']);
+
+                    $start = $start->addMonth(1);
+                    $end = $end->addMonth(1);
+                }
                 break;
         }
 
-        if($request->params["advances"] != self::STATS_REQUEST_DAY)
-        {
-            if(!$this->user->hasRole('admin'))
-            {
-                $start = Carbon::now()->subDay(3);
-                $end = Carbon::now();
-            }
-        }
-
-        $this->setDataRange($start, $end, $recommendation, $family_id, $subfamily_id, $rate_id);
-
-        $salesNServices = $this->getSalesNServices(clone $start, $family_id, $subfamily_id, $rate_id);
-
-        if($this->user->hasRole('admin'))
-        {
-            $sales[0] = $salesNServices[0];
-            $sales[1] = $salesNServices[1];
-            $nServices[0] = $salesNServices[2];
-            $nServices[1] = $salesNServices[3];
-
-            $patients = $this->getPatientsCount(clone $start);
-            $tickets = $this->getAverageTicket($sales, $nServices, clone $start);
-        }
-        else
-        {
-            $sales[0] = $salesNServices[1];
-            $nServices[0] = $salesNServices[3];
-
-            $patients = $this->getPatientsCount(clone $start)[1];
-            $tickets = $this->getAverageTicket($sales, $nServices, clone $start)[1];
-        }
-
-        return response()->json(['patients' => $patients, 'sales' => $sales,'tickets' => $tickets, 'nServices' => $nServices]);
+        return response()->json(['patients' => $patients, 'sales' => $sales,'tickets' => $tickets, 'nServices' => $services]);
     }
 
-    private function nullEverything() 
+    private function getData($start, $end)
     {
-        $this->newPatientsPrevious = [];
-        $this->oldPatientsPrevious = [];
-    
-        $this->newPatientsThis = [];
-        $this->oldPatientsThis = [];
-    
-        $this->ratesPrevious = null;
-        $this->ratesThis = null;
-    }
-
-    public function setDataRange($start, $end, $recommendation, $family_id, $subfamily_id, $rate_id)
-    {
-        $this->nullEverything();
-
-        $previousStart = clone $start;
-        $previousEnd = clone $end;
-
-        $previousStart->subMonth(1);
-        $previousEnd->subMonth(1);
-
+        Log::info($start);
+        Log::info($end);
         $payments = PatientPayment::query()
-            ->with("patientRate.subfamily")
-            ->whereBetween(
-                'created_at', [
-                    $start, 
-                    $end
-                ])
-            ->orWhereBetween(
-                'created_at', [
-                    $previousStart,
-                    $previousEnd
-                ])
-            ->get();
+                        ->whereBetween('created_at', [
+                            $start,
+                            $end
+                        ])
+                        ->get();
 
-        $patients = [];
-        $patientIds = [];
-
-        foreach($payments as $payment)
-        {
-            if(!in_array($payment->patient_id, $patientIds))
-            {
-                $patient = Patient::with('payments')->find($payment->patient_id);
-                if($patient != null)
-                {
-                    array_push($patients, $patient);
-                }
-                array_push($patientIds, $payment->patient_id);
-            }
-        }
-
-        //$patients = Patient::query()->with('payments')->where('id', '>', '5000')->get();
-
-        $appointmentsThis = Appointment::query()
-            ->where('status', Appointment::STATUS_ASSISTED)
-            ->whereBetween('date', [
-                $start, 
-                $end])
-            ->get();
-
-        $appointmentsPrevious = Appointment::query()
-            ->where('status', Appointment::STATUS_ASSISTED)
-            ->whereBetween('date', [
-                $previousStart, 
-                $previousEnd])
-            ->get();
-
-        foreach($patients as $patient)
-        {
-            if(count($patient->payments) > 0)
-            {
-                if($recommendation != null)
-                {
-                    if($patient->reccomendation_id != $recommendation) continue;
-                }
-
-                $paymentDate = new Carbon($patient->payments[0]->created_at);
-
-                if($paymentDate > $start && $paymentDate < $end)
-                {
-                    array_push($this->newPatientsThis, $patient->id);
-                }
-                else if($paymentDate > $previousStart && $paymentDate < $previousEnd)
-                {
-                    array_push($this->newPatientsPrevious, $patient->id);
-                }
-            }
-        }
-
-        foreach($appointmentsThis as $appointment)
-        {
-            if($recommendation != null)
-            {
-                $patient = Patient::find($appointment->patient_id);
-                if($patient)
-                {
-                    if($patient->reccomendation_id != $recommendation) continue;
-                }
-            }
-
-            if(!in_array($appointment->patient_id, $this->oldPatientsThis) 
-                && !in_array($appointment->patient_id, $this->newPatientsThis))
-            {
-                array_push($this->oldPatientsThis, $appointment->patient_id);
-            }
-        }
-
-        foreach($appointmentsPrevious as $appointment)
-        {
-            if($recommendation != null)
-            {
-                $patient = Patient::find($appointment->patient_id);
-                if($patient)
-                {
-                    if($patient->reccomendation_id != $recommendation) continue;
-                }
-            }
-
-            if(!in_array($appointment->patient_id, $this->oldPatientsPrevious) 
-                && !in_array($appointment->patient_id , $this->newPatientsPrevious))
-            {
-                array_push($this->oldPatientsPrevious, $appointment->patient_id);
-            }
-        }
-
-        $this->ratesPrevious = AssistedAppointments::query()                
-            ->whereBetween('created_at', [
-                $previousStart,
-                $previousEnd])
-            ->with('appointment.patient')
-            ->get();
-
-
-        $this->ratesThis = AssistedAppointments::query()                
-            ->whereBetween('created_at', [
-                $start, 
-                $end])
-            ->with('appointment.patient')
-            ->get();
-    }
-
-    public function getSalesNServices($start, $family_id, $subfamily_id, $rate_id)
-    {
-        $previousStart = clone $start;
-        $servicesPrevious = null;
-        $servicesThis = null;
-        $servicesPrevious["Fecha"] = $previousStart->subMonth(1)->format('Y-m');
-        $servicesThis["Fecha"] = $start->format('Y-m');
-        $servicesPrevious["ServiciosRecurrentes"] = 0;
-        $servicesPrevious["ServiciosNuevos"] = 0;
-        $servicesThis["ServiciosRecurrentes"] = 0;
-        $servicesThis["ServiciosNuevos"] = 0;
+        $appointments = AssistedAppointments::query()
+                            ->whereBetween('created_at', [
+                                $start,
+                                $end
+                            ])
+                            ->with('appointment', 'patientRate')
+                            ->get();
         
-        $previousMonth = null;
-        $thisMonth = null;
-        $previousMonth["Fecha"] = $servicesPrevious["Fecha"];
-        $thisMonth["Fecha"] = $servicesThis["Fecha"];
-        $previousMonth["ValorEjecutadoRecurrentes"] = 0;
-        $previousMonth["ValorEjecutadoNuevos"] = 0;
-        $thisMonth["ValorEjecutadoRecurrentes"] = 0;
-        $thisMonth["ValorEjecutadoNuevos"] = 0;
-
-        $rateFound = null;
-        if($rate_id != null)
+        $oldPatientIds = [];
+        $newPatientIds = [];
+        $oldPatientSales = 0;
+        $newPatientSales = 0;
+        $oldPatientServices = 0;
+        $newPatientServices = 0;
+        $oldAvrgTicket = 0;
+        $newAvrgTicket = 0;
+        $oldAvgSale = 0;
+        $newAvgSale = 0;
+        $newPatientID = $this->getFirstPatientOfMonth(clone $start);
+        if($newPatientID != 0) 
         {
-            $rateFound = Rate::find($rate_id);
+            //Get patients & unique array
+            foreach($payments as $payment)
+            {
+                $patientId = $payment->patient_id;
+                if($patientId >= $newPatientID)
+                {
+                    //NEW
+                    $newPatientSales += $payment->ammount;
+                }
+                else
+                { 
+                    //OLD
+                    $oldPatientSales += $payment->ammount;
+                }
+            }
+
+            foreach($appointments as $appointment)
+            {
+                $patientId = $appointment->appointment->patient_id;
+                if($patientId >= $newPatientID)
+                {
+                    array_push($newPatientIds, $patientId);
+                    if($appointment->patientRate) $newAvgSale += $appointment->patientRate->price;
+                    $newPatientServices++;
+                }
+                else 
+                {
+                    array_push($oldPatientIds, $patientId);
+                    if($appointment->patientRate) $oldAvgSale += $appointment->patientRate->price;
+                    $oldPatientServices++;
+                }
+            }
+
+            $oldPatientIds = array_unique($oldPatientIds, SORT_NUMERIC);
+            $newPatientIds = array_unique($newPatientIds, SORT_NUMERIC);
+
+            $oldAvrgTicket = intval($oldPatientSales / (($oldPatientServices == 0) ? 1 : $oldPatientServices));
+            $newAvrgTicket = intval($newPatientSales / (($newPatientServices == 0) ? 1 : $newPatientServices));
         }
 
-        foreach($this->ratesPrevious as $rate)
-        {
-            foreach($this->oldPatientsPrevious as $patient)
-            {
-                if($rate->appointment->patient_id == $patient)
-                {
-                    if($family_id == null || $family_id == $rate->patientRate->subfamily->family_id)
-                    {
-                        if($subfamily_id == null || $subfamily_id == $rate->patientRate->subfamily_id)
-                        {
-                            if($rateFound == null || $rateFound->name == $rate->patientRate->name)
-                            {
-                                $previousMonth["ValorEjecutadoRecurrentes"] += $rate->consumed;
-                                $servicesPrevious["ServiciosRecurrentes"]++;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
+        $data = [
+            'patients' => [
+                "Fecha" => $start->format('Y-m-d'),
+                "Recurrentes" => count($oldPatientIds), 
+                "Nuevos" => count($newPatientIds),
+                "TotalGeneral" => count($oldPatientIds) + count($newPatientIds),
+            ],
+            'sales' => [
+                "Fecha" => $start->format('Y-m-d'),
+                "ValorEjecutadoRecurrentes" => $oldPatientSales, 
+                "ValorEjecutadoNuevos" => $newPatientSales,
+                "TotalGeneral" => $oldPatientSales + $newPatientSales,
+            ],
+            'tickets' => [
+                "Fecha" => $start->format('Y-m-d'),
+                "TicketPromedioRecurrentes" => $oldAvrgTicket, 
+                "TicketPromedioNuevos" => $newAvrgTicket,
+                "TotalGeneral" => $oldAvrgTicket + $newAvrgTicket,
+            ],
+            'services' => [
+                "Fecha" => $start->format('Y-m-d'),
+                "ServiciosRecurrentes" => $oldPatientServices, 
+                "ServiciosNuevos" => $newPatientServices,
+                "TotalGeneral" => $oldPatientServices + $newPatientServices,
+            ],
+        ];
 
-            foreach($this->newPatientsPrevious as $patient)
-            {
-                if($rate->appointment->patient_id == $patient)
-                {
-                    if($family_id == null || $family_id == $rate->patientRate->subfamily->family_id)
-                    {
-                        if($subfamily_id == null || $subfamily_id == $rate->patientRate->subfamily_id)
-                        {
-                            if($rateFound == null || $rateFound->name == $rate->patientRate->name)
-                            {
-                                $previousMonth["ValorEjecutadoNuevos"] += $rate->consumed;
-                                $servicesPrevious["ServiciosNuevos"]++;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        foreach($this->ratesThis as $rate)
-        {
-            foreach($this->oldPatientsThis as $patient)
-            {
-                if($rate->appointment->patient_id == $patient)
-                {
-                    if($family_id == null || $family_id == $rate->patientRate->subfamily->family_id)
-                    {
-                        if($subfamily_id == null || $subfamily_id == $rate->patientRate->subfamily_id)
-                        {
-                            if($rateFound == null || $rateFound->name == $rate->patientRate->name)
-                            {
-                                $thisMonth["ValorEjecutadoRecurrentes"] += $rate->consumed;
-                                $servicesThis["ServiciosRecurrentes"]++;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            foreach($this->newPatientsThis as $patient)
-            {
-                if($rate->appointment->patient_id == $patient)
-                {
-                    if($family_id == null || $family_id == $rate->patientRate->subfamily->family_id)
-                    {
-                        if($subfamily_id == null || $subfamily_id == $rate->patientRate->subfamily_id)
-                        {
-                            if($rateFound == null || $rateFound->name == $rate->patientRate->name)
-                            {
-                                $thisMonth["ValorEjecutadoNuevos"] += $rate->consumed;
-                                $servicesThis["ServiciosNuevos"]++;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        $previousMonth["TotalGeneral"] = $previousMonth["ValorEjecutadoRecurrentes"] + $previousMonth["ValorEjecutadoNuevos"];
-        $thisMonth["TotalGeneral"] =  $thisMonth["ValorEjecutadoRecurrentes"] + $thisMonth["ValorEjecutadoNuevos"];
-
-        $servicesPrevious["TotalGeneral"] = $servicesPrevious["ServiciosRecurrentes"] + $servicesPrevious["ServiciosNuevos"];
-        $servicesThis["TotalGeneral"] = $servicesThis["ServiciosRecurrentes"] + $servicesThis["ServiciosNuevos"];
-
-        return [$previousMonth, $thisMonth, $servicesPrevious, $servicesThis];
+        return $data;
     }
 
-    public function getPatientsCount($start)
+    private function getFirstPatientOfMonth($start)
     {
-        $previousMonth = null;
-        $thisMonth = null;
+        $carbonStart = new Carbon($start);
+        $carbonStart = $carbonStart->startOfMonth();
 
-        $previousStart = clone $start;
+        $startOfDay = clone $carbonStart;
+        $endOfDay = clone $carbonStart;
+        $endOfDay = $endOfDay->addDay();
 
-        $thisMonth["Fecha"] = $start->format('Y-m');
-        $previousMonth["Fecha"] = $previousStart->subMonth(1)->format('Y-m');
-
-        $previousMonth["Recurrentes"] = count($this->oldPatientsPrevious);
-        $previousMonth["Nuevos"] = count($this->newPatientsPrevious);
-        $previousMonth["TotalGeneral"] = $previousMonth["Recurrentes"] + $previousMonth["Nuevos"];
-
-        $thisMonth["Recurrentes"] = count($this->oldPatientsThis);
-        $thisMonth["Nuevos"] = count($this->newPatientsThis);
-        $thisMonth["TotalGeneral"] = $thisMonth["Recurrentes"] + $thisMonth["Nuevos"];
-
-        return [$previousMonth, $thisMonth];
-    }
-
-    public function getAverageTicket($sales, $services, $start)
-    {
-        $previousMonth = null;
-        $thisMonth = null;
-
-        $previousStart = clone $start;
-
-        $previousMonth["Fecha"] = $previousStart->subMonth(1)->format('Y-m');
-        $thisMonth["Fecha"] = $start->format('Y-m');
-
-        $previousMonth["TicketPromedioRecurrentes"] = intval(($sales[0]["ValorEjecutadoRecurrentes"] / 1.18) / ($services[0]["ServiciosRecurrentes"] > 0 ? $services[0]["ServiciosRecurrentes"] : 1));
-        $previousMonth["TicketPromedioNuevos"] = intval(($sales[0]["ValorEjecutadoNuevos"] / 1.18) / ($services[0]["ServiciosNuevos"] > 0 ? $services[0]["ServiciosNuevos"] : 1));
-
-        if($this->user->hasRole('admin'))
+        $patient_id = 0;
+        $tries = 0;
+        while($patient_id <= 0)
         {
-            $thisMonth["TicketPromedioRecurrentes"] = intval(($sales[1]["ValorEjecutadoRecurrentes"] / 1.18) / ($services[1]["ServiciosRecurrentes"] > 0 ? $services[1]["ServiciosRecurrentes"] : 1));
-            $thisMonth["TicketPromedioNuevos"] = intval(($sales[1]["ValorEjecutadoNuevos"] / 1.18) / ($services[1]["ServiciosNuevos"] > 0 ? $services[1]["ServiciosNuevos"] : 1));
-            $thisMonth["TotalGeneral"] = $thisMonth["TicketPromedioRecurrentes"] + $thisMonth["TicketPromedioNuevos"];
-        }
+            $patient = Patient::query()->whereBetween('created_at', [$startOfDay, $endOfDay])->first();
+            $startOfDay = $startOfDay->addDay();
+            $endOfDay = $endOfDay->addDay();
 
-        $previousMonth["TotalGeneral"] = $previousMonth["TicketPromedioRecurrentes"] + $previousMonth["TicketPromedioNuevos"];
+            if($patient) $patient_id = $patient->id;
+            if($tries > 10) return 0;
+            $tries++;
+        } 
 
-        return [$previousMonth, $thisMonth];
+        return $patient_id;
     }
 
     public function excel(Request $request)
