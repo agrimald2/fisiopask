@@ -43,6 +43,16 @@
           :form="form"
         />
 
+        <!-- roles -->
+        <form-input
+          label="Roles"
+          name="role"
+          v-model="form.role"
+          type="select"
+          :options="roles"
+          :form="form"
+        />
+
       </template>
 
       <template #actions>
@@ -85,7 +95,7 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: ["model", "workspaces"],
+  props: ["model", "workspaces", "roles"],
 
   components: {
     JetActionMessage,
@@ -110,6 +120,7 @@ export default {
 
         name: null,
         lastname: null,
+        role: null,
 
         ...this.model,
       }),

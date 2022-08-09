@@ -1,16 +1,10 @@
 <template>
   <!-- Usuarios y Personas -->
   <link-group title="Usuarios y Personas">
-    <!--link-item
-      label="Gráficos y Estadística"
-      icon="fa-chart-bar"
-      @click="go('statistics.index')"
-    /-->
-
     <link-item
-      label="Citas"
-      icon="fa-eye"
-      @click="go('doctors.appointments.index')"
+      label="Tests"
+      icon="fa-lungs-virus"
+      @click="go('tests.index')"
     />
   </link-group>
 </template>

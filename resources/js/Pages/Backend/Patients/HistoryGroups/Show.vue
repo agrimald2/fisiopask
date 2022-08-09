@@ -40,6 +40,16 @@
       </div>
     </app-body>
 
+    <app-body>
+      <div class="py-4 px-1">
+        <gridie
+          class="text-left w-full"
+          :rows="tests"
+          :cols="cols3"
+        />
+      </div>
+    </app-body>
+
   </app-layout>
 </template>
 
@@ -54,7 +64,7 @@ import dates from "@/ui/dates.js";
 import UiButton from "@/Shared/UI/Button";
 
 export default {
-  props: ["id", "medicalHistory", "revisions", "files"],
+  props: ["id", "medicalHistory", "revisions", "files", "tests"],
 
   components: {
     AppLayout,
@@ -106,7 +116,37 @@ export default {
         ],
       },
     ];
-    return { cols1, cols2 };
+
+    const cols3 = [
+      c("test_type.name", "Tipo de Test"),
+      c("doctor.fullname", "Doctor"),
+      c("", "Compañía")
+        .extend({
+          html:true,
+        })
+        .format(function (row){
+          if (row.company.name) return `<span> ${row.company.name} </span>`;
+          else return `<span> NO APLICA </span>`;;
+        }),
+      c("", "Resultado")
+      .extend({
+        html: true,
+      })
+      .format(function (row) {
+        let output = `<span>`;
+        row.results.forEach(element => {
+          output += element.data + " / ";
+        });
+
+        output = output.slice(0, output.length - 2);
+
+        output += `</span>`;
+
+        return output;
+      }),
+      c("created_at", "Fecha").format((value) => dates.dateForLaravel(value)),
+    ];
+    return { cols1, cols2, cols3 };
   },
 };
 </script>

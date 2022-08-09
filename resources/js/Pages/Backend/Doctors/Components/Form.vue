@@ -37,8 +37,8 @@
         <!-- password -->
         <form-input
           label="Password"
-          name="user.password"
-          v-model="form.user.password"
+          name="password"
+          v-model="form.password"
           type="password"
           :form="form"
         />
@@ -165,6 +165,7 @@ export default {
           password: null,
         },
 
+        password: null,
         name: null,
         lastname: null,
         birth_date: null,
@@ -181,6 +182,7 @@ export default {
 
   methods: {
     onSubmitted() {
+      this.form.user.password = this.form.password;
       const model = this.model;
       let url = route("doctors.store");
 

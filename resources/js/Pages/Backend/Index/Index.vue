@@ -23,6 +23,10 @@
       <worker-links />
     </template>
 
+    <template v-if="roles.includes('lab')">
+      <lab-links />
+    </template>
+
     <div class="py-24"></div>
 
   </app-layout>
@@ -35,6 +39,7 @@ import AdminLinks from "./Admins/Links";
 import DoctorLinks from "./Doctors/Links";
 import AssistantLinks from "./Assistants/Links";
 import WorkerLinks from "./Workers/Links";
+import LabLinks from "./Lab/Links";
 
 import DoctorAppointments from "./Doctors/Appointments/Appointments.vue";
 
@@ -48,6 +53,7 @@ export default {
     DoctorLinks,
     AssistantLinks,
     WorkerLinks,
+    LabLinks,
 
     DoctorAppointments,
   },

@@ -82,11 +82,11 @@
       @click="go('hc.index')"
     />
 
-    <link-item
+    <!--link-item
       label="Gráficos y Estadística"
       icon="fa-chart-bar"
       @click="go('statistics.index')"
-    />
+    /-->
 
     <link-item
       label="Análisis"

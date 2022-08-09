@@ -8,6 +8,7 @@ use App\Models\MedicalRevision;
 
 use App\Http\Controllers\Controller;
 use App\Models\HCType;
+use App\Models\Test;
 use Illuminate\Http\Request;
 
 class HistoryGroupController extends Controller
@@ -79,8 +80,14 @@ class HistoryGroupController extends Controller
 
         $files = $group->medicalHistoryFile()->get();
 
+        $tests = Test::query()
+                    ->with('doctor', 'patient', 'company', 'testType', 'results')
+                    ->where('patient_id', $group->patient_id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
         return inertia(
             'Backend/Patients/HistoryGroups/Show', 
-            compact('id', 'medicalHistory', 'revisions', 'files'));
+            compact('id', 'medicalHistory', 'revisions', 'files', 'tests'));
     }
 }

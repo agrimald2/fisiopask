@@ -34,7 +34,12 @@ class AssistantController extends Controller
 
     public function create()
     {
-        return inertia('Backend/Assistants/CreateEdit');
+        $roles = [
+            0 => "Asistente",
+            1 => "Laboratorio",
+        ];
+
+        return inertia('Backend/Assistants/CreateEdit', compact('roles'));
     }
 
     public function store(Request $request)
@@ -44,17 +49,19 @@ class AssistantController extends Controller
             'lastname' => 'required',
             'user.email' => 'required|email|unique:users,email',
             'user.password' => 'required|min:5',
+            'role' => 'required',
         ]);
 
         $user = User::make($validated['user']);
         $user->name = $validated['name'];
         $user->save();
 
-        $user->assignRole('assistant');
+        if($validated['role'] == 0) $user->assignRole('assistant');
+        else if($validated['role'] == 1) $user->assignRole('lab');
 
         $user->assistant()->create(
                                 collect($validated)
-                                ->except('user')
+                                ->except('user', 'role')
                                 ->toArray());
 
         toast('success', 'Asistente creado correctamente');

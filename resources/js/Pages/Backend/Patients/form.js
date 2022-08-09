@@ -46,6 +46,14 @@ export default (props, { attrs }) => [
   },
 
   {
+    name: "document_type",
+    label: "Tipo de Documento",
+    type: "tel",
+    type: inputs.Select,
+    options: attrs.documentTypes,
+  },
+
+  {
     name: "dni",
     label: "DNI",
     type: "tel",
@@ -74,6 +82,51 @@ export default (props, { attrs }) => [
     name: "district",
     label: "Distrito",
     type: "text",
+  },
+
+  {
+    name: "address",
+    label: "Dirección",
+    type: "text",
+  },
+
+  {
+    name: "insurance",
+    label: "Seguro de salud",
+    type: "text",
+  },
+
+  {
+    name: "education",
+    label: "Educación",
+    type: inputs.Select,
+    options: attrs.education,
+  },
+
+  {
+    name: "ocupation",
+    label: "Ocupación",
+    type: "text",
+  },
+
+  {
+    name: "religion",
+    label: "Religión",
+    type: inputs.Select,
+    options: attrs.religion,
+  },
+
+  {
+    name: "birth_place",
+    label: "Lugar de nacimiento",
+    type: "text",
+  },
+
+  {
+    name: "status",
+    label: "Estado Civil",
+    type: inputs.Select,
+    options: attrs.status,
   },
 
   {

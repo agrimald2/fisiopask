@@ -18,6 +18,7 @@
         <default-form
           class="mt-10 sm:mt-0"
           :model="model"
+          :roles="roles"
         />
 
       </div>
@@ -32,7 +33,7 @@ import JetSectionBorder from "@/Jetstream/SectionBorder.vue";
 import DefaultForm from "./Components/Form";
 
 export default {
-  props: ["model"],
+  props: ["model", "roles"],
 
   components: {
     AppLayout,

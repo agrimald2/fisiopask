@@ -75,6 +75,38 @@ class PatientController extends Controller
         $recommendationsMap = [];
 
         foreach($recommendations as $recommendation) $recommendationsMap[$recommendation->id] = $recommendation->recommendation;
+
+        $status = [
+            "Soltero" => "Soltero",
+            "Casado" => "Casado",
+            "Viudo" => "Viudo",
+            "Divorciado" => "Divorciado",
+        ];
+
+        $documentTypes = [
+            "DNI" => "DNI",
+            "CARNET DE EXTRANJERIA" => "CARNET DE EXTRANJERIA",
+            "PASAPORTE" => "PASAPORTE",
+            "OTRO" => "OTRO",
+        ];
+
+        $education = [
+            "Sin Nivel/Inicial" => "Sin Nivel/Inicial",
+            "Primaria" => "Primaria",
+            "Secundaria" => "Secundaria",
+            "Superior no universitaria" => "Superior no universitaria",
+            "Superior universitaria" => "Superior universitaria",
+        ];
+
+        $religion = [
+            "Cristiano" => "Cristiano",
+            "Judío" => "Judío",
+            "Musulmán" => "Musulmán",
+            "Budista" => "Budista",
+            "Irreligión" => "Irreligión",
+            "Otro" => "Otro",
+            "No sabe/No especifica" => "No sabe/No especifica",
+        ];
         
         return inertia('Backend/Dynamic/Form', [
             'title' => [
@@ -90,6 +122,10 @@ class PatientController extends Controller
             'sexOptions' => config('doctors.sex'),
 
             'recommendations' => $recommendationsMap,
+            'status' => $status,
+            'documentTypes' => $documentTypes,
+            'education' => $education,
+            'religion' => $religion,
         ]);
     }
 
@@ -100,19 +136,27 @@ class PatientController extends Controller
             'name' => 'required',
             'lastname1' => 'required',
             'lastname2' => 'required',
+            'document_type' => 'required',
             'dni' => 'required',
             'birth_date' => 'required|date:Y-m-d',
             'sex' => 'required|string',
             'email' => 'nullable|email',
             'phone' => 'nullable|integer',
             'district' => 'nullable|string',
+            'address' => 'nullable|string',
+            'insurance' => 'nullable|string',
+            'education' => 'nullable|string',
+            'ocupation' => 'nullable|string',
+            'religion' => 'nullable|string',
+            'birth_place' => 'nullable|string',
+            'status' => 'nullable|string',
             'recommendation_id' => '',
         ]);
 
         $patient->update($validated);
 
         toast('success', 'Actualizado con éxito!');
-        return redirect()->back();
+        return redirect()->route('patients.index');
     }
 
 

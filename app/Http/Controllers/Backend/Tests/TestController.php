@@ -21,6 +21,13 @@ class TestController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
+        $lab = false;
+        if($user->hasRole('lab'))
+        {
+            $lab = true;
+        }
+
         $searchQuery = $request->searchQuery;
         $companyQuery = $request->companyQuery;
         $model = Test::query()
@@ -31,6 +38,9 @@ class TestController extends Controller
                 });
             })
             ->where('company_id', 'LIKE', "%$companyQuery%")
+            ->when($lab, function($q) {
+                $q->where('result_at', null);
+            })
             ->orderBy('id', 'desc')
             ->get();
 
