@@ -7,6 +7,7 @@ use App\Models\Patient;
 use App\Models\User;
 use App\Models\PatientRate;
 use App\Models\Rate;
+use Illuminate\Support\Facades\DB;
 
 class PatientService
 {
@@ -22,11 +23,9 @@ class PatientService
         return Patient::query()
             ->orderBy('id', 'desc')
             ->when($searchString, function ($query, $searchString) {
-                return $query->where('name', 'like', "%$searchString%")
+                return $query->where(DB::raw("CONCAT(`name`, ' ', `lastname1`, ' ', `lastname2`)"), 'LIKE', "%$searchString%")
                     ->orWhere('dni', 'like', "%$searchString%")
-                    ->orWhere('phone', 'like', "%$searchString%")
-                    ->orWhere('lastname1', 'like', "%$searchString%")
-                    ->orWhere('lastname2', 'like', "%$searchString%");
+                    ->orWhere('phone', 'like', "%$searchString%");
             })
             ->paginate(20);
     }

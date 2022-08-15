@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PatientAddRatesSelfAction;
 use App\Http\Controllers\Patients\Auth\LoginAction;
 use App\Http\Controllers\Patients\Auth\LogoutAction;
 use App\Http\Controllers\Patients\IndexAction;
@@ -30,19 +31,22 @@ Route::middleware('patients.auth')->group(function () {
     Route::get('/', IndexAction::class)
         ->name('area.patients.index');
 
-        Route::get('/seeRates', SeeRatesAction::class)
+    Route::get('/seeRates', SeeRatesAction::class)
         ->name('area.patients.rates');        
 
-        Route::get('/seeAppointments', SeeAppointmentsAction::class)
+    Route::get('/addRatesSelf', PatientAddRatesSelfAction::class)
+        ->name('area.patients.addRatesSelf');
+
+    Route::get('/seeAppointments', SeeAppointmentsAction::class)
         ->name('area.patients.appointments');      
 
-        Route::get('/seePastAppointments', SeePastAppointmentsAction::class)
+    Route::get('/seePastAppointments', SeePastAppointmentsAction::class)
         ->name('area.patients.appointments.past');      
 
-        Route::get('/reprogramAppointments', ReprogramAppointmentsAction::class)
+    Route::get('/reprogramAppointments', ReprogramAppointmentsAction::class)
         ->name('area.patients.appointments.reprogram');      
 
-        Route::get('/cancelAppointments', CancelAppointmentsAction::class)
+    Route::get('/cancelAppointments', CancelAppointmentsAction::class)
         ->name('area.patients.appointments.cancel');              
 
     Route::get('/rebook', RebookAction::class)
@@ -56,7 +60,8 @@ Route::middleware('patients.auth')->group(function () {
     Route::post('/pay', PayAction::class)
         ->name('area.patients.pay');
 
-    Route::get('/addRatePatient/{id}', RateMenuAction::class);
+    Route::get('/addRatePatient/{id}', RateMenuAction::class)
+        ->name('area.patients.addRatePatient');
 });
 
 Route::get('/survey/appointment/{id}', PatientSurveyController::class)

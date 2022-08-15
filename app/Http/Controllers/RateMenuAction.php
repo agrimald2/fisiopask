@@ -33,6 +33,6 @@ class RateMenuAction extends Controller
             'state' => PatientRate::RATE_STATUS_OPEN,
         ]);
         
-        return redirect()->back();
+        return redirect()->route('area.patients.rates');
     }
 }

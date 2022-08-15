@@ -60,6 +60,13 @@
               icon="fa-solid fa-calendar-minus"
               @click="go('area.patients.appointments.cancel')"
             />
+
+            <link-item
+              class="mt-2rem"
+              label="Añadir Tarifas"
+              icon="fa-clipboard-list"
+              @click="go('area.patients.addRatesSelf')"
+            />
           </link-group>
       </div>
       <div class="container" style="justify-content:center;display:flex">

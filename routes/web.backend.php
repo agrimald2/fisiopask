@@ -442,4 +442,4 @@ Route::post('/booking/{patient}/postTime', [MultipleBookingController::class, 'p
     ->only('index');
 
 
-    Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 
+    //Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 
