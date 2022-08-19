@@ -54,6 +54,14 @@ export default (props, { attrs }) => {
             prompt("Dashboard link", row.link);
           },
         },
+
+        {
+          label: "Whatsapp",
+          clicked({ row }) {
+            const url = route('doctors.wame', row.phone);
+            Inertia.visit(url);
+          }
+        }
       ],
     },
   ];

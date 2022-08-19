@@ -95,6 +95,9 @@ Route::prefix('doctors')->group(function () {
         ->name("doctors.subfamilies.add");
     Route::post('/subfamilies/remove', [DoctorController::class, 'subfamiliesRemove'])
         ->name("doctors.subfamilies.remove");
+
+    Route::get('/wame/{phone}', [DoctorController::class, 'wame'])
+        ->name("doctors.wame");
 });
 
 

@@ -201,4 +201,10 @@ class DoctorController extends Controller
 
         return redirect()->route('doctors.edit', $request->doctor_id);
     }
+
+    public function wame($phone)
+    {
+        $gateway = "https://wa.me/".$phone;
+        return response('', 409)->header('X-Inertia-Location', $gateway);
+    }
 }
