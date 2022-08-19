@@ -85,7 +85,7 @@ export default (props, { attrs }) => {
           {
             label: "Multi",
             clicked({ row }) {
-              Inertia.visit(route("multipleBooking.pickDay", row.patient_id));
+              Inertia.visit(route("multipleBooking.pickDay", row.phone));
             },
           },
         ],
@@ -100,6 +100,20 @@ export default (props, { attrs }) => {
             clicked({ row }) {
               Inertia.visit(route("doctors.appointments.show", row.id));
             },
+          },
+        ],
+      }),
+
+    c()
+      .type(cells.Buttons)
+      .extend({
+        buttons: [
+          {
+            label: "Whatsapp",
+            clicked({ row }) {
+              const url = route('doctors.wame', row.phone);
+              Inertia.visit(url);
+            }
           },
         ],
       }),
