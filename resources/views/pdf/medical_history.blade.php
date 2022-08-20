@@ -149,7 +149,7 @@
         <img src="{{ URL::to('/') }}/img/HC_header.png" alt="" srcset="">
     </header>
     <div class="hc_number">
-        000001
+        {{ $code }}
     </div>
     <main>
         <!--INFORMACIÓN DEL PACIENTE-->
@@ -165,7 +165,7 @@
                                 APELLIDO PATERNO
                             </div>
                             <div class="inputs text-center">
-                                COLONIA
+                                {{ $patient->lastname1 }}
                             </div>
                         </div>
                         <div class="col-25 ">
@@ -173,7 +173,7 @@
                                 APELLIDO MATERNO
                             </div>
                             <div class="inputs text-center">
-                                BARETTO
+                                {{ $patient->lastname2 }}
                             </div>
                         </div>
                         <div class="col-50 ">
@@ -181,7 +181,7 @@
                                 NOMBRE COMPLETO
                             </div>
                             <div class="inputs text-center">
-                                MARCELO GABRIEL
+                                {{ $patient->name }}
                             </div>
                         </div>
                     </div>
@@ -192,7 +192,7 @@
                                     SEX
                                 </div>
                                 <div class="inputs text-center">
-                                    M
+                                    {{ $patient->sex }}
                                 </div>
                             </div>
                             <div class="col-33">
@@ -200,7 +200,7 @@
                                     EDAD
                                 </div>
                                 <div class="inputs text-center">
-                                    21
+                                    {{ $age }}
                                 </div>
                             </div>
                             <div class="col-33">
@@ -208,7 +208,7 @@
                                     FECHA NAC.
                                 </div>
                                 <div class="inputs text-center">
-                                    26/06/2001
+                                    {{ $patient->birth_date }}
                                 </div>
                             </div>
                         </div>
@@ -218,7 +218,7 @@
                                     EST. CIVIL
                                 </div>
                                 <div class="inputs text-center">
-                                    VIUDO
+                                    {{ $patient->status }}
                                 </div>
                             </div>
                             <div class="col-33">
@@ -226,7 +226,7 @@
                                     TIPO
                                 </div>
                                 <div class="inputs text-center">
-                                    SALVOCONDUCTO
+                                    {{ $patient->document_type }}
                                 </div>
                             </div>
                             <div class="col-33">
@@ -234,7 +234,7 @@
                                     NUMERO
                                 </div>
                                 <div class="inputs text-center">
-                                    99988878
+                                    {{ $patient->dni }}
                                 </div>
                             </div>
                         </div>
@@ -247,7 +247,7 @@
                                 SEGURO DE SALUD
                             </div>
                             <div class="inputs text-center">
-                                FISIOSALUD EPS
+                                {{ $patient->insurance }}
                             </div>
                         </div>
                         <div class="col-25 ">
@@ -255,7 +255,7 @@
                                 GRADO DE INSTRUCCIÓN
                             </div>
                             <div class="inputs text-center">
-                                TIU COAGUILA
+                                {{ $patient->education }}
                             </div>
                         </div>
                         <div class="col-25 ">
@@ -263,7 +263,7 @@
                                 OCUPACIÓN
                             </div>
                             <div class="inputs text-center">
-                                DOTERO PROFESIONAL
+                                {{ $patient->ocupation }}
                             </div>
                         </div>
                         <div class="col-25 ">
@@ -271,7 +271,7 @@
                                 RELIGIÓN
                             </div>
                             <div class="inputs text-center">
-                                SEGUIDOR DE IGOR
+                                {{ $patient->religion }}
                             </div>
                         </div>
                     </div>
@@ -281,7 +281,7 @@
                                 DISTRITO
                             </div>
                             <div class="inputs text-center">
-                                CALLAO HUNDIDO
+                                {{ $patient->district }}
                             </div>
                         </div>
                         <div class="col-50 ">
@@ -289,7 +289,7 @@
                                 DOMICILIO
                             </div>
                             <div class="inputs text-center">
-                                Am Wriezener bhf, 10243
+                                {{ $patient->address }}
                             </div>
                         </div>
                         <div class="col-25 ">
@@ -297,7 +297,7 @@
                                 CELULAR
                             </div>
                             <div class="inputs text-center">
-                                954123456
+                                {{ $patient->phone }}
                             </div>
                         </div>
                     </div>
@@ -313,23 +313,16 @@
         </div>
         <hr>
 
-        <!-- @TODO LOPEAR ACÁ CON DATOS DEL BACK -->
+        @foreach ($data as $d)
         <div class="other_rows">
             <h3>
-                MOTIVO DE CONSULTA:
+                {{ $d["name"] }}:
             </h3>
             <p>
-                Se jodió la rodilla el inútil este por estar jugando fuchibol y se sacó la entreputa
+                {{ $d["value"] }}
             </p>
-        </div>
-        <div class="other_rows">
-            <h3>
-                MOTIVO DE CONSULTA:
-            </h3>
-            <p>
-                Se jodió la rodilla el inútil este por estar jugando fuchibol y se sacó la entreputa
-            </p>
-        </div>
+        </div>            
+        @endforeach
     </main>
     <footer>
 

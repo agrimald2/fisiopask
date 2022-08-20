@@ -329,7 +329,9 @@ Route::get('/medicalhistory/show/{id}', [MedicalHistoryController::class, 'show'
 
 //PDF MEDICAL HISTORIES
 Route::get('/medicalhistory/pdf/{id}', [MedicalRevisionController::class, 'pdf'])
-->name('medicalhistory.pdf');
+    ->name('medicalhistory.pdf');
+Route::get('/medicalrevision/pdf/{id}', [MedicalRevisionController::class, 'revpdf'])
+    ->name('medicalrevision.pdf');
 
 
 //Medical Revision

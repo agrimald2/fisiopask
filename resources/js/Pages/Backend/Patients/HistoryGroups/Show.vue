@@ -91,7 +91,8 @@ export default {
       })
       .format(function (row) {
         //INSTEAD OF "IP SERVER" USE BASE_URL v
-        return `<a href="http://127.0.0.1:8000/dashboard/medicalhistory/pdf/${row.id}" text-white px-2 rounded">PDF</a>`;
+        const url = route("medicalhistory.pdf", row.id);
+        return `<span class="text-black px-2 rounded" style="border: 1px solid red"><a href="${url}" text-white px-2 rounded">PDF</a></span>`;
 
       }),
       {
@@ -112,6 +113,16 @@ export default {
       c("doctor.name", "Doctor"),
       c("description", "Descripción"),
       c("created_at", "Fecha").format((value) => dates.dateForLaravel(value)),
+      c("", "PDF")
+        .extend({
+          html: true,
+        })
+        .format(function (row) {
+          //INSTEAD OF "IP SERVER" USE BASE_URL v
+          const url = route("medicalrevision.pdf", row.id);
+          return `<span class="text-black px-2 rounded" style="border: 1px solid red"><a href="${url}" text-white px-2 rounded">PDF</a></span>`;
+
+        }),
       {
         type: cells.Buttons,
         buttons: [
@@ -154,6 +165,15 @@ export default {
         return output;
       }),
       c("created_at", "Fecha").format((value) => dates.dateForLaravel(value)),
+
+      c("", "")
+        .extend({
+          html: true,
+        })
+        .format((value, {row}) => {
+          const url = route("tests.downloadPDF", row.id);
+          return `<span class="text-black px-2 rounded" style="border: 1px solid red"><a href="${url}"> PDF  </a> </span>`;
+        }),
     ];
     return { cols1, cols2, cols3 };
   },

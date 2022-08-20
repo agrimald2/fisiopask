@@ -15,7 +15,10 @@ use App\Models\Appointment;
 use App\Models\Diagnostic;
 use App\Models\HCAttribute;
 use App\Models\HistoryData;
+use App\Models\MedicalHistory;
+use App\Models\Patient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use PDF;
 
 class MedicalRevisionController extends Controller
@@ -39,13 +42,134 @@ class MedicalRevisionController extends Controller
     }
 
     public function pdf($id){
-        $pdf = PDF::loadView('pdf.medical_history');
-        //Idealmente en el nombre poner HC-DNI PACIENTE-ANANDAMIDACM
-        //return $pdf->download('HC-77035606-AnandamidaCM.pdf');
-        return view('pdf.medical_history');
+        $history = MedicalHistory::find($id);
+        $patient = Patient::find($history->patient_id);
+        $age = date_diff(date_create($patient->birth_date), date_create('now'))->y;
 
+        $data = [];
+
+        $hd = HistoryData::query()
+                    ->where('history_id', $id)
+                    ->where('is_revision', false)
+                    ->get();
+
+        foreach($hd as $d)
+        {
+            $attr = HCAttribute::find($d->attribute_id);
+            
+            $value = $this->getValueFromData($d, $attr);
+
+            $info = [
+                'name' => $attr->input_name,
+                'value' => $value,
+            ];
+
+            array_push($data, $info);
+        }
+
+        $code = 1000000 + $id;
+
+        return view('pdf.medical_history', compact('patient', 'age', 'data', 'code'));
     }
 
+    public function revpdf($id){
+        $history = MedicalRevision::find($id);
+        $patient = Patient::find($history->patient_id);
+        $age = date_diff(date_create($patient->birth_date), date_create('now'))->y;
+
+        $data = [];
+
+        $hd = HistoryData::query()
+                ->where('history_id', $id)
+                ->where('is_revision', true)
+                ->get();
+
+        foreach($hd as $d)
+        {
+            $attr = HCAttribute::find($d->attribute_id);
+            
+            $value = $this->getValueFromData($d, $attr);
+
+            $info = [
+                'name' => $attr->input_name,
+                'value' => $value,
+            ];
+
+            array_push($data, $info);
+        }
+
+        $code = 2000000 + $id;
+
+        return view('pdf.medical_history', compact('patient', 'age', 'data', 'code'));
+    }
+
+    private function getValueFromData($data, $attr)
+    {
+        if($attr->input_type <= 1)
+        {
+            return $data->data;
+        }
+        else
+        {
+            $model = $attr->related_model;
+
+            $r = "";
+
+            $first = true;
+
+            foreach(explode('^', $data->data) as $exploded)
+            {
+                if(!$first)
+                {
+                    $r .= " - ";
+                }
+                $r .= $this->getModeledData($data, $model);
+                $first = false;
+            }
+
+            return $r;
+        }
+    }
+
+    private function getModeledData($data, $model)
+    {
+        switch($model)
+        {
+            case 0:
+                return $data;
+                break;
+            case 1:
+                $x = AffectedArea::find($data);
+                return $x[0]->category . " " . $x[0]->sub_category;
+                break;
+            case 2:
+                $x = Diagnostic::find($data);
+                return $x[0]->name;
+                break;
+            case 3:
+                $x = Treatment::find($data);
+                return $x[0]->name;
+                break;
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                if($data->data == 0) return "Aumentado";
+                else if($data->data == 1) return "Conservado";
+                else if($data->data == 2) return "Disminuido";
+                break;
+            case 10:
+                if($data->data == 0) return "Eutímico";
+                else if($data->data == 1) return "Distímico";
+                break;
+            case 11:
+                if($data->data == 0) return "Sí";
+                else if($data->data == 1) return "No";
+                break;
+        }
+    }
 
     public function create($id)
     {
