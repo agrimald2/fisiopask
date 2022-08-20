@@ -146,7 +146,7 @@
   </head>
   <body>
     <header class="clearfix">
-        <img src="{{ URL::to('/') }}/img/HC_header.png" alt="" srcset="">
+        <img src="{{ URL::to('/') }}/assets/HC_header.png" alt="" srcset="">
     </header>
     <div class="hc_number">
         {{ $code }}
