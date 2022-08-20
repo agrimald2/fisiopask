@@ -83,8 +83,17 @@ export default {
   setup() {
     const cols1 = [
       c("doctor.name", "Doctor"),
-      c("description", "Descripción"),
+      c("description", "Descripcion"),
       c("created_at", "Fecha").format((value) => dates.dateForLaravel(value)),
+    c("", "PDF")
+      .extend({
+        html: true,
+      })
+      .format(function (row) {
+        //INSTEAD OF "IP SERVER" USE BASE_URL v
+        return `<a href="http://127.0.0.1:8000/dashboard/medicalhistory/pdf/${row.id}" text-white px-2 rounded">PDF</a>`;
+
+      }),
       {
         type: cells.Buttons,
         buttons: [

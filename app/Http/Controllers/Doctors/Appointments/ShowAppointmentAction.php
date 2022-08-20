@@ -49,6 +49,7 @@ class ShowAppointmentAction extends Controller
             }
         }
 
+        /*
         if($rate == null)
         {
             $constantRate = Rate::find(1);
@@ -60,6 +61,7 @@ class ShowAppointmentAction extends Controller
 
             if($query) $rate = $query;
         }
+        */
 
         return inertia('Doctors/Appointments/Show', compact('appointment', 'doctor', 'patient', 'role', 'rate'));
     }

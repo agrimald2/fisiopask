@@ -23,7 +23,7 @@
           <div v-else-if="attribute.input_type == 1">
             <jet-input
               :id="attribute.input_name"
-              type="numeric"
+              type="number"
               class="mt-1 block w-full"
               v-model="form.attributes[attribute.id]"
               @input="updateValue($event, attribute.id, $event.target.value)"
@@ -82,7 +82,7 @@
       </JetButton>
     </template>
 
-    
+
   </JetFormSection>
 </template>
 
@@ -155,7 +155,7 @@ export default {
       if(id == 1) return this.affected_areas;
       else if(id == 2) return this.diagnostics;
       else if(id == 3) return this.treatments;
-      else if (id == 10) 
+      else if (id == 10)
       {
         let arr = ["Eutímico", "Distímico"];
         return arr;
@@ -170,7 +170,7 @@ export default {
         let arr = ["Aumentado", "Conservado", "Disminuido"];
         return arr;
       }
-      
+
       return null;
     },
   },

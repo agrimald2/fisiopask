@@ -16,6 +16,7 @@ use App\Models\Diagnostic;
 use App\Models\HCAttribute;
 use App\Models\HistoryData;
 use Illuminate\Http\Request;
+use PDF;
 
 class MedicalRevisionController extends Controller
 {
@@ -33,9 +34,18 @@ class MedicalRevisionController extends Controller
         $treatments = Treatment::all();
         $diagnostics = Diagnostic::all();
 
-        return inertia('Backend/Patients/MedicalRevisions/Index', 
+        return inertia('Backend/Patients/MedicalRevisions/Index',
             compact('model', 'data', 'areas', 'treatments', 'diagnostics'));
     }
+
+    public function pdf($id){
+        $pdf = PDF::loadView('pdf.medical_history');
+        //Idealmente en el nombre poner HC-DNI PACIENTE-ANANDAMIDACM
+        //return $pdf->download('HC-77035606-AnandamidaCM.pdf');
+        return view('pdf.medical_history');
+
+    }
+
 
     public function create($id)
     {
@@ -62,11 +72,11 @@ class MedicalRevisionController extends Controller
             ->get();
 
         return inertia(
-            'Backend/Patients/MedicalRevisions/Create', 
+            'Backend/Patients/MedicalRevisions/Create',
             compact(
-                'history_group', 
-                'diagnostics', 
-                'treatments', 
+                'history_group',
+                'diagnostics',
+                'treatments',
                 'analysis',
                 'affected_areas',
                 'attributes'
@@ -77,7 +87,7 @@ class MedicalRevisionController extends Controller
     {
         $validated = $request->validate([
             'patient_id' => ['required', 'numeric'],
-            'doctor_id' => ['required', 'numeric'],    
+            'doctor_id' => ['required', 'numeric'],
             'history_group_id' => ['required', 'numeric'],
             'attributes' => ['required']
         ]);

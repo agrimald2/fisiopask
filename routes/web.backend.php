@@ -247,7 +247,7 @@ Route::resource('paymentMethods', PaymentMethodController::class)
     ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
 /**
- * Recomendations  
+ * Recomendations
  */
 Route::resource('recommendation', RecommendationController::class)
 ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
@@ -327,6 +327,11 @@ Route::get('medicalhistory/create/{id}/{type}', [MedicalHistoryController::class
 Route::get('/medicalhistory/show/{id}', [MedicalHistoryController::class, 'show'])
     ->name('medicalhistory.show');
 
+//PDF MEDICAL HISTORIES
+Route::get('/medicalhistory/pdf/{id}', [MedicalRevisionController::class, 'pdf'])
+->name('medicalhistory.pdf');
+
+
 //Medical Revision
 Route::resource('medicalrevision', MedicalRevisionController::class)
     ->only('store');
@@ -336,6 +341,7 @@ Route::get('medicalrevision/create/{id}', [MedicalRevisionController::class, 'cr
 
 Route::get('/medicalrevision/show/{id}', [MedicalRevisionController::class, 'show'])
     ->name('medicalrevision.show');
+
 
 //Affected Areas
 Route::resource('affectedarea', AffectedAreaController::class)
@@ -441,18 +447,18 @@ Route::get('/booking/{patient}/pickTime/{date}', [MultipleBookingController::cla
 
 Route::post('/booking/{patient}/postTime', [MultipleBookingController::class, 'postTime'])
     ->name('multipleBooking.postTime');
-    
+
 /**
  * AREA: Statistics
  */
-    Route::post('/statistic', [StatisticsController::class, 'statistic'])->name('statistic');    
-    Route::get('/excel', [StatisticsController::class,'excel'])->name('excel');   
-    //Route::post('/excel', [StatisticsController::class,'excel'])->name('excel');    
+    Route::post('/statistic', [StatisticsController::class, 'statistic'])->name('statistic');
+    Route::get('/excel', [StatisticsController::class,'excel'])->name('excel');
+    //Route::post('/excel', [StatisticsController::class,'excel'])->name('excel');
     Route::resource('statistics', StatisticsController::class)
     ->only('index');
 
 
-    Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 
+    Route::get('/testa', [TestAssistanceController::class,'test'])->name('test');
 
 /**
  * Tests
@@ -473,7 +479,7 @@ Route::get('/tests/DNILookup', [TestController::class, 'showCheckDNI'])
 Route::post('/tests/CheckDNI', [TestController::class, 'checkDNI'])
     ->name('tests.checkDNI');
 Route::post('/tests/CreatePatient', [TestController::class, 'createPatient'])
-    ->name('tests.createPatient');  
+    ->name('tests.createPatient');
 
 
 Route::resource('companies', CompanyController::class)
