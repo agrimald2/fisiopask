@@ -111,7 +111,7 @@ export default (props, { attrs }) => {
           {
             label: "Whatsapp",
             clicked({ row }) {
-              const url = route('doctors.wame', row.phone);
+              const url = route('doctors.wame', row.id);
               Inertia.visit(url);
             }
           },
