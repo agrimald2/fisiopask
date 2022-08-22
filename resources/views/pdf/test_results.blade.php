@@ -292,7 +292,7 @@
 
       <div id="notices">
         <div>MÉTODO:</div>
-        <div class="notice">Inmunocromatología</div>
+        <div class="notice">{{ $testType->method }}</div>
       </div>
 
       <table border="0" cellspacing="0" cellpadding="0">

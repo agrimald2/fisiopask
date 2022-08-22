@@ -61,13 +61,14 @@ class MedicalRevisionController extends Controller
 
             $info = [
                 'name' => $attr->input_name,
+                'type' => $attr->input_type,
                 'value' => $value,
             ];
 
             array_push($data, $info);
         }
 
-        $code = 1000000 + $id;
+        $code = $patient->dni;
 
         return view('pdf.medical_history', compact('patient', 'age', 'data', 'code'));
     }
@@ -92,13 +93,14 @@ class MedicalRevisionController extends Controller
 
             $info = [
                 'name' => $attr->input_name,
+                'type' => $attr->input_type,
                 'value' => $value,
             ];
 
             array_push($data, $info);
         }
 
-        $code = 2000000 + $id;
+        $code = $patient->dni;
 
         return view('pdf.medical_history', compact('patient', 'age', 'data', 'code'));
     }
@@ -121,7 +123,7 @@ class MedicalRevisionController extends Controller
             {
                 if(!$first)
                 {
-                    $r .= " - ";
+                    $r .= " / ";
                 }
                 $r .= $this->getModeledData($data, $model);
                 $first = false;
@@ -144,7 +146,7 @@ class MedicalRevisionController extends Controller
                 break;
             case 2:
                 $x = Diagnostic::find($data);
-                return $x[0]->name;
+                return $x[0]->cie_10 ." - ".$x[0]->name;
                 break;
             case 3:
                 $x = Treatment::find($data);

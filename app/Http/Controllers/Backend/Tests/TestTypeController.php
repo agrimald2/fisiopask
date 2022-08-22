@@ -46,6 +46,7 @@ class TestTypeController extends Controller
         $validated = $request->validate([
             'name' => 'required',
             'description' => 'required',
+            'method' => 'required',
             'type' => 'required',
             'result_count' => 'numeric|required',
         ]);
@@ -53,6 +54,7 @@ class TestTypeController extends Controller
         TestType::create([
             'name' => $validated['name'],
             'description' => $validated['description'],
+            'method' => $validated['method'],
             'type' => $validated['type'],
             'result_count' => $validated['result_count'],
         ]);
@@ -79,11 +81,13 @@ class TestTypeController extends Controller
         $validated = $request->validate([
             'name' => 'required',
             'description' => 'required',
+            'method' => 'required',
         ]);
 
         $model = TestType::find($id);
 
         $model->name = $validated['name'];
+        $model->method = $validated['method'];
         $model->description = $validated['description'];
 
         $model->save();

@@ -132,7 +132,7 @@
         width: 80%;
     }
     .other_rows{
-        padding-left: 0.7cm
+        padding-left: 0.7cm;
     }
     .other_rows h3{
         color: #48757cd1;
@@ -313,16 +313,34 @@
         </div>
         <hr>
 
-        @foreach ($data as $d)
+        @for ($i = 0; $i < count($data); $i++)
+        @if ($data[$i]["type"] == 2)
+        <div class="flex">
+            @for ($j = 0; $j < 2; $j++)
+            <div class="other_rows" style="width: 50%">
+                <h3>
+                    {{ $data[$i + $j]["name"] }}:
+                </h3>
+                <p style="width: 90%">
+                    {{ $data[$i + $j]["value"] }}
+                </p>
+            </div>  
+            @endfor
+            @php
+                $i++
+            @endphp
+        </div>
+        @else
         <div class="other_rows">
             <h3>
-                {{ $d["name"] }}:
+                {{ $data[$i]["name"] }}:
             </h3>
             <p>
-                {{ $d["value"] }}
+                {{ $data[$i]["value"] }}
             </p>
         </div>            
-        @endforeach
+        @endif
+        @endfor
     </main>
     <footer>
 

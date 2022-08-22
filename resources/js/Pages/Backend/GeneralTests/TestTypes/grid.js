@@ -8,6 +8,7 @@ export default (props, { attrs }) => {
   const cols = [
     c("name", "Nombre"),
     c("description", "Descripción"),
+    c("method", "Método"),
     c("", "Tipo")
       .extend({
         html: true

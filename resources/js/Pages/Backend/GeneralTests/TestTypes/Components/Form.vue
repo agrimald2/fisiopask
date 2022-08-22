@@ -22,6 +22,14 @@
           :form="form"
         />
 
+        <!-- method -->
+        <form-input
+          label="Método"
+          name="method"
+          v-model="form.method"
+          :form="form"
+        />
+
         <!-- type -->
         <form-input
           label="Tipo"
@@ -103,6 +111,7 @@ export default {
 
         name: null,
         description: null,
+        method: null,
         type: 0,
         result_count: 1,
 
