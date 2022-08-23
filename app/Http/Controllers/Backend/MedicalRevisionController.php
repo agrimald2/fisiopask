@@ -125,50 +125,41 @@ class MedicalRevisionController extends Controller
                 {
                     $r .= " / ";
                 }
-                $r .= $this->getModeledData($data, $model);
+                $r .= $this->getModeledData($exploded, $model);
                 $first = false;
             }
 
-            return $r;
+            return substr($r, 0, -2);
         }
     }
 
     private function getModeledData($data, $model)
     {
+        $x = null;
         switch($model)
         {
             case 0:
-                return $data;
-                break;
-            case 1:
-                $x = AffectedArea::find($data);
-                return $x[0]->category . " " . $x[0]->sub_category;
-                break;
-            case 2:
-                $x = Diagnostic::find($data);
-                return $x[0]->cie_10 ." - ".$x[0]->name;
-                break;
-            case 3:
-                $x = Treatment::find($data);
-                return $x[0]->name;
-                break;
             case 4:
             case 5:
             case 6:
             case 7:
             case 8:
             case 9:
-                if($data->data == 0) return "Aumentado";
-                else if($data->data == 1) return "Conservado";
-                else if($data->data == 2) return "Disminuido";
-                break;
             case 10:
-                if($data->data == 0) return "Eutímico";
-                else if($data->data == 1) return "Distímico";
+            case 11:                
+                return $data;
                 break;
-            case 11:
-                if($data->data == 0) return "Sí";
-                else if($data->data == 1) return "No";
+            case 1:
+                $x = AffectedArea::find($data);
+                if($x) return $x->category . " " . $x->sub_category;
+                break;
+            case 2:
+                $x = Diagnostic::find($data);
+                if($x) return $x->cie_10 ." - ".$x->name;
+                break;
+            case 3:
+                $x = Treatment::find($data);
+                if($x) return $x->name;
                 break;
         }
     }

@@ -314,9 +314,10 @@
         <hr>
 
         @for ($i = 0; $i < count($data); $i++)
-        @if ($data[$i]["type"] == 2)
+        @if ($data[$i]["type"] == 1 || $data[$i]["type"] == 2 || $data[$i]["type"] == 3)
         <div class="flex">
             @for ($j = 0; $j < 2; $j++)
+            @if ($i + $j < count($data))
             <div class="other_rows" style="width: 50%">
                 <h3>
                     {{ $data[$i + $j]["name"] }}:
@@ -325,6 +326,7 @@
                     {{ $data[$i + $j]["value"] }}
                 </p>
             </div>  
+            @endif
             @endfor
             @php
                 $i++
