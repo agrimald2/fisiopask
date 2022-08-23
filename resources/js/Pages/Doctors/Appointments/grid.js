@@ -86,7 +86,7 @@ export default (props, { attrs }) => {
           {
             label: "Multi",
             clicked({ row }) {
-              Inertia.visit(route("multipleBooking.pickDay", row.phone));
+              Inertia.visit(route("multipleBooking.pickDay", row.patient_id));
             },
           },
         ],
