@@ -215,7 +215,10 @@ class FisioNextRepository implements RepositoryContract
         $patientText = $this->getWhatsappPatientConfirmationText($data, $type);
         if ($patientText) {
             chatapi($patient->phone, $patientText);
+            logs()->warning(chatapi($patient->phone, $patientText));
         } 
+
+
         // Send message to doctor
         //$doctorText = $this->getWhatsappDoctorConfirmationText($data);
         //if ($doctorText) {

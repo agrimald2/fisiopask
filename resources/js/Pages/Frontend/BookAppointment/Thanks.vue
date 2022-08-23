@@ -15,14 +15,14 @@
               Recibirás una confirmación a Whatsapp:
             </span>
           </div>
-
+          <!--
           <div
             class="text-2xl"
             v-if="phone"
           >
             +{{ phone }}
           </div>
-
+          -->
           <div class="mt-2 grid">
             <ui-button
               type="button"

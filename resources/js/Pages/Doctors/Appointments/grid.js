@@ -1,4 +1,5 @@
 import dates from "@/ui/dates.js";
+import { Link } from '@inertiajs/inertia-vue3'
 
 import { Inertia } from "@inertiajs/inertia";
 import { cells, c } from "@ferchoposting/gridie";
@@ -109,10 +110,20 @@ export default (props, { attrs }) => {
       .extend({
         buttons: [
           {
-            label: "Whatsapp",
+            label({row}){
+              if(row.reminder == 0){
+                return 'WHA'
+              }else{
+                return '-'
+              };
+            },
             clicked({ row }) {
               const url = route('doctors.wame', row.id);
-              Inertia.visit(url);
+              if(row.reminder == 0){
+                Inertia.visit(url);
+              }else{
+                
+              }
             }
           },
         ],
