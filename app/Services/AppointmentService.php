@@ -20,8 +20,15 @@ class AppointmentService
 
     public function make($date, Schedule $schedule, Patient $patient)
     {
+        if(auth()->user() != null){
+            $created_by = auth()->user()->name;
+        }else{
+            $created_by = 'Paciente';
+        }
+
         return Appointment::create([
             'date' => $date,
+            'created_by' => $created_by,
 
             'patient_id' => $patient->id,
             'schedule_id' => $schedule->id,

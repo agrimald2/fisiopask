@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="landing/css/select2.min.css" />
     <link rel="stylesheet" href="landing/css/style.css" />
 
-    <script src="https://kit.fontawesome.com/2fcf075a91.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/2780e63ff4.js" crossorigin="anonymous"></script>
 
     <!-- SRIPTS -->    
     <script src="landing/js/vendor/modernizr-3.5.0.min.js"></script>
