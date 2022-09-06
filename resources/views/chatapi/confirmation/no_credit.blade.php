@@ -4,15 +4,15 @@ Hola {{$patientName}}, bienvenido de vuelta!
 Tu cita ha sido generada
 
 *Fecha de cita:*
-{{ $date }}
+{{$date}}
 *Hora de cita:*
-{{ $startTime }}
+{{$startTime}}
 *Fisioterapeuta:*
-{{ $doctorName }}
+{{$doctorName}}
 
 *Puedes realizar el pago de tu cita por medio de este link para evitar colas y demoras en recepción:*
 
-{{ $dashboardLink }}
+{{$dashboardLink}}
 
 
 O puedes hacer transferencia bancaria a las siguientes cuentas:

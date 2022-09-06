@@ -216,7 +216,9 @@ class FisioNextRepository implements RepositoryContract
         if ($patientText) {
             chatapi($patient->phone, $patientText);
             logs()->warning(chatapi($patient->phone, $patientText));
-        } 
+        } else{
+            logs()->warning('ALGO SALIÓ MAL');
+        }
 
 
         // Send message to doctor

@@ -52,6 +52,7 @@
           </p>
         </div>
       </div>
+
       <template v-if="rate != null">
         <div class="border rounded p-3 text-center">
           <div class="mt-4 text-center text-xl">
@@ -180,6 +181,71 @@
       <div class="pb-12"></div>
     </app-body>
 
+    <app-body v-if="role == 'admin'">
+      <div class="mt-4 border rounded p-3 text-center">
+        <div class="mt-4 text-center text-xl">
+          <h1 class="large-text bold"> INFORMACIÓN AUDITORÍA </h1> 
+        </div>
+        <div class="mt-4">
+          <p class="medium-text">
+            <strong>Fecha de creación</strong>
+          </p> 
+          <!--<p v-if="role == 'admin'" class="medium-text">-->
+          <p class="medium-text">
+            {{ dates.dateForHumans(appointment.created_at)}} a las {{dates.hourForHumans(appointment.created_at)}}
+          </p> 
+
+          <p class="medium-text">
+            <strong>Por:</strong>
+          </p> 
+          <p v-if="appointment.created_by" class="medium-text">
+            {{appointment.created_by}}
+          </p>
+          <p v-else class="medium-text">
+            NO HAY INFO
+          </p>
+
+          <p class="medium-text">
+            <strong>Cancelado Por:</strong>
+          </p> 
+          <p v-if="appointment.cancel_by" class="medium-text">
+            {{appointment.cancel_by}}
+          </p>
+          <p v-else class="medium-text">
+            NO CANCELADO
+          </p>
+
+          <p class="medium-text">
+            <strong>Reprogramado Por:</strong>
+          </p> 
+          <p v-if="appointment.reeschedule_by" class="medium-text">
+            {{appointment.reeschedule_by}}
+          </p>
+          <p v-else class="medium-text">
+            NO REPROGRAMADO
+          </p>
+
+          <p class="medium-text">
+            <strong>Fecha de ultimo update:</strong>
+          </p> 
+          <p class="medium-text">
+            {{ dates.dateForHumans(appointment.updated_at)}} a las {{dates.hourForHumans(appointment.updated_at)}}
+          </p>
+        
+          <p class="medium-text">
+            <strong>Historia Clínica:</strong>
+          </p> 
+          <p class="medium-text">
+            <span v-if="appointment.history_created">
+              SI
+            </span>
+            <span v-else>
+              NO
+            </span>
+          </p>
+        </div>
+      </div>
+    </app-body>
   </app-layout>
 </template>
 

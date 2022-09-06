@@ -55,7 +55,7 @@ class PatientService
     {
         $patient = Patient::create($data);
 
-        $constantRate = Rate::find(1);
+        /*$constantRate = Rate::find(1);
 
         PatientRate::create([
             'name' => $constantRate->name,
@@ -69,7 +69,7 @@ class PatientService
             'sessions_total' => 1,
             'sessions_left' => 1,
             'state' => PatientRate::RATE_STATUS_OPEN,
-        ]);
+        ]);*/
 
         return $patient;
     }
