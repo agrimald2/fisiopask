@@ -37,16 +37,15 @@
 
       <div class="mt-4 border rounded p-3 text-center">
         <div class="mt-4 text-center text-xl">
-          <h1 class="large-text bold"> INFORMACIÓN DEL PACIENTE </h1> 
+          <h1 class="large-text bold"> INFORMACIÓN DEL PACIENTE </h1>
         </div>
         <div class="mt-4">
           <p class="medium-text">
             {{patient.fullname}}
-          </p> 
-          <!--<p v-if="role == 'admin'" class="medium-text">-->
-          <p class="medium-text">
+          </p>
+          <p v-if="role == 'admin'" class="medium-text">
             {{patient.phone}}
-          </p> 
+          </p>
           <p class="medium-text">
             {{ patient.dni }} |  {{ patient.sex }} | {{ dates.moment().year() - dates.moment(patient.birth_date).year() }} años
           </p>
@@ -56,7 +55,7 @@
       <template v-if="rate != null">
         <div class="border rounded p-3 text-center">
           <div class="mt-4 text-center text-xl">
-            <h1 class="large-text bold"> TARIFA DE LA CITA </h1> 
+            <h1 class="large-text bold"> TARIFA DE LA CITA </h1>
           </div>
           <div class="mt-4 text-center text-xl medium-text">
             {{ rate.name }}
@@ -72,7 +71,7 @@
               <th>Asistidas:</th>
 
               <th>Puede Asistir:</th>
-            </tr>            
+            </tr>
             <tr class="medium-text">
               <td>
                 {{ rate.price }}
@@ -131,7 +130,7 @@
           v-show="appointment.status == 3"
           @click="markNotAssisted"
         >
-          Marcar Inasistencia 
+          Marcar Inasistencia
         </front-button>
 
         <!--<front-button
@@ -184,20 +183,20 @@
     <app-body v-if="role == 'admin'">
       <div class="mt-4 border rounded p-3 text-center">
         <div class="mt-4 text-center text-xl">
-          <h1 class="large-text bold"> INFORMACIÓN AUDITORÍA </h1> 
+          <h1 class="large-text bold"> INFORMACIÓN AUDITORÍA </h1>
         </div>
         <div class="mt-4">
           <p class="medium-text">
             <strong>Fecha de creación</strong>
-          </p> 
+          </p>
           <!--<p v-if="role == 'admin'" class="medium-text">-->
           <p class="medium-text">
             {{ dates.dateForHumans(appointment.created_at)}} a las {{dates.hourForHumans(appointment.created_at)}}
-          </p> 
+          </p>
 
           <p class="medium-text">
             <strong>Por:</strong>
-          </p> 
+          </p>
           <p v-if="appointment.created_by" class="medium-text">
             {{appointment.created_by}}
           </p>
@@ -207,7 +206,7 @@
 
           <p class="medium-text">
             <strong>Cancelado Por:</strong>
-          </p> 
+          </p>
           <p v-if="appointment.cancel_by" class="medium-text">
             {{appointment.cancel_by}}
           </p>
@@ -217,7 +216,7 @@
 
           <p class="medium-text">
             <strong>Reprogramado Por:</strong>
-          </p> 
+          </p>
           <p v-if="appointment.reeschedule_by" class="medium-text">
             {{appointment.reeschedule_by}}
           </p>
@@ -227,14 +226,14 @@
 
           <p class="medium-text">
             <strong>Fecha de ultimo update:</strong>
-          </p> 
+          </p>
           <p class="medium-text">
             {{ dates.dateForHumans(appointment.updated_at)}} a las {{dates.hourForHumans(appointment.updated_at)}}
           </p>
-        
+
           <p class="medium-text">
             <strong>Historia Clínica:</strong>
-          </p> 
+          </p>
           <p class="medium-text">
             <span v-if="appointment.history_created">
               SI

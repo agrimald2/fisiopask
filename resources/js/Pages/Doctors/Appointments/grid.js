@@ -46,7 +46,7 @@ export default (props, { attrs }) => {
         else if(status == 4) statusStr = "CAN";
 
         return `<span class="${className} text-white px-2 rounded">${statusStr}</span>`;
-  
+
       }),
 
     c("date", "Fecha")
@@ -114,7 +114,7 @@ export default (props, { attrs }) => {
               if(row.reminder == 0){
                 return 'WHA'
               }else{
-                return '-'
+                return 'WHA'
               };
             },
             clicked({ row }) {
@@ -122,7 +122,7 @@ export default (props, { attrs }) => {
               if(row.reminder == 0){
                 Inertia.visit(url);
               }else{
-                
+                Inertia.visit(url);
               }
             }
           },
