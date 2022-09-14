@@ -108,7 +108,7 @@
 
         <front-button
           color="red"
-          v-if="appointment.status == 1 && role !== 'assistant'"
+          v-if="appointment.status == 1 && role !== 'assistant' && role !== 'doctor'"
           @click="cancelAppointment"
         >
           Cancelar Cita
@@ -118,10 +118,10 @@
 
         <front-button
           color="green"
-          v-show="appointment.status != 4 && appointment.status != 3"
+          v-show="appointment.status != 4 && appointment.status != 3 && role !== 'doctor'"
           @click="markAssisted"
         >
-          Marcar Asistencia
+          Marcar Asistencia 2
         </front-button>
 
         <front-button

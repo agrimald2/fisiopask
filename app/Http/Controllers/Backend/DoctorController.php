@@ -26,13 +26,13 @@ class DoctorController extends Controller
         if ($user->hasRole('assistant')) {
             return inertia('Backend/Dynamic/Grid', [
                 'model' => $model->items(),
-    
+
                 'links' => $model->linkCollection(),
-    
+
                 'parameters' => $request->all(),
-    
+
                 'title' => 'Lista de Doctores',
-    
+
                 'grid' => 'Backend/Doctors/gridAssistant.js',
             ]);
         }
@@ -205,6 +205,14 @@ class DoctorController extends Controller
     public function wame($phone)
     {
         $appointment = Appointment::with('patient')->find($phone);
+
+        if( $appointment->start <= '12:00'){
+            $appointment->start = $appointment->start . 'AM';
+        }else{
+            $appointment->start = $appointment->start . 'PM';
+        };
+
+
         $patientURL = "https://fisiosalud.pe/area/patients/login/".$appointment->patient->dni."/".$appointment->patient->token;
         $text = "*FISIOSALUD: RECORDATORIO DE CITA*%0a%0aHola, te recordamos que tienes una cita pendiente con nostros el dia:%0a%0a*Fecha de cita:*%0a$appointment->date%0a*Hora de cita:*%0a$appointment->start%0a%0a%0a*PAGOS, CITAS Y  REPROGRAMACIONES*%0a%0aSi deseas:%0a- Pagar tus Citas%0a- Ver tus Citas Programadas%0a- Agendar Nuevas Citas%0a- Reprogramar tus Citas%0a%0aPor favor dar click en el siguiente link:%0a$patientURL%0a%0aTe esperamos, FISIOSALUD:%0ahttps://fisiosalud.pe%0a%0aPor favor, agreganos a tus contactos para activar los links";
 

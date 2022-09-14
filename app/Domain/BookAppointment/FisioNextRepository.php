@@ -141,7 +141,7 @@ class FisioNextRepository implements RepositoryContract
         //$this->makeGoogleCalendarAppointment($date, $schedule, $patient);
 
         $appointment = Appointment::query()->where('date', $date)->where('status', '!=', Appointment::STATUS_CANCELED)->where('patient_id', $patient->id)->get();
-        
+
         if(!$appointment->isEmpty()) return $appointment;
 
         return appointments()->make(
@@ -180,18 +180,18 @@ class FisioNextRepository implements RepositoryContract
 
         $date = $appointment->date->format('d/m/Y');
         $startTime = $appointment->start;
-        
+
         $patientName = $patient->name;
         $patientName = $patient->name . " " . $patient->lastname1 . " " . $patient->lastname2;
-        
-        $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+
+        $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname;
         $doctorWorkspace = [];
-        
+
         if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
-        
+
         $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
         $dashboardDoctor = env('APP_URL').'dashboard/doctors/appointments/'.$appointment->id;
-        
+
         $office = $appointment->schedule->office;
         $office_indications = $office->indications;
         $office_address = $office->address;
@@ -215,7 +215,7 @@ class FisioNextRepository implements RepositoryContract
         $patientText = $this->getWhatsappPatientConfirmationText($data, $type);
         if ($patientText) {
             chatapi($patient->phone, $patientText);
-            logs()->warning(chatapi($patient->phone, $patientText));
+            //logs()->warning(chatapi($patient->phone, $patientText));
         } else{
             logs()->warning('ALGO SALIÓ MAL');
         }
@@ -225,11 +225,11 @@ class FisioNextRepository implements RepositoryContract
         //$doctorText = $this->getWhatsappDoctorConfirmationText($data);
         //if ($doctorText) {
         //    chatapi($appointment->doctor->phone, $doctorText);
-        //}           
+        //}
     }
 
     protected function getWhatsappPatientConfirmationText($data, $type)
-    {   
+    {
         switch ($type) {
             case "credit":
                 return view('chatapi.confirmation.credit', $data)->render();

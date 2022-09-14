@@ -14,6 +14,12 @@
             <span v-if="phone">
               Recibirás una confirmación a Whatsapp:
             </span>
+            
+            <br>
+            Si no te llegó la confirmación al WHATSAPP.
+
+            <br>
+            Por favor dale click al botón de abajo.
           </div>
           <!--
           <div
@@ -26,9 +32,19 @@
           <div class="mt-2 grid">
             <ui-button
               type="button"
+              @click="goWha"
+            >RECIBIR CONFIRMACIÓN</ui-button>
+          </div>
+          <!--
+          <div class="mt-2 grid">
+            <ui-button
+              color="yellow"
               @click="goHome"
             >Volver al Inicio</ui-button>
-          </div>
+          </div> -->
+          <a href="https://fisiosalud.pe" style="text-decoration: underline;">
+            Volver al inicio
+          </a>
         </div>
 
       </ui-container>
@@ -55,6 +71,10 @@ export default {
   methods: {
     goHome() {
       window.location = this.buttonUrl;
+    },
+    goWha() {
+        let whaUrl = 'https://api.whatsapp.com/send?phone='+this.phone+'&text=Hola%2C%0AAcabo%20de%20agendarme%20por%20la%20web.%0A%0AEspero%20mi%20CONFIRMACI%C3%93N%20de%20cita.%20%0A%0AMuchas%20gracias.'
+        window.location = whaUrl;
     },
   },
 };

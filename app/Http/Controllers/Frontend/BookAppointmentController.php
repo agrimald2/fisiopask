@@ -230,7 +230,7 @@ class BookAppointmentController extends Controller
         {
             $appointment = $appointment[0];
         }
-        
+
         $patientId = $appointment->patient_id;
 
         $payments = PatientPayment::query()->where('patient_id', $patientId)->get();
@@ -240,12 +240,12 @@ class BookAppointmentController extends Controller
 
         //EXISTING PATIENT
         if($payments->first())
-        {   
+        {
             //Create Constant Rate if no rates
             /*if(!$this->patientHasActiveRates($patientId))
             {
                 $constantRate = Rate::find(1);
-            
+
                 PatientRate::create([
                     'name' => $constantRate->name,
                     'subfamily_id' => $constantRate->subfamily_id,
@@ -263,29 +263,29 @@ class BookAppointmentController extends Controller
 
             $credit = true;
 
-            foreach($products as $product) 
+            foreach($products as $product)
             {
-                if(!$product->can_assist_bool) 
+                if(!$product->can_assist_bool)
                 {
                     $credit = false;
                     break;
                 }
             }
-            
-            //TODO @WHATSAPP SALDO A FAVOR 
+
+            //TODO @WHATSAPP SALDO A FAVOR
             if($credit)
             {
                 $this->repo->sendConfirmationToPatient($dni, $appointment, 'credit');
             }
             else
-            { 
-            //TODO @WHATSAPP SIN SALDO 
+            {
+            //TODO @WHATSAPP SIN SALDO
                 $this->repo->sendConfirmationToPatient($dni, $appointment, 'no_credit');
             }
         }
         else //NEW PATIENT
         {
-            //TODO @WHATSAPP PACIENTE NUEVO 
+            //TODO @WHATSAPP PACIENTE NUEVO
             $this->repo->sendConfirmationToPatient($dni, $appointment, 'new');
         }
 
