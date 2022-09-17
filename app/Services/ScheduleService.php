@@ -41,7 +41,7 @@ class ScheduleService
     {
 
         $user = auth()->user();
-        if($user->hasRole('admin'))
+        if($user != null && $user->hasRole('admin'))
         {
             return Schedule::query()
                 ->whereKey($id)
@@ -66,8 +66,7 @@ class ScheduleService
         /*
         @TODO -> BOOK MULTIPLE APPOINTMENTS IN THE SAME SCHEDULE 
         */
-
-        if($user->hasRole('admin')){
+        if($user!= null && $user->hasRole('admin')){
             return Schedule::query()
                 ->where('week_day', $weekDay)
                 ->whereDoesntHave('doctor.freezes', function ($q) use ($date) {
@@ -78,22 +77,23 @@ class ScheduleService
                 ->orderBy('start_time')
                 ->with(['doctor' => fn ($q) => $q->with('specialties')])
                 ->get();
+        }else{
+            return Schedule::query()
+            ->where('week_day', $weekDay)
+            ->whereDoesntHave('appointment', function ($q) use ($date) {
+                return $q->where('date', $date);
+            })
+            ->whereDoesntHave('doctor.freezes', function ($q) use ($date) {
+                return $q->where('start', '<=', $date)
+                    ->where('end', '>=', $date);
+            })
+            ->when($officeId, fn ($q) => $q->where('office_id', $officeId))
+            ->orderBy('start_time')
+            ->with(['doctor' => fn ($q) => $q->with('specialties')])
+            ->get();
         }
-
-        return Schedule::query()
-        ->where('week_day', $weekDay)
-        ->whereDoesntHave('appointment', function ($q) use ($date) {
-            return $q->where('date', $date);
-        })
-        ->whereDoesntHave('doctor.freezes', function ($q) use ($date) {
-            return $q->where('start', '<=', $date)
-                ->where('end', '>=', $date);
-        })
-        ->when($officeId, fn ($q) => $q->where('office_id', $officeId))
-        ->orderBy('start_time')
-        ->with(['doctor' => fn ($q) => $q->with('specialties')])
-        ->get();
     }
+
 
 
     public function scheduleCollectionToData($schedules)

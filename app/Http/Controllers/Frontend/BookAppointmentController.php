@@ -288,9 +288,11 @@ class BookAppointmentController extends Controller
             //TODO @WHATSAPP PACIENTE NUEVO
             $this->repo->sendConfirmationToPatient($dni, $appointment, 'new');
         }
+        
+        return $this->thanks($appointment);
 
-        return redirect()->route('bookAppointment.thanks')
-            ->with('phone', $phone);
+        //return redirect()->route('bookAppointment.thanks')
+        //    ->with('phone', $phone);
     }
 
     private function patientHasActiveRates($patientId)
@@ -307,12 +309,28 @@ class BookAppointmentController extends Controller
     /**
      * Thanks
      */
-    public function thanks()
+    public function thanks($appointment)
     {
-        $phone = session('phone', null);
+        $date = $appointment->date->format('d/m/Y');
+        $startTime = $appointment->start;
+
+        $office = $appointment->schedule->office;
+        $office_indications = $office->indications;
+        $office_address = $office->address;
+        $office_reference = $office->reference;
+
+        $data = compact(
+            'date',
+            'startTime',
+            'office_indications',
+            'office_address',
+            'office_reference',
+        );
+
+        $appointment = $data;
 
         $buttonUrl = $this->repo->getThankYouPageButtonUrl();
 
-        return inertia(self::BASE . '/Thanks', compact('phone', 'buttonUrl'));
+        return inertia(self::BASE . '/Thanks', compact('appointment', 'buttonUrl'));
     }
 }
