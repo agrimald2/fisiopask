@@ -25,7 +25,7 @@ class MarkAssistedAction extends Controller
         $showDistrict = !$patient->district;
         $showRecommendation = $patient->recommendation_id != null;
 
-        
+
         if($showDistrict || $showRecommendation)
         {
             $recommendations = Recommendation::query()->get();
@@ -35,9 +35,11 @@ class MarkAssistedAction extends Controller
         //@Mark Assisted Logic
 
         $sessions_left = $patientRate->sessions_left;
-        
-        if($sessions_left > 0) 
+
+        if($sessions_left > 0)
         {
+            $appointment->status = Appointment::STATUS_ASSISTED;
+            $appointment->save();
             $patientRate->sessions_left = $sessions_left - 1;
             $patientRate->save();
 
@@ -46,21 +48,18 @@ class MarkAssistedAction extends Controller
                 $patientRate->state = PatientRate::RATE_STATUS_COMPLETE;
                 $patientRate->save();
             }
-             
         }
 
         //logs()->warning($patientRate);
-        
+
         AssistedAppointments::create([
             'appointment_id' => $appointment->id,
             'patient_rate_id' => $patientRate->id,
             'rate_charged' => $patientRate->name,
             'consumed' => $patientRate->price / $patientRate->sessions_total,
             'marked_by' => auth()->user()->name,
-        ]); 
+        ]);
 
-        $appointment->status = Appointment::STATUS_ASSISTED;
-        $appointment->save();
 
         if($appointmentId != null) return redirect()->route('doctors.appointments.show', $appointmentId);
 

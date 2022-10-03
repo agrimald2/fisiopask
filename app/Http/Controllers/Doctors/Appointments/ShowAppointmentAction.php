@@ -29,11 +29,11 @@ class ShowAppointmentAction extends Controller
         $patient = $appointment->patient;
 
         $doctor = Doctor::withTrashed()->where('id', $appointment["doctor_id"])->first();
-        
+
         $doctorSubfamilies = DoctorSubfamily::query()->where('doctor_id' , $doctor->id)->get();
 
         $rate = null;
-        
+
         foreach($doctorSubfamilies as $subfamily)
         {
             $query = PatientRate::query()
@@ -42,7 +42,8 @@ class ShowAppointmentAction extends Controller
                 ->where('patient_id', $patient->id)
                 ->first();
 
-            if($query) 
+
+            if($query)
             {
                 $rate = $query;
                 break;
@@ -69,5 +70,5 @@ class ShowAppointmentAction extends Controller
 
 
 
-    
+
 }

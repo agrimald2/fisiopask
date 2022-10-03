@@ -114,7 +114,7 @@
           Cancelar Cita
         </front-button>
 
-<!-- v-show="appointment.status != 4 && appointment.is_pending" -->
+    <!-- v-show="appointment.status != 4 && appointment.is_pending" -->
 
         <front-button
           color="green"
