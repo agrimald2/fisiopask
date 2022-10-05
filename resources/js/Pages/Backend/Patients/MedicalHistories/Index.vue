@@ -20,7 +20,7 @@
           <span style="font-weight:bold"> DOCTOR </span>
           <i class="fas fa-angle-right"></i>
           {{model.doctor.name}} {{model.doctor.lastname}}
-        </div>      
+        </div>
       </div>
 
       <div class="mt-4">
@@ -28,7 +28,7 @@
           <span style="font-weight:bold"> PACIENTE </span>
           <i class="fas fa-angle-right"></i>
           {{model.patient.name}} {{model.patient.lastname1}} {{model.patient.lastname2}}
-        </div>      
+        </div>
       </div>
 
       <div class="mt-4 border rounded p-3">
@@ -46,7 +46,8 @@
               {{ dates.moment().year() - dates.moment(model.patient.birth_date).year() }} años
             </td>
           </tr>
-          <tr>
+          <!--
+            <tr>
             <th>SEXO:</th>
             <td>
               {{ model.patient.sex }}
@@ -56,6 +57,7 @@
               {{ model.patient.phone }}
             </td>
           </tr>
+          -->
         </table>
       </div>
       <div class="mt-4 text-center text-xl">
@@ -100,7 +102,7 @@
             <td>
               {{ model.diagnostic.cie_10 }} - {{ model.diagnostic.name }}
             </td>
-          </tr>          
+          </tr>
           <br>
           <tr class="mt-4">
             <th>ANÁLISIS SUGERIDOS:</th>
