@@ -24,7 +24,7 @@ class PatientSurveyController extends Controller
         return inertia('Patients/Survey/Index', compact('id'));
     }
 
-    public function store(Request $request) 
+    public function store(Request $request)
     {
         //Store Survey details
         $validated = $request->validate([
@@ -43,7 +43,7 @@ class PatientSurveyController extends Controller
         //Survey Message Variables
         $phone = $patient->phone;
         $patientName = $patient->name;
-        
+
         //Get Random Link
         $dice = rand(1,5);
         $facebook_link = 'https://www.facebook.com/fisiosaludperu/reviews/?ref=page_internal';
@@ -54,8 +54,8 @@ class PatientSurveyController extends Controller
             $review_link = $google_link;
         }else{
             $review_link = $facebook_link;
-        }      
-    
+        }
+
         $data = compact(
             'patientName',
             'review_link',
@@ -63,8 +63,8 @@ class PatientSurveyController extends Controller
 
         $text = $this->getWhatsappPatientReview($data);
 
-        if( $validated['office_score'] == 5 && 
-            $validated['doctor_score'] == 5 && 
+        if( $validated['office_score'] == 5 &&
+            $validated['doctor_score'] == 5 &&
             $validated['service_score'] == 5)
         {
             //logs()->error("$text");
@@ -81,8 +81,9 @@ class PatientSurveyController extends Controller
                 {
                     $patient->history_created = true;
                     $patient->save();
-                    
-                    chatapi($phone, $text);
+
+                    //@TODO WHATSAPP REVIEW
+                    //chatapi($phone, $text);
                     //@send message to rate on google n shit
                 }
             }

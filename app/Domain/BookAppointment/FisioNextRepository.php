@@ -176,6 +176,8 @@ class FisioNextRepository implements RepositoryContract
 
     public function sendConfirmationToPatient($dni, $appointment, $type)
     {
+        $waba_type = 'confirmation2';
+
         $patient = patients()->getByDni($dni);
 
         $date = $appointment->date->format('d/m/Y');
@@ -184,12 +186,17 @@ class FisioNextRepository implements RepositoryContract
         $patientName = $patient->name;
         $patientName = $patient->name . " " . $patient->lastname1 . " " . $patient->lastname2;
 
+        $patientDNI = $patient->dni;
+        $patientToken = $patient->token;
+
         $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname;
-        $doctorWorkspace = [];
+        //$doctorWorkspace = [];
 
         if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
 
-        $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
+
+        //$dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($patient);
+        $dashboardLink = $patientDNI.'/'.$patientToken;
         $dashboardDoctor = env('APP_URL').'dashboard/doctors/appointments/'.$appointment->id;
 
         $office = $appointment->schedule->office;
@@ -204,28 +211,29 @@ class FisioNextRepository implements RepositoryContract
             'startTime',
             'doctorName',
             'dashboardLink',
-            'doctorWorkspace',
             'office_indications',
             'office_address',
             'office_reference',
             'office_maps_link',
         );
 
-        // Send message to patient
-        $patientText = $this->getWhatsappPatientConfirmationText($data, $type);
-        if ($patientText) {
-            chatapi($patient->phone, $patientText);
-            //logs()->warning(chatapi($patient->phone, $patientText));
+        //Get old Message with Blade VIEW
+        //$patientText = $this->getWhatsappPatientConfirmationText($data, $type);
+
+        if ($data) {
+            chatapi($patient->phone, $data, $waba_type);
         } else{
             logs()->warning('ALGO SALIÓ MAL');
         }
 
+        /*
+        Send message to doctor
 
-        // Send message to doctor
-        //$doctorText = $this->getWhatsappDoctorConfirmationText($data);
-        //if ($doctorText) {
-        //    chatapi($appointment->doctor->phone, $doctorText);
-        //}
+        $doctorText = $this->getWhatsappDoctorConfirmationText($data);
+        if ($doctorText) {
+            chatapi($appointment->doctor->phone, $doctorText);
+        }
+        */
     }
 
     protected function getWhatsappPatientConfirmationText($data, $type)

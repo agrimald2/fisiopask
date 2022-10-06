@@ -9,6 +9,8 @@ class AppointmentCanceler
     public function cancel(Appointment $appointment)
     {
 
+        $waba_type = 'cancel';
+
         $appointment->load('patient');
         $phone = $appointment->patient->phone;
 
@@ -21,7 +23,7 @@ class AppointmentCanceler
         $date = $appointment->date->format('d/m/Y');
         $startTime = $appointment->start;
         $patientName = $patient->name . " " . $patient->lastname1 . " ". $patient->lastname2;
-        $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+        $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname;
 
         $data = compact(
             'dashboardLink',
@@ -30,22 +32,24 @@ class AppointmentCanceler
             'patientName'
         );
 
-        $text = $this->getWhatsappPatientCancelText($data);
+        //$text = $this->getWhatsappPatientCancelText($data);
 
-        chatapi($phone, $text);
+        chatapi($phone, $data, $waba_type);
 
         $appointment->status = Appointment::STATUS_CANCELED;
         $appointment->schedule_id = NULL;
+
         if(auth()->user() != null){
             $appointment->cancel_by = auth()->user()->name;
         }else{
             $appointment->cancel_by = "Paciente";
         }
+
         $appointment->save();
     }
 
     protected function getWhatsappPatientCancelText($data)
-    {   
+    {
         return view('chatapi.cancel', $data)->render();
     }
 }

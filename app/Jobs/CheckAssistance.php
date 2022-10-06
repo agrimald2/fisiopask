@@ -37,6 +37,8 @@ class CheckAssistance implements ShouldQueue
         //TODO @WHATSAPP 5 estrellas paciente
         foreach($confirmedAppointments as $appointment)
         {
+            $waba_type = 'not_assisted';
+
             $startTime = Carbon::parse($appointment->start);
             $startHour = Carbon::parse($appointment->start)->format('H');
 
@@ -50,7 +52,7 @@ class CheckAssistance implements ShouldQueue
                     $startTime = $appointment->start;
                     $patientName = $appointment->patient->name;
                     $patientName = $appointment->patient->name . " " . $appointment->patient->lastname1;
-                    $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+                    $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname;
                     $doctorWorkspace = [];
                     if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
                     $dashboardLink = app(PatientAuthRepositoryContract::class)->getAuthLinkForPatient($appointment->patient);
@@ -58,19 +60,15 @@ class CheckAssistance implements ShouldQueue
                     $patientDNI = $appointment->patient->dni;
                     $patientToken = $appointment->patient->token;
                     $dashboardLink = 'https://fisiosalud.pe/area/patients/login/'.$patientDNI.'/'.$patientToken;
-    
+
                     $data = compact(
-                        'patientName',
                         'date',
                         'startTime',
-                        'doctorName',
-                        'dashboardLink',
-                        'doctorWorkspace'
                     );
+                    
+                    //$text = $this->getWhatsappPatientNotAssistedText($data);
 
-                    $text = $this->getWhatsappPatientNotAssistedText($data);
-
-                    chatapi($phone, $text);
+                    chatapi($phone, $data, $waba_type);
                     $appointment->status = Appointment::STATUS_NOT_ASSISTED;
                     $appointment->save();
                 }
@@ -78,9 +76,9 @@ class CheckAssistance implements ShouldQueue
         }
     }
 
-    
+
     protected function getWhatsappPatientNotAssistedText($data)
-    {   
+    {
         return view('chatapi.notAssisted', $data)->render();
     }
 

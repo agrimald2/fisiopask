@@ -32,64 +32,62 @@ class SendReminderBefore implements ShouldQueue
 
         foreach($confirmedAppointments as $appointment)
         {
+                $waba_type = 'reminder';
+
                 $phone = $appointment->patient->phone;
                 $patient = $appointment->patient;
-                
+
                 $patientDNI = $patient->dni;
                 $patientToken = $patient->token;
-                $dashboardLink = 'https://fisiosalud.pe/area/patients/login/'.$patientDNI.'/'.$patientToken;
-
+                //$dashboardLink = 'https://fisiosalud.pe/area/patients/login/'.$patientDNI.'/'.$patientToken;
+                $dashboardLink = $patientDNI.'/'.$patientToken;
 
                 $date = $appointment->date->format('d/m/Y');
                 $startTime = $appointment->start;
                 $patientName = $patient->name . " " . $patient->lastname1 . " ". $patient->lastname2;
-                $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname; 
+                $doctorName = $appointment->doctor->name . ' ' . $appointment->doctor->lastname;
                 $doctorWorkspace = [];
-                $address = Office::find($appointment->office_id)->address;
+
+                /*$address = Office::find($appointment->office_id)->address;
                 $reference = Office::find($appointment->office_id)->reference;
                 if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
-        
-                /*
+                */
+
                 $office = $appointment->schedule->office;
                 $office_indications = $office->indications;
                 $office_address = $office->address;
                 $office_reference = $office->reference;
                 $office_maps_link = $office->maps_link;
-                */
+
 
                 $data = compact(
-                    'patientName',
                     'date',
                     'startTime',
-                    'doctorName',
-                    'dashboardLink',
-                    'doctorWorkspace',
-                    /*
                     'office_indications',
                     'office_address',
                     'office_reference',
                     'office_maps_link',
-                    */
+                    'dashboardLink',
                 );
-               
+
                 $created_date = $appointment->date->format('d/m/Y');
                 $today_date = Carbon::now()->format('d/m/Y');
 
 
-                $text = $this->getWhatsappPatientReminderText($data);
-                
+                //$text = $this->getWhatsappPatientReminderText($data);
+
                 if($created_date != $today_date){
-                    chatapi($phone, $text);
+                    chatapi($phone, $data, $waba_type);
                 }
-                
+
                 $appointment->reminder = '1';
-                
+
                 $appointment->save();
         }
     }
 
     protected function getWhatsappPatientReminderText($data)
-    {   
+    {
         return view('chatapi.reminder', $data)->render();
     }
 
