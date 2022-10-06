@@ -78,11 +78,11 @@ if (!function_exists('patients')) {
 
 
 if (!function_exists('chatapi')) {
-    function chatapi($phone, $text)
+    function chatapi($phone, $data, $waba_type)
     {
-        if ($phone && $text) {
+        if ($phone && $data && $waba_type) {
             $chatApi = app(App\Services\ChatApiService::class);
-            return $chatApi->send($phone, $text);
+            return $chatApi->send($phone, $data, $waba_type);
         }
         return null;
     }
