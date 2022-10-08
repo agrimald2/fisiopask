@@ -3,6 +3,7 @@
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Frontend\BookAppointmentController;
+use App\Http\Controllers\Frontend\PatientLoginController;
 use App\Http\Controllers\Paynow\ShowRequestPaymentAction;
 use App\Http\Controllers\Paynow\StorePaymentRequestAction;
 use App\Http\Controllers\Paynow\VerifyPaymentRequestAction;
@@ -11,6 +12,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])
     ->name('landing.index');
+
+    // Capture dni for Patient Login
+    Route::get('/patientlogin', [PatientLoginController::class, 'index'])
+        ->name('patientLogin.index');
+    Route::post('/patientlogin', [PatientLoginController::class, 'indexPost'])
+        ->name('patientLogin.index.post');
 
 Route::namespace(null)
     ->prefix('book-appointment')
