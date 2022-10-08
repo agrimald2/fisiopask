@@ -65,7 +65,7 @@ class CheckAssistance implements ShouldQueue
                         'date',
                         'startTime',
                     );
-                    
+
                     //$text = $this->getWhatsappPatientNotAssistedText($data);
 
                     chatapi($phone, $data, $waba_type);
