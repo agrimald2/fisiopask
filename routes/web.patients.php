@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PatientAddRatesSelfAction;
 use App\Http\Controllers\Patients\Auth\LoginAction;
+use App\Http\Controllers\Patients\Auth\LoginWhaAction;
 use App\Http\Controllers\Patients\Auth\LogoutAction;
 use App\Http\Controllers\Patients\IndexAction;
 use App\Http\Controllers\Patients\SeeRatesAction;
@@ -22,6 +23,12 @@ Route::get('/login/{dni}/{token}', LoginAction::class)
     ->name('area.patients.login')
     ->middleware('patients.guest', 'throttle:patients');
 
+    Route::get('/loginwha/{dni}', LoginWhaAction::class)
+    ->name('area.patients.login')
+    ->middleware('patients.guest', 'throttle:patients');
+
+
+
 Route::get('/logout', LogoutAction::class)
     ->name('area.patients.logout')
     ->middleware('patients.auth');
@@ -32,22 +39,22 @@ Route::middleware('patients.auth')->group(function () {
         ->name('area.patients.index');
 
     Route::get('/seeRates', SeeRatesAction::class)
-        ->name('area.patients.rates');        
+        ->name('area.patients.rates');
 
     Route::get('/addRatesSelf', PatientAddRatesSelfAction::class)
         ->name('area.patients.addRatesSelf');
 
     Route::get('/seeAppointments', SeeAppointmentsAction::class)
-        ->name('area.patients.appointments');      
+        ->name('area.patients.appointments');
 
     Route::get('/seePastAppointments', SeePastAppointmentsAction::class)
-        ->name('area.patients.appointments.past');      
+        ->name('area.patients.appointments.past');
 
     Route::get('/reprogramAppointments', ReprogramAppointmentsAction::class)
-        ->name('area.patients.appointments.reprogram');      
+        ->name('area.patients.appointments.reprogram');
 
     Route::get('/cancelAppointments', CancelAppointmentsAction::class)
-        ->name('area.patients.appointments.cancel');              
+        ->name('area.patients.appointments.cancel');
 
     Route::get('/rebook', RebookAction::class)
         ->name('area.patients.rebook');
