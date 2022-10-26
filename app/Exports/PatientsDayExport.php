@@ -28,27 +28,98 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
     {
         $this->office = $office;
         $this->start = $start;
-        $this->end = $end;        
-       
+        $this->end = $end;
+
     }
 
     public function array(): array
     {
+
+        /*
+        $data = AssistedAppointments::query()->with('appointment.patient', 'patientRate.subfamily.family', 'appointment.doctor')->get();
+
+        $rValue = array();
+
+        foreach($data as $aa)
+        {
+            $eDocName = "n/a";
+            $eDate = $aa->created_at;
+            $eHorario = "n/a";
+            $ePatientName = "n/a";
+            $ePatientDNI = "n/a";
+            $ePatientPhone = "n/a";
+            $eFamily = "n/a";
+            $eSubFamily = "n/a";
+            $eRateName = "n/a";
+            $eRatePrice = "n/a";
+            $eOffice = "n/a";
+
+
+            $app = $aa->appointment;
+            if($app)
+            {
+                $doc = $app->doctor;
+                if($doc)
+                {
+                    $eDocName = $doc->fullname;
+                }
+                $patient = $app->patient;
+                if($patient)
+                {
+                    $ePatientName = $patient->fullname;
+                    $ePatientDNI = $patient->dni;
+                    $ePatientPhone = $patient->phone;
+                }
+
+                $eHorario = strval($app->start)." - ".strval($app->end);
+                $eOffice = $app->office;
+            }
+
+            $rate = $aa->patientRate;
+            if($rate)
+            {
+                $eFamily = $rate->subfamily->family->name;
+                $eSubFamily = $rate->subFamily->name;
+                $eRateName = $rate->name;
+                $eRatePrice = $rate->price;
+            }
+
+            array_push($rValue, array(
+                "Nombres y Apellidos del Doctor" => $eDocName,
+                "Año" => substr($eDate, 0, 4),
+                "Mes" => substr($eDate, 5, 2),
+                "Día" => substr($eDate, 8, 2),
+                "Fecha" => substr($eDate, 0, 10),
+                "Hora de Atención" => $eHorario,
+                "Nombres y Apellidos Paciente" => $ePatientName,
+                "Dni del Paciente" => $ePatientDNI,
+                "Celular del paciente" => $ePatientPhone,
+                "Familia" => $eFamily,
+                "Sub Familia" => $eSubFamily,
+                "Tipo de Tarifa" => $eRateName,
+                "Precio Tarifa"	 => $eRatePrice,
+                "Sucursal" => $eOffice,
+            ));
+        }
+
+        return $rValue;
+        */
+
         $payments = PatientPayment::query()
-            ->whereBetween('created_at', 
+            ->whereBetween('created_at',
                 array(
-                    $this->start." 00:00:00", 
+                    $this->start." 00:00:00",
                     $this->end." 23:59:59"
                 ))
             ->with('patientRate.appointment.patient', 'patientRate.appointment.doctor', 'patientRate.subfamily.family', 'paymentMethod', 'patient')
             ->get();
-            
+
         $data = array();
 
         $kchiAppointments = array();
 
-        foreach($payments as $payment)
-        {
+        foreach($payments as $payment){
+
             $rate = $payment->patientRate;
 
             if($rate == null) continue;
@@ -59,6 +130,8 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
 
             $aa = AssistedAppointments::query()->where('appointment_id', $appointment->id)->first();
 
+            if(!$aa) continue;
+
             if($aa->patient_rate_id != $rate->id) continue;
 
             if($appointment->office_id != $this->office) continue;
@@ -68,7 +141,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
             $appointment = $appointment->load('doctor');
 
             $survey = Survey::query()->where('appointment_id', $appointment->id)->first();
-            
+
             $sessionsAssisted = ($rate->sessions_total - $rate->sessions_left) * $rate->price / $rate->sessions_total;
             $date = $payment->created_at;
 
@@ -101,7 +174,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
                     "Familia" => $rate->subfamily->family->name,
                     "Sub Familia" => $rate->subfamily->name,
                     "Tipo de Tarifa" => $rate->name,
-                    "Forma de Pago" => $payment->paymentMethod->payment_method,
+                    "Forma de Pago" => $payment->payment_method,
                     "Precio Tarifa"	 => $rate->price,
                     "Monto Cobrado"	=> $payment->ammount,
                     "Saldo Cobrado" => $rate->appointment_price,
@@ -143,15 +216,15 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
 
         $assistances = AssistedAppointments::query()
             ->with('patientRate.subfamily.family')
-            ->whereBetween('created_at', 
+            ->whereBetween('created_at',
                 array(
-                    $this->start." 00:00:00", 
+                    $this->start." 00:00:00",
                     $this->end." 23:59:59"
                 ))
             ->get();
 
-        foreach($assistances as $assistance)
-        {
+
+    foreach($assistances as $assistance){
             $wasMarked = false;
             foreach($kchiAppointments as $kchiAppointment)
             {
@@ -170,11 +243,13 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
             if($appointment->office_id != $this->office) continue;
 
             $survey = Survey::query()->where('appointment_id', $appointment->id)->first();
-            
+
             $date = $appointment->date;
-            
+
             $rate = $assistance->patientRate;
-            
+
+            if($rate == null) continue;
+
             $sessionsAssisted = ($rate->sessions_total - $rate->sessions_left) * $rate->price / $rate->sessions_total;
 
             $firstPaymentEver = PatientPayment::query()->where("patient_id", $appointment->patient_id)->first();
@@ -247,6 +322,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
 
         return $data;
     }
+
     public function headings(): array
     {
         $user = auth()->user();
@@ -260,23 +336,23 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
                 "Fecha",
                 "Hora de Atención",
                 "Nombres y Apellidos Paciente",
-                "C. Ofi",
-                "C. Ser",
-                "C. Doc",
-                "Comentario",
+                //"C. Ofi",
+                //"C. Ser",
+                //"C. Doc",
+                //"Comentario",
                 "Dni del Paciente",
                 "Celular del paciente",
                 "Familia",
                 "Sub Familia",
                 "Tipo de Tarifa",
-                "Forma de Pago",
+                //"Forma de Pago",
                 "Precio Tarifa",
-                "Monto Cobrado",
-                "Saldo Cobrado",
-                "Valor Ejecutado",
-                "Mes Origen",
+                //"Monto Cobrado",
+                //"Valor Ejecutado",
+                //"Saldo Cobrado",
+                //"Mes Origen",
                 "Sucursal",
-                "Historial Medico",
+                //"Historial Medico",
             ];
         }
 
@@ -307,7 +383,7 @@ class PatientsDayExport implements FromArray, WithHeadings, WithStyles, WithColu
     public function columnWidths(): array
     {
         return [
-            'A' => 35,            
+            'A' => 35,
             'B' => 10,
             'C' => 20,
             'D' => 35,

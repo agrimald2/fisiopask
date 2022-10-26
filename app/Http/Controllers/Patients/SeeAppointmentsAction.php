@@ -20,6 +20,7 @@ class SeeAppointmentsAction extends Controller
                 $q->select('id', 'name', 'lastname');
             }])
             ->where('date', '>', Carbon::now()->subDay(1)->format('Y-m-d'))
+            ->where('status', '==', 1)
             ->orderBy('date', 'asc')
             ->get();
 
@@ -27,7 +28,7 @@ class SeeAppointmentsAction extends Controller
              * 1. La busqueda debe resetear el numero de pagina, pequeño error
              * 2. El error, para variar era pq el doctor no tenía ninguna subfamilia
              */
-            
+
         $rates = $model->rates()
             ->orderBy('id', 'desc')
             ->get();

@@ -42,7 +42,7 @@ class CheckAssistance implements ShouldQueue
             $startTime = Carbon::parse($appointment->start);
             $startHour = Carbon::parse($appointment->start)->format('H');
 
-            if($startTime->diffInHours($currentTime) > 3)
+            if($startTime->diffInHours($currentTime) > 2)
             {
                 if($startHour < $currentHour)
                 {

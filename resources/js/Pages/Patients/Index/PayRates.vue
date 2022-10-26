@@ -11,7 +11,7 @@
               text-align:center;
               font-size: 0.9rem;
           ">
-  
+
           Evita colas y esperas en Recepción pagando con anticipación tus Citas pendientes.
 
           </div>
@@ -24,10 +24,23 @@
 
       <div class="container" style="">
           <RatesCmp :rates="rates"/>
+          <div v-if="rates.length <=0">
+            <strong style="text-align:center;">
+                No tienes tarifas activas, por favor añade una dando click en "Añadir Tarifas"
+            </strong>
+          </div>
       </div>
 
       <div>
-        <link-item 
+        <link-item
+          v-if="rates.length <=0"
+          style="color:blue"
+          class="mt-2rem"
+          label="Añadir Tarifas"
+          icon="fa-clipboard-list"
+          @click="go('area.patients.addRatesSelf')"
+        />
+        <link-item
           style="color:blue"
           class="mt-2rem"
           label="Volver al Menú"

@@ -15,8 +15,8 @@ class ExampleSeeder extends Seeder
     {
         $this->createSpecialties();
         $this->createOffices();
-        #$this->createDoctorJuan();
-        #$this->createDoctorPedro();
+        $this->createDoctorJuan();
+        $this->createDoctorPedro();
         #$this->createPatients();
     }
 
@@ -31,9 +31,21 @@ class ExampleSeeder extends Seeder
 
     public function createOffices()
     {
-        offices()->create(['name' => 'Spa Chalet de Lakshmi', 'address' => 'Mexico #59']);
-        #offices()->create(['name' => 'Fisio Salud Lima', 'address' => 'Lima #12']);
-        #offices()->create(['name' => 'Fisio Salud Chile', 'address' => 'Chile #42']);
+        #offices()->create(['name' => 'Spa Chalet de Lakshmi', 'address' => 'Mexico #59']);
+        offices()->create([
+            'name' => 'Corpac',
+            'address' => 'Lima #12',
+            'reference' => 'Referencia de Corpac',
+            'indications' => 'Indicaciones de Corpac',
+            'maps_link' => 'googlemaps2.com',
+        ]);
+        offices()->create([
+            'name' => 'Primavera',
+            'address' => 'Primavera #42',
+            'reference' => 'Referencia de primavera',
+            'indications' => 'Indicaciones de primavera',
+            'maps_link' => 'googlemaps.com',
+        ]);
     }
 
 
@@ -45,6 +57,9 @@ class ExampleSeeder extends Seeder
                 'email' => 'pedro@pedro.com',
                 'password' => 'pedro'
             ],
+
+            'name' => 'Pedro',
+            'lastname' => 'Páramo',
 
             'birth_date' => '2000-03-03',
 
@@ -65,7 +80,7 @@ class ExampleSeeder extends Seeder
         ]);
 
         schedules()->storeMany($doctor, [
-            'office_id' => 1,
+            'office_id' => 2,
             'days' => [1, 2, 3, 4, 5],
             'start_time' => '11:00',
             'end_time' => '11:30',
@@ -79,7 +94,7 @@ class ExampleSeeder extends Seeder
         ]);
 
         schedules()->storeMany($doctor, [
-            'office_id' => 1,
+            'office_id' => 2,
             'days' => [1, 2, 3, 4, 5],
             'start_time' => '12:00',
             'end_time' => '13:00',
@@ -103,6 +118,8 @@ class ExampleSeeder extends Seeder
                 'password' => 'juan'
             ],
 
+            'name' => 'Juan',
+            'lastname' => 'Diaz',
             'birth_date' => '2000-03-03',
 
             'sex' => 'M',
@@ -115,14 +132,14 @@ class ExampleSeeder extends Seeder
         $doctor->specialties()->attach(2);
 
         schedules()->storeMany($doctor, [
-            'office_id' => 1,
+            'office_id' => 2,
             'days' => [1, 2, 3, 4, 5],
             'start_time' => '10:00',
             'end_time' => '11:00',
         ]);
 
         schedules()->storeMany($doctor, [
-            'office_id' => 1,
+            'office_id' => 2,
             'days' => [1, 2, 3, 4, 5],
             'start_time' => '11:00',
             'end_time' => '12:00',

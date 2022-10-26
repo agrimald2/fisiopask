@@ -25,6 +25,7 @@ class SendReminderBefore implements ShouldQueue
     public function __construct()
     {
         $confirmedAppointments = Appointment::query()
+            ->with('schedule')
             ->where('status', Appointment::STATUS_CONFIRMED)
             ->where('date', Carbon::tomorrow()->format('Y-m-d'))
             ->where('reminder', '0')
@@ -53,7 +54,10 @@ class SendReminderBefore implements ShouldQueue
                 if($appointment->doctor->workspace != null) $doctorWorkspace = $appointment->doctor->workspace->name;
                 */
 
-                $office = $appointment->schedule->office;
+
+
+                $office = Office::find($appointment->office_id);
+                logs()->info($office);
                 $office_indications = $office->indications;
                 $office_address = $office->address;
                 $office_reference = $office->reference;
@@ -67,7 +71,7 @@ class SendReminderBefore implements ShouldQueue
                     'office_address',
                     'office_reference',
                     'office_maps_link',
-                    'dashboardLink',
+                    'dashboardLink'
                 );
 
                 $created_date = $appointment->date->format('d/m/Y');
@@ -83,6 +87,7 @@ class SendReminderBefore implements ShouldQueue
                 $appointment->reminder = '1';
 
                 $appointment->save();
+                logs()->info('ENVIADO');
         }
     }
 

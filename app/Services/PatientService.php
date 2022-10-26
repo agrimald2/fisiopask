@@ -83,6 +83,16 @@ class PatientService
             $patient = $this->create($data);
         }
 
+        if (!$patient->token) {
+            $patient->token = \Str::random(8);
+            $patient->save();
+        }
+
+        $link = route('area.patients.login', [
+            'dni' => $patient->dni,
+            'token' => $patient->token,
+        ]);
+
         return $patient;
     }
 

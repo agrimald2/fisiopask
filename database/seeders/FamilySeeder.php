@@ -14,11 +14,11 @@ class FamilySeeder extends Seeder
      */
     public function run()
     {
-        Family::create(['name' => 'Bebidas'])
+        Family::create(['name' => 'Paquetes de terapias'])
             ->subfamilies()
             ->createMany([
-                ['name' => 'Refrescos'],
-                ['name' => 'Jugos'],
+                ['name' => 'Paquete 1'],
+                ['name' => 'Paquete 2'],
             ]);
 
         Family::create(['name' => 'Traumatologia'])

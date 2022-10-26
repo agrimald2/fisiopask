@@ -120,9 +120,14 @@
           color="green"
           v-show="appointment.status != 4 && appointment.status != 3 && role !== 'doctor'"
           @click="markAssisted"
+          v-if="currentDate() == appointment.date"
         >
-          Marcar Asistencia 2
+          Marcar Asistencia
         </front-button>
+
+        <v-else>
+            FUTURO
+        </v-else>
 
         <front-button
           color="red"
@@ -272,6 +277,11 @@ export default {
   },
 
   methods: {
+    currentDate() {
+      const current = new Date();
+      const date = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`;
+      return date;
+    },
     cancelAppointment() {
       //if (
       //  confirm("Estas seguro?") &&

@@ -13,11 +13,11 @@
           <div class="text-lg text-gray-500 tracking-wide">
             Tu cita ha sido agendada con éxito. <br>
             {{appointment.date}}, {{appointment.startTime}}
-            
+
             <br>
             <br>
             <strong> {{appointment.office_address}}</strong>
-            
+
             <br>
             {{appointment.office_indications}}
             <br><br>
@@ -33,13 +33,13 @@
           >
             +{{ phone }}
           </div>
-          -->
+          
           <div class="mt-2 grid">
             <ui-button
               type="button"
               @click="goWha"
             >RECIBIR CONFIRMACIÓN</ui-button>
-          </div>
+          </div>-->
           <!--
           <div class="mt-2 grid">
             <ui-button

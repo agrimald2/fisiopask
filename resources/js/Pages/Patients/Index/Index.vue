@@ -11,7 +11,7 @@
               text-align:center;
               font-size: 1.2rem;
           ">
-  
+
           {{ model.name }} {{ model.lastname1 }} {{ model.lastname2 }} <br>
 
           </div>
@@ -26,7 +26,15 @@
 
       <div class="container" style="margin-top: -2rem;">
           <link-group style="display: block!important;">
-            <link-item 
+
+            <link-item
+            class="mt-2rem"
+            label="Añadir Tarifa Para Pago"
+            icon="fa-clipboard-list"
+            @click="go('area.patients.addRatesSelf')"
+            />
+
+            <link-item
               class="mt-2rem"
               label="Pagar Mis Citas"
               icon="fa-solid fa-money-bill"
@@ -61,12 +69,7 @@
               @click="go('area.patients.appointments.cancel')"
             />
 
-            <link-item
-              class="mt-2rem"
-              label="Añadir Tarifas"
-              icon="fa-clipboard-list"
-              @click="go('area.patients.addRatesSelf')"
-            />
+
           </link-group>
       </div>
       <div class="container" style="justify-content:center;display:flex">
@@ -75,7 +78,7 @@
             @click="go('area.patients.logout')"
           >
             Cerrar Sesión
-          </ui-button>        
+          </ui-button>
       </div>
     </ui-container>
   </layout>

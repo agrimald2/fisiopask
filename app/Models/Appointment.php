@@ -57,14 +57,14 @@ class Appointment extends Model
         $rate = null;
 
         $doctorSubfamilies = DoctorSubfamily::query()->where('doctor_id' , $this->doctor_id)->get();
-        
+
         foreach($doctorSubfamilies as $subfamily)
         {
             $query = PatientRate::query()
                 ->where('subfamily_id', $subfamily->subfamily_id)
                 ->where('patient_id', $this->patient_id)
                 ->first();
-            
+
             if($query)
             {
                 $rate = $query;
@@ -131,7 +131,7 @@ class Appointment extends Model
         return $this->belongsTo(Office::class);
     }
 
-    
+
 
     public function survey()
     {
