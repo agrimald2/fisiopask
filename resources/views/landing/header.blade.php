@@ -16,7 +16,7 @@
             <div class="container">
                 <div class="st-main-header-in">
                     <div class="st-main-header-left">
-                        <a class="st-site-branding" href="main_gallery"><img src="landing/img/logo.png" alt="Fisiosalud Logo" id="logo_topbar"></a>
+                        <a class="st-site-branding" href="main_gallery"><img src="landing/img/logo.png" alt="Fisioterapia Logo" id="logo_topbar"></a>
                     </div>
                     <div class="st-main-header-right">
                         <div class="st-nav">
