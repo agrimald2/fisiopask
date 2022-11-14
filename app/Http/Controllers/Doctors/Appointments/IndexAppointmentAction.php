@@ -17,13 +17,14 @@ class IndexAppointmentAction extends Controller
     {
         $user = auth()->user();
         $isDoctor = $user->hasRole('doctor');
+        $isDoc = 'ADMIN';
 
         $searchQuery = $request->searchQuery;
         $dateQueryFrom = $request->dateQueryFrom;
         $dateQueryTo = $request->dateQueryTo;
         $doctorQuery = $request->doctorQuery;
         $officeQuery = $request->officeQuery;
-        
+
         $statusQuery = $request->statusQuery;
 
 
@@ -36,10 +37,12 @@ class IndexAppointmentAction extends Controller
         {
             $doctors = Doctor::query()->where('user_id', $user->id)->get();
             $doctorQuery = $doctors[0]->id;
+            $isDoc = 'DOC';
         }
         else
         {
             $doctors = Doctor::query()->get();
+            $isDoc = 'NO-DOC';
         }
 
         $offices = Office::query()->get();
@@ -48,11 +51,11 @@ class IndexAppointmentAction extends Controller
 
         $dateFormated = $date->format('Y-m-d');
 
-        $rData = [ 
-            'searchQuery' => $request->searchQuery, 
-            'dateQueryFrom' => $request->dateQueryFrom, 
-            'dateQueryTo' => $request->dateQueryTo, 
-            'doctorQuery' => $request->doctorQuery, 
+        $rData = [
+            'searchQuery' => $request->searchQuery,
+            'dateQueryFrom' => $request->dateQueryFrom,
+            'dateQueryTo' => $request->dateQueryTo,
+            'doctorQuery' => $request->doctorQuery,
             'officeQuery' => $request->officeQuery,
             'statusQuery' => $request->statusQuery,
             'fetchAll' => true,
@@ -96,7 +99,7 @@ class IndexAppointmentAction extends Controller
 
             'enableDateSearch' => true,
 
-            'enableOfficeSearch' => true,   
+            'enableOfficeSearch' => true,
 
             'enableDoctorSearch' => $canSearchByDoctor,
 
@@ -106,7 +109,7 @@ class IndexAppointmentAction extends Controller
 
 
     private function getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery)
-    {        
+    {
         $appointments = DB::table('appointments')
             ->join('patients', 'patients.id', '=', 'appointments.patient_id')
             ->select(DB::raw("appointments.*, patients.*, appointments.id as id"));
@@ -122,7 +125,7 @@ class IndexAppointmentAction extends Controller
             $appointments
                 ->where('office', 'LIKE', $officeQuery);
         }
-            
+
         if(!(empty($dateQueryFrom) || empty($dateQueryTo)))
         {
             $appointments
@@ -145,13 +148,13 @@ class IndexAppointmentAction extends Controller
                     ->orWhere(DB::raw("CONCAT(`lastname1`, ' ', `lastname2`)"), 'LIKE', $searchQuery);
             });
         }
-        
+
         $appointments
             ->orderBy('date', 'desc')
             ->orderBy('start', 'desc');
 
         $result = $appointments->paginate(120);
-        
+
         return $result;
-    }    
+    }
 }

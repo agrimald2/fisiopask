@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\WorkspaceController;
 use App\Http\Controllers\Backend\PatientController;
 use App\Http\Controllers\Backend\PatientAppointmentController;
 use App\Http\Controllers\Backend\PatientRates\AddPaymentToPatientAction;
+use App\Http\Controllers\Backend\PatientRates\AddPaymentToPatientActionApp;
 use App\Http\Controllers\Backend\PatientRates\AddRateToPatientAction;
 use App\Http\Controllers\Backend\PatientRates\DestroyPatientRateAction;
 use App\Http\Controllers\Backend\PatientRates\GeneratePaymentRequestLinkAction;
@@ -20,6 +21,7 @@ use App\Http\Controllers\Backend\PatientRates\RenderPaymentFormAction;
 use App\Http\Controllers\Backend\PatientRates\ShowPaymentsAction;
 use App\Http\Controllers\Backend\PatientRates\CancelPaymentAction;
 use App\Http\Controllers\Backend\PatientRates\PayRateAction;
+use App\Http\Controllers\Backend\PatientRates\PayRateActionApp;
 use App\Http\Controllers\Backend\PatientRates\PayConstantRateAction;
 use App\Http\Controllers\Backend\PatientRates\CancelRateAction;
 use App\Http\Controllers\Backend\PatientRates\AbandonRateAction;
@@ -145,6 +147,9 @@ Route::get('/patients/rates/{patientRate}/notAssisted/{appointment}', MarkNotAss
 Route::get('/patients/rates/{patientRate}/pay', PayRateAction::class)
     ->name('patients.rates.pay');
 
+Route::get('/patients/rates/{patientRate}/{appointment_id}/pay', PayRateActionApp::class)
+    ->name('patients.rates.payApp');
+
 Route::get('/patients/constantrate/{appointment}/pay', PayConstantRateAction::class)
     ->name('patients.constantrate.pay');
 
@@ -178,11 +183,13 @@ Route::namespace(null)
         Route::get('/create', RenderPatientPosAction::class)
             ->name('create');
 
-        Route::post('/', AddRateToPatientAction::class)
+        Route::post('/{appointment_id}', AddRateToPatientAction::class)
             ->name('store');
 
         Route::get('/payments/create', RenderPaymentFormAction::class)
             ->name('payments.create');
+        Route::post('/payments/{appointment_id}', AddPaymentToPatientActionApp::class)
+            ->name('payments.storeApp');
         Route::post('/payments', AddPaymentToPatientAction::class)
             ->name('payments.store');
     });
@@ -244,7 +251,7 @@ Route::resource('paymentMethods', PaymentMethodController::class)
     ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
 /**
- * Recomendations  
+ * Recomendations
  */
 Route::resource('recommendation', RecommendationController::class)
 ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
@@ -434,15 +441,15 @@ Route::get('/booking/{patient}/pickTime/{date}', [MultipleBookingController::cla
 
 Route::post('/booking/{patient}/postTime', [MultipleBookingController::class, 'postTime'])
     ->name('multipleBooking.postTime');
-    
+
 /**
  * AREA: Statistics
  */
-    Route::post('/statistic', [StatisticsController::class, 'statistic'])->name('statistic');    
-    Route::get('/excel', [StatisticsController::class,'excel'])->name('excel');   
-    //Route::post('/excel', [StatisticsController::class,'excel'])->name('excel');    
+    Route::post('/statistic', [StatisticsController::class, 'statistic'])->name('statistic');
+    Route::get('/excel', [StatisticsController::class,'excel'])->name('excel');
+    //Route::post('/excel', [StatisticsController::class,'excel'])->name('excel');
     Route::resource('statistics', StatisticsController::class)
     ->only('index');
 
 
-    //Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 
+    //Route::get('/testa', [TestAssistanceController::class,'test'])->name('test');

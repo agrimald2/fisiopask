@@ -10,11 +10,15 @@ use Illuminate\Http\Request;
 
 class AddRateToPatientAction extends Controller
 {
-    public function __invoke(Request $request, Patient $patient)
+    public function __invoke(Request $request, Patient $patient, $appointment_id)
     {
         $request->validate([
             'cart.*.qty' => 'required|integer'
         ]);
+
+        $count = PatientRate::withTrashed()->count();
+
+        $request->appointment_id;
 
         collect($request->cart)
             ->map(function ($cartRate) use ($patient, $request) {
@@ -55,10 +59,11 @@ class AddRateToPatientAction extends Controller
                 }
             });
 
+
         if ($request->redirect) {
-            return redirect($request->redirect);
+            return redirect()->route('patients.rates.payApp', [$count+1,$request->appointment_id]);
         }
 
-        return redirect()->route('patients.rates.index', $patient);
+            return redirect()->route('patients.rates.payApp', [$count+1,$request->appointment_id]);
     }
 }

@@ -10,6 +10,7 @@ class AddPaymentToPatientAction extends Controller
 {
     public function __invoke(Request $request, Patient $patient)
     {
+        logs()->warning('A');
         $request->validate([
             'payment_method_id' => 'required|integer',
             'ammount' => 'required|numeric',
@@ -27,7 +28,7 @@ class AddPaymentToPatientAction extends Controller
                 'payment_method' => $paymentMethod->payment_method,
                 'patient_rate_id' => $request->rate_id,
             ]);
-        
+
         $appointment = $request->appointment_id;
         return redirect()->route('patients.rates.index', [$patient, $appointment]);
     }

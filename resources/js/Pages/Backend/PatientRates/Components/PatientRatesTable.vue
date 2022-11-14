@@ -24,7 +24,7 @@ export default {
       c("price", "Precio"),
       c("payed", "Cantidad Pagada"),
       c("sessions_total", "Citas Totales"),
-      c("appointments_paid", "Citas Pagadas"),
+      c("appointments_paid", "Citas Pagadas2"),
       c("appointments_assisted", "Citas Asistidas"),
       c("can_assist_string", "Puede Asistir"),
       c("", "Estado")
@@ -33,7 +33,7 @@ export default {
         })
         .format(function (row) {
             let colorClass = "bg-green-400";
-            
+
             if (row.state == 0){
               colorClass = "bg-yellow-400";
             } else if(row.state == 1){

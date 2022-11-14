@@ -111,18 +111,18 @@ export default (props, { attrs }) => {
         buttons: [
           {
             label({row}){
-              if(row.reminder == 0){
+              if(props.enableDoctorSearch == true){
                 return 'WHA'
               }else{
-                return 'WHA'
+                return '-'
               };
             },
             clicked({ row }) {
               const url = route('doctors.wame', row.id);
-              if(row.reminder == 0){
+              if(props.enableDoctorSearch == true){
                 Inertia.visit(url);
               }else{
-                Inertia.visit(url);
+                //Inertia.visit(url);
               }
             }
           },

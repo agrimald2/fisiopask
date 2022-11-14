@@ -87,7 +87,9 @@
         <ui-button
           color="green"
           @click="submit"
-        >Añadir a la Cuenta del Cliente</ui-button>
+        >Añadir a la Cuenta del Cliente
+            {{appointment_id}}
+        </ui-button>
       </div>
     </div>
 
@@ -107,6 +109,7 @@ export default {
       type: Object,
       default: {},
     },
+    appointment_id: null
   },
 
   components: {
@@ -121,25 +124,6 @@ export default {
   },
 
   methods: {
-    submit() {
-      const url = this.submitUrl;
-      const data = {
-        cart: this.cart,
-        ...this.options,
-      };
-
-      this.$inertia.post(url, data);
-      this.cart = [];
-    },
-
-    removeRate(y) {
-      const index = this.cart.findIndex((x) => x == y);
-
-      if (index > -1) {
-        this.cart.splice(index, 1);
-      }
-    },
-
     addRate() {
       if(!this.input.product.is_product) this.input.qty = 1;
       if (this.input.product && !isNaN(this.input.qty) && this.input.qty > 0) {
@@ -153,6 +137,29 @@ export default {
         this.input.qty = null;
 
         this.cart.push(cartRate);
+      }
+    },
+
+    submit() {
+      const url = this.submitUrl;
+      const data = {
+        cart: this.cart,
+        appointment_id: this.appointment_id,
+        ...this.options,
+      };
+
+      console.log(url);
+      console.log(data);
+      this.$inertia.post(url, data);
+      this.cart = [];
+
+    },
+
+    removeRate(y) {
+      const index = this.cart.findIndex((x) => x == y);
+
+      if (index > -1) {
+        this.cart.splice(index, 1);
       }
     },
   },

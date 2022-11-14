@@ -25,7 +25,9 @@ class PayRateAction extends Controller
 
         $patient = Patient::find($patientRate->patient_id);
 
-        return inertia('Backend/PatientRates/AddSpecificPayment', compact('patient', 'paymentMethodOptions', 'balance', 'patientRate'));
+        $appointment_id = 0;
+
+        return inertia('Backend/PatientRates/AddSpecificPayment', compact('patient', 'paymentMethodOptions', 'balance', 'patientRate','appointment_id'));
     }
 
     private function getPaymentMethodOptions()

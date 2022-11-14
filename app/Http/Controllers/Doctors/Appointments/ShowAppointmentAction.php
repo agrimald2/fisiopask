@@ -32,6 +32,11 @@ class ShowAppointmentAction extends Controller
 
         $doctorSubfamilies = DoctorSubfamily::query()->where('doctor_id' , $doctor->id)->get();
 
+        $rates = PatientRate::query()
+        ->where('state', PatientRate::RATE_STATUS_OPEN)
+        ->where('patient_id', $patient->id)
+        ->get();
+
         $rate = null;
 
         foreach($doctorSubfamilies as $subfamily)
@@ -49,6 +54,10 @@ class ShowAppointmentAction extends Controller
                 break;
             }
         }
+
+
+
+
         /*
         if($rate == null)
         {
@@ -63,7 +72,7 @@ class ShowAppointmentAction extends Controller
         }
         */
 
-        return inertia('Doctors/Appointments/Show', compact('appointment', 'doctor', 'patient', 'role', 'rate'));
+        return inertia('Doctors/Appointments/Show', compact('appointment', 'doctor', 'patient', 'role', 'rate','rates'));
     }
 
 

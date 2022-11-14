@@ -143,7 +143,7 @@
         <Multiselect
           id="diagnostics"
           v-model="form.diagnostic_id"
-          :close-on-select="true"          
+          :close-on-select="true"
           :searchable="true"
           :options="diagnostics"
         />
@@ -167,7 +167,7 @@
       </JetButton>
     </template>
 
-    
+
   </JetFormSection>
 </template>
 
@@ -217,10 +217,10 @@ export default {
         treatment_id: null,
         analysis_id: null,
         affected_area_id: null,
-        
+
         history_group_id: null,
 
-        treatments: [], 
+        treatments: [],
         value: []
       }),
     };
