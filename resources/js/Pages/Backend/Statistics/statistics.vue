@@ -423,7 +423,7 @@
               >
                 <div class="flex justify-between">
                   <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                    Venta en Soles (SERVICIOS CONSUMIDOS)
+                    Venta en Soles
                   </h4>
 
                   <h4
@@ -563,42 +563,6 @@
               </div>
             </div>
 
-            <div class="grid sm:px-4 lg:px-6 gap-6 mb-2 md:grid-cols-2">
-              <div
-                class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
-              >
-                <div class="flex justify-between">
-                  <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                    Dinero recaudado en BRUTO (NO dinero consumido)
-                  </h4>
-
-                  <h4
-                    :class="[
-                      {
-                        'text-green-400 mb-4 font-semibold': salesPorcentajeBruto > 0,
-                      },
-                      { 'text-red-400 mb-4 font-semibold': salesPorcentajeBruto < 0 },
-                    ]"
-                  >
-                    {{ salesPorcentajeBruto }}%
-                  </h4>
-                </div>
-                <div v-if="showSB" class="flex justify-center">
-                  <h3 class="mb-4 font-semibold text-red-500">
-                    No se encontró información
-                  </h3>
-                </div>
-                <div v-else id="chart">
-                  <apexchart
-                    type="bar"
-                    height="430"
-                    :options="chartOptionsSalesBruto"
-                    :series="seriesSalesBruto"
-                  ></apexchart>
-                </div>
-              </div>
-          </div>
-
             <!-- EXCEL -->
             <h2
               class="
@@ -648,12 +612,6 @@
                           "
                           v-model="officeExcel"
                         >
-                          <option
-                            :value="0"
-                            selected
-                          >
-                            TODAS
-                          </option>
                           <option
                             v-for="(o, index) in offices"
                             :key="index"
@@ -843,7 +801,6 @@
       recommendation: Object,
       patient: Object,
       sales: Object,
-      salesBruto: Object,
       ticket: Object,
       nServices: Object,
       modelValue: Object,
@@ -896,11 +853,6 @@
         showS: Boolean,
         seriesSales: [],
         chartOptionsSales: {},
-        //BRUTOSALES
-        salesPorcentajeBruto: null,
-        showSB: Boolean,
-        seriesSalesBruto: [],
-        chartOptionsSalesBruto: {},
         //TICKET
         ticketPorcentaje: null,
         showT: Boolean,
@@ -926,7 +878,6 @@
     created() {
       //call dashboard
       this.showPatient(this.$props.patient);
-      this.showSalesBruto(this.$props.salesBruto);
       this.showSales(this.$props.sales);
       this.showTicket(this.$props.ticket);
       this.showNservices(this.$props.nServices);
@@ -1053,82 +1004,6 @@
           },
         ];
         this.chartOptionsSales = {
-          chart: {
-            type: "bar",
-            height: 350,
-            stacked: true,
-            toolbar: {
-              show: true,
-            },
-            zoom: {
-              enabled: true,
-            },
-          },
-          colors: ["#2983FF", "#FF9800"],
-          responsive: [
-            {
-              breakpoint: 480,
-              options: {
-                legend: {
-                  position: "bottom",
-                  offsetX: -10,
-                  offsetY: 0,
-                },
-              },
-            },
-          ],
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              borderRadius: 10,
-            },
-          },
-          xaxis: {
-            categories: fecha,
-          },
-          legend: {
-            position: "top",
-
-            horizontalAling: "left",
-            offsetX: 40,
-          },
-          fill: {
-            opacity: 1,
-          },
-        };
-      },
-      //SalesBruto
-      showSalesBruto(salesBruto) {
-        salesBruto != "" ? (this.showSB = false) : (this.showSB = true);
-        let fecha = [];
-        let recurrentes = [];
-        let nuevos = [];
-        let totalGeneral = [];
-        this.salesPorcentajeBruto = "";
-
-        Object.keys(salesBruto).forEach((e) => {
-          fecha.push(salesBruto[e].Fecha);
-          nuevos.push(salesBruto[e].ValorEjecutadoNuevos);
-          recurrentes.push(salesBruto[e].ValorEjecutadoRecurrentes);
-          totalGeneral.push(salesBruto[e].TotalGeneral);
-        });
-        var a = totalGeneral[totalGeneral.length - 2];
-        var b = totalGeneral[totalGeneral.length - 1];
-
-        if (totalGeneral.length > 1 && a > 0) {
-          this.salesPorcentajeBruto = Math.round((+b / a - 1) * 100);
-        }
-        this.seriesSalesBruto = [
-          {
-            name: "Nuevos",
-            data: nuevos,
-          },
-          {
-            name: "Recurrentes",
-            data: recurrentes,
-          },
-        ];
-        this.chartOptionsSalesBruto = {
           chart: {
             type: "bar",
             height: 350,
@@ -1377,7 +1252,6 @@
             this.showPatient(response.data.patients);
             this.showNservices(response.data.nServices);
             this.showSales(response.data.sales);
-            this.showSalesBruto(response.data.salesBruto);
           })
           .catch((err) => {
             console.log(err);

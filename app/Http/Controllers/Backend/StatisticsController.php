@@ -1,5 +1,5 @@
 <?php
-//TODO REVISAR ESTADÍSTICAS
+
 namespace App\Http\Controllers\Backend;
 
 use App\Exports\PatientsDayExport;
@@ -34,7 +34,6 @@ class StatisticsController extends Controller
         $patients = [];
         $tickets = [];
         $sales = [];
-        $salesBruto = [];
         $services = [];
 
         $start = Carbon::now()->startOfMonth()->subMonth(5);
@@ -46,14 +45,13 @@ class StatisticsController extends Controller
             array_push($patients, $data['patients']);
             array_push($tickets, $data['tickets']);
             array_push($sales, $data['sales']);
-            array_push($salesBruto, $data['salesBruto']);
             array_push($services, $data['services']);
 
             $start = $start->addMonth(1);
             $end = $end->addMonth(1);
         }
 
-        return inertia('Backend/Statistics/statistics', ['offices'=>$offices,'recommendation'=>$recommendation,'patient' => $patients, 'sales' => $sales, 'salesBruto' => $salesBruto, 'ticket' => $tickets, 'nServices' => $services]);
+        return inertia('Backend/Statistics/statistics', ['offices'=>$offices,'recommendation'=>$recommendation,'patient' => $patients, 'sales' => $sales, 'ticket' => $tickets, 'nServices' => $services]);
     }
 
     public function statistic(Request $request)
@@ -70,7 +68,6 @@ class StatisticsController extends Controller
         $patients = [];
         $tickets = [];
         $sales = [];
-        $salesBruto = [];
         $services = [];
 
         switch($request->params["advances"])
@@ -85,7 +82,6 @@ class StatisticsController extends Controller
                     array_push($patients, $data['patients']);
                     array_push($tickets, $data['tickets']);
                     array_push($sales, $data['sales']);
-                    array_push($sales, $data['salesBruto']);
                     array_push($services, $data['services']);
 
                     $start = $start->addMonth(1);
@@ -111,7 +107,6 @@ class StatisticsController extends Controller
                     array_push($patients, $data['patients']);
                     array_push($tickets, $data['tickets']);
                     array_push($sales, $data['sales']);
-                    array_push($salesBruto, $data['salesBruto']);
                     array_push($services, $data['services']);
 
                     $start = $start->addDay(1);
@@ -133,7 +128,6 @@ class StatisticsController extends Controller
                     array_push($patients, $data['patients']);
                     array_push($tickets, $data['tickets']);
                     array_push($sales, $data['sales']);
-                    array_push($salesBruto, $data['salesBruto']);
                     array_push($services, $data['services']);
 
                     $start = $start->addMonth(1);
@@ -152,7 +146,6 @@ class StatisticsController extends Controller
                     array_push($patients, $data['patients']);
                     array_push($tickets, $data['tickets']);
                     array_push($sales, $data['sales']);
-                    array_push($salesBruto, $data['salesBruto']);
                     array_push($services, $data['services']);
 
                     $start = $start->addMonth(1);
@@ -173,7 +166,6 @@ class StatisticsController extends Controller
                     array_push($patients, $data['patients']);
                     array_push($tickets, $data['tickets']);
                     array_push($sales, $data['sales']);
-                    array_push($salesBruto, $data['salesBruto']);
                     array_push($services, $data['services']);
 
                     $start = $start->addMonth(1);
@@ -182,24 +174,19 @@ class StatisticsController extends Controller
                 break;
         }
 
-        return response()->json(['patients' => $patients, 'sales' => $sales, 'salesBruto' => $salesBruto,'tickets' => $tickets, 'nServices' => $services]);
+        return response()->json(['patients' => $patients, 'sales' => $sales,'tickets' => $tickets, 'nServices' => $services]);
     }
 
     private function getData($start, $end)
     {
-        //Log::info($start);
-        //Log::info($end);
+        Log::info($start);
+        Log::info($end);
         $payments = PatientPayment::query()
                         ->whereBetween('created_at', [
                             $start,
                             $end
                         ])
                         ->get();
-
-        $payments_debug = $payments->toArray();
-        //logs()->debug('PAGOS AHORA', $payments_debug);
-
-
 
         $appointments = AssistedAppointments::query()
                             ->whereBetween('created_at', [
@@ -209,17 +196,10 @@ class StatisticsController extends Controller
                             ->with('appointment', 'patientRate')
                             ->get();
 
-
-        //NEW PAYMENTS INFO, JUST CONSUMED
-        $appointments_debug = $appointments->toArray();
-        //logs()->debug('PAGOS CORREGIDO', $appointments_debug);
-
         $oldPatientIds = [];
         $newPatientIds = [];
         $oldPatientSales = 0;
         $newPatientSales = 0;
-        $oldPatientSalesBruto = 0;
-        $newPatientSalesBruto = 0;
         $oldPatientServices = 0;
         $newPatientServices = 0;
         $oldAvrgTicket = 0;
@@ -229,53 +209,24 @@ class StatisticsController extends Controller
         $newPatientID = $this->getFirstPatientOfMonth(clone $start);
         if($newPatientID != 0)
         {
-            //Corrected Consumed SALES
-            foreach($appointments as $appointment){
-                $app_index = 1;
-                $appointments_to_array = $appointment->toArray();
-                $consumed_payments = $appointments_to_array['consumed'];
-
-                $patientId = $appointment->appointment->patient_id;
-
-                if($patientId >= $newPatientID)
-                {
-                    //NEW
-                    $newPatientSales += $consumed_payments;
-                }
-                else
-                {
-                    //OLD
-                    $oldPatientSales += $consumed_payments;
-                }
-            }
-
-            //Bruto Sales
+            //Get patients & unique array
             foreach($payments as $payment)
             {
                 $patientId = $payment->patient_id;
                 if($patientId >= $newPatientID)
                 {
                     //NEW
-                    $newPatientSalesBruto += $payment->ammount;
+                    $newPatientSales += $payment->ammount;
                 }
                 else
                 {
                     //OLD
-                    $oldPatientSalesBruto += $payment->ammount;
+                    $oldPatientSales += $payment->ammount;
                 }
-
             }
-
 
             foreach($appointments as $appointment)
             {
-                /*
-                $app_index = 1;
-                $appointments_debug = $appointment->toArray();
-                $consumed_payments_debug = $appointments_debug['consumed'];
-
-                logs()->warning('PAGOS CORREGIDO NUEVOS: '.$app_index.' - '. $consumed_payments_debug);
-                */
                 $patientId = $appointment->appointment->patient_id;
                 if($patientId >= $newPatientID)
                 {
@@ -289,7 +240,6 @@ class StatisticsController extends Controller
                     if($appointment->patientRate) $oldAvgSale += $appointment->patientRate->price;
                     $oldPatientServices++;
                 }
-                $app_index++;
             }
 
             $oldPatientIds = array_unique($oldPatientIds, SORT_NUMERIC);
@@ -324,13 +274,6 @@ class StatisticsController extends Controller
                 "ServiciosNuevos" => $newPatientServices,
                 "TotalGeneral" => $oldPatientServices + $newPatientServices,
             ],
-            'salesBruto' => [
-                "Fecha" => $start->format('Y-m-d'),
-                "ValorEjecutadoRecurrentes" => $oldPatientSalesBruto,
-                "ValorEjecutadoNuevos" => $newPatientSalesBruto,
-                "TotalGeneral" => $oldPatientSalesBruto + $newPatientSalesBruto,
-            ],
-
         ];
 
         return $data;
@@ -376,6 +319,6 @@ class StatisticsController extends Controller
             }
         }
 
-        return Excel::download(new PatientsDayExport($request->office,$request->start,$request->end), 'FISIO-Pacientes-Atendidos-DEL-'.$request->start.'-AL-'.$request->end.'.xlsx');
+        return Excel::download(new PatientsDayExport($request->office,$request->start,$request->end), 'FISIO-Pacientes-Atendidos.xlsx');
     }
 }
