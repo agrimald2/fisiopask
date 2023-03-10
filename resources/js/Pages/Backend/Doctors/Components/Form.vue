@@ -14,7 +14,7 @@
         <form-input
           label="Nombre"
           name="name"
-          v-model="form.name"
+          v-model="form. name"
           :form="form"
         />
 

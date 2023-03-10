@@ -12,7 +12,6 @@
                 lg:px-6
                 font-semibold
                 text-gray-700
-                dark:text-gray-200
               "
             >
               Gráficos Estadísticas
@@ -20,7 +19,7 @@
 
             <div class="sm:px-4 lg:px-6 gap-6 mb-2 md:grid-cols-2">
               <div
-                class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
+                class="min-w-0 p-4 bg-white rounded-lg shadow-xs"
               >
                 <h4 class="font-semibold text-gray-800">Filtrar por</h4>
                 <!--Filtro-->
@@ -39,12 +38,6 @@
                         leading-tight
                         focus:border-indigo-300
                         rounded-lg
-                        dark:border-gray-200
-                        dark:border-none
-                        dark:bg-gray-600
-                        dark:text-white
-                        dark:focus:border-blue-500
-                        dark:focus:shadow-outline-blue
                       "
                       v-model="paramsFilter.office"
                     >
@@ -71,12 +64,6 @@
                         leading-tight
                         focus:border-indigo-300
                         rounded-lg
-                        dark:border-gray-200
-                        dark:border-none
-                        dark:bg-gray-600
-                        dark:text-white
-                        dark:focus:border-blue-500
-                        dark:focus:shadow-outline-blue
                       "
                       @change="clearParams()"
                       v-model="paramsFilter.advances"
@@ -111,12 +98,6 @@
                             leading-tight
                             focus:border-indigo-300
                             rounded-lg
-                            dark:border-gray-200
-                            dark:border-none
-                            dark:bg-gray-600
-                            dark:text-white
-                            dark:focus:border-blue-500
-                            dark:focus:shadow-outline-blue
                           "
                           v-model="paramsFilter.daySelected"
                         >
@@ -284,12 +265,6 @@
                             leading-tight
                             focus:border-indigo-300
                             rounded-lg
-                            dark:border-gray-200
-                            dark:border-none
-                            dark:bg-gray-600
-                            dark:text-white
-                            dark:focus:border-blue-500
-                            dark:focus:shadow-outline-blue
                           "
                           v-model="paramsRecomendation.recommendations"
                         >
@@ -367,7 +342,6 @@
                     class="
                       w-full
                       bg-gray-200
-                      dark:bg-gray-800
                       rounded-full
                       h-1.5
                       mt-2
@@ -375,7 +349,7 @@
                     "
                   >
                     <div
-                      class="bg-green-400 dark:bg-purple-600 h-1.5 rounded-full"
+                      class="bg-green-400 h-1.5 rounded-full"
                       style="width: 99%"
                     ></div>
                   </div>
@@ -419,10 +393,10 @@
 
             <div class="grid sm:px-4 lg:px-6 gap-6 mb-2 md:grid-cols-2">
               <div
-                class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
+                class="min-w-0 p-4 bg-white rounded-lg shadow-xs"
               >
                 <div class="flex justify-between">
-                  <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+                  <h4 class="mb-4 font-semibold text-gray-800">
                     Venta en Soles
                   </h4>
 
@@ -453,7 +427,7 @@
               </div>
 
               <div
-                class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
+                class="min-w-0 p-4 bg-white rounded-lg shadow-xs"
               >
                 <div class="flex justify-between">
                   <h4 class="mb-4 font-semibold text-gray-800">
@@ -493,10 +467,10 @@
 
             <div class="grid sm:px-4 lg:px-6 gap-6 mb-2 md:grid-cols-2">
               <div
-                class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
+                class="min-w-0 p-4 bg-white rounded-lg shadow-xs"
               >
                 <div class="flex justify-between">
-                  <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+                  <h4 class="mb-4 font-semibold text-gray-800">
                     Clientes Únicos
                   </h4>
 
@@ -530,10 +504,10 @@
               </div>
 
               <div
-                class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
+                class="min-w-0 p-4 bg-white rounded-lg shadow-xs"
               >
                 <div class="flex justify-between">
-                  <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+                  <h4 class="mb-4 font-semibold text-gray-800">
                     Ticket Promedio
                   </h4>
                   <h4
@@ -572,14 +546,14 @@
                 lg:px-6
                 font-semibold
                 text-gray-700
-                dark:text-gray-200
+
               "
             >
               Reporte Excel
             </h2>
             <div class="sm:px-4 lg:px-6 gap-6 mb-2 md:grid-cols-2">
               <div
-                class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
+                class="min-w-0 p-4 bg-white rounded-lg shadow-xs"
               >
                 <h4 class="font-semibold text-gray-800">Clientes atendidos</h4>
 
@@ -603,12 +577,6 @@
                             leading-tight
                             focus:border-indigo-300
                             rounded-lg
-                            dark:border-gray-200
-                            dark:border-none
-                            dark:bg-gray-600
-                            dark:text-white
-                            dark:focus:border-blue-500
-                            dark:focus:shadow-outline-blue
                           "
                           v-model="officeExcel"
                         >

@@ -44,40 +44,34 @@
     />
   </link-group>
 
-  <link-group style="margin-top:-3rem!important;" 
-    title="Registros">
+  <link-group style="margin-top: -3rem !important" title="Registros">
     <link-item
-        label="Pagos recibidos"
-        icon="fa-receipt"
-        @click="go('payments.index')"
-      />
+      label="Pagos recibidos"
+      icon="fa-receipt"
+      @click="go('payments.index')"
+    />
 
-      <link-item
-        label="Links de Pagos"
-        icon="fa-credit-card"
-        @click="go('paymentlinks.index')"
-      />
+    <link-item
+      label="Links de Pagos"
+      icon="fa-credit-card"
+      @click="go('paymentlinks.index')"
+    />
 
-      <link-item
-        label="Encuestas"
-        icon="fa-comment-medical"
-        @click="go('surveys.index')"
-      />
+    <link-item
+      label="Encuestas"
+      icon="fa-comment-medical"
+      @click="go('surveys.index')"
+    />
 
-      <link-item
-        label="Recomendaciones"
-        icon="fas fa-handshake"
-        @click="go('recommendation.index')"
-      />
+    <link-item
+      label="Recomendaciones"
+      icon="fas fa-handshake"
+      @click="go('recommendation.index')"
+    />
   </link-group>
 
   <!-- System records -->
-  <link-group
-    title="Registros"
-    class=""
-  >
-
-  
+  <link-group title="Registros" class="">
     <link-item
       label="Gráficos y Estadística"
       icon="fa-chart-bar"
@@ -110,8 +104,7 @@
   </link-group>
 
   <!-- Categorias -->
-  <link-group style="margin-top:-3rem!important;" 
-    title="Tarifas">
+  <link-group style="margin-top: -3rem !important" title="Tarifas">
     <link-item
       label="Tarifas"
       icon="fa-dollar-sign"
@@ -124,16 +117,56 @@
       @click="go('paymentMethods.index')"
     />
 
-    <link-item
-      label="Familias"
-      icon="fa-tags"
-      @click="go('families.index')"
-    />
+    <link-item label="Familias" icon="fa-tags" @click="go('families.index')" />
 
     <link-item
       label="Subfamilias"
       icon="fa-tags"
       @click="go('subfamilies.index')"
+    />
+  </link-group>
+
+  <link-group title="Gastos y Pagos">
+    <link-item
+      label="Receptores"
+      icon="fa-user-md"
+      @click="go('billsreceivers.index')"
+    />
+
+    <link-item
+      label="Formas de Pago"
+      icon="fa-hands-helping"
+      @click="go('billspaymentmethods.index')"
+    />
+
+    <link-item
+      label="Origen de Dinero"
+      icon="fa-hospital-user"
+      @click="go('billsorigins.index')"
+    />
+
+    <link-item
+      label="Pagadores"
+      icon="fa-building"
+      @click="go('billspayers.index')"
+    />
+
+    <link-item
+      label="Familia"
+      icon="fa-kaaba"
+      @click="go('billsfamilies.index')"
+    />
+
+    <link-item
+      label="SubFamilia"
+      icon="fa-briefcase-medical"
+      @click="go('billssubfamilies.index')"
+    />
+
+    <link-item
+      label="Pagos"
+      icon="fa-eye"
+      @click="go('bills.index')"
     />
   </link-group>
 </template>
@@ -149,7 +182,7 @@ export default {
   components: {
     LinkGroup,
     LinkItem,
-  },  
+  },
   methods: {
     go(routeName) {
       const url = route(routeName);

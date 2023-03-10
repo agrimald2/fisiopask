@@ -17,6 +17,7 @@ class FamilyController extends DynamicController
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $model = Family::query()

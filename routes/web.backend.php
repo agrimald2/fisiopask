@@ -66,6 +66,16 @@ use App\Http\Controllers\GoogleCalendar\GoogleCalendarController;
 
 use App\Http\Controllers\Doctors\Appointments\MultipleBookingController;
 
+
+use App\Http\Controllers\Backend\Bills\BillsFamilyController;
+use App\Http\Controllers\Backend\Bills\BillsSubFamilyController;
+use App\Http\Controllers\Backend\Bills\BillsReceiverController;
+use App\Http\Controllers\Backend\Bills\BillsPayerController;
+use App\Http\Controllers\Backend\Bills\BillsPaymentMethodController;
+use App\Http\Controllers\Backend\Bills\BillsOriginController;
+use App\Http\Controllers\Backend\Bills\BillController;
+
+
 use App\Http\Controllers\Backend\GenerateTokensAction;
 use App\Http\Controllers\Backend\PatientRecNDistrictController;
 use App\Models\Doctor;
@@ -77,7 +87,7 @@ Route::get('/', IndexAction::class)
 
 /**
  * Assistants
-*/
+ */
 Route::resource('assistants', AssistantController::class)
     ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
@@ -165,7 +175,8 @@ Route::get('/patients/rates/{patientRate}/payments', ShowPaymentsAction::class)
 Route::get('/patients/payments/{payment}/cancel', CancelPaymentAction::class)
     ->name('patients.rates.payments.cancel');
 
-Route::namespace(null)
+Route::
+    namespace (null)
     ->name('patients.rates.')
     ->prefix('/patients/{patient}/appointment/{appointment}/rates')
     ->group(function () {
@@ -173,7 +184,8 @@ Route::namespace(null)
             ->name('index');
     });
 
-Route::namespace(null)
+Route::
+    namespace (null)
     ->name('patients.rates.')
     ->prefix('/patients/{patient}/rates')
     ->group(function () {
@@ -197,7 +209,7 @@ Route::namespace(null)
 /**
  * Payment Indexer
  */
- Route::resource('payments', PaymentController::class)
+Route::resource('payments', PaymentController::class)
     ->only('index');
 /**
  * Payment Links
@@ -214,7 +226,7 @@ Route::resource('offices', OfficeController::class)
  * Workspaces
  */
 Route::resource('workspaces', WorkspaceController::class)
-->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
 /**
  * Doctor specialties
@@ -254,7 +266,7 @@ Route::resource('paymentMethods', PaymentMethodController::class)
  * Recomendations
  */
 Route::resource('recommendation', RecommendationController::class)
-->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
 
 /**
  * Families & subfamilies
@@ -404,28 +416,37 @@ Route::post('/reschedule/{appointment}/postTime', [RescheduleAppointment::class,
 
 Route::prefix('test')
     ->group(function () {
-        Route::post('/doctors', function () {
-            $search = request()->search;
+        Route::post(
+            '/doctors',
+            function () {
+                    $search = request()->search;
 
-            return Doctor::query()
-                ->where('name', 'LIKE', "%$search%")
-                ->limit(5)
-                ->get()
-                ->pluck('name', 'id');
-        })->name('test.doctors');
+                    return Doctor::query()
+                        ->where('name', 'LIKE', "%$search%")
+                        ->limit(5)
+                        ->get()
+                        ->pluck('name', 'id');
+                }
+        )->name('test.doctors');
 
-        Route::post('/doctors/ids', function () {
-            $ids = request()->ids;
+        Route::post(
+            '/doctors/ids',
+            function () {
+                    $ids = request()->ids;
 
-            return Doctor::query()
-                ->whereIn('id', $ids)
-                ->get()
-                ->pluck('name', 'id');
-        });
+                    return Doctor::query()
+                        ->whereIn('id', $ids)
+                        ->get()
+                        ->pluck('name', 'id');
+                }
+        );
 
-        Route::get('/', function () {
-            return inertia('Test/Dropdown');
-        });
+        Route::get(
+            '/',
+            function () {
+                    return inertia('Test/Dropdown');
+                }
+        );
     });
 
 Route::get('/generateTokens', GenerateTokensAction::class);
@@ -445,11 +466,52 @@ Route::post('/booking/{patient}/postTime', [MultipleBookingController::class, 'p
 /**
  * AREA: Statistics
  */
-    Route::post('/statistic', [StatisticsController::class, 'statistic'])->name('statistic');
-    Route::get('/excel', [StatisticsController::class,'excel'])->name('excel');
-    //Route::post('/excel', [StatisticsController::class,'excel'])->name('excel');
-    Route::resource('statistics', StatisticsController::class)
+Route::post('/statistic', [StatisticsController::class, 'statistic'])->name('statistic');
+Route::get('/excel', [StatisticsController::class, 'excel'])->name('excel');
+//Route::post('/excel', [StatisticsController::class,'excel'])->name('excel');
+Route::resource('statistics', StatisticsController::class)
     ->only('index');
 
 
-    //Route::get('/testa', [TestAssistanceController::class,'test'])->name('test');
+//Route::get('/testa', [TestAssistanceController::class,'test'])->name('test');
+
+
+/*
+Route::prefix('bills')
+->name('bills.')
+->group(function () {
+Route::post('/connect', [GoogleCalendarController::class, 'connect'])
+->name('connect');
+});
+*/
+
+//? BillsFamily
+Route::resource('billsfamilies', BillsFamilyController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//? BillsSubFamily
+Route::resource('billssubfamilies', BillsSubFamilyController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//? BillsReceiver
+Route::resource('billsreceivers', BillsReceiverController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//? BillsPayer
+Route::resource('billspayers', BillsPayerController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//? BillsPaymentMethod
+Route::resource('billspaymentmethods', BillsPaymentMethodController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//? BillsOrigin
+Route::resource('billsorigins', BillsOriginController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+//? BillsTransaction
+Route::resource('bills', BillController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
+
+
+Route::get('/filtered-bills', [BillController::class, 'getFilteredData'])->name('bills.filter');

@@ -7,7 +7,7 @@
     </template>
     <app-body>
       <div class="mt-4 capitalize text-center text-xl">
-        <span style="font-size: 1.5rem;"> REVISIÓN MÉDICA </span> 
+        <span style="font-size: 1.5rem;"> REVISIÓN MÉDICA </span>
         <br>
         {{ dates.dateForHumans(model.created_at) }}
           -
@@ -16,11 +16,11 @@
 
 
       <div class="mt-4">
-        <div class="flex items-center gap-4 justify-center text-xl" style="text-transform:uppercase" > 
+        <div class="flex items-center gap-4 justify-center text-xl" style="text-transform:uppercase" >
           <span style="font-weight:bold"> DOCTOR </span>
           <i class="fas fa-angle-right"></i>
           {{model.doctor.name}} {{model.doctor.lastname}}
-        </div>      
+        </div>
       </div>
 
       <div class="mt-4">
@@ -28,7 +28,7 @@
           <span style="font-weight:bold"> PACIENTE </span>
           <i class="fas fa-angle-right"></i>
           {{model.patient.name}} {{model.patient.lastname1}} {{model.patient.lastname2}}
-        </div>      
+        </div>
       </div>
 
       <div class="mt-4 border rounded p-3">

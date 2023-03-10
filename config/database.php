@@ -109,13 +109,12 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => env('RENIEC_DATABASE_URL'),
-            'host' => env('RENIEC_DB_HOST', '127.0.0.1'),
-            'port' => env('RENIEC_DB_PORT', '3306'),
-            'database' => env('fisiosal_fisiopask', 'fisiosal_fisiopask'),
-            'username' => env('RENIEC_DB_USERNAME', 'fisiosal_user'),
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'fisiopask'),
+            'username' => env('OLD_DB_USERNAME', 'user'),
             'password' => env('DB_PASSWORD', ''),
-            'password' => env('RENIEC_DB_PASSWORD', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',

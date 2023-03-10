@@ -295,8 +295,8 @@ class ChatApiService
             $result = $this->makeRequest($data);
         }
 
-        //logs()->debug("CHATAPI: {$phone} -> \n" . $message);
-        //logs()->debug($result);
+        logs()->debug("CHATAPI: {$phone} -> \n");
+        logs()->debug($result);
 
         return $result;
     }
@@ -308,7 +308,7 @@ class ChatApiService
         $token = $this->token;
         $instanceId = $this->instanceId;
 
-        $url = 'https://api.chat-api.com/instance' . $instanceId . '/sendTemplate?token=' . $token;
+        $url = 'https://api.1msg.io/' . $instanceId . '/sendTemplate?token=' . $token;
 
         $request = Http::post($url, $data);
 

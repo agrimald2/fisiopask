@@ -179,14 +179,17 @@ class StatisticsController extends Controller
 
     private function getData($start, $end)
     {
+        /*
         Log::info($start);
         Log::info($end);
+        */
         $payments = PatientPayment::query()
                         ->whereBetween('created_at', [
                             $start,
                             $end
                         ])
                         ->get();
+
 
         $appointments = AssistedAppointments::query()
                             ->whereBetween('created_at', [
@@ -276,7 +279,10 @@ class StatisticsController extends Controller
             ],
         ];
 
+        Log::info($data);
         return $data;
+
+
     }
 
     private function getFirstPatientOfMonth($start)
