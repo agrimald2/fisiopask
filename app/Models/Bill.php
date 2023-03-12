@@ -20,6 +20,7 @@ class Bill extends Model
         'moneyOrigin',
         'payer',
         'quantity',
+        'created_by'
     ];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];

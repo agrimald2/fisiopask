@@ -18,6 +18,7 @@
         </button>
       </jet-nav-link>
     </div>
+
     <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8 bg-white text-center">
       <div class="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-6 gap-4">
         <div class="col-span-4 shadow-md">
@@ -29,7 +30,15 @@
               :receivers="receivers"
               :payers="payers"
               :todayDate="todayDate"
+              @filterData="handleFilteredData"
             />
+            <button
+              type="button"
+              class="pb-2 mb-2 inline-block px-6 py-2.5 bg-green-800 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-900 hover:shadow-lg focus:bg-gray-900 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-900 active:shadow-lg transition duration-150 ease-in-out"
+              @click="exportToExcel(bills)"
+            >
+              Exportar a Excel
+            </button>
             <table class="w-full text-sm text-left text-gray-500">
               <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
@@ -44,7 +53,7 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="(bill, index) in newbills"
+                  v-for="(bill, index) in bills"
                   :key="index"
                   class="bg-white border-b hover:bg-gray-50"
                 >
@@ -137,32 +146,35 @@ import JetNavLink from "@/Jetstream/NavLink.vue";
 export default {
   props: [
     "bills",
-    "SumOfSubFamilies",
     "total",
+    "SumOfSubFamilies",
+
     "subfamilies",
     "families",
     "receivers",
     "payers",
+
     "todayDate",
   ],
 
-  watch: {
-    bills: {
-      handler: function () {
-        this.$inertia.reload({
-          preserveState: true,
-          preserveScroll: true,
-        });
-      },
-      deep: true,
-    },
-  },
-
   data() {
     return {
-      newbills: [],
+      bills: this.bills,
+      total: this.total,
+      SumOfSubFamilies: this.SumOfSubFamilies,
+
+      jsonData: [
+        { name: "John", age: 30 },
+        { name: "Alice", age: 25 },
+      ],
+      fields: ["name", "age"],
+
+      filteredBills: Array,
+      filteredTotal: String,
+      filteredsumOfSubfamilies: Array,
     };
   },
+
   components: {
     AppLayout,
     JetSectionBorder,
@@ -173,17 +185,54 @@ export default {
   },
 
   methods: {
-    createLink() {
-      console.log("Log:");
+    handleFilteredData(data) {
+      this.filteredBills = data.bills;
+      this.filteredTotal = data.total;
+      this.filteredsumOfSubfamilies = data.sumOfSubfamilies;
+
+      this.bills = this.filteredBills;
+      this.total = this.filteredTotal;
+      this.SumOfSubFamilies = this.filteredsumOfSubfamilies;
+    },
+
+    organizeBill(data) {
+      let desorganizedData = data;
+      const newArray = [];
+      for (let i = 0; i < desorganizedData.length; i++) {
+        const newObj = {
+          ID: i + 1,
+          Fecha: dates.dateForLaravel(desorganizedData[i].created_at),
+          Pagador: desorganizedData[i].payer,
+          MetodoDePago: desorganizedData[i].paymentway,
+          OrigenDelDinero: desorganizedData[i].moneyOrigin,
+          Descripcion: desorganizedData[i].description,
+          Familia: desorganizedData[i].bills_sub_family.billsfamily.name,
+          SubFamilia: desorganizedData[i].bills_sub_family.name,
+          Receptor: desorganizedData[i].receiver,
+          Monto: desorganizedData[i].quantity,
+          UsuarioDeSistema: desorganizedData[i].created_by,
+        };
+
+        newArray.push(newObj);
+      }
+      return newArray;
+    },
+
+    exportToExcel(bills) {
+      const exportBills = this.organizeBill(bills);
+      console.log("1.0. Tabla a Exportar");
+      console.table(exportBills);
+      console.log("1.1. JSON a Exportar");
+      console.log(exportBills);
     },
   },
-  computed: {
-    countriesIdOptions() {},
-  },
 
-  created() {
-    this.newbills = this.bills;
-    console.log(this.bills);
+  mounted() {
+    /*
+    axios.get("/dashboard/bills").then(response => {
+      this.message = response.data;
+    });
+    */
   },
 
   setup() {

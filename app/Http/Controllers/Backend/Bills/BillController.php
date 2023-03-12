@@ -11,12 +11,9 @@ use App\Models\BillsPayer;
 use App\Models\BillsPaymentMethod;
 use App\Models\BillsReceiver;
 
-use Illuminate\Support\Facades\DB;
-
-
 use Carbon\Carbon;
-use Google\Service\CloudBuild\Warning;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class BillController extends Controller
 {
@@ -25,18 +22,14 @@ class BillController extends Controller
     {
 
         $today = Carbon::today()->startOfDay();
-
         $bills = Bill::query()->with('billsSubFamily.billsfamily')->where('created_at', '>=', $today)->orderBy('created_at', 'desc')->get();
-
 
         $subfamilies = BillsSubFamily::query()->get();
         $families = BillsFamily::query()->get();
         $receivers = BillsReceiver::query()->get();
         $payers = BillsPayer::query()->get();
 
-
         $total = Bill::where('created_at', '>=', $today)->sum('quantity');
-
         $SumOfSubFamilies = Bill::with('billsSubFamily.billsfamily')
             ->where('created_at', '>=', $today)
             ->selectRaw('SUM(quantity) as total_quantity, billssubfamily_id')
@@ -46,44 +39,32 @@ class BillController extends Controller
 
 
         $todayDate = Carbon::today()->format('Y-m-d');
-
-        return inertia(
-            'Backend/Bills/Bill/Index',
-            compact(
-                'subfamilies',
-                'families',
-                'receivers',
-                'payers',
-                'bills',
-                'SumOfSubFamilies',
-                'total',
-                'todayDate'
-            )
-        );
+        return Inertia::render('Backend/Bills/Bill/Index', [
+            'subfamilies' => $subfamilies,
+            'families' => $families,
+            'receivers' => $receivers,
+            'payers' => $payers,
+            'bills' => $bills,
+            'SumOfSubFamilies' => $SumOfSubFamilies,
+            'total' => $total,
+            'todayDate' => $todayDate
+        ]);
     }
 
     public function getFilteredData(Request $request)
     {
-        $today_start = Carbon::today()->startOfDay();
-        $today_end = Carbon::today()->endOfDay();
-
         $query = Bill::query()->with('billsSubFamily.billsfamily');
-
-        $startDate = $today_start;
-        $endDate = $today_end;
-
-
+        $startDate = Carbon::today()->startOfDay();
+        $endDate = Carbon::today()->endOfDay();
 
         if ($request->input('start_date')) {
             $startDate = Carbon::createFromFormat('Y-m-d', $request->input('start_date'))->startOfDay();
         }
-
         if ($request->input('end_date')) {
             $endDate = Carbon::createFromFormat('Y-m-d', $request->input('end_date'))->endOfDay();
         }
 
-        $query->where('created_at', '>=', $startDate);
-        $query->where('created_at', '<=', $endDate);
+        $query->whereBetween('created_at', [$startDate, $endDate]);
 
         if ($request->input('family_id') != NULL && $request->input('family_id') != 0) {
             $query->whereHas('billssubfamily.billsfamily', function ($query) use ($request) {
@@ -105,33 +86,26 @@ class BillController extends Controller
 
 
         $bills = $query->get();
-
-        $SumOfSubFamilies = Bill::with('billsSubFamily.billsfamily')
-            ->where('created_at', '>=', $startDate)
-            ->where('created_at', '<=', $endDate)
+        $total = $query->sum('quantity');
+        $sumOfSubfamilies = Bill::with('billsSubFamily.billsfamily')
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->selectRaw('SUM(quantity) as total_quantity, billssubfamily_id')
             ->groupBy('billssubfamily_id')
             ->orderBy('total_quantity', 'desc')
             ->get();
 
-        $total = $query->sum('quantity');
 
-        logs()->error('<!-- REQUEST AND CONSULT -->');
-        logs()->debug($request);
-        logs()->debug($query->toSql());
+        $filteredData = [
+            'bills' => $bills,
+            'total' => $total,
+            'sumOfSubfamilies' => $sumOfSubfamilies,
+            //'startDate' => $startDate,
+            //'endDate' => $startDate,
+        ];
 
-        logs()->error('<!-- BILLS INFO -->');
-        logs()->debug($bills);
-        logs()->debug(count($bills));
+        
 
-        logs()->error('<!-- TOTAL SUM -->');
-        logs()->debug($total);
-
-        logs()->error('<!-- SUM BY SUBFAMILIES -->');
-        logs()->debug($SumOfSubFamilies);
-        logs()->debug(count($SumOfSubFamilies));
-
-
+        return $filteredData;
     }
 
     public function create()
@@ -142,7 +116,6 @@ class BillController extends Controller
         $paymentMethods = BillsPaymentMethod::query()->get();
         $receivers = BillsReceiver::query()->get();
 
-        //$offices = offices()->index();
         return inertia(
             'Backend/Bills/Bill/CreateEdit',
             compact(
@@ -165,13 +138,9 @@ class BillController extends Controller
             'moneyOrigin' => 'required',
             'payer' => 'required',
             'quantity' => 'required|numeric ',
+            'created_by' => ''
         ]);
 
-
-        // TODO FindReceiverById and get Name to save in BD
-        /*
-        $patientRate = PatientRate::find($patientPaymentRequest->patient_rate_id);
-        */
         $receiver = BillsReceiver::find($validated['receiver']);
         $paymentway = BillsPaymentMethod::find($validated['paymentway']);
         $moneyOrigin = BillsOrigin::find($validated['moneyOrigin']);
@@ -181,6 +150,7 @@ class BillController extends Controller
         $validated['paymentway'] = $paymentway->name;
         $validated['moneyOrigin'] = $moneyOrigin->name;
         $validated['payer'] = $payer->name;
+        $validated['created_by'] = auth()->user()->name;
 
         bills()->create($validated);
 

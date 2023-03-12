@@ -4,7 +4,6 @@ import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/inertia-vue3";
 import { InertiaProgress } from "@inertiajs/progress";
 
-
 import VueApexCharts from 'vue3-apexcharts';
 
 const appName =

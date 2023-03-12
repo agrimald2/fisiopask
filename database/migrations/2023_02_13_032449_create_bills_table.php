@@ -25,6 +25,9 @@ class CreateBillsTable extends Migration
             $table->string('description')->nullable();
             $table->string('quantity');
 
+            $table->string('created_by');
+
+
             $table->softDeletes();
             $table->timestamps();
         });

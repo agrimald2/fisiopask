@@ -80,7 +80,7 @@
     </div>
 
     <div class="relative col-span-3">
-      <h5>SubFamilia </h5>
+      <h5>SubFamilia</h5>
       <select
         id="libraries"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -105,7 +105,11 @@
         v-model="payer"
       >
         <option selected value="0">Todos</option>
-        <option v-for="(payer, index) in payers" :key="index" :value="payer.name">
+        <option
+          v-for="(payer, index) in payers"
+          :key="index"
+          :value="payer.name"
+        >
           {{ payer.name }}
         </option>
       </select>
@@ -134,10 +138,10 @@
     type="button"
     class="pb-2 mb-2 inline-block px-6 py-2.5 bg-gray-700 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-900 hover:shadow-lg focus:bg-gray-900 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-900 active:shadow-lg transition duration-150 ease-in-out"
   >
-    Buscar
+    FILTRAR
   </button>
   <button
-    @click="log()"
+    @click="clearFilters()"
     type="button"
     class="pb-2 mb-2 ml-4 inline-block px-6 py-2.5 bg-white-700 text-black font-medium text-xs leading-tight uppercase rounded shadow-md transition duration-150 ease-in-out"
   >
@@ -148,7 +152,7 @@
 </template>
 <script>
 export default {
-  props: ["subfamilies", "families", "receivers", "payers","todayDate"],
+  props: ["subfamilies", "families", "receivers", "payers", "todayDate"],
   data() {
     return {
       subfamily: "",
@@ -173,11 +177,16 @@ export default {
           },
         })
         .then((response) => {
-          this.$emit("/dashboard/filtered-bills", response.data);
+          this.$emit("filterData", response.data);
         })
         .catch((error) => {
           console.error(error);
         });
+    },
+
+    clearFilters() {
+      location.reload();
+      console.log("reloading")
     },
   },
 };
