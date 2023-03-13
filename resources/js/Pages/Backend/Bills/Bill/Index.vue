@@ -17,6 +17,14 @@
           AÑADIR NUEVO
         </button>
       </jet-nav-link>
+      <jet-nav-link :href="route('bills.stadistics')">
+        <button
+          type="button"
+          class="pb-2 mb-2 inline-block px-6 py-2.5 bg-white-800 text-black font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-white-900 hover:shadow-lg focus:bg-white-900 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-900 active:shadow-lg transition duration-150 ease-in-out"
+        >
+          GRÁFICA
+        </button>
+      </jet-nav-link>
     </div>
 
     <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8 bg-white text-center">
@@ -54,14 +62,18 @@
               <tbody>
                 <tr
                   v-for="(bill, index) in bills"
+                  @click="showDetails(bill.id)"
                   :key="index"
-                  class="bg-white border-b hover:bg-gray-50"
+                  :class="{
+                    'bg-red-200 border-b hover:bg-gray-50': bill.status === 2,
+                    'border-b hover:bg-gray-50': bill.status != 2,
+                  }"
                 >
                   <th
                     scope="row"
                     class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap"
                   >
-                    S/. {{ bill.quantity }}
+                    S/. {{ bill.quantity.toLocaleString() }}
                   </th>
                   <td class="py-4 px-6">{{ bill.receiver }}</td>
                   <td class="py-4 px-6 text-center">
@@ -73,6 +85,7 @@
                   <td class="py-4 px-6">{{ bill.payer }}</td>
                   <td class="py-4 px-6">
                     {{ dates.dateForHumans(bill.created_at) }}
+                    {{ dates.hourForHumans(bill.created_at) }}
                   </td>
                 </tr>
               </tbody>
@@ -218,22 +231,45 @@ export default {
       return newArray;
     },
 
+    showDetails(id) {
+      console.log("FA");
+      this.$inertia.visit(`/dashboard/showBillDetails/${id}`);
+    },
+
     exportToExcel(bills) {
       const exportBills = this.organizeBill(bills);
-      console.log("1.0. Tabla a Exportar");
-      console.table(exportBills);
-      console.log("1.1. JSON a Exportar");
-      console.log(exportBills);
+      const csvData = this.toCsv(exportBills);
+
+      const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", "ReporteDeGastosFisiosalud.csv");
+      document.body.appendChild(link);
+      link.click();
+    },
+
+    toCsv(data) {
+      const delimiter = ",";
+      const keys = Object.keys(data[0]);
+
+      const headerRow = keys.join(delimiter) + "\n";
+      const bodyRows = data
+        .map((row) => {
+          return keys
+            .map((key) => {
+              return '"' + row[key] + '"';
+            })
+            .join(delimiter);
+        })
+        .join("\n");
+
+      return headerRow + bodyRows;
     },
   },
 
-  mounted() {
-    /*
-    axios.get("/dashboard/bills").then(response => {
-      this.message = response.data;
-    });
-    */
-  },
+  mounted() {},
 
   setup() {
     return { dates };

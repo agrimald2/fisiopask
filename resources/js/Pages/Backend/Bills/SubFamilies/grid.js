@@ -8,7 +8,7 @@ export default (props, { attrs }) => {
   const cols = [
     c("name", "Nombre"),
 
-    c("family.name", "Familia"),
+    c("billsfamily.name", "Familia"),
 
     c("created_at", "Creado").format((value, { row }) =>
       moment(value).format("YYYY MM DD h:mm A")

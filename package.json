@@ -35,6 +35,7 @@
         "mosha-vue-toastify": "^1.0.20",
         "qrcode.vue": "^3.3.3",
         "v-calendar": "^3.0.0-alpha.5",
+        "vue-apexcharts": "^1.6.2",
         "vue-tel-input": "^6.0.0-beta.4",
         "vue3-apexcharts": "^1.4.1",
         "vue3-popper": "^1.2.1",

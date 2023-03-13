@@ -6,7 +6,7 @@
           <span
             class="underline cursor-pointer"
             @click="$inertia.visit(route('bills.index'))"
-            >Cubículos</span
+            >Transacciones</span
           >
           <i class="fas fa-angle-right"></i>
           {{ model ? "Editar" : "Crear" }} una Transacción

@@ -2,7 +2,7 @@
   <div class="libraryFilter mt-4">
     <hr class="mb-4 mt-2" style="height: 4vh; background-color: cadetblue" />
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-      TOTAL - S/. {{ total }}
+      TOTAL - S/. {{ total.toLocaleString() }}
     </h2>
 
     <hr class="mb-4 mt-2" style="height: 4vh; background-color: cadetblue" />
@@ -30,14 +30,14 @@
               >
                 <div class="row">
                   <span
-                    style="position: absolute; left: 1vw"
                     class="pb-2 mb-2 inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-900 hover:shadow-lg focus:bg-gray-900 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-900 active:shadow-lg transition duration-150 ease-in-out"
                   >
                     {{ SumOfSubFamilie.bills_sub_family.billsfamily.name }} -
                     {{ SumOfSubFamilie.bills_sub_family.name }}
                   </span>
-                  <span class="amount" style="position: absolute; right: 2vw"
-                    >S/{{ SumOfSubFamilie.total_quantity }}
+                  <br>
+                  <span class="amount"
+                    >S/{{ SumOfSubFamilie.total_quantity.toLocaleString() }}
                   </span>
                 </div>
               </button>

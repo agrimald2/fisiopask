@@ -11,6 +11,12 @@ class Bill extends Model
     use HasFactory;
     use SoftDeletes;
 
+    /**
+     * ! Status
+     * ? 0 -> Solicitado
+     * ? 1 -> Aprobado
+     * ? 2 -> Anulado
+     */
     protected $fillable = [
         'name',
         'description',
@@ -20,6 +26,18 @@ class Bill extends Model
         'moneyOrigin',
         'payer',
         'quantity',
+
+        'status',
+        'isDoubleChecked',
+
+        'isApproved',
+        'approved_by',
+        'approved_at',
+
+        'secondIsApproved',
+        'second_approved_by',
+        'second_approved_at',
+
         'created_by'
     ];
 

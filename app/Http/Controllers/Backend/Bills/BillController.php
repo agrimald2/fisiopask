@@ -13,24 +13,28 @@ use App\Models\BillsReceiver;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class BillController extends Controller
 {
 
+
     public function index()
     {
 
         $today = Carbon::today()->startOfDay();
-        $bills = Bill::query()->with('billsSubFamily.billsfamily')->where('created_at', '>=', $today)->orderBy('created_at', 'desc')->get();
+        $bills = Bill::query()->with('billsSubFamily.billsfamily')->where('status', 1)->where('created_at', '>=', $today)->orderBy('created_at', 'desc')->get();
 
         $subfamilies = BillsSubFamily::query()->get();
         $families = BillsFamily::query()->get();
         $receivers = BillsReceiver::query()->get();
         $payers = BillsPayer::query()->get();
 
-        $total = Bill::where('created_at', '>=', $today)->sum('quantity');
+        $total = Bill::where('created_at', '>=', $today)->where('status', 1)->sum('quantity');
         $SumOfSubFamilies = Bill::with('billsSubFamily.billsfamily')
+            ->where('status', 1)
             ->where('created_at', '>=', $today)
             ->selectRaw('SUM(quantity) as total_quantity, billssubfamily_id')
             ->groupBy('billssubfamily_id')
@@ -53,7 +57,12 @@ class BillController extends Controller
 
     public function getFilteredData(Request $request)
     {
-        $query = Bill::query()->with('billsSubFamily.billsfamily');
+        if ($request->input('showRequests')) {
+            $query = Bill::query()->with('billsSubFamily.billsfamily')->where('status', 0)->orWhere('status', 2);
+        } else {
+            $query = Bill::query()->with('billsSubFamily.billsfamily')->where('status', 1);
+        }
+
         $startDate = Carbon::today()->startOfDay();
         $endDate = Carbon::today()->endOfDay();
 
@@ -87,23 +96,18 @@ class BillController extends Controller
 
         $bills = $query->get();
         $total = $query->sum('quantity');
-        $sumOfSubfamilies = Bill::with('billsSubFamily.billsfamily')
+        $sumOfSubfamilies = $query
             ->whereBetween('created_at', [$startDate, $endDate])
             ->selectRaw('SUM(quantity) as total_quantity, billssubfamily_id')
             ->groupBy('billssubfamily_id')
             ->orderBy('total_quantity', 'desc')
             ->get();
 
-
         $filteredData = [
             'bills' => $bills,
             'total' => $total,
             'sumOfSubfamilies' => $sumOfSubfamilies,
-            //'startDate' => $startDate,
-            //'endDate' => $startDate,
         ];
-
-        
 
         return $filteredData;
     }
@@ -138,6 +142,8 @@ class BillController extends Controller
             'moneyOrigin' => 'required',
             'payer' => 'required',
             'quantity' => 'required|numeric ',
+            'status' => '',
+            'isDoubleChecked' => '',
             'created_by' => ''
         ]);
 
@@ -146,15 +152,208 @@ class BillController extends Controller
         $moneyOrigin = BillsOrigin::find($validated['moneyOrigin']);
         $payer = BillsPayer::find($validated['payer']);
 
+        $validated['isDoubleChecked'] = $validated['isDoubleChecked'] ? 1 : 0;
+
         $validated['receiver'] = $receiver->name;
         $validated['paymentway'] = $paymentway->name;
         $validated['moneyOrigin'] = $moneyOrigin->name;
         $validated['payer'] = $payer->name;
+        $validated['status'] = 0;
         $validated['created_by'] = auth()->user()->name;
 
-        bills()->create($validated);
+
+        /**
+         * Message data variables
+         */
+
+        $created_bill = bills()->create($validated);
+
+        if ($validated['isDoubleChecked'] == 0) {
+            $m_level = 1;
+        } else {
+            $m_level = 2;
+        }
+
+
+        $m_level = strval($validated['isDoubleChecked']);
+        $m_amount = $validated['quantity'];
+        $m_receiver = $validated['receiver'];
+        $m_family = 'Software';
+        $m_subfamily = 'Software';
+        $m_description = $validated['description'];
+        $m_id = strval($created_bill->getAttribute('id'));
+
+        $messageData = compact(
+            'm_level',
+            'm_amount',
+            'm_receiver',
+            'm_family',
+            'm_subfamily',
+            'm_description',
+            'm_id',
+        );
+
+        $waba_type = 'bill_notification';
+
+
+        chatapi('51992219307', $messageData, $waba_type);
+        if ($validated['isDoubleChecked']) {
+            chatapi('51992219307', $messageData, $waba_type);
+        }
 
         toast('success', 'Transacción creado!');
         return redirect()->route('bills.index');
+    }
+
+    public function showBillDetails($id)
+    {
+        $bill = Bill::with('billsSubFamily.billsfamily')->find($id);
+        return inertia('Backend/Bills/Bill/Details', compact('bill'));
+    }
+    public function aprroveBill($id)
+    {
+        $user = auth()->user()->name;
+        $bill = Bill::find($id);
+
+        if ($bill->isApproved) {
+            if ($user == $bill->approved_by) {
+                return;
+            } else {
+                $bill->secondIsApproved = "SI";
+                $bill->second_approved_by = $user;
+                $bill->second_approved_at = Carbon::now();
+            }
+        } else {
+            $bill->isApproved = "SI";
+            $bill->approved_by = $user;
+            $bill->approved_at = Carbon::now();
+        }
+
+        if (!$bill->isDoubleChecked && $bill->isApproved == "SI" || $bill->isDoubleChecked && $bill->isApproved == "SI" && $bill->secondIsApproved == "SI") {
+            $bill->status = 1;
+        }
+
+        $bill->update();
+        return;
+    }
+
+    public function denyBill($id)
+    {
+        $user = auth()->user()->name;
+        $bill = Bill::find($id);
+
+        if ($bill->isApproved) {
+            if ($user == $bill->approved_by) {
+                return;
+            } else {
+                $bill->secondIsApproved = "NO";
+                $bill->second_approved_by = $user;
+                $bill->second_approved_at = Carbon::now();
+            }
+        } else {
+            $bill->isApproved = "NO";
+            $bill->approved_by = $user;
+            $bill->approved_at = Carbon::now();
+        }
+
+        if (!$bill->isDoubleChecked && $bill->isApproved || $bill->isDoubleChecked && $bill->secondIsApproved) {
+            $bill->status = 1;
+        }
+
+        $bill->update();
+        return;
+    }
+
+    public function stadistics()
+    {
+
+        $today = Carbon::today()->endOfDay();
+
+        //Get Past 6 Months of Stadistics
+        $bills = Bill::where('status', 1)
+            ->where('created_at', '>', $today->subMonths(6))
+            ->get()
+            ->groupBy(function ($bill) {
+                return Carbon::parse($bill->created_at)->format('M');
+            })
+            ->map(function ($bills) {
+                return $bills->sum('quantity');
+            });
+
+        $data = json_decode($bills, true);
+
+        $months = array_keys($data);
+        $amounts = array_values($data);
+
+
+        $results = Bill::select('billssubfamily_id', \DB::raw('SUM(quantity) as total_quantity'))
+            ->where('status', 1)
+            ->with('billsSubFamily')
+            ->groupBy('billssubfamily_id')
+            ->get();
+
+
+        $amountsBySubFamilies = $results->pluck('total_quantity')->toArray();
+        $subFamilies = $results->pluck('billsSubFamily.name')->toArray();
+
+        return Inertia::render('Backend/Bills/Stadistics/Index', [
+            'months' => $months,
+            'amounts' => $amounts,
+            'amountsBySubFamilies' => $amountsBySubFamilies,
+            'subFamilies' => $subFamilies,
+        ]);
+    }
+
+    public function filterStadistics(Request $request)
+    {
+        $today = Carbon::today()->endOfDay();
+
+        //Get Past 6 Months of Stadistics
+        $bills = Bill::where('status', 1)
+            ->where('created_at', '>', $today->subMonths(6))
+            ->get()
+            ->groupBy(function ($bill) {
+                return Carbon::parse($bill->created_at)->format('M');
+            })
+            ->map(function ($bills) {
+                return $bills->sum('quantity');
+            });
+
+        $data = json_decode($bills, true);
+
+        $months = array_keys($data);
+        $amounts = array_values($data);
+
+        /*Filter Subfamilies*/
+
+        $startDate = Carbon::today()->startOfDay();
+        $endDate = Carbon::today()->endOfDay();
+
+        if ($request->input('start_date')) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $request->input('start_date'))->startOfDay();
+        }
+        if ($request->input('end_date')) {
+            $endDate = Carbon::createFromFormat('Y-m-d', $request->input('end_date'))->endOfDay();
+        }
+
+        $results = Bill::select('billssubfamily_id', \DB::raw('SUM(quantity) as total_quantity'))
+            ->where('status', 1)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->with('billsSubFamily')
+            ->groupBy('billssubfamily_id')
+            ->get();
+
+
+        $amountsBySubFamilies = $results->pluck('total_quantity')->toArray();
+        $subFamilies = $results->pluck('billsSubFamily.name')->toArray();
+
+        $filteredData = [
+            'amountsBySubFamilies' => $amountsBySubFamilies,
+            'subFamilies' => $subFamilies,
+        ];
+
+        logs()->warning($filteredData);
+
+        return $filteredData;
     }
 }

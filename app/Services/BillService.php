@@ -10,7 +10,7 @@ class BillService
     {
         return Bill::query()
             ->orderBy('id', 'desc')
-            ->get();
+            ->BillServiceget();
     }
 
     public function create($data)

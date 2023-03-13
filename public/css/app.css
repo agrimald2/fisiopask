@@ -1164,14 +1164,17 @@ select {
 .col-span-6 {
 	grid-column: span 6 / span 6;
 }
-.col-span-2 {
-	grid-column: span 2 / span 2;
+.col-span-3 {
+	grid-column: span 3 / span 3;
 }
 .col-span-4 {
 	grid-column: span 4 / span 4;
 }
-.col-span-3 {
-	grid-column: span 3 / span 3;
+.col-span-2 {
+	grid-column: span 2 / span 2;
+}
+.col-span-5 {
+	grid-column: span 5 / span 5;
 }
 .m-2 {
 	margin: 0.5rem;
@@ -1859,6 +1862,10 @@ select {
 	--tw-bg-opacity: 1;
 	background-color: rgba(55, 65, 81, var(--tw-bg-opacity));
 }
+.bg-green-800 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(6, 95, 70, var(--tw-bg-opacity));
+}
 .bg-transparent {
 	background-color: transparent;
 }
@@ -1869,6 +1876,30 @@ select {
 .bg-red-800 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(153, 27, 27, var(--tw-bg-opacity));
+}
+.bg-yellow-700 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(180, 83, 9, var(--tw-bg-opacity));
+}
+.bg-yellow-300 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(252, 211, 77, var(--tw-bg-opacity));
+}
+.bg-yellow-200 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(253, 230, 138, var(--tw-bg-opacity));
+}
+.bg-red-200 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(254, 202, 202, var(--tw-bg-opacity));
+}
+.bg-green-100 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(209, 250, 229, var(--tw-bg-opacity));
+}
+.bg-green-600 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(5, 150, 105, var(--tw-bg-opacity));
 }
 .bg-opacity-25 {
 	--tw-bg-opacity: 0.25;
@@ -2107,6 +2138,9 @@ select {
 }
 .font-normal {
 	font-weight: 400;
+}
+.font-light {
+	font-weight: 300;
 }
 .uppercase {
 	text-transform: uppercase;
@@ -2430,6 +2464,14 @@ select {
 .hover\:bg-gray-900:hover {
 	--tw-bg-opacity: 1;
 	background-color: rgba(17, 24, 39, var(--tw-bg-opacity));
+}
+.hover\:bg-yellow-900:hover {
+	--tw-bg-opacity: 1;
+	background-color: rgba(120, 53, 15, var(--tw-bg-opacity));
+}
+.hover\:bg-yellow-700:hover {
+	--tw-bg-opacity: 1;
+	background-color: rgba(180, 83, 9, var(--tw-bg-opacity));
 }
 .hover\:text-gray-500:hover {
 	--tw-text-opacity: 1;
@@ -2977,6 +3019,10 @@ select {
 
 	.md\:grid-cols-6 {
 		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
+
+	.md\:grid-cols-4 {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
 
 	.md\:gap-6 {

@@ -18,14 +18,14 @@ class ChatApiService
         $this->namespace = env('CHATAPI_NAMESPACE');
     }
 
-        // FISIO KEYS
+    // FISIO KEYS
 
-            //$this->namespace = '85489fc6_2bdc_4137_a3e6_409829280fb5';
-            //$this->token = 'rway84qnx1zpgzkg';
-            //$this->instanceId = '271955';
+    //$this->namespace = '85489fc6_2bdc_4137_a3e6_409829280fb5';
+    //$this->token = 'rway84qnx1zpgzkg';
+    //$this->instanceId = '271955';
 
 
-        // TEMPLATES
+    // TEMPLATES
 
     public function send($phone, $appointment_info, $waba_type)
     {
@@ -41,12 +41,12 @@ class ChatApiService
                 $data = [
                     'phone' => $phone,
                     'namespace' => '85489fc6_2bdc_4137_a3e6_409829280fb5',
-                    'language' =>  [
+                    'language' => [
                         'code' => 'es',
                         'policy' => 'deterministic'
                     ],
-                    'template' => $app.$waba_type,
-                    'params' =>  [
+                    'template' => $app . $waba_type,
+                    'params' => [
                         [
                             'type' => "body",
                             'parameters' => [
@@ -87,7 +87,7 @@ class ChatApiService
                         ],
                         [
                             'type' => "button",
-                            'sub_type'  => "url",
+                            'sub_type' => "url",
                             'parameters' => [
                                 [
                                     "type" => "text",
@@ -98,17 +98,17 @@ class ChatApiService
 
                     ]
                 ];
-              break;
+                break;
             case "reminder":
                 $data = [
                     'phone' => $phone,
                     'namespace' => '85489fc6_2bdc_4137_a3e6_409829280fb5',
-                    'language' =>  [
+                    'language' => [
                         'code' => 'es',
                         'policy' => 'deterministic'
                     ],
-                    'template' => $app.$waba_type,
-                    'params' =>  [
+                    'template' => $app . $waba_type,
+                    'params' => [
                         [
                             'type' => "body",
                             'parameters' => [
@@ -141,7 +141,7 @@ class ChatApiService
                         ],
                         [
                             'type' => "button",
-                            'sub_type'  => "url",
+                            'sub_type' => "url",
                             'parameters' => [
                                 [
                                     "type" => "text",
@@ -152,17 +152,17 @@ class ChatApiService
 
                     ]
                 ];
-              break;
+                break;
             case "reeschedule":
                 $data = [
                     'phone' => $phone,
                     'namespace' => '85489fc6_2bdc_4137_a3e6_409829280fb5',
-                    'language' =>  [
+                    'language' => [
                         'code' => 'es',
                         'policy' => 'deterministic'
                     ],
-                    'template' => $app.$waba_type,
-                    'params' =>  [
+                    'template' => $app . $waba_type,
+                    'params' => [
                         [
                             'type' => "body",
                             'parameters' => [
@@ -203,7 +203,7 @@ class ChatApiService
                         ],
                         [
                             'type' => "button",
-                            'sub_type'  => "url",
+                            'sub_type' => "url",
                             'parameters' => [
                                 [
                                     "type" => "text",
@@ -214,28 +214,28 @@ class ChatApiService
 
                     ]
                 ];
-            break;
+                break;
             case "cancel":
                 $data = [
                     'phone' => $phone,
                     'namespace' => '85489fc6_2bdc_4137_a3e6_409829280fb5',
-                    'language' =>  [
+                    'language' => [
                         'code' => 'es',
                         'policy' => 'deterministic'
                     ],
-                    'template' => $app.$waba_type
+                    'template' => $app . $waba_type
                 ];
-              break;
+                break;
             case "not_assisted":
                 $data = [
                     'phone' => $phone,
                     'namespace' => '85489fc6_2bdc_4137_a3e6_409829280fb5',
-                    'language' =>  [
+                    'language' => [
                         'code' => 'es',
                         'policy' => 'deterministic'
                     ],
-                    'template' => $app.$waba_type,
-                    'params' =>  [
+                    'template' => $app . $waba_type,
+                    'params' => [
                         [
                             'type' => "body",
                             'parameters' => [
@@ -251,17 +251,17 @@ class ChatApiService
                         ],
                     ]
                 ];
-            break;
+                break;
             case "survey2":
                 $data = [
                     'phone' => $phone,
                     'namespace' => '85489fc6_2bdc_4137_a3e6_409829280fb5',
-                    'language' =>  [
+                    'language' => [
                         'code' => 'es',
                         'policy' => 'deterministic'
                     ],
-                    'template' => $app.$waba_type,
-                    'params' =>  [
+                    'template' => $app . $waba_type,
+                    'params' => [
                         [
                             'type' => "body",
                             'parameters' => [
@@ -273,7 +273,7 @@ class ChatApiService
                         ],
                         [
                             'type' => "button",
-                            'sub_type'  => "url",
+                            'sub_type' => "url",
                             'parameters' => [
                                 [
                                     "type" => "text",
@@ -283,7 +283,61 @@ class ChatApiService
                         ],
                     ]
                 ];
-            break;
+                break;
+            case "bill_notification":
+                $data = [
+                    'phone' => $phone,
+                    'namespace' => '85489fc6_2bdc_4137_a3e6_409829280fb5',
+                    'language' => [
+                        'code' => 'es',
+                        'policy' => 'deterministic'
+                    ],
+                    'template' => $waba_type,
+                    'params' => [
+                        [
+                            'type' => "body",
+                            'parameters' => [
+                                [
+                                    "type" => "text",
+                                    "text" => $appointment_info['m_level']
+                                ],
+                                [
+                                    "type" => "text",
+                                    "text" => $appointment_info['m_amount']
+                                ],
+                                [
+                                    "type" => "text",
+                                    "text" => $appointment_info['m_receiver']
+                                ],
+                                [
+                                    "type" => "text",
+                                    "text" => $appointment_info['m_family']
+                                ],
+                                [
+                                    "type" => "text",
+                                    "text" => $appointment_info['m_subfamily']
+                                ],
+                                [
+                                    "type" => "text",
+                                    "text" => $appointment_info['m_description']
+                                ],
+                            ]
+
+                        ],
+                        [
+                            'type' => "button",
+                            'sub_type' => "url",
+                            'parameters' => [
+                                [
+                                    "type" => "text",
+                                    "text" => $appointment_info['m_id']
+                                ],
+                            ]
+                        ],
+
+                    ]
+                ];
+                break;
             default:
                 $data = [];
         }

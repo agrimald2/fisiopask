@@ -133,20 +133,31 @@
     </div>
   </div>
 
-  <button
-    @click="search()"
-    type="button"
-    class="pb-2 mb-2 inline-block px-6 py-2.5 bg-gray-700 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-900 hover:shadow-lg focus:bg-gray-900 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-900 active:shadow-lg transition duration-150 ease-in-out"
-  >
-    FILTRAR
-  </button>
-  <button
-    @click="clearFilters()"
-    type="button"
-    class="pb-2 mb-2 ml-4 inline-block px-6 py-2.5 bg-white-700 text-black font-medium text-xs leading-tight uppercase rounded shadow-md transition duration-150 ease-in-out"
-  >
-    X
-  </button>
+  <div class="buttons">
+    <button
+      @click="search()"
+      type="button"
+      class="pb-2 mb-2 inline-block px-6 py-2.5 bg-gray-700 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-900 hover:shadow-lg focus:bg-gray-900 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-900 active:shadow-lg transition duration-150 ease-in-out"
+    >
+      FILTRAR
+    </button>
+
+    <button
+      @click="showRequests()"
+      type="button"
+      class="ml-2 pb-2 mb-2 inline-block px-6 py-2.5 bg-yellow-300 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-yellow-700 hover:shadow-lg focus:bg-gray-900 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-900 active:shadow-lg transition duration-150 ease-in-out"
+    >
+      SOLICITUDES
+    </button>
+
+    <button
+      @click="clearFilters()"
+      type="button"
+      class="pb-2 mb-2 ml-4 inline-block px-6 py-2.5 bg-white-700 text-black font-medium text-xs leading-tight uppercase rounded shadow-md transition duration-150 ease-in-out"
+    >
+      X
+    </button>
+  </div>
 
   <hr class="mb-2" />
 </template>
@@ -184,10 +195,75 @@ export default {
         });
     },
 
+    showRequests() {
+      axios
+        .get("/dashboard/filtered-bills", {
+          params: {
+            subfamily_id: this.subfamily,
+            family_id: this.family,
+            receiver: this.receiver,
+            payer: this.payer,
+            start_date: this.startDate,
+            end_date: this.endDate,
+            showRequests: true,
+          },
+        })
+        .then((response) => {
+          this.$emit("filterData", response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+
     clearFilters() {
       location.reload();
-      console.log("reloading")
+      console.log("reloading");
     },
   },
 };
 </script>
+<style scoped>
+/* toggle-pill-color */
+.toggle-pill-color input[type="checkbox"] {
+  display: none;
+}
+.toggle-pill-color input[type="checkbox"] + label {
+  display: block;
+  position: relative;
+  width: 3em;
+  height: 1.6em;
+  margin-bottom: 20px;
+  border-radius: 1em;
+  background: #e84d4d;
+  box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-transition: background 0.1s ease-in-out;
+  transition: background 0.1s ease-in-out;
+}
+.toggle-pill-color input[type="checkbox"] + label:before {
+  content: "";
+  display: block;
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 1em;
+  background: #fff;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  left: 0.2em;
+  top: 0.2em;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.toggle-pill-color input[type="checkbox"]:checked + label {
+  background: #47cf73;
+}
+.toggle-pill-color input[type="checkbox"]:checked + label:before {
+  box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+  left: 1.6em;
+}
+/* toggle-pill-color end */
+</style>

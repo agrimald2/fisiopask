@@ -515,3 +515,8 @@ Route::resource('bills', BillController::class)
 
 
 Route::get('/filtered-bills', [BillController::class, 'getFilteredData'])->name('bills.filter');
+Route::get('/showBillDetails/{id}', [BillController::class, 'showBillDetails'])->name('bills.details');
+Route::post('/approveBill/{id}', [BillController::class, 'aprroveBill'])->name('bills.approve');
+Route::post('/denyBill/{id}', [BillController::class, 'denyBill'])->name('bills.deny');
+Route::get('/stadistics/bills', [BillController::class, 'stadistics'])->name('bills.stadistics');
+Route::get('/filterStadistics/bills', [BillController::class, 'filterStadistics'])->name('bills.stadistics.filter');
