@@ -29,13 +29,13 @@
           v-show="Object.keys(officeOptions).length > 1"
         >
           <div class="text-center text-4xl uppercase tracking-wider text-gray-800">
-            Sucursal
+            
           </div>
 
           <div class="mt-4">
             <ui-radio
               class="flex-col"
-              :options="officeOptions"
+              :options="officeOptions[0]"
               v-model="form.office_id"
             />
 
@@ -116,7 +116,7 @@ export default {
     autoSelectOffice(officeOptions) {
       const keys = Object.keys(officeOptions);
 
-      const key = keys[0];
+      const key = keys[1];
 
       this.form.office_id = key;
     },
