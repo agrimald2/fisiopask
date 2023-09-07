@@ -1,9 +1,7 @@
 <template>
   <app-layout title="Transacciones Fisiosalud">
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Transacciones
-      </h2>
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight">Transacciones</h2>
     </template>
 
     <br />
@@ -52,9 +50,7 @@
                 <tr>
                   <th scope="col" class="py-3 px-6">Monto</th>
                   <th scope="col" class="py-3 px-6">Receptor</th>
-                  <th scope="col" class="py-3 px-6 text-center">
-                    Familia - Subfamilia
-                  </th>
+                  <th scope="col" class="py-3 px-6 text-center">Familia - Subfamilia</th>
                   <th scope="col" class="py-3 px-6">Pagador</th>
                   <th scope="col" class="py-3 px-6">Fecha y Hora</th>
                 </tr>
@@ -232,7 +228,6 @@ export default {
     },
 
     showDetails(id) {
-      console.log("FA");
       this.$inertia.visit(`/dashboard/showBillDetails/${id}`);
     },
 

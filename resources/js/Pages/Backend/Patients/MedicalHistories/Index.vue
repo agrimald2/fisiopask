@@ -181,7 +181,7 @@ export default {
 
   mounted()
   {
-    console.log(this.model);
+
   },
   setup() {
     const dashboardLink = route("dashboard");

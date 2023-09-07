@@ -45,7 +45,7 @@ class ChatApiService
                         'code' => 'es',
                         'policy' => 'deterministic'
                     ],
-                    'template' => $app . $waba_type,
+                    'template' => 'confirmation3 ',
                     'params' => [
                         [
                             'type' => "body",

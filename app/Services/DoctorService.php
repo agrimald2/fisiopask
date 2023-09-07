@@ -59,7 +59,7 @@ class DoctorService
     public function create($data)
     {
         $user = User::make($data['user']);
-        $user->name = $user['name'];
+        $user->name =  $user['name'];
         $user->save();
 
         $user->assignRole('doctor');

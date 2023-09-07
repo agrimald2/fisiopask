@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\Models\BillsSubfamily;
+use App\Models\BillsSubFamily;
 
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +17,6 @@ class BillsFamily extends Model
 
     public function billssubfamilies()
     {
-        return $this->hasMany(BillsSubfamily::class);
+        return $this->hasMany(BillsSubFamily::class);
     }
 }

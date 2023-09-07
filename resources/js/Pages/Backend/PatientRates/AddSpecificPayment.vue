@@ -64,7 +64,6 @@ export default {
 
     methods: {
         submit() {
-            console.log(this.form);
             const url = route("patients.rates.payments.store", [this.patient.id, 0]);
             const urlApp = route("patients.rates.payments.storeApp", [this.patient.id, this.appointment_id]);
             if (this.appointment_id == 0) {

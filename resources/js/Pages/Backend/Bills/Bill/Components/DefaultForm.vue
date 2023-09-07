@@ -1,8 +1,6 @@
 <template>
   <JetFormSection @submitted="onSubmitted">
-    <template #title>
-      {{ model ? "Editar" : "Crear" }} una Transacción
-    </template>
+    <template #title> {{ model ? "Editar" : "Crear" }} una Transacción </template>
 
     <template #form>
       <!-- Description -->
@@ -119,10 +117,7 @@
         Guardado.
       </JetActionMessage>
 
-      <JetButton
-        :class="{ 'opacity-25': form.processing }"
-        :disabled="form.processing"
-      >
+      <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
         Guardar
       </JetButton>
     </template>
@@ -140,14 +135,7 @@ import JetLabel from "@/Jetstream/Label";
 import FormInput from "@/Shared/Backend/Form/Input";
 
 export default {
-  props: [
-    "model",
-    "subfamilies",
-    "origins",
-    "payers",
-    "paymentMethods",
-    "receivers",
-  ],
+  props: ["model", "subfamilies", "origins", "payers", "paymentMethods", "receivers"],
 
   components: {
     JetActionMessage,
@@ -203,9 +191,6 @@ export default {
       const url = route("bills.store");
 
       this.form._method = "POST";
-
-      console.log("Hola");
-      console.table(this.form);
 
       this.form.post(url, {
         // errorBag: "",

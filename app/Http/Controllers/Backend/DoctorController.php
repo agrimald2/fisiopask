@@ -65,6 +65,8 @@ class DoctorController extends Controller
 
     public function store(Request $request)
     {
+
+
         $validated = $request->validate([
             'name' => 'required',
             'lastname' => 'required',
@@ -77,6 +79,10 @@ class DoctorController extends Controller
             'document_reference' => 'required',
             'workspace_id' => '',
         ]);
+
+
+        logs()->warning($validated);
+
 
         doctors()->create($validated);
 

@@ -1,6 +1,6 @@
 *FISIOSALUD: CONFIRMACIÓN DE CITA*
 
-Hola 
+Hola
 {{ $patientName }}
 
 Tu cita ha sido generada.
@@ -12,7 +12,7 @@ Hora de cita:
 *{{ $startTime }}*
 
 Fisioterapeuta:
-{{ $doctorName }} 
+{{ $doctorName }}
 
 *PAGO DE CITAS Y REPROGRAMACIONES*
 
@@ -25,7 +25,7 @@ O puedes hacer transferencia bancaria a las siguientes cuentas:
 Banco BBVA:
 0011 0023 0200074705
 
-CCI: 
+CCI:
 01102300020007470591
 
 También puedes pagar presencialmente en RECEPCIÓN en Efectivo, con Tarjeta de Crédito o Tarjeta de Débito.
@@ -38,6 +38,7 @@ Referencia: {{ $office_reference }}
 
 *Ver mapa aquí:*
 {{ $office_maps_link }}
+
 
 Te esperamos, FISIOSALUD:
 https://fisiosalud.pe

@@ -6,9 +6,7 @@
     <div class="relative col-span-5">
       <h5>Fec. Inicio</h5>
       <div class="relative max-w-sm">
-        <div
-          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-        >
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
             aria-hidden="true"
             class="w-5 h-5 text-gray-500"
@@ -34,9 +32,7 @@
     <div class="relative col-span-5">
       <h5>Fec. Final</h5>
       <div class="relative max-w-sm">
-        <div
-          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-        >
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
             aria-hidden="true"
             class="w-5 h-5 text-gray-500"
@@ -107,7 +103,6 @@ export default {
 
     clearFilters() {
       location.reload();
-      console.log("reloading");
     },
   },
 };

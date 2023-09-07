@@ -70,9 +70,7 @@
           <br />
           <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
             <div class="text-left py-2 px-2">
-              <h3 class="font-bold text-md mb-2 uppercase">
-                INFORMACIÓN DE PAGO:
-              </h3>
+              <h3 class="font-bold text-md mb-2 uppercase">INFORMACIÓN DE PAGO:</h3>
               <div class="solicitant">
                 <span class="font-bold text-sm"> Método de Pago:</span>
                 {{ bill.paymentway }}
@@ -172,9 +170,7 @@ export default {
   setup() {
     return { dates };
   },
-  mounted() {
-    console.table(this.bill);
-  },
+  mounted() {},
   methods: {
     approve(id) {
       axios

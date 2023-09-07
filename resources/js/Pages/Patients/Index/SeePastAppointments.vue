@@ -10,7 +10,7 @@
       </div>
 
       <div>
-        <link-item 
+        <link-item
           style="color:blue"
           class="mt-2rem"
           label="Volver al Menú"
@@ -55,7 +55,6 @@ export default {
     RatesCmp,
   },
   mounted (){
-    console.log(this.appointments);
   },
    methods: {
     go(routeName) {

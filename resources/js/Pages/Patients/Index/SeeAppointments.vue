@@ -16,27 +16,27 @@
         </p>
       </div>
       <div>
-        <link-item 
+        <link-item
           style="color:blue"
           class="mt-2rem"
           label="Agendar Nueva Cita"
           icon="fa-solid fa-calendar"
           @click="go('area.patients.rebook')"
         />
-        <link-item 
+        <link-item
           style="color:blue"
           class="mt-2rem"
           label="Ver Citas Pasadas"
           icon="fa-solid fa-paste"
           @click="go('area.patients.appointments.past')"
         />
-        <link-item 
+        <link-item
           style="color:blue"
           class="mt-2rem"
           label="Volver al Menú"
           icon="fa-solid fa-arrow-left"
           @click="go('area.patients.index')"
-        />        
+        />
       </div>
     </ui-container>
   </layout>
@@ -76,9 +76,8 @@ export default {
   },
 
   mounted (){
-    console.log(this.appointments);
   },
-  
+
    methods: {
     go(routeName) {
       const url = route(routeName);

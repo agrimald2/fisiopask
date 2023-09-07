@@ -83,7 +83,6 @@ export default {
   },
 
   mounted() {
-    console.log(this.alert);
     if(this.alert == true)
     {
       if(confirm("Usted ya cuenta una cita agendada para este día, por favor eliga otra fecha. O envíe un whatsapp al 987327809 para atender su solicitud") == true){

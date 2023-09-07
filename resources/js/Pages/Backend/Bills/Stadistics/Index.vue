@@ -30,9 +30,7 @@
           <div class="grid sm:px-4 lg:px-6 gap-6 mb-2 md:grid-cols-1">
             <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs">
               <div class="justify-between">
-                <h2 class="font-bold tx-md uppercase">
-                  Gastos en Soles x SubFamilias
-                </h2>
+                <h2 class="font-bold tx-md uppercase">Gastos en Soles x SubFamilias</h2>
                 <div id="chart">
                   <apexchart
                     :key="chartKey"
@@ -119,46 +117,7 @@ export default {
         },
       ];
     },
-    /*
-        amountsBySubFamiliesOptions() {
-        return {
-            chart: {
-            type: "bar",
-            },
-            plotOptions: {
-            bar: {
-                horizontal: false,
-                endingShape: "rounded",
-                distributed: true,
-            },
-            },
-            dataLabels: {
-            enabled: true,
-            },
-            xaxis: {
-            categories: this.subFamilies,
-            },
-            yaxis: {
-            title: {
-                text: "Gasto en S/. x Subfamilias",
-            },
-            },
-        };
-        },
-
-        amountsBySubFamiliesSeries() {
-        return [
-            {
-            name: "Amount",
-            data: this.amountsBySubFamilies,
-            },
-        ];
-        },
-
-    */
-
     amountsBySubFamiliesSeriesKeyed() {
-      // return a new array that is dependent on amountsBySubFamilies and chartKey
       return [
         {
           name: "Amount",
@@ -167,7 +126,6 @@ export default {
         },
       ];
     },
-
     amountsBySubFamiliesOptionsKeyed() {
       return {
         chart: {
@@ -200,20 +158,12 @@ export default {
       this.filteredSubFamilies = data.subFamilies;
       this.filteredAmountsBySubFamilies = data.amountsBySubFamilies;
 
-      this.subFamilies.splice(
-        0,
-        this.subFamilies.length,
-        ...this.filteredSubFamilies
-      );
+      this.subFamilies.splice(0, this.subFamilies.length, ...this.filteredSubFamilies);
       this.amountsBySubFamilies.splice(
         0,
         this.amountsBySubFamilies.length,
         ...this.filteredAmountsBySubFamilies
       );
-
-      console.table(this.amountsBySubFamilies);
-
-      // update the key to force a re-render of the chart
       this.chartKey += 1;
     },
   },

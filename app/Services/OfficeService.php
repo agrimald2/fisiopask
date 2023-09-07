@@ -10,7 +10,7 @@ class OfficeService
     public function options()
     {
         return Office::query()
-            ->get()
+            ->first()
             ->pluck('name', 'id');
     }
 

@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Backend\Bills;
 
 use App\Http\Controllers\DynamicController;
 use App\Models\BillsFamily;
-use App\Models\BillsSubfamily;
+use App\Models\BillsSubFamily;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class BillsSubFamilyController extends DynamicController
 {
-    protected $resourceName = "Bills Subfamilias";
+    protected $resourceName = "Bills Subfamilies";
     protected $resourcePath = "Backend/Bills/SubFamilies";
     protected $resourceRoute = "billssubfamilies";
 
@@ -22,7 +22,14 @@ class BillsSubFamilyController extends DynamicController
      */
     public function index()
     {
-        $model = BillsSubfamily::query()
+
+        $test = BillsFamily::query()
+            ->orderBy('id', 'desc')
+            ->get()
+            ->pluck('name', 'id')
+            ->toArray();
+
+        $model = BillsSubFamily::query()
             ->with('billsfamily')
             ->orderBy('id', 'desc')
             ->paginate(10);
@@ -55,7 +62,7 @@ class BillsSubFamilyController extends DynamicController
             'billsfamily_id' => 'required|integer',
         ]);
 
-        BillsSubfamily::create($validated);
+        BillsSubFamily::create($validated);
 
         return $this->redirectIndex();
     }
@@ -63,10 +70,10 @@ class BillsSubFamilyController extends DynamicController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\BillsSubfamily  $subfamily
+     * @param  \App\Models\BillsSubFamily  $subfamily
      * @return \Illuminate\Http\Response
      */
-    public function edit(BillsSubfamily $subfamily)
+    public function edit(BillsSubFamily $subfamily)
     {
         return $this->form($subfamily, [
             'families' => $this->getFamilyOptions(),
@@ -77,10 +84,10 @@ class BillsSubFamilyController extends DynamicController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\BillsSubfamily  $subfamily
+     * @param  \App\Models\BillsSubFamily  $subfamily
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, BillsSubfamily $subfamily)
+    public function update(Request $request, BillsSubFamily $subfamily)
     {
         $validated = $request->validate([
             'name' => 'required',
@@ -95,10 +102,10 @@ class BillsSubFamilyController extends DynamicController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\BillsSubfamily  $subfamily
+     * @param  \App\Models\BillsSubFamily  $subfamily
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BillsSubfamily $subfamily)
+    public function destroy(BillsSubFamily $subfamily)
     {
         $subfamily->delete();
 

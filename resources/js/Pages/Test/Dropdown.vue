@@ -3,11 +3,7 @@
     <div class="text-4xl">Vue Dropdown</div>
 
     <div class="mt-4 mx-auto w-1/2">
-      <ui-dropdown
-        v-model="input"
-        @changed="onChanged"
-        :apiUrl="route('test.doctors')"
-      />
+      <ui-dropdown v-model="input" @changed="onChanged" :apiUrl="route('test.doctors')" />
     </div>
 
     <div class="mt-4">
@@ -15,7 +11,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import UiDropdown from "@/Shared/Dropdown/Dropdown.vue";
@@ -46,9 +41,7 @@ export default {
   },
 
   methods: {
-    onChanged(value) {
-      console.log("EVENTO: ", value);
-    },
+    onChanged(value) {},
   },
 };
 </script>

@@ -6,9 +6,7 @@
     <div class="relative col-span-6">
       <h5>Fec. Inicio</h5>
       <div class="relative max-w-sm">
-        <div
-          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-        >
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
             aria-hidden="true"
             class="w-5 h-5 text-gray-500"
@@ -35,9 +33,7 @@
     <div class="relative col-span-6">
       <h5>Fec. Final</h5>
       <div class="relative max-w-sm">
-        <div
-          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-        >
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
             aria-hidden="true"
             class="w-5 h-5 text-gray-500"
@@ -69,11 +65,7 @@
         v-model="family"
       >
         <option selected value="0">Todas</option>
-        <option
-          v-for="(family, index) in families"
-          :key="index"
-          :value="family.id"
-        >
+        <option v-for="(family, index) in families" :key="index" :value="family.id">
           {{ family.name }}
         </option>
       </select>
@@ -105,11 +97,7 @@
         v-model="payer"
       >
         <option selected value="0">Todos</option>
-        <option
-          v-for="(payer, index) in payers"
-          :key="index"
-          :value="payer.name"
-        >
+        <option v-for="(payer, index) in payers" :key="index" :value="payer.name">
           {{ payer.name }}
         </option>
       </select>
@@ -218,7 +206,6 @@ export default {
 
     clearFilters() {
       location.reload();
-      console.log("reloading");
     },
   },
 };

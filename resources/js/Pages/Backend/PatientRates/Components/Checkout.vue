@@ -147,9 +147,6 @@ export default {
         appointment_id: this.appointment_id,
         ...this.options,
       };
-
-      console.log(url);
-      console.log(data);
       this.$inertia.post(url, data);
       this.cart = [];
 

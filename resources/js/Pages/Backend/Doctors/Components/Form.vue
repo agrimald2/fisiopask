@@ -1,9 +1,7 @@
 <template>
   <div>
     <jet-form-section @submitted="onSubmitted">
-      <template #title>
-        {{ model ? "Editar " : "Crear un nuevo" }} Doctor
-      </template>
+      <template #title> {{ model ? "Editar " : "Crear un nuevo" }} Doctor </template>
 
       <template #description>
         Un doctor puede acceder a la plataforma con su email y contraseña.
@@ -11,12 +9,7 @@
 
       <template #form>
         <!-- name -->
-        <form-input
-          label="Nombre"
-          name="name"
-          v-model="form. name"
-          :form="form"
-        />
+        <form-input label="Nombre" name="name" v-model="form.name" :form="form" />
 
         <!-- lastname -->
         <form-input
@@ -99,14 +92,10 @@
           :options="workspaces"
           :form="form"
         />
-
       </template>
 
       <template #actions>
-        <jet-action-message
-          :on="form.recentlySuccessful"
-          class="mr-3"
-        >
+        <jet-action-message :on="form.recentlySuccessful" class="mr-3">
           Guardado.
         </jet-action-message>
 
@@ -121,14 +110,10 @@
 
     <!-- Delete button -->
     <div class="py-6">
-      <jet-danger-button
-        v-if="model"
-        @click="destroy"
-      >
+      <jet-danger-button v-if="model" @click="destroy">
         Eliminar doctor
       </jet-danger-button>
     </div>
-
   </div>
 </template>
 
@@ -202,9 +187,7 @@ export default {
 
     destroy() {
       if (
-        confirm(
-          "Esta acción no puede deshacerse, presione cancelar si no está seguro."
-        )
+        confirm("Esta acción no puede deshacerse, presione cancelar si no está seguro.")
       ) {
         this.$inertia.delete(route("doctors.destroy", this.form.id));
       }
