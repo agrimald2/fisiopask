@@ -4,6 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="e-pask.com">
 
+    <meta property="og:image" content="{{ env('APP_URL') }}/logo-white-large.png">
+    <link rel="icon" href="{{ env('APP_URL') }}/logo-white-large.png) }}">
+    
 <!-- META TAGS -->
 <!-- Primary Meta Tags -->
     <title>Fisiosalud - Centro de rehabilitación y fisioterapia</title>
