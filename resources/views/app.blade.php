@@ -8,8 +8,8 @@
 
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
-    <meta property="og:image"
-    content="{{ asset('logo-white-large.png') }}">
+    <meta property="og:image" content="{{ env('APP_URL') }}/logo-white-large.png">
+    <link rel="icon" href="{{ env('APP_URL') }}/logo-white-large.png) }}">
     
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
