@@ -50,8 +50,6 @@ class MarkAssistedAction extends Controller
             }
         }
 
-        //logs()->warning($patientRate);
-
         AssistedAppointments::create([
             'appointment_id' => $appointment->id,
             'patient_rate_id' => $patientRate->id,

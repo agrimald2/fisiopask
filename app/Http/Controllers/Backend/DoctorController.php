@@ -80,10 +80,6 @@ class DoctorController extends Controller
             'workspace_id' => '',
         ]);
 
-
-        logs()->warning($validated);
-
-
         doctors()->create($validated);
 
         toast('success', 'Doctor creado correctamente');

@@ -352,8 +352,6 @@ class BillController extends Controller
             'subFamilies' => $subFamilies,
         ];
 
-        logs()->warning($filteredData);
-
         return $filteredData;
     }
 }

@@ -37,7 +37,6 @@ trait Helpers
         ];
 
         if (!$service) {
-            logs()->warning('G Calendar access_token rejected', $debugEvent);
             return null;
         }
 
@@ -51,8 +50,6 @@ trait Helpers
                 $calendarId,
                 $event
             );
-
-        logs()->debug('Event inserted', $debugEvent);
 
         return $insertedEvent;
     }

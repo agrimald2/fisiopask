@@ -46,7 +46,7 @@
                     </p>
                     <p class="medium-text">
                         {{ patient.dni }} | {{ patient.sex }} | {{ dates.moment().year() -
-                                dates.moment(patient.birth_date).year()
+                            dates.moment(patient.birth_date).year()
                         }} años
                     </p>
                 </div>
@@ -123,8 +123,7 @@
                     Marcar Asistencia
                 </front-button>
 
-                <front-button color="red" v-if="role == 'admin'" v-show="appointment.status == 3"
-                    @click="markNotAssisted">
+                <front-button color="red" v-if="role == 'admin'" v-show="appointment.status == 3" @click="markNotAssisted">
                     Marcar Inasistencia
                 </front-button>
 
@@ -170,6 +169,7 @@
             <div class="mt-4 border rounded p-3 text-center">
                 <div class="mt-4 text-center text-xl">
                     <h1 class="large-text bold"> INFORMACIÓN AUDITORÍA </h1>
+                    <p class="text-sm">(Formato 24 horas -> 18:00 y 06:00)</p>
                 </div>
                 <div class="mt-4">
                     <p class="medium-text">
@@ -177,8 +177,13 @@
                     </p>
                     <!--<p v-if="role == 'admin'" class="medium-text">-->
                     <p class="medium-text">
-                        {{ dates.dateForHumans(appointment.created_at) }} a las
-                        {{ dates.hourForHumans(appointment.created_at) }}
+                        {{ new Date(appointment.created_at).toLocaleDateString() }}
+                        a las
+                        {{ new Date(appointment.created_at).toLocaleString('en-US', {
+                            hour12: false, hour: '2-digit',
+                            minute: '2-digit'
+                        }) }}
+
                     </p>
 
                     <p class="medium-text">
@@ -215,8 +220,12 @@
                         <strong>Fecha de ultimo update:</strong>
                     </p>
                     <p class="medium-text">
-                        {{ dates.dateForHumans(appointment.updated_at) }} a las
-                        {{ dates.hourForHumans(appointment.updated_at) }}
+                        {{ new Date(appointment.updated_at).toLocaleDateString() }}
+                        a las
+                        {{ new Date(appointment.updated_at).toLocaleString('en-US', {
+                            hour12: false, hour: '2-digit',
+                            minute: '2-digit'
+                        }) }}
                     </p>
 
                     <p class="medium-text">
@@ -244,7 +253,6 @@ import AppBody from "@/Shared/Backend/AppBody";
 import FrontButton from "@/Shared/Frontend/Button";
 
 import dates from "@/ui/dates";
-
 export default {
     props: ["appointment", "doctor", "patient", "role", "rate", "rates"],
 

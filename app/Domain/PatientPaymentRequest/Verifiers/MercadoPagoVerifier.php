@@ -44,8 +44,6 @@ class MercadoPagoVerifier implements VerifierContract
             $patientPaymentRequest->is_completed = true;
             $patientPaymentRequest->save();
 
-            logs()->debug("PatientPaymentRequest approved id {$patientPaymentRequest->id}.");
-
             if (!$patientPaymentRequest->patient_payment_id) {
                 $patientPayment = $patientPaymentRequest->payment()
                     ->create([

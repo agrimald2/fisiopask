@@ -15,7 +15,6 @@ class CancelAction extends Controller
         $yesterday = Carbon::yesterday()->format('Y-m-d');
         $appointment_date = $appointment->date;
         if($appointment_date<$yesterday){
-            return logs()->error('Antigua');
             return redirect()->back();
         }
       

@@ -57,7 +57,6 @@ class SendReminderBefore implements ShouldQueue
 
 
                 $office = Office::find($appointment->office_id);
-                logs()->info($office);
                 $office_indications = $office->indications;
                 $office_address = $office->address;
                 $office_reference = $office->reference;
@@ -87,7 +86,6 @@ class SendReminderBefore implements ShouldQueue
                 $appointment->reminder = '1';
 
                 $appointment->save();
-                logs()->info('ENVIADO');
         }
     }
 

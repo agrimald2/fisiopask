@@ -223,7 +223,7 @@ class FisioNextRepository implements RepositoryContract
         if ($data) {
             chatapi($patient->phone, $data, $waba_type);
         } else{
-            logs()->warning('ALGO SALIÓ MAL');
+            logs()->error('ALGO SALIÓ MAL');
         }
 
         /*

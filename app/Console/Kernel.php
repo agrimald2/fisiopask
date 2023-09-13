@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new CheckAssistance)->everyMinute();
-        $schedule->job(new SendReminderBefore)->twiceDaily(12, 18);
+        $schedule->job(new SendReminderBefore)->twiceDaily(10, 18)->timezone('America/Lima');;
         $schedule->job(new SendSurvey)->hourly();
     }
 

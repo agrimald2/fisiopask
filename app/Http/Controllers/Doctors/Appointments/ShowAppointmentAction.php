@@ -10,6 +10,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Subfamily;
 use App\Models\DoctorSubfamily;
+use Log;
 
 class ShowAppointmentAction extends Controller
 {
@@ -54,9 +55,6 @@ class ShowAppointmentAction extends Controller
                 break;
             }
         }
-
-
-
 
         /*
         if($rate == null)

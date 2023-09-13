@@ -313,8 +313,6 @@ class StatisticsController extends Controller
                 ) AS b"
             );
 
-            logs()->warning($ticket);
-
             $nServices = DB::select(
                 "SELECT a.months AS Fecha,
                 IFNULL(SUM(CASE WHEN a.nuevo > 1 THEN a.nuevo END),0) AS ServiciosRecurrentes,

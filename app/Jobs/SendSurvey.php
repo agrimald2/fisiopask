@@ -53,7 +53,6 @@ class SendSurvey implements ShouldQueue
 
                 $surveyLink = $appointment->id;
                 $surveyLink = strval($surveyLink);
-                //logs()->warning($surveyLink);
 
                 $patientName = $patient->name;
                 $data = compact(

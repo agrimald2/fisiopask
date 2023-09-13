@@ -11,24 +11,24 @@ export default (props, { attrs }) => {
 
   let currentPage = urlParms.get('page');
 
-  if(!(currentPage >= 1)) currentPage = 1;
+  if (!(currentPage >= 1)) currentPage = 1;
 
   const rows = props.model;
 
   const cols = [
     c("", "#")
-    .extend({
-      html: true,
-    })
-    .format(function (row) {
-      let className = "bg-green-400";
+      .extend({
+        html: true,
+      })
+      .format(function (row) {
+        let className = "bg-green-400";
 
-      if (row.status == 4) className = "bg-red-400";
+        if (row.status == 4) className = "bg-red-400";
 
-      //return `${row.id}`
-      return `<p>${((currentPage - 1) * 120) + (props.model.indexOf(row) + 1)}<p>`;
+        //return `${row.id}`
+        return `<p>${((currentPage - 1) * 120) + (props.model.indexOf(row) + 1)}<p>`;
 
-    }),
+      }),
 
     c("", "Estado")
       .extend({
@@ -40,10 +40,10 @@ export default (props, { attrs }) => {
 
         let statusStr = "undefined";
 
-        if(status == 1) statusStr = "CONFI";
-        else if(status == 2) statusStr = "N A";
-        else if(status == 3) statusStr = "ASIS";
-        else if(status == 4) statusStr = "CAN";
+        if (status == 1) statusStr = "CONFI";
+        else if (status == 2) statusStr = "N A";
+        else if (status == 3) statusStr = "ASIS";
+        else if (status == 4) statusStr = "CAN";
 
         return `<span class="${className} text-white px-2 rounded">${statusStr}</span>`;
 
@@ -110,25 +110,30 @@ export default (props, { attrs }) => {
       .extend({
         buttons: [
           {
-            label({row}){
-              if(props.enableDoctorSearch == true){
-                return 'WHA'
-              }else{
-                return '-'
+            label({ row }) {
+              if (props.enableDoctorSearch == true) {
+                if (props.isAssistant) {
+                  return null
+                } else {
+                  return 'Wha'
+                }
+              } else {
+                return null
               };
             },
             clicked({ row }) {
               const url = route('doctors.wame', row.id);
-              if(props.enableDoctorSearch == true){
-                Inertia.visit(url);
-              }else{
+              if (props.enableDoctorSearch == true) {
+                if (!props.isAssistant) {
+                  Inertia.visit(url);
+                }
+              } else {
                 //Inertia.visit(url);
               }
             }
           },
         ],
       }),
-
   ];
   function windowAppointment() {
     window.open("https://fisiosalud.pe/cita", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=500,width=600,height=600");

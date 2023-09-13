@@ -67,8 +67,6 @@ class PatientSurveyController extends Controller
             $validated['doctor_score'] == 5 &&
             $validated['service_score'] == 5)
         {
-            //logs()->error("$text");
-
             $now = Carbon::now();
             $before = clone $now;
             $before->subMonth(1);

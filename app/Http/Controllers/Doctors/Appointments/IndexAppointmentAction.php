@@ -10,6 +10,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\VarDumper\VarDumper;
+use Log;
 
 class IndexAppointmentAction extends Controller
 {
@@ -18,12 +19,15 @@ class IndexAppointmentAction extends Controller
         $user = auth()->user();
         $isDoctor = $user->hasRole('doctor');
         $isDoc = 'ADMIN';
+        $isAssistant = $user->hasRole('assistant');
+        
 
         $searchQuery = $request->searchQuery;
         $dateQueryFrom = $request->dateQueryFrom;
         $dateQueryTo = $request->dateQueryTo;
         $doctorQuery = $request->doctorQuery;
         $officeQuery = $request->officeQuery;
+        $isNew = $request->isNew;
 
         $statusQuery = $request->statusQuery;
 
@@ -58,6 +62,7 @@ class IndexAppointmentAction extends Controller
             'doctorQuery' => $request->doctorQuery,
             'officeQuery' => $request->officeQuery,
             'statusQuery' => $request->statusQuery,
+            'isNew' => $request->isNew,
             'fetchAll' => true,
         ];
 
@@ -71,7 +76,7 @@ class IndexAppointmentAction extends Controller
             }
         }
 
-        $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery );
+        $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery, $isNew );
 
         $user = auth()->user();
         if ($user->hasRole('admin') || $user->hasRole('assistant')) {
@@ -104,11 +109,13 @@ class IndexAppointmentAction extends Controller
             'enableDoctorSearch' => $canSearchByDoctor,
 
             'enableOfficeSearch' => true,
+
+            'isAssistant' => $isAssistant
         ]);
     }
 
 
-    private function getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery)
+    private function getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery, $isNew)
     {
         $appointments = DB::table('appointments')
             ->join('patients', 'patients.id', '=', 'appointments.patient_id')
@@ -149,6 +156,22 @@ class IndexAppointmentAction extends Controller
             });
         }
 
+        if(!empty($isNew)){
+            if($isNew === "new") {
+                $appointments->whereNotExists(function ($query) {
+                    $query->select(DB::raw(1))
+                          ->from('patient_payments')
+                          ->whereRaw('patient_payments.patient_id = patients.id');
+                });
+            }else if($isNew === "old"){
+                $appointments->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                          ->from('patient_payments')
+                          ->whereRaw('patient_payments.patient_id = patients.id');
+                });
+            }
+        }
+
         $appointments
             ->orderBy('date', 'desc')
             ->orderBy('start', 'desc');
@@ -158,3 +181,4 @@ class IndexAppointmentAction extends Controller
         return $result;
     }
 }
+

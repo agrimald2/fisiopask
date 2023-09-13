@@ -349,9 +349,6 @@ class ChatApiService
             $result = $this->makeRequest($data);
         }
 
-        logs()->debug("CHATAPI: {$phone} -> \n");
-        logs()->debug($result);
-
         return $result;
     }
 

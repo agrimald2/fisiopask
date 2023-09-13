@@ -10,9 +10,6 @@ class AddPaymentToPatientActionApp extends Controller
 {
     public function __invoke(Request $request, Patient $patient, $appointment_id)
     {
-        logs()->warning('B');
-        logs()->warning($appointment_id);
-
         $request->validate([
             'payment_method_id' => 'required|integer',
             'ammount' => 'required|numeric',
