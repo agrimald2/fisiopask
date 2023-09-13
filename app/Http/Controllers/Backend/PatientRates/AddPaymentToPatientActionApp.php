@@ -10,6 +10,12 @@ class AddPaymentToPatientActionApp extends Controller
 {
     public function __invoke(Request $request, Patient $patient, $appointment_id)
     {
+        $payment_author = 'Paciente';
+        $user = auth()->user();
+        if($user){
+            $payment_author = $user->name;
+        }
+        
         $request->validate([
             'payment_method_id' => 'required|integer',
             'ammount' => 'required|numeric',
@@ -26,6 +32,7 @@ class AddPaymentToPatientActionApp extends Controller
                 'payment_method_id' => $paymentMethod->id,
                 'payment_method' => $paymentMethod->payment_method,
                 'patient_rate_id' => $request->rate_id,
+                'payment_author' => $payment_author,
             ]);
 
 

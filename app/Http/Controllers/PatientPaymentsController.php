@@ -70,10 +70,20 @@ class PatientPaymentsController extends Controller
         $totalResults = count($patientPayments);
         $totalAmount = array_sum(array_column($patientPayments, 'ammount'));
 
+        // Create an array to hold the total amount for each payment method
+        $totalAmountPerMethod = [];
+        foreach ($patientPayments as $payment) {
+            if (!isset($totalAmountPerMethod[$payment->payment_method_id])) {
+                $totalAmountPerMethod[$payment->payment_method_id] = ['name' => $payment->payment_method, 'total' => 0];
+            }
+            $totalAmountPerMethod[$payment->payment_method_id]['total'] += $payment->ammount;
+        }
+
         return response()->json([
             'patientPayments' => $patientPayments,
             'totalResults' => $totalResults,
             'totalAmount' => $totalAmount,
+            'totalAmountPerMethod' => $totalAmountPerMethod,
         ]);
     }
     
