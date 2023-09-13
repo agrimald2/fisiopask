@@ -32,7 +32,7 @@ class PatientPaymentsController extends Controller
         $end_date = $request->end_date;
         $search_query = $request->search_query;
 
-        $sql = "SELECT * FROM patient_payments 
+        $sql = "SELECT patient_payments.*, patients.*, patient_rates.*, payment_methods.*, patient_payments.created_at as payment_created_at FROM patient_payments 
         JOIN patients ON patient_payments.patient_id = patients.id 
         JOIN patient_rates ON patient_payments.patient_rate_id = patient_rates.id 
         JOIN payment_methods ON patient_payments.payment_method_id = payment_methods.id 

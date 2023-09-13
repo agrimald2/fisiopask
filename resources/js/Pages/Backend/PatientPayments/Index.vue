@@ -104,9 +104,9 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <a href="#" class="font-medium text-blue-600 hover:underline">
-                                        {{ new Date(patient_payment.updated_at).toLocaleDateString() }}
+                                        {{ new Date(patient_payment.payment_created_at).toLocaleDateString() }}
                                         |
-                                        {{ new Date(patient_payment.updated_at).toLocaleString('en-US', {
+                                        {{ new Date(patient_payment.payment_created_at).toLocaleString('en-US', {
                                             hour12: false, hour: '2-digit',
                                             minute: '2-digit'
                                         }) }}
