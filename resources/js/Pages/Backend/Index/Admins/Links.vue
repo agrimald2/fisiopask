@@ -48,7 +48,7 @@
     <link-item
       label="Pagos recibidos"
       icon="fa-receipt"
-      @click="go('payments.index')"
+      @click="go('paymentsPayments.index')"
     />
 
     <link-item

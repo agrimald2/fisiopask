@@ -525,4 +525,4 @@ Route::get('/filterStadistics/bills', [BillController::class, 'filterStadistics'
 Route::post('/rate/file/store', [FileController::class, 'storeRate'])->name('rate.file.store');
 
 
-Route::get('/patientPayments', [PatientPaymentsController::class, 'index']);
+Route::get('/patientPayments', [PatientPaymentsController::class, 'index'])->name('paymentsPayments.index');

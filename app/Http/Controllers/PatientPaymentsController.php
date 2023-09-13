@@ -22,7 +22,6 @@ class PatientPaymentsController extends Controller
     public function index()
     {
         $paymentMethods = PaymentMethod::all();
-        Log::warning($paymentMethods);
         return inertia('Backend/PatientPayments/Index', ['payment_methods' => $paymentMethods]);
     }
     
