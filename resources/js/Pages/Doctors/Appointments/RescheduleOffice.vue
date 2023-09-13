@@ -9,6 +9,7 @@
         >
           <div class="text-center text-4xl uppercase tracking-wider text-gray-800">
             Sucursal
+
           </div>
 
           <div class="mt-4">

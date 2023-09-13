@@ -2636,6 +2636,10 @@ select {
 .focus\:ring-transparent:focus {
 	--tw-ring-color: transparent;
 }
+.focus\:ring-indigo-500:focus {
+	--tw-ring-opacity: 1;
+	--tw-ring-color: rgba(99, 102, 241, var(--tw-ring-opacity));
+}
 .focus\:ring-opacity-50:focus {
 	--tw-ring-opacity: 0.5;
 }
@@ -2972,6 +2976,11 @@ select {
 	.sm\:text-xl {
 		font-size: 1.25rem;
 		line-height: 1.75rem;
+	}
+
+	.sm\:text-sm {
+		font-size: 0.875rem;
+		line-height: 1.25rem;
 	}
 }
 @media (min-width: 768px) {

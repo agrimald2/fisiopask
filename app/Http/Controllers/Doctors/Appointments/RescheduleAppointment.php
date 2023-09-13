@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Domain\Patients\PatientAuthRepositoryContract;
 
 use App\Models\Appointment;
-
+use Log;
 class RescheduleAppointment extends Controller
 {
     public function pickOffice($appointment)
@@ -47,17 +47,16 @@ class RescheduleAppointment extends Controller
         /*if(now()->parse($date)->lt(now()->toDateString())) {
             return redirect()->route('reschedule.pickDay', compact('appointment'));
         }*/
-
         $filters = [
             'doctorId' => $appointment->doctor_id,
         ];
 
         $schedules = schedules()->getAvailableSchedulesFor($date, $office);
         $schedules = schedules()->scheduleCollectionToData($schedules);
-        $groupedSchedules = schedules()->groupSchedulesByStartTime($schedules)->toArray();
-
+        $groupedSchedules = schedules()->groupSchedulesByStartTime($schedules)->toArray();        
         $specialtyOptions = doctorSpecialties()->options();
-
+        
+        
         return inertia('Doctors/Appointments/RescheduleTime', compact(
             'appointment',
             'filters',

@@ -35,7 +35,7 @@ use App\Http\Controllers\Backend\ScheduleController;
 use App\Http\Controllers\Backend\ScheduleFreezeController;
 use App\Http\Controllers\Backend\StatisticsController;
 use App\Http\Controllers\Backend\SubfamilyController;
-
+use App\Http\Controllers\Backend\FileController;
 
 use App\Http\Controllers\TestAssistanceController;
 
@@ -520,3 +520,5 @@ Route::post('/approveBill/{id}', [BillController::class, 'aprroveBill'])->name('
 Route::post('/denyBill/{id}', [BillController::class, 'denyBill'])->name('bills.deny');
 Route::get('/stadistics/bills', [BillController::class, 'stadistics'])->name('bills.stadistics');
 Route::get('/filterStadistics/bills', [BillController::class, 'filterStadistics'])->name('bills.stadistics.filter');
+
+Route::post('/rate/file/store', [FileController::class, 'storeRate'])->name('rate.file.store');

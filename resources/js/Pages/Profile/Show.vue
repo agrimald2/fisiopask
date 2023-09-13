@@ -8,7 +8,12 @@
 
     <div>
       <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-        <google-calendar-connection />
+
+
+
+        <input type="file"
+          class="py-2 px-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+          @change="handleFileUpload" />
         <jet-section-border />
 
         <div v-if="$page.props.jetstream.canUpdateProfileInformation">
@@ -29,15 +34,18 @@
           <jet-section-border />
         </div>
 
-        <logout-other-browser-sessions-form
-          :sessions="sessions"
-          class="mt-10 sm:mt-0"
-        />
+        <logout-other-browser-sessions-form :sessions="sessions" class="mt-10 sm:mt-0" />
 
         <template v-if="$page.props.jetstream.hasAccountDeletionFeatures">
           <jet-section-border />
 
           <delete-user-form class="mt-10 sm:mt-0" />
+        </template>
+
+        <template>
+          <jet-section-border />
+
+          <update-rate class="mt-10 sm:mt-0" />
         </template>
       </div>
     </div>
@@ -47,6 +55,7 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DeleteUserForm from "@/Pages/Profile/Partials/DeleteUserForm.vue";
+import UpdateRate from "@/Pages/Profile/Partials/UpdateRate.vue";
 import JetSectionBorder from "@/Jetstream/SectionBorder.vue";
 import LogoutOtherBrowserSessionsForm from "@/Pages/Profile/Partials/LogoutOtherBrowserSessionsForm.vue";
 import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue";
@@ -65,7 +74,24 @@ export default {
     TwoFactorAuthenticationForm,
     UpdatePasswordForm,
     UpdateProfileInformationForm,
+    UpdateRate,
     GoogleCalendarConnection,
   },
+  methods: {
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      axios.post('/rate/file/store', formData)
+        .then(response => {
+          // Handle success response
+        })
+        .catch(error => {
+          // Handle error response
+        });
+    }
+  }
 };
 </script>
