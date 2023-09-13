@@ -7,6 +7,7 @@ use App\Models\PatientPayment;
 use App\Models\PaymentMethod;
 use Inertia\Inertia;
 use Log;
+use DB;
 
 class PatientPaymentsController extends Controller
 {
@@ -31,27 +32,43 @@ class PatientPaymentsController extends Controller
         $end_date = $request->end_date;
         $search_query = $request->search_query;
 
-        $patientPayments = PatientPayment::with('patient', 'patientRate', 'paymentMethod')
-            ->whereHas('patient', function ($query) use ($search_query) {
-                $query->where('name', 'like', '%' . $search_query . '%')
-                    ->orWhere('lastname1', 'like', '%' . $search_query . '%')
-                    ->orWhere('lastname2', 'like', '%' . $search_query . '%')
-                    ->orWhere('dni', 'like', '%' . $search_query . '%');
-            })
-            ->when($payment_method_id, function ($query) use ($payment_method_id) {
-                $query->where('payment_method_id', $payment_method_id);
-            })
-            ->when($start_date, function ($query) use ($start_date) {
-                $query->whereDate('created_at', '>=', $start_date);
-            })
-            ->when($end_date, function ($query) use ($end_date) {
-                $query->whereDate('created_at', '<=', $end_date);
-            })
-            ->latest() // Order by last
-            ->get();
+        $sql = "SELECT * FROM patient_payments 
+        JOIN patients ON patient_payments.patient_id = patients.id 
+        JOIN patient_rates ON patient_payments.patient_rate_id = patient_rates.id 
+        JOIN payment_methods ON patient_payments.payment_method_id = payment_methods.id 
+        WHERE (patients.name LIKE :search_query1 
+        OR patients.lastname1 LIKE :search_query2 
+        OR patients.lastname2 LIKE :search_query3 
+        OR patients.dni LIKE :search_query4)";
 
-        $totalResults = $patientPayments->count();
-        $totalAmount = $patientPayments->sum('ammount');
+        $bindings = [
+            'search_query1' => '%' . $search_query . '%',
+            'search_query2' => '%' . $search_query . '%',
+            'search_query3' => '%' . $search_query . '%',
+            'search_query4' => '%' . $search_query . '%',
+        ];
+
+        if ($payment_method_id) {
+            $sql .= " AND patient_payments.payment_method_id = :payment_method_id";
+            $bindings['payment_method_id'] = $payment_method_id;
+        }
+
+        if ($start_date) {
+            $sql .= " AND DATE(patient_payments.created_at) >= :start_date";
+            $bindings['start_date'] = $start_date;
+        }
+
+        if ($end_date) {
+            $sql .= " AND DATE(patient_payments.created_at) <= :end_date";
+            $bindings['end_date'] = $end_date;
+        }
+
+        $sql .= " ORDER BY patient_payments.created_at DESC";
+
+        $patientPayments = DB::select($sql, $bindings);
+
+        $totalResults = count($patientPayments);
+        $totalAmount = array_sum(array_column($patientPayments, 'ammount'));
 
         return response()->json([
             'patientPayments' => $patientPayments,

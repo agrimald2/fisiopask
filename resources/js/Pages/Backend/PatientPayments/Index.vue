@@ -94,13 +94,13 @@
                                     {{ index + 1 }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    {{ patient_payment.patient.name }}
+                                    {{ patient_payment.lastname1 }} {{ patient_payment.lastname2 }}
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ patient_payment.ammount }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ patient_payment.patient_rate.name }}
+                                    {{ patient_payment.name }}
                                 </td>
                                 <td class="px-6 py-4">
                                     <a href="#" class="font-medium text-blue-600 hover:underline">
