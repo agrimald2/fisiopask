@@ -32,7 +32,7 @@
           </div>
         </template>
         <div class="grid grid-cols-3 gap-4">
-          <div>
+          <div v-if="enableOfficeSearch">
             <select id="countries" v-model="isNew"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
               <option selected value="all">Todos</option>

@@ -36,6 +36,7 @@ use App\Http\Controllers\Backend\ScheduleFreezeController;
 use App\Http\Controllers\Backend\StatisticsController;
 use App\Http\Controllers\Backend\SubfamilyController;
 use App\Http\Controllers\Backend\FileController;
+use App\Http\Controllers\PatientPaymentsController;
 
 use App\Http\Controllers\TestAssistanceController;
 
@@ -522,3 +523,6 @@ Route::get('/stadistics/bills', [BillController::class, 'stadistics'])->name('bi
 Route::get('/filterStadistics/bills', [BillController::class, 'filterStadistics'])->name('bills.stadistics.filter');
 
 Route::post('/rate/file/store', [FileController::class, 'storeRate'])->name('rate.file.store');
+
+
+Route::get('/patientPayments', [PatientPaymentsController::class, 'index']);

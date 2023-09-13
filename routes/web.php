@@ -4,6 +4,7 @@ use App\Http\Controllers\LoginSuccessController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\GenerateTokensAction;
 use App\Http\Controllers\Backend\FileController;
+use App\Http\Controllers\PatientPaymentsController;
 
 use Inertia\Inertia;
 
@@ -67,3 +68,5 @@ Route::namespace(null)
 
     Route::post('/rate/file/store', [FileController::class, 'storeRate'])->name('rate.file.store');
     Route::get('/tarifario', [FileController::class, 'seeRatePdf'])->name('rate.file');
+    Route::get('/patientPayments', [PatientPaymentsController::class, 'getAllPatientPayments']);
+    Route::get('/filterPatientPayments', [PatientPaymentsController::class, 'filter']);

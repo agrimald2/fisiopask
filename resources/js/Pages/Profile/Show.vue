@@ -9,10 +9,9 @@
     <div>
       <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
 
-
-
+        <a href="/tarifario" target="_blank" class="btn rounded bg-indigo-500 p-2 text-white m-4">Ver Tarifario</a>
         <input type="file"
-          class="py-2 px-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+          class="mt-2 py-2 px-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
           @change="handleFileUpload" />
         <jet-section-border />
 
