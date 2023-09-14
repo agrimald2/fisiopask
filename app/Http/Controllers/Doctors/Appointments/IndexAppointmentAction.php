@@ -161,15 +161,15 @@ class IndexAppointmentAction extends Controller
         if(!empty($searchQuery))
         {
             $appointments->where(function($q) use ($searchQuery) {
-                $q->where('dni', 'LIKE', $searchQuery)
-                    ->orWhere('phone', 'LIKE', $searchQuery)
-                    ->orWhere('name', 'LIKE', $searchQuery)
-                    ->orWhere('lastname1', 'LIKE', $searchQuery)
-                    ->orWhere('lastname2', 'LIKE', $searchQuery)
-                    ->orWhere(DB::raw("CONCAT(`name`, ' ', `lastname1`, ' ', `lastname2`)"), 'LIKE', $searchQuery)
-                    ->orWhere(DB::raw("CONCAT(`name`, ' ', `lastname1`)"), 'LIKE', $searchQuery)
-                    ->orWhere(DB::raw("CONCAT(`name`, ' ', `lastname2`)"), 'LIKE', $searchQuery)
-                    ->orWhere(DB::raw("CONCAT(`lastname1`, ' ', `lastname2`)"), 'LIKE', $searchQuery);
+                $q->where('patients.dni', 'LIKE', $searchQuery)
+                    ->orWhere('patients.phone', 'LIKE', $searchQuery)
+                    ->orWhere('patients.name', 'LIKE', $searchQuery)
+                    ->orWhere('patients.lastname1', 'LIKE', $searchQuery)
+                    ->orWhere('patients.lastname2', 'LIKE', $searchQuery)
+                    ->orWhere(DB::raw("CONCAT(`patients.name`, ' ', `patients.lastname1`, ' ', `patients.lastname2`)"), 'LIKE', $searchQuery)
+                    ->orWhere(DB::raw("CONCAT(`patients.name`, ' ', `patients.lastname1`)"), 'LIKE', $searchQuery)
+                    ->orWhere(DB::raw("CONCAT(`patients.name`, ' ', `patients.lastname2`)"), 'LIKE', $searchQuery)
+                    ->orWhere(DB::raw("CONCAT(`patients.lastname1`, ' ', `patients.lastname2`)"), 'LIKE', $searchQuery);
             });
         }
 
