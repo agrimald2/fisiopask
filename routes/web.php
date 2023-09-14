@@ -66,7 +66,7 @@ Route::namespace(null)
     Route::get('/testa', [TestAssistanceController::class,'test'])->name('test'); 
 
 
-    Route::post('/rate/file/store', [FileController::class, 'storeRate'])->name('rate.file.store');
+    //Route::post('/rate/file/store', [FileController::class, 'storeRate'])->name('rate.file.store');
     Route::get('/tarifario', [FileController::class, 'seeRatePdf'])->name('rate.file');
     Route::get('/patientPayments', [PatientPaymentsController::class, 'getAllPatientPayments']);
     Route::get('/filterPatientPayments', [PatientPaymentsController::class, 'filter']);
