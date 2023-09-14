@@ -58,7 +58,7 @@ export default (props, { attrs }) => {
         html: true,
       })
       .format(function (row) {
-        return `${row.lastname1} ${row.lastname2}`;
+        return `${row.app_name} ${row.lastname1} ${row.lastname2}`;
       }),
 
     c("", "Licenciado")
