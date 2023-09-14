@@ -180,7 +180,6 @@ class BookAppointmentController extends Controller
      */
     public function pickTime($dni, $date)
     {
-        logs()->warning("A");
         // If past date redirect to index
         if (now()->parse($date)->lt(now()->toDateString())) {
             return redirect()->route('bookAppointment.pickDay', $dni);

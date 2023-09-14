@@ -58,7 +58,6 @@ export default (props, { attrs }) => {
         html: true,
       })
       .format(function (row) {
-        console.log(row);
         return `${row.lastname1} ${row.lastname2}`;
       }),
 

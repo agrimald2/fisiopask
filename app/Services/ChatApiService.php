@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Log;
 
 class ChatApiService
 {
@@ -13,9 +14,9 @@ class ChatApiService
     public function __construct()
     {
         // Token and Instance
-        $this->token = env('CHATAPI_TOKEN');
-        $this->instanceId = env('CHATAPI_INSTANCE_ID');
-        $this->namespace = env('CHATAPI_NAMESPACE');
+        $this->token = 'e5l6xh2x9oam8gjm';
+        $this->instanceId = '449221';
+        $this->namespace = '85489fc6_2bdc_4137_a3e6_409829280fb5';
     }
 
     // FISIO KEYS
@@ -45,7 +46,7 @@ class ChatApiService
                         'code' => 'es',
                         'policy' => 'deterministic'
                     ],
-                    'template' => 'confirmation3 ',
+                    'template' => 'confirmation3',
                     'params' => [
                         [
                             'type' => "body",
@@ -334,10 +335,11 @@ class ChatApiService
 
         $result = null;
 
-        if (env('CHATAPI_PRODUCTION', false)) {
+        //if (env('CHATAPI_PRODUCTION', false)) {
             $result = $this->makeRequest($data);
-        }
+        //}
 
+        Log::debug($result);
         return $result;
     }
 
