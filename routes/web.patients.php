@@ -23,12 +23,6 @@ Route::get('/login/{dni}/{token}', LoginAction::class)
     ->name('area.patients.login')
     ->middleware('patients.guest', 'throttle:patients');
 
-    Route::get('/loginwha/{dni}', LoginWhaAction::class)
-    ->name('area.patients.login')
-    ->middleware('patients.guest', 'throttle:patients');
-
-
-
 Route::get('/logout', LogoutAction::class)
     ->name('area.patients.logout')
     ->middleware('patients.auth');
