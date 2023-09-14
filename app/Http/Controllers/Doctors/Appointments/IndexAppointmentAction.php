@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Doctors\Appointments;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Doctor;
+use App\Models\Patient; // Added Patient model
 use App\Models\Office;
 use DateTime;
 use Illuminate\Http\Request;
@@ -28,6 +29,8 @@ class IndexAppointmentAction extends Controller
         $doctorQuery = $request->doctorQuery;
         $officeQuery = $request->officeQuery;
         $isNew = $request->isNew;
+        $haveBalance = $request->haveBalance;
+
 
         $statusQuery = $request->statusQuery;
 
@@ -63,6 +66,7 @@ class IndexAppointmentAction extends Controller
             'officeQuery' => $request->officeQuery,
             'statusQuery' => $request->statusQuery,
             'isNew' => $request->isNew,
+            'haveBalance' => $request->haveBalance,
             'fetchAll' => true,
         ];
 
@@ -76,7 +80,7 @@ class IndexAppointmentAction extends Controller
             }
         }
 
-        $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery, $isNew );
+        $model = $this->getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery, $isNew, $haveBalance);
 
         $user = auth()->user();
         if ($user->hasRole('admin') || $user->hasRole('assistant')) {
@@ -115,11 +119,24 @@ class IndexAppointmentAction extends Controller
     }
 
 
-    private function getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery, $isNew)
+    private function getModels($searchQuery, $dateQueryFrom, $dateQueryTo, $doctorQuery, $officeQuery, $statusQuery, $isNew, $haveBalance)
     {
         $appointments = DB::table('appointments')
             ->join('patients', 'patients.id', '=', 'appointments.patient_id')
-            ->select(DB::raw("appointments.*, patients.*, appointments.id as id"));
+            ->leftJoinSub(
+                DB::table('patient_rates')
+                    ->select('patient_id', DB::raw('MAX(id) as id'))
+                    ->groupBy('patient_id'),
+                'latest_patient_rates',
+                function ($join) {
+                    $join->on('patients.id', '=', 'latest_patient_rates.patient_id');
+                }
+            )
+            ->join('patient_rates', function ($join) {
+                $join->on('patients.id', '=', 'patient_rates.patient_id')
+                     ->on('latest_patient_rates.id', '=', 'patient_rates.id');
+            }) // Added patient_rates join
+            ->select('appointments.*', 'patients.*', 'patient_rates.*', 'appointments.id as id');
 
         if(!empty($statusQuery))
         {
@@ -169,6 +186,16 @@ class IndexAppointmentAction extends Controller
                           ->from('patient_payments')
                           ->whereRaw('patient_payments.patient_id = patients.id');
                 });
+            }
+        }
+
+        Log::debug($haveBalance);
+        // Added balance filter
+        if(!empty($haveBalance)){
+            if($haveBalance === "true") {
+                $appointments->whereRaw('patient_rates.payed > (patient_rates.price * (patient_rates.sessions_total - patient_rates.sessions_left))');
+            } elseif($haveBalance === "false") {
+                $appointments->whereRaw('patient_rates.payed <= (patient_rates.price * (patient_rates.sessions_total - patient_rates.sessions_left))');
             }
         }
 

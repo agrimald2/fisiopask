@@ -31,13 +31,21 @@
             </div>
           </div>
         </template>
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-4 gap-4">
           <div v-if="enableOfficeSearch">
             <select id="countries" v-model="isNew"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
               <option selected value="all">Todos</option>
               <option value="new">Nuevos</option>
               <option value="old">Antiguos</option>
+            </select>
+          </div>
+          <div v-if="enableOfficeSearch">
+            <select id="countries" v-model="haveBalance"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+              <option selected value="">Todos</option>
+              <option value="true">A favor</option>
+              <option value="false">Sin Saldo</option>
             </select>
           </div>
           <div>
@@ -255,6 +263,7 @@ export default {
       doctorQuery: null,
       officeQuery: null,
       isNew: "all",
+      haveBalance: "",
       statusQuery: null,
 
       showDropDownDoctors: false,
@@ -285,9 +294,10 @@ export default {
       const doctorQuery = this.doctorQuery;
       const officeQuery = this.officeQuery;
       const isNew = this.isNew;
+      const haveBalance = this.haveBalance;
       const statusQuery = this.statusQuery;
 
-      const data = { searchQuery, dateQueryFrom, dateQueryTo, doctorQuery, officeQuery, statusQuery, isNew };
+      const data = { searchQuery, dateQueryFrom, dateQueryTo, doctorQuery, officeQuery, statusQuery, isNew, haveBalance };
       this.$inertia.get("", data, { preserveScroll: true });
     },
     toggleDropDownDoctors() {
