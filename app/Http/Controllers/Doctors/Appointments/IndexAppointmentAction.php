@@ -87,6 +87,7 @@ class IndexAppointmentAction extends Controller
             $canSearchByDoctor = true;
         }
 
+        Log::debug($model);
         $model->appends($_GET)->links();
 
         return inertia('Backend/Dynamic/Grid', [
@@ -132,10 +133,10 @@ class IndexAppointmentAction extends Controller
                     $join->on('patients.id', '=', 'latest_patient_rates.patient_id');
                 }
             )
-            ->join('patient_rates', function ($join) {
+            ->leftJoin('patient_rates', function ($join) {
                 $join->on('patients.id', '=', 'patient_rates.patient_id')
                      ->on('latest_patient_rates.id', '=', 'patient_rates.id');
-            }) // Added patient_rates join
+            }) // Changed join to leftJoin to include patients without patient_rates
             ->select('appointments.*', 'patients.name', 'patients.*', 'patient_rates.*', 'appointments.id as id');
 
         if(!empty($statusQuery))
@@ -187,6 +188,7 @@ class IndexAppointmentAction extends Controller
                 });
             }
         }
+
         // Added balance filter
         if(!empty($haveBalance)){
             if($haveBalance === "true") {
