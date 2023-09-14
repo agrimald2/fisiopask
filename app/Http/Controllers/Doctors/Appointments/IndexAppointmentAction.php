@@ -136,7 +136,7 @@ class IndexAppointmentAction extends Controller
                 $join->on('patients.id', '=', 'patient_rates.patient_id')
                      ->on('latest_patient_rates.id', '=', 'patient_rates.id');
             }) // Added patient_rates join
-            ->select('appointments.*', 'patients.*', 'patient_rates.*', 'appointments.id as id');
+            ->select('appointments.*', 'patients.name', 'patients.*', 'patient_rates.*', 'appointments.id as id');
 
         if(!empty($statusQuery))
         {
