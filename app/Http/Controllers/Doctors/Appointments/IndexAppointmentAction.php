@@ -187,8 +187,6 @@ class IndexAppointmentAction extends Controller
                 });
             }
         }
-
-        Log::debug($haveBalance);
         // Added balance filter
         if(!empty($haveBalance)){
             if($haveBalance === "true") {
