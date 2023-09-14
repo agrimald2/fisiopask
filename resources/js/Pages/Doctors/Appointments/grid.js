@@ -59,7 +59,7 @@ export default (props, { attrs }) => {
       })
       .format(function (row) {
         console.log(row);
-        return `${row.name} ${row.lastname1} ${row.lastname2}`;
+        return `${row.lastname1} ${row.lastname2}`;
       }),
 
     c("", "Licenciado")
