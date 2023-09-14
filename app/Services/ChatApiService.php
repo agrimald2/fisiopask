@@ -37,7 +37,7 @@ class ChatApiService
         $app = 'appointment_';
 
         switch ($waba_type) {
-            case "confirmation2":
+            case "confirmation3":
                 $data = [
                     'phone' => $phone,
                     'namespace' => '85489fc6_2bdc_4137_a3e6_409829280fb5',
@@ -85,17 +85,6 @@ class ChatApiService
                             ]
 
                         ],
-                        [
-                            'type' => "button",
-                            'sub_type' => "url",
-                            'parameters' => [
-                                [
-                                    "type" => "text",
-                                    "text" => $appointment_info['dashboardLink']
-                                ]
-                            ]
-                        ],
-
                     ]
                 ];
                 break;

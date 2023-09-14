@@ -176,7 +176,7 @@ class FisioNextRepository implements RepositoryContract
 
     public function sendConfirmationToPatient($dni, $appointment, $type)
     {
-        $waba_type = 'confirmation2';
+        $waba_type = 'confirmation3';
 
         $patient = patients()->getByDni($dni);
 
