@@ -95,6 +95,6 @@ class PatientSurveyController extends Controller
 
     protected function getWhatsappPatientReview($data)
     {
-        return view('chatapi.review', $data)->render();
+        return view('chatapi.review', compact('data'))->render();
     }
 }

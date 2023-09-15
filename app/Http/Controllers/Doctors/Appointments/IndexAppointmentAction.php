@@ -87,7 +87,6 @@ class IndexAppointmentAction extends Controller
             $canSearchByDoctor = true;
         }
 
-        Log::debug($model);
         $model->appends($_GET)->links();
 
         return inertia('Backend/Dynamic/Grid', [

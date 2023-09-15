@@ -339,7 +339,6 @@ class ChatApiService
             $result = $this->makeRequest($data);
         //}
 
-        Log::debug($result);
         return $result;
     }
 
