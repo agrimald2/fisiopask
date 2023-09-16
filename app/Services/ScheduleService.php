@@ -41,8 +41,8 @@ class ScheduleService
     {
 
         $user = auth()->user();
-        // if($user!= null && $user->hasRole('admin')
-        if($user != null)
+        // if($user!= null && $user->hasRole('admin') || $user->hasRole('assistant')
+        if($user != null && ($user->hasRole('admin') || $user->hasRole('assistant')))
         {
             return Schedule::query()
                 ->whereKey($id)
@@ -67,8 +67,8 @@ class ScheduleService
         /*
         @TODO -> BOOK MULTIPLE APPOINTMENTS IN THE SAME SCHEDULE 
         */
-        // if($user!= null && $user->hasRole('admin')
-        if($user!= null){
+        // if($user!= null && ($user->hasRole('admin') || $user->hasRole('assistant')))
+        if($user != null && ($user->hasRole('admin') || $user->hasRole('assistant'))){
             return Schedule::query()
                 ->where('week_day', $weekDay)
                 ->whereDoesntHave('doctor.freezes', function ($q) use ($date) {
