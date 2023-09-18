@@ -31,18 +31,10 @@
           <ui-button type="button" class="bg-red-500 border-red-700 text-white" @click="back()">
             <div class="flex items-center justify-center">
               <i class="fas fa-angle-left pr-3 bold uppercase"></i>
-              CAMBIAR FECHA 3
+              CAMBIAR FECHA
             </div>
           </ui-button>
         </div>
-        <div class="uppercase font-bold tracking-wide">
-          {{ filters }}
-        </div>
-        <hr>
-        <div class="uppercase font-bold tracking-wide">
-          {{ groupedSchedules }}
-        </div>
-
       </ui-container>
     </form>
   </Layout>
