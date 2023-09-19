@@ -10,7 +10,7 @@
 
     <meta property="og:image" content="{{ env('APP_URL') }}/logo-white-large.png">
     <link rel="icon" href="{{ env('APP_URL') }}/logo-white-large.png) }}">
-    
+
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
@@ -31,6 +31,18 @@
             style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LWXMWBFVT4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-LWXMWBFVT4');
+    </script>
 
     <!-- Global site tag (gtag.js) - Google Ads: 761287326 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-761287326"></script>
