@@ -62,7 +62,7 @@ class PatientSurveyController extends Controller
         );
 
         $text = $this->getWhatsappPatientReview($data);
-
+        
         if( $validated['office_score'] == 5 &&
             $validated['doctor_score'] == 5 &&
             $validated['service_score'] == 5)
@@ -95,6 +95,6 @@ class PatientSurveyController extends Controller
 
     protected function getWhatsappPatientReview($data)
     {
-        return view('chatapi.review', compact('data'))->render();
+        return view('chatapi.review', $data)->render();
     }
 }
