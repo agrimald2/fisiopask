@@ -1,4 +1,4 @@
-*Hola {{ $patientName }}! Muchas gracias por tus 5 estrellas!*
+*Hola! Muchas gracias por tus 5 estrellas!*
 
 Esperamos que hayas disfrutado tu atención en *FISIOSALUD*
 
