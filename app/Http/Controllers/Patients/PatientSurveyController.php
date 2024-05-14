@@ -50,19 +50,15 @@ class PatientSurveyController extends Controller
         $google_link = 'https://g.page/r/CXWZUJP5kbUKEAU/review';
         $review_link = '';
 
-        if ($dice <= 2){
-            $review_link = $google_link;
-        }else{
-            $review_link = $facebook_link;
-        }
+        $review_link = ($dice <= 2) ? $google_link : $facebook_link;
 
         $data = compact(
             'patientName',
-            'review_link',
+            'review_link', // Now included in the array passed to the view
         );
 
         $text = $this->getWhatsappPatientReview($data);
-        
+
         if( $validated['office_score'] == 5 &&
             $validated['doctor_score'] == 5 &&
             $validated['service_score'] == 5)
