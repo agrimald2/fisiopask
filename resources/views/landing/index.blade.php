@@ -17,7 +17,7 @@
     
         <div class="icon-bar">
             <a href="https://www.facebook.com/fisiosaludperu/" class="facebook"><i class="fa fa-facebook"></i></a> 
-            <a href="https://wa.me/51955089005" class="twitter"><i class="fa fa-whatsapp"></i></a> 
+            <a href="https://wa.me/51987327809" class="twitter"><i class="fa fa-whatsapp"></i></a> 
             <a href="https://fisiosalud.pe/cita" class="google i_text">Reservar <br/> Cita</a> 
             <a href="tel:+51955089005" class="linkedin i_text">Llámanos <br/> Ahora</a>
         </div>

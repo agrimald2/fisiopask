@@ -32,7 +32,6 @@
                     <div class="st-footer-widget">
                         <h2 class="st-footer-widget-title">Sucursales</h2>
                         <ul class="st-footer-widget-nav st-mp0">
-                            <li><a href="https://www.google.com/maps/place/FISIOSALUD+-+Centro+de+Rehabilitaci%C3%B3n+y+Fisioterapia/@-12.0909686,-77.0165155,17z/data=!3m1!4b1!4m5!3m4!1s0x9105c9f9db2c1699:0xab591f993509975!8m2!3d-12.0909669!4d-77.0143177?hl=de"><i class="fas fa-chevron-right"></i><b>San Isidro</b> <br> Av. José Galvez Barrenechea 148</a></li>                           </a></li>
                             <li><a href="https://www.google.com/maps/place/FISIOSALUD+-+Centro+de+Rehabilitaci%C3%B3n+y+Fisioterapia/@-12.0909686,-77.0165155,17z/data=!3m1!4b1!4m5!3m4!1s0x9105c9f9db2c1699:0xab591f993509975!8m2!3d-12.0909669!4d-77.0143177?hl=de"><i class="fas fa-chevron-right"></i><b>Santiago de Surco</b> <br> Av. Primavera 1277</a></li>
                         </ul>
                     </div>
@@ -45,6 +44,7 @@
                             <li><span class="st-footer-contact-title"><i class="fab fa-whatsapp"></i></span> 987 327 809</li>
                             <li><span class="st-footer-contact-title"><i class="fab fa-facebook"></i></span> Fisiosalud</li>
                             <li><span class="st-footer-contact-title"><i class="fab fa-instagram"></i></span> @fisiosalud.pe</li>
+                            <li><span class="st-footer-contact-title"><i class="fas fa-book"></i></span> <a href="https://form.jotform.com/221533049204042">Libro de Reclamaciones</a></li>
                         </ul>
                     </div>
                 </div>
