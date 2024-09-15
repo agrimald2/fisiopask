@@ -55,12 +55,14 @@
               @click="go('area.patients.appointments')"
             />
 
-            <link-item
+            <!-- 
+              <link-item
               class="mt-2rem"
               label="Reprogramar Citas"
               icon="fa-solid fa-calendar-day"
               @click="go('area.patients.appointments.reprogram')"
-            />
+              />
+            -->
 
             <!--
             <link-item
