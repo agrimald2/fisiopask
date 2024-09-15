@@ -10,7 +10,6 @@ class MercadoPagoGateway
     public function __construct()
     {
         $token = config('services.mercadopago.access_token');
-        Log::info($token);
         MercadoPago\SDK::setAccessToken($token);
     }
 
