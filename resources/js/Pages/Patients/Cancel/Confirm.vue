@@ -33,14 +33,14 @@
       <div class="mt-4">
         <div class="grid items-center gap-4">
 
-          <!-- Cancel -->
+          <!-- Cancel
           <ui-button
             color="red"
             @click="confirm"
           >
             Cancelar mi Cita
           </ui-button>
-
+          -->
           <!-- Logout -->
           <ui-button
             color="yellow"
