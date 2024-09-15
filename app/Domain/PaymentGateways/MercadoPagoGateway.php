@@ -3,12 +3,14 @@
 namespace App\Domain\PaymentGateways;
 
 use MercadoPago;
+use Illuminate\Support\Facades\Log;
 
 class MercadoPagoGateway
 {
     public function __construct()
     {
         $token = env("MERCADOPAGO_ACCESS_TOKEN");
+        Log::info($token);
         MercadoPago\SDK::setAccessToken($token);
     }
 
