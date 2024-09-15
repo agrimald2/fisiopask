@@ -62,13 +62,14 @@
               @click="go('area.patients.appointments.reprogram')"
             />
 
+            <!--
             <link-item
               class="mt-2rem"
               label="Cancelar Sin Reprogramar"
               icon="fa-solid fa-calendar-minus"
               @click="go('area.patients.appointments.cancel')"
             />
-
+          -->
 
           </link-group>
       </div>
