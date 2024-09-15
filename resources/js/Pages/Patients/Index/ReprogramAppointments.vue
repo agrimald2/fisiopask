@@ -19,9 +19,8 @@
         </div>
       </div>
 
-      
       <div class="container" style="">
-          <appointments :appointments="appointments" :past="false"/>
+          <appointments :appointments="filteredAppointments" :past="false"/>
       </div>
 
       <div>
@@ -59,7 +58,20 @@ import RatesCmp from "./Components/Rates";
 
 export default {
   props: ["model", "appointments", "rates"],
-
+  data(){
+    return {
+      dateTime: new Date(),
+    }
+  },
+  computed: {
+    filteredAppointments() {
+      const thresholdTime = this.dateTime.getTime() + (5 * 60 * 60 * 1000); // 5 Hours from current time in milliseconds
+      return this.appointments.filter(appointment => {
+        const appointmentTime = new Date(`${appointment.date}T${appointment.start}`).getTime();
+        return appointmentTime >= thresholdTime;
+      });
+    }
+  },
   components: {
     Layout,
     UiContainer,
@@ -72,7 +84,7 @@ export default {
     RatesCmp,
   },
 
-   methods: {
+  methods: {
     go(routeName) {
       const url = route(routeName);
       this.$inertia.visit(url);
