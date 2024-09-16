@@ -21,7 +21,7 @@
       <div class="container" style="margin-top:1rem;">
         <div class="text-4xl font-bold" style="text-align:center; color: cadetblue; font-size:1.55rem; font-weight:bolder">Tarifas</div>
       </div>
-
+      <!-- @TODO Acá podrás ver las tarifas disponibles para el paciente -->
       <div class="container" style="">
         <link-group style="display: block!important;">
           <link-item 

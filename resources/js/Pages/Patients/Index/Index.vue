@@ -29,9 +29,10 @@
       <div class="container" style="margin-top: -2rem;">
         <link-group style="display: block!important;">
 
+        <!--
           <link-item class="mt-2rem" label="Añadir Tarifa Para Pago" icon="fa-clipboard-list"
             @click="go('area.patients.addRatesSelf')" />
-
+        -->
           <link-item class="mt-2rem" label="Pagar Mis Citas" icon="fa-solid fa-money-bill"
             @click="go('area.patients.rates')" />
 
