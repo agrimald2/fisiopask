@@ -139,6 +139,7 @@
                     <div 
                       v-if="showFamilyDropdown"
                       @click.stop
+                      data-family-dropdown
                       class="fixed z-[9999] bg-white border border-gray-200 rounded-xl shadow-2xl max-h-96 overflow-hidden"
                       :style="dropdownStyles"
                     >
@@ -538,13 +539,13 @@ export default {
   },
 
   mounted() {
-    window.addEventListener('scroll', this.handleScrollOrResize, true);
-    window.addEventListener('resize', this.handleScrollOrResize);
+    window.addEventListener('scroll', this.handleScroll, true);
+    window.addEventListener('resize', this.handleResize);
   },
 
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScrollOrResize, true);
-    window.removeEventListener('resize', this.handleScrollOrResize);
+    window.removeEventListener('scroll', this.handleScroll, true);
+    window.removeEventListener('resize', this.handleResize);
   },
 
   data() {
@@ -738,7 +739,20 @@ export default {
       }
     },
 
-    handleScrollOrResize() {
+    handleScroll(event) {
+      if (this.showFamilyDropdown) {
+        // Verificar si el scroll es dentro del dropdown
+        const dropdownPanel = document.querySelector('[data-family-dropdown]');
+        if (dropdownPanel && dropdownPanel.contains(event.target)) {
+          // El scroll es dentro del dropdown, no cerrar
+          return;
+        }
+        // El scroll es fuera del dropdown, cerrar
+        this.showFamilyDropdown = false;
+      }
+    },
+
+    handleResize() {
       if (this.showFamilyDropdown) {
         this.showFamilyDropdown = false;
       }
