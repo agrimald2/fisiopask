@@ -48,6 +48,13 @@
                 >
                   Estadísticas
                 </jet-nav-link>
+
+                <jet-nav-link
+                  :href="route('marketing.index')"
+                  :active="route().current('marketing.*')"
+                >
+                  Marketing
+                </jet-nav-link>
               </div>
             </div>
 
