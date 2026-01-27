@@ -280,15 +280,119 @@
                 <!-- Por Licenciado -->
                 <div>
                   <label class="block text-sm font-medium text-gray-600 mb-2">Por Licenciado</label>
-                  <select
-                    v-model="filters.doctor_id"
-                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all appearance-none bg-white"
-                  >
-                    <option :value="null">Todos los licenciados</option>
-                    <option v-for="doctor in doctors" :key="doctor.id" :value="doctor.id">
-                      {{ doctor.name }}
-                    </option>
-                  </select>
+                  
+                  <!-- Doctor Search Select -->
+                  <div class="relative" ref="doctorDropdownContainer">
+                    <button
+                      ref="doctorDropdownButton"
+                      @click="toggleDoctorDropdown"
+                      type="button"
+                      class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white text-left flex items-center justify-between"
+                    >
+                      <span :class="filters.doctor_id ? 'text-gray-800' : 'text-gray-500'">
+                        {{ getSelectedDoctorName() }}
+                      </span>
+                      <div class="flex items-center gap-2">
+                        <button 
+                          v-if="filters.doctor_id"
+                          @click.stop="filters.doctor_id = null"
+                          class="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                        >
+                          <svg class="w-4 h-4 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                        <svg 
+                          class="w-5 h-5 text-gray-400 transition-transform" 
+                          :class="{ 'rotate-180': showDoctorDropdown }"
+                          fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
+
+                  <!-- Doctor Dropdown Content (Teleported to body) -->
+                  <teleport to="body">
+                    <!-- Overlay to close dropdown -->
+                    <div 
+                      v-if="showDoctorDropdown" 
+                      @click="showDoctorDropdown = false"
+                      class="fixed inset-0 z-[9998]"
+                    ></div>
+                    
+                    <!-- Dropdown Panel -->
+                    <div 
+                      v-if="showDoctorDropdown"
+                      @click.stop
+                      data-doctor-dropdown
+                      class="fixed z-[9999] bg-white border border-gray-200 rounded-xl shadow-2xl max-h-80 overflow-hidden"
+                      :style="doctorDropdownStyles"
+                    >
+                      <!-- Search Input -->
+                      <div class="p-3 border-b border-gray-100 sticky top-0 bg-white z-10">
+                        <div class="relative">
+                          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                          <input
+                            ref="doctorSearchInput"
+                            v-model="doctorSearch"
+                            type="text"
+                            placeholder="Buscar licenciado..."
+                            @click.stop
+                            @focus.stop
+                            class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <!-- Doctor List -->
+                      <div class="overflow-y-auto max-h-56">
+                        <!-- Opción: Todos los licenciados -->
+                        <button
+                          @click="selectDoctor(null)"
+                          class="w-full px-4 py-3 text-left hover:bg-purple-50 transition-colors flex items-center gap-3 border-b border-gray-100"
+                          :class="{ 'bg-purple-50': filters.doctor_id === null }"
+                        >
+                          <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                          </div>
+                          <span class="font-medium text-gray-700">Todos los licenciados</span>
+                          <svg v-if="filters.doctor_id === null" class="w-5 h-5 text-purple-500 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                          </svg>
+                        </button>
+
+                        <!-- Lista de doctores -->
+                        <button
+                          v-for="doctor in filteredDoctors"
+                          :key="doctor.id"
+                          @click="selectDoctor(doctor.id)"
+                          class="w-full px-4 py-3 text-left hover:bg-purple-50 transition-colors flex items-center gap-3 border-b border-gray-50 last:border-b-0"
+                          :class="{ 'bg-purple-50': filters.doctor_id === doctor.id }"
+                        >
+                          <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                            <span class="text-sm font-semibold text-purple-600">
+                              {{ doctor.name.charAt(0).toUpperCase() }}
+                            </span>
+                          </div>
+                          <span class="text-gray-700">{{ doctor.name }}</span>
+                          <svg v-if="filters.doctor_id === doctor.id" class="w-5 h-5 text-purple-500 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                          </svg>
+                        </button>
+
+                        <!-- No results -->
+                        <div v-if="filteredDoctors.length === 0 && doctorSearch.trim()" class="p-4 text-center text-gray-500 text-sm">
+                          No se encontraron licenciados para "{{ doctorSearch }}"
+                        </div>
+                      </div>
+                    </div>
+                  </teleport>
                 </div>
               </div>
             </div>
@@ -573,6 +677,13 @@ export default {
         left: 0,
         width: 0,
       },
+      showDoctorDropdown: false,
+      doctorSearch: '',
+      doctorDropdownPosition: {
+        top: 0,
+        left: 0,
+        width: 0,
+      },
     };
   },
 
@@ -637,6 +748,24 @@ export default {
         width: `${this.dropdownPosition.width}px`,
       };
     },
+
+    filteredDoctors() {
+      if (!this.doctorSearch.trim()) {
+        return this.doctors;
+      }
+      const search = this.doctorSearch.toLowerCase().trim();
+      return this.doctors.filter(doctor => 
+        doctor.name.toLowerCase().includes(search)
+      );
+    },
+
+    doctorDropdownStyles() {
+      return {
+        top: `${this.doctorDropdownPosition.top}px`,
+        left: `${this.doctorDropdownPosition.left}px`,
+        width: `${this.doctorDropdownPosition.width}px`,
+      };
+    },
   },
 
   methods: {
@@ -667,6 +796,7 @@ export default {
       };
       this.previewCount = null;
       this.familySearch = '';
+      this.doctorSearch = '';
     },
 
     // Multi-select methods
@@ -740,15 +870,21 @@ export default {
     },
 
     handleScroll(event) {
+      // Verificar dropdown de familias
       if (this.showFamilyDropdown) {
-        // Verificar si el scroll es dentro del dropdown
-        const dropdownPanel = document.querySelector('[data-family-dropdown]');
-        if (dropdownPanel && dropdownPanel.contains(event.target)) {
-          // El scroll es dentro del dropdown, no cerrar
+        const familyDropdown = document.querySelector('[data-family-dropdown]');
+        if (familyDropdown && familyDropdown.contains(event.target)) {
           return;
         }
-        // El scroll es fuera del dropdown, cerrar
         this.showFamilyDropdown = false;
+      }
+      // Verificar dropdown de doctores
+      if (this.showDoctorDropdown) {
+        const doctorDropdown = document.querySelector('[data-doctor-dropdown]');
+        if (doctorDropdown && doctorDropdown.contains(event.target)) {
+          return;
+        }
+        this.showDoctorDropdown = false;
       }
     },
 
@@ -756,6 +892,49 @@ export default {
       if (this.showFamilyDropdown) {
         this.showFamilyDropdown = false;
       }
+      if (this.showDoctorDropdown) {
+        this.showDoctorDropdown = false;
+      }
+    },
+
+    // Doctor dropdown methods
+    toggleDoctorDropdown() {
+      this.showDoctorDropdown = !this.showDoctorDropdown;
+      if (this.showDoctorDropdown) {
+        this.doctorSearch = '';
+        this.$nextTick(() => {
+          this.updateDoctorDropdownPosition();
+          if (this.$refs.doctorSearchInput) {
+            this.$refs.doctorSearchInput.focus();
+          }
+        });
+      }
+    },
+
+    updateDoctorDropdownPosition() {
+      const button = this.$refs.doctorDropdownButton;
+      if (button) {
+        const rect = button.getBoundingClientRect();
+        this.doctorDropdownPosition = {
+          top: rect.bottom + 8,
+          left: rect.left,
+          width: rect.width,
+        };
+      }
+    },
+
+    selectDoctor(doctorId) {
+      this.filters.doctor_id = doctorId;
+      this.showDoctorDropdown = false;
+      this.doctorSearch = '';
+    },
+
+    getSelectedDoctorName() {
+      if (this.filters.doctor_id === null) {
+        return 'Todos los licenciados';
+      }
+      const doctor = this.doctors.find(d => d.id === this.filters.doctor_id);
+      return doctor ? doctor.name : 'Todos los licenciados';
     },
 
     async getPreview() {
