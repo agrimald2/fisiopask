@@ -58,7 +58,7 @@
             </div>
 
             <!-- Filtros de Tarifa -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
               <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
                 <div class="flex items-center gap-3">
                   <div class="p-2 bg-amber-100 rounded-lg">
@@ -106,8 +106,9 @@
                   </div>
 
                   <!-- Dropdown Toggle -->
-                  <div class="relative">
+                  <div class="relative" ref="familyDropdownContainer">
                     <button
+                      ref="familyDropdownButton"
                       @click="toggleFamilyDropdown"
                       type="button"
                       class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all bg-white text-left flex items-center justify-between"
@@ -123,12 +124,23 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
+                  </div>
 
-                    <!-- Dropdown Content -->
+                  <!-- Dropdown Content (Teleported to body) -->
+                  <teleport to="body">
+                    <!-- Overlay to close dropdown -->
+                    <div 
+                      v-if="showFamilyDropdown" 
+                      @click="showFamilyDropdown = false"
+                      class="fixed inset-0 z-[9998]"
+                    ></div>
+                    
+                    <!-- Dropdown Panel -->
                     <div 
                       v-if="showFamilyDropdown"
                       @click.stop
-                      class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl max-h-80 overflow-hidden"
+                      class="fixed z-[9999] bg-white border border-gray-200 rounded-xl shadow-2xl max-h-96 overflow-hidden"
+                      :style="dropdownStyles"
                     >
                       <!-- Search Input -->
                       <div class="p-3 border-b border-gray-100 sticky top-0 bg-white z-10">
@@ -149,7 +161,7 @@
                       </div>
 
                       <!-- Family List -->
-                      <div class="overflow-y-auto max-h-60">
+                      <div class="overflow-y-auto max-h-64">
                         <template v-for="family in filteredFamilies" :key="family.id">
                           <!-- Family Header -->
                           <div class="sticky top-0 bg-gray-50 px-4 py-2 border-b border-gray-100">
@@ -207,15 +219,6 @@
                         </button>
                       </div>
                     </div>
-                  </div>
-
-                  <!-- Click outside to close -->
-                  <teleport to="body">
-                    <div 
-                      v-if="showFamilyDropdown" 
-                      @click="showFamilyDropdown = false"
-                      class="fixed inset-0 z-40"
-                    ></div>
                   </teleport>
                 </div>
 
@@ -534,6 +537,16 @@ export default {
     AppLayout,
   },
 
+  mounted() {
+    window.addEventListener('scroll', this.handleScrollOrResize, true);
+    window.addEventListener('resize', this.handleScrollOrResize);
+  },
+
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScrollOrResize, true);
+    window.removeEventListener('resize', this.handleScrollOrResize);
+  },
+
   data() {
     return {
       filters: {
@@ -554,6 +567,11 @@ export default {
       previewCount: null,
       showFamilyDropdown: false,
       familySearch: '',
+      dropdownPosition: {
+        top: 0,
+        left: 0,
+        width: 0,
+      },
     };
   },
 
@@ -609,6 +627,14 @@ export default {
         });
       });
       return all;
+    },
+
+    dropdownStyles() {
+      return {
+        top: `${this.dropdownPosition.top}px`,
+        left: `${this.dropdownPosition.left}px`,
+        width: `${this.dropdownPosition.width}px`,
+      };
     },
   },
 
@@ -692,10 +718,29 @@ export default {
       this.showFamilyDropdown = !this.showFamilyDropdown;
       if (this.showFamilyDropdown) {
         this.$nextTick(() => {
+          this.updateDropdownPosition();
           if (this.$refs.familySearchInput) {
             this.$refs.familySearchInput.focus();
           }
         });
+      }
+    },
+
+    updateDropdownPosition() {
+      const button = this.$refs.familyDropdownButton;
+      if (button) {
+        const rect = button.getBoundingClientRect();
+        this.dropdownPosition = {
+          top: rect.bottom + 8,
+          left: rect.left,
+          width: rect.width,
+        };
+      }
+    },
+
+    handleScrollOrResize() {
+      if (this.showFamilyDropdown) {
+        this.showFamilyDropdown = false;
       }
     },
 
