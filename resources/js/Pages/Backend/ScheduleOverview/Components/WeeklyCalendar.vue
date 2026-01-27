@@ -199,7 +199,10 @@ export default {
 
   methods: {
     getDateForDay(dayIndex) {
-      const start = new Date(this.weekStart);
+      // Usar formato con T00:00:00 para evitar problemas de zona horaria
+      // Sin esto, "2026-01-26" se interpreta como UTC y puede retroceder un día
+      const [year, month, day] = this.weekStart.split('-').map(Number);
+      const start = new Date(year, month - 1, day); // month es 0-indexed
       start.setDate(start.getDate() + (dayIndex - 1));
       return start;
     },
