@@ -74,5 +74,8 @@ class Kernel extends HttpKernel
         // patient
         'patients.auth' => \App\Domain\Patients\Middlewares\IsAuthenticated::class,
         'patients.guest' => \App\Domain\Patients\Middlewares\IsGuest::class,
+
+        // MCP API
+        'mcp.auth' => \App\Http\Middleware\McpTokenAuth::class,
     ];
 }

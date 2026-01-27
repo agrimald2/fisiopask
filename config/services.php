@@ -34,4 +34,8 @@ return [
         'access_token' => env('MERCADOPAGO_ACCESS_TOKEN'),
     ],
 
+    'mcp' => [
+        'api_token' => env('MCP_API_TOKEN'),
+    ],
+
 ];

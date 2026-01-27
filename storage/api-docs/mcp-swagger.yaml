@@ -1,0 +1,940 @@
+openapi: 3.0.3
+info:
+  title: FisioSalud MCP API
+  description: |
+    API REST para integración con agentes de AI (chatbots, voicebots).
+    
+    Permite gestionar citas médicas de fisioterapia:
+    - Consultar disponibilidad de horarios
+    - Agendar nuevas citas
+    - Reprogramar citas existentes
+    - Cancelar citas
+    - Gestionar pacientes
+    
+    ## Autenticación
+    
+    Todos los endpoints requieren autenticación mediante token Bearer.
+    Configure el token en la variable de entorno `MCP_API_TOKEN`.
+    
+    ```
+    Authorization: Bearer {MCP_API_TOKEN}
+    ```
+    
+    ## Consultorio
+    
+    Actualmente solo existe el consultorio **Primavera**. Todos los horarios
+    disponibles corresponden a este consultorio.
+    
+  version: 1.0.0
+  contact:
+    name: FisioSalud
+    url: https://fisiosalud.pe
+
+servers:
+  - url: https://fisiosalud.pe/api/mcp
+    description: Producción
+  - url: http://localhost:8000/api/mcp
+    description: Desarrollo local
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Catalogo
+    description: Información de doctores y especialidades
+  - name: Disponibilidad
+    description: Consulta de horarios disponibles
+  - name: Pacientes
+    description: Gestión de pacientes
+  - name: Citas
+    description: Gestión de citas médicas
+
+paths:
+  /doctors:
+    get:
+      tags:
+        - Catalogo
+      summary: Listar doctores
+      description: Obtiene la lista de todos los doctores con sus especialidades
+      operationId: getDoctors
+      responses:
+        '200':
+          description: Lista de doctores
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Doctor'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /specialties:
+    get:
+      tags:
+        - Catalogo
+      summary: Listar especialidades
+      description: Obtiene la lista de todas las especialidades médicas disponibles
+      operationId: getSpecialties
+      responses:
+        '200':
+          description: Lista de especialidades
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Specialty'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /availability/{date}:
+    get:
+      tags:
+        - Disponibilidad
+      summary: Ver disponibilidad por fecha
+      description: |
+        Obtiene los horarios disponibles para una fecha específica
+        en el consultorio Primavera.
+      operationId: getAvailability
+      parameters:
+        - name: date
+          in: path
+          required: true
+          description: Fecha en formato YYYY-MM-DD
+          schema:
+            type: string
+            format: date
+            example: '2026-01-28'
+      responses:
+        '200':
+          description: Disponibilidad para la fecha
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/AvailabilityResponse'
+        '400':
+          description: Fecha inválida o en el pasado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidDate:
+                  summary: Formato de fecha inválido
+                  value:
+                    success: false
+                    error:
+                      code: INVALID_DATE_FORMAT
+                      message: El formato de fecha es invalido. Use YYYY-MM-DD
+                pastDate:
+                  summary: Fecha en el pasado
+                  value:
+                    success: false
+                    error:
+                      code: DATE_IN_PAST
+                      message: No se puede consultar disponibilidad para fechas pasadas
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /patient/{dni}:
+    get:
+      tags:
+        - Pacientes
+      summary: Buscar paciente por DNI
+      description: Obtiene la información de un paciente por su DNI
+      operationId: getPatient
+      parameters:
+        - name: dni
+          in: path
+          required: true
+          description: Número de DNI del paciente
+          schema:
+            type: string
+            example: '12345678'
+      responses:
+        '200':
+          description: Información del paciente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Patient'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Paciente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error:
+                  code: PATIENT_NOT_FOUND
+                  message: No se encontro un paciente con el DNI proporcionado
+
+  /patient:
+    post:
+      tags:
+        - Pacientes
+      summary: Crear o actualizar paciente
+      description: |
+        Crea un nuevo paciente o actualiza los datos de uno existente
+        si el DNI ya está registrado.
+      operationId: createPatient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientCreateRequest'
+      responses:
+        '201':
+          description: Paciente creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 789
+                      dni:
+                        type: string
+                        example: '87654321'
+                      fullname:
+                        type: string
+                        example: Maria Fernandez Castro
+                  message:
+                    type: string
+                    example: Paciente registrado exitosamente
+        '200':
+          description: Paciente actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      dni:
+                        type: string
+                      fullname:
+                        type: string
+                  message:
+                    type: string
+                    example: Paciente actualizado exitosamente
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /patient/{dni}/appointments:
+    get:
+      tags:
+        - Pacientes
+      summary: Citas futuras del paciente
+      description: Obtiene todas las citas futuras (no canceladas) de un paciente
+      operationId: getPatientAppointments
+      parameters:
+        - name: dni
+          in: path
+          required: true
+          description: Número de DNI del paciente
+          schema:
+            type: string
+            example: '12345678'
+      responses:
+        '200':
+          description: Lista de citas del paciente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      patient:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          dni:
+                            type: string
+                          fullname:
+                            type: string
+                      appointments:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AppointmentSummary'
+                      total:
+                        type: integer
+                        example: 2
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/PatientNotFound'
+
+  /appointments:
+    post:
+      tags:
+        - Citas
+      summary: Agendar nueva cita
+      description: |
+        Crea una nueva cita para un paciente existente.
+        El paciente debe estar registrado previamente.
+      operationId: createAppointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppointmentCreateRequest'
+      responses:
+        '201':
+          description: Cita agendada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/AppointmentDetail'
+                  message:
+                    type: string
+                    example: Cita agendada exitosamente
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/PatientNotFound'
+        '409':
+          description: Conflicto - Horario no disponible o paciente ya tiene cita
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                scheduleNotAvailable:
+                  summary: Horario ya ocupado
+                  value:
+                    success: false
+                    error:
+                      code: SCHEDULE_NOT_AVAILABLE
+                      message: El horario seleccionado ya no esta disponible
+                patientHasAppointment:
+                  summary: Paciente ya tiene cita en esa fecha
+                  value:
+                    success: false
+                    error:
+                      code: PATIENT_HAS_APPOINTMENT
+                      message: El paciente ya tiene una cita agendada para esta fecha
+                      existing_appointment_id: 1234
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /appointments/{id}:
+    get:
+      tags:
+        - Citas
+      summary: Ver detalle de cita
+      description: Obtiene la información detallada de una cita
+      operationId: getAppointment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la cita
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        '200':
+          description: Detalle de la cita
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/AppointmentFull'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/AppointmentNotFound'
+
+    delete:
+      tags:
+        - Citas
+      summary: Cancelar cita
+      description: |
+        Cancela una cita existente. No se pueden cancelar citas
+        que ya fueron atendidas o que ya están canceladas.
+      operationId: cancelAppointment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la cita
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        '200':
+          description: Cita cancelada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Cita cancelada exitosamente
+        '400':
+          description: No se puede cancelar la cita
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                alreadyCanceled:
+                  summary: Cita ya cancelada
+                  value:
+                    success: false
+                    error:
+                      code: APPOINTMENT_ALREADY_CANCELED
+                      message: La cita ya se encuentra cancelada
+                completed:
+                  summary: Cita ya atendida
+                  value:
+                    success: false
+                    error:
+                      code: APPOINTMENT_COMPLETED
+                      message: No se puede cancelar una cita ya atendida
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/AppointmentNotFound'
+
+  /appointments/{id}/reschedule:
+    put:
+      tags:
+        - Citas
+      summary: Reprogramar cita
+      description: |
+        Reprograma una cita existente a una nueva fecha y horario.
+        No se pueden reprogramar citas canceladas o ya atendidas.
+      operationId: rescheduleAppointment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la cita a reprogramar
+          schema:
+            type: integer
+            example: 1234
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RescheduleRequest'
+      responses:
+        '200':
+          description: Cita reprogramada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/AppointmentDetail'
+                  message:
+                    type: string
+                    example: Cita reprogramada exitosamente
+        '400':
+          description: No se puede reprogramar la cita
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                canceled:
+                  summary: Cita cancelada
+                  value:
+                    success: false
+                    error:
+                      code: APPOINTMENT_CANCELED
+                      message: No se puede reprogramar una cita cancelada
+                completed:
+                  summary: Cita ya atendida
+                  value:
+                    success: false
+                    error:
+                      code: APPOINTMENT_COMPLETED
+                      message: No se puede reprogramar una cita ya atendida
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/AppointmentNotFound'
+        '409':
+          description: Horario no disponible
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error:
+                  code: SCHEDULE_NOT_AVAILABLE
+                  message: El horario seleccionado ya no esta disponible
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Token de autenticación configurado en MCP_API_TOKEN
+
+  schemas:
+    Doctor:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        name:
+          type: string
+          example: Juan
+        lastname:
+          type: string
+          example: Perez
+        fullname:
+          type: string
+          example: Juan Perez
+        specialties:
+          type: array
+          items:
+            $ref: '#/components/schemas/Specialty'
+
+    Specialty:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Fisioterapia
+
+    Patient:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 456
+        dni:
+          type: string
+          example: '12345678'
+        name:
+          type: string
+          example: Carlos
+        lastname1:
+          type: string
+          example: Lopez
+        lastname2:
+          type: string
+          example: Ramirez
+        fullname:
+          type: string
+          example: Carlos Lopez Ramirez
+        phone:
+          type: string
+          example: '987654321'
+        email:
+          type: string
+          nullable: true
+          example: carlos@email.com
+        birth_date:
+          type: string
+          example: '1985-03-15'
+        sex:
+          type: string
+          enum: [M, F]
+          example: M
+
+    PatientCreateRequest:
+      type: object
+      required:
+        - dni
+        - name
+        - lastname1
+        - lastname2
+        - phone
+        - birth_date
+        - sex
+      properties:
+        dni:
+          type: string
+          minLength: 5
+          maxLength: 20
+          example: '87654321'
+        name:
+          type: string
+          maxLength: 100
+          example: Maria
+        lastname1:
+          type: string
+          maxLength: 100
+          example: Fernandez
+        lastname2:
+          type: string
+          maxLength: 100
+          example: Castro
+        phone:
+          type: string
+          maxLength: 20
+          example: '912345678'
+        birth_date:
+          type: string
+          format: date
+          example: '1990-07-20'
+        sex:
+          type: string
+          enum: [M, F]
+          example: F
+        email:
+          type: string
+          format: email
+          nullable: true
+          example: maria@email.com
+
+    AvailabilityResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: '2026-01-28'
+        day_name:
+          type: string
+          example: Miercoles
+        office:
+          type: string
+          example: Primavera
+        total_slots:
+          type: integer
+          example: 8
+        slots:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduleSlot'
+
+    ScheduleSlot:
+      type: object
+      properties:
+        schedule_id:
+          type: integer
+          description: ID del schedule para usar al agendar
+          example: 15
+        start_time:
+          type: string
+          example: '09:00'
+        end_time:
+          type: string
+          example: '10:00'
+        doctor:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 3
+            name:
+              type: string
+              example: Juan Perez
+            specialties:
+              type: array
+              items:
+                type: string
+              example: ['Fisioterapia', 'Rehabilitacion']
+
+    AppointmentCreateRequest:
+      type: object
+      required:
+        - patient_dni
+        - schedule_id
+        - date
+      properties:
+        patient_dni:
+          type: string
+          description: DNI del paciente (debe existir previamente)
+          example: '12345678'
+        schedule_id:
+          type: integer
+          description: ID del schedule obtenido de /availability
+          example: 15
+        date:
+          type: string
+          format: date
+          description: Fecha de la cita (YYYY-MM-DD)
+          example: '2026-01-28'
+
+    RescheduleRequest:
+      type: object
+      required:
+        - schedule_id
+        - date
+      properties:
+        schedule_id:
+          type: integer
+          description: ID del nuevo schedule
+          example: 28
+        date:
+          type: string
+          format: date
+          description: Nueva fecha (YYYY-MM-DD)
+          example: '2026-01-30'
+
+    AppointmentDetail:
+      type: object
+      properties:
+        appointment_id:
+          type: integer
+          example: 1234
+        date:
+          type: string
+          format: date
+          example: '2026-01-28'
+        start_time:
+          type: string
+          example: '09:00'
+        end_time:
+          type: string
+          example: '10:00'
+        status:
+          type: string
+          enum: [confirmed, not_assisted, assisted, canceled]
+          example: confirmed
+        doctor:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 3
+            name:
+              type: string
+              example: Juan Perez
+        patient:
+          type: object
+          properties:
+            dni:
+              type: string
+              example: '12345678'
+            name:
+              type: string
+              example: Carlos Lopez
+        office:
+          type: string
+          example: Primavera
+
+    AppointmentFull:
+      allOf:
+        - $ref: '#/components/schemas/AppointmentDetail'
+        - type: object
+          properties:
+            id:
+              type: integer
+              example: 1234
+            status_code:
+              type: integer
+              example: 1
+            patient:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 456
+                dni:
+                  type: string
+                  example: '12345678'
+                fullname:
+                  type: string
+                  example: Carlos Lopez Ramirez
+                phone:
+                  type: string
+                  example: '987654321'
+            created_at:
+              type: string
+              format: date-time
+              example: '2026-01-27T10:30:00Z'
+            created_by:
+              type: string
+              nullable: true
+              example: MCP API
+
+    AppointmentSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1234
+        date:
+          type: string
+          format: date
+          example: '2026-01-28'
+        start_time:
+          type: string
+          example: '09:00'
+        end_time:
+          type: string
+          example: '10:00'
+        status:
+          type: string
+          example: confirmed
+        status_code:
+          type: integer
+          example: 1
+        doctor:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+        office:
+          type: string
+          example: Primavera
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: ERROR_CODE
+            message:
+              type: string
+              example: Descripcion del error
+            details:
+              type: object
+              description: Detalles adicionales del error (opcional)
+
+  responses:
+    Unauthorized:
+      description: Token de autenticación inválido o faltante
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            missingToken:
+              summary: Token no proporcionado
+              value:
+                success: false
+                error:
+                  code: MISSING_TOKEN
+                  message: Token de autenticacion no proporcionado. Use el header Authorization Bearer {token}
+            invalidToken:
+              summary: Token inválido
+              value:
+                success: false
+                error:
+                  code: INVALID_TOKEN
+                  message: Token de autenticacion invalido
+
+    ValidationError:
+      description: Error de validación
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            error:
+              code: VALIDATION_ERROR
+              message: Error de validacion
+              details:
+                date:
+                  - El campo date es obligatorio
+
+    PatientNotFound:
+      description: Paciente no encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            error:
+              code: PATIENT_NOT_FOUND
+              message: No se encontro un paciente con el DNI proporcionado
+
+    AppointmentNotFound:
+      description: Cita no encontrada
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            error:
+              code: APPOINTMENT_NOT_FOUND
+              message: No se encontro la cita especificada
