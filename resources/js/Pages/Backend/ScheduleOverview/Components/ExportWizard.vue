@@ -302,6 +302,7 @@
 <script>
 import axios from "axios";
 import str2hex from "@/ui/str2hex";
+import dates from "@/ui/dates";
 
 export default {
   props: {
@@ -318,7 +319,7 @@ export default {
   emits: ['close'],
 
   data() {
-    const today = new Date().toISOString().split('T')[0];
+    const today = dates.todayString();
     
     return {
       step: 1,
@@ -326,7 +327,7 @@ export default {
       selectedDoctorIds: [],
       doctorSearch: '',
       dateFrom: today,
-      dateTo: this.addDays(today, 6),
+      dateTo: dates.addDaysToDate(today, 6),
       today,
       loadingPreview: false,
       loadingExport: false,
@@ -373,8 +374,8 @@ export default {
 
     daysCount() {
       if (!this.dateFrom || !this.dateTo) return 0;
-      const from = new Date(this.dateFrom);
-      const to = new Date(this.dateTo);
+      const from = dates.parseLocalDate(this.dateFrom);
+      const to = dates.parseLocalDate(this.dateTo);
       return Math.ceil((to - from) / (1000 * 60 * 60 * 24)) + 1;
     },
 
@@ -423,20 +424,16 @@ export default {
     },
 
     addDays(dateStr, days) {
-      const date = new Date(dateStr);
-      date.setDate(date.getDate() + days);
-      return date.toISOString().split('T')[0];
+      return dates.addDaysToDate(dateStr, days);
     },
 
     getThisWeekRange() {
       const today = new Date();
       const dayOfWeek = today.getDay();
       const daysUntilSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
-      const sunday = new Date(today);
-      sunday.setDate(today.getDate() + daysUntilSunday);
       return {
         from: this.today,
-        to: sunday.toISOString().split('T')[0],
+        to: dates.addDaysToDate(this.today, daysUntilSunday),
       };
     },
 
@@ -444,13 +441,11 @@ export default {
       const today = new Date();
       const dayOfWeek = today.getDay();
       const daysUntilMonday = dayOfWeek === 0 ? 1 : 8 - dayOfWeek;
-      const monday = new Date(today);
-      monday.setDate(today.getDate() + daysUntilMonday);
-      const sunday = new Date(monday);
-      sunday.setDate(monday.getDate() + 6);
+      const mondayStr = dates.addDaysToDate(this.today, daysUntilMonday);
+      const sundayStr = dates.addDaysToDate(mondayStr, 6);
       return {
-        from: monday.toISOString().split('T')[0],
-        to: sunday.toISOString().split('T')[0],
+        from: mondayStr,
+        to: sundayStr,
       };
     },
 
@@ -467,7 +462,7 @@ export default {
 
     formatDate(dateStr) {
       if (!dateStr) return '';
-      const date = new Date(dateStr);
+      const date = dates.parseLocalDate(dateStr);
       return date.toLocaleDateString('es-ES', { 
         weekday: 'short', 
         day: 'numeric', 
@@ -557,7 +552,7 @@ export default {
       this.selectedDoctorIds = [];
       this.doctorSearch = '';
       this.dateFrom = this.today;
-      this.dateTo = this.addDays(this.today, 6);
+      this.dateTo = dates.addDaysToDate(this.today, 6);
       this.previewData = null;
     },
   },

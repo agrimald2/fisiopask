@@ -205,6 +205,7 @@ import WeeklyCalendar from "./Components/WeeklyCalendar.vue";
 import Legend from "./Components/Legend.vue";
 import ExportWizard from "./Components/ExportWizard.vue";
 import str2hex from "@/ui/str2hex";
+import dates from "@/ui/dates";
 import axios from "axios";
 
 export default {
@@ -249,8 +250,8 @@ export default {
 
   computed: {
     formattedWeekRange() {
-      const start = new Date(this.localWeekStart);
-      const end = new Date(this.localWeekEnd);
+      const start = dates.parseLocalDate(this.localWeekStart);
+      const end = dates.parseLocalDate(this.localWeekEnd);
       
       const startDay = start.getDate();
       const endDay = end.getDate();
@@ -297,21 +298,17 @@ export default {
     },
 
     previousWeek() {
-      const date = new Date(this.localWeekStart);
-      date.setDate(date.getDate() - 7);
-      this.selectedDate = date.toISOString().split('T')[0];
+      this.selectedDate = dates.addDaysToDate(this.localWeekStart, -7);
       this.fetchSchedules();
     },
 
     nextWeek() {
-      const date = new Date(this.localWeekStart);
-      date.setDate(date.getDate() + 7);
-      this.selectedDate = date.toISOString().split('T')[0];
+      this.selectedDate = dates.addDaysToDate(this.localWeekStart, 7);
       this.fetchSchedules();
     },
 
     goToToday() {
-      this.selectedDate = new Date().toISOString().split('T')[0];
+      this.selectedDate = dates.todayString();
       this.fetchSchedules();
     },
 
@@ -341,7 +338,7 @@ export default {
       this.dayModalData = {
         date: dayData.date,
         dayName: dayData.dayName,
-        formattedDate: new Date(dayData.date).toLocaleDateString('es-ES', { 
+        formattedDate: dates.parseLocalDate(dayData.date).toLocaleDateString('es-ES', { 
           weekday: 'long', 
           year: 'numeric', 
           month: 'long', 

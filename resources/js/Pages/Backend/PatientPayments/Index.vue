@@ -147,6 +147,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";
 import axios from "axios";
+import dates from "@/ui/dates";
 
 export default {
     props: ['payment_methods'],
@@ -157,8 +158,8 @@ export default {
     data() {
         return {
             payment_method_id: null,
-            start_date: new Date().toISOString().split('T')[0],
-            end_date: new Date().toISOString().split('T')[0],
+            start_date: dates.todayString(),
+            end_date: dates.todayString(),
             search_query: null,
             patient_payments: null,
             totalResults: 0,

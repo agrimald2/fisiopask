@@ -762,6 +762,7 @@
   import axios from "axios";
   import Dropdown from "@/Shared/Dropdown/Dropdown";
   import { DatePicker } from "v-calendar";
+  import dates from "@/ui/dates";
 
   export default {
     props: {
@@ -786,8 +787,8 @@
     data() {
       return {
         dates: {
-          start: new Date().toISOString().slice(0, 10),
-          end: new Date().toISOString().slice(0, 10),
+          start: dates.todayString(),
+          end: dates.todayString(),
         },
 
         masks: {
@@ -836,10 +837,8 @@
         //EXCEL
         officeExcel:this.$props.offices[0].id,
         datesExcel: {
-
-          start: new Date().toISOString().slice(0, 10),
-          end: new Date().toISOString().slice(0, 10),
-
+          start: dates.todayString(),
+          end: dates.todayString(),
         },
       };
     },
