@@ -3,70 +3,115 @@
     <div class="py-6">
       <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
-        <div class="mb-8">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-4">
-              <div class="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="mb-6 lg:mb-8">
+          <!-- Title Row -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div class="flex items-center gap-3 sm:gap-4">
+              <div class="p-2 sm:p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg">
+                <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
               <div>
-                <h1 class="text-2xl font-bold text-gray-800">Horarios de Doctores</h1>
-                <p class="text-gray-500">Visualiza y gestiona los horarios de todos los doctores</p>
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Horarios de Doctores</h1>
+                <p class="text-sm sm:text-base text-gray-500 hidden sm:block">Visualiza y gestiona los horarios de todos los doctores</p>
               </div>
             </div>
 
-            <!-- Week Navigation -->
-            <div class="flex items-center gap-3">
+            <!-- Export Button - Desktop -->
+            <button
+              @click="showExportWizard = true"
+              class="hidden md:flex px-4 py-2 rounded-lg bg-gradient-to-r from-[#0cb8b6] to-[#0a9f9d] text-white font-medium hover:shadow-lg hover:shadow-[#0cb8b6]/30 transition-all shadow-sm items-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Exportar PDF
+            </button>
+          </div>
+
+          <!-- Week Navigation Row -->
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
               <button
                 @click="previousWeek"
                 class="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 hover:border-indigo-300 transition-all shadow-sm"
               >
-                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
               
-              <div class="px-4 py-2 bg-white rounded-lg border border-gray-200 shadow-sm">
-                <span class="font-semibold text-gray-700">{{ formattedWeekRange }}</span>
+              <div class="px-3 sm:px-4 py-2 bg-white rounded-lg border border-gray-200 shadow-sm">
+                <span class="text-sm sm:text-base font-semibold text-gray-700">{{ formattedWeekRange }}</span>
               </div>
 
               <button
                 @click="nextWeek"
                 class="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 hover:border-indigo-300 transition-all shadow-sm"
               >
-                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
               </button>
+            </div>
 
+            <div class="flex items-center gap-2">
               <button
                 @click="goToToday"
-                class="px-4 py-2 rounded-lg bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition-all shadow-sm"
+                class="px-3 sm:px-4 py-2 rounded-lg bg-indigo-500 text-white text-sm sm:text-base font-medium hover:bg-indigo-600 transition-all shadow-sm"
               >
                 Hoy
               </button>
 
-              <!-- Export Button -->
+              <!-- Export Button - Mobile -->
               <button
                 @click="showExportWizard = true"
-                class="px-4 py-2 rounded-lg bg-gradient-to-r from-[#0cb8b6] to-[#0a9f9d] text-white font-medium hover:shadow-lg hover:shadow-[#0cb8b6]/30 transition-all shadow-sm flex items-center gap-2"
+                class="md:hidden px-3 py-2 rounded-lg bg-gradient-to-r from-[#0cb8b6] to-[#0a9f9d] text-white font-medium hover:shadow-lg transition-all shadow-sm flex items-center gap-1"
               >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Exportar PDF
+                <span class="text-sm">PDF</span>
               </button>
             </div>
           </div>
         </div>
 
+        <!-- Mobile Filters Toggle -->
+        <div class="lg:hidden mb-4">
+          <button
+            @click="showMobileFilters = !showMobileFilters"
+            class="w-full flex items-center justify-between px-4 py-3 bg-white rounded-xl border border-gray-200 shadow-sm"
+          >
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+              <span class="font-medium text-gray-700">Filtros</span>
+              <span v-if="hasActiveFilters" class="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-xs rounded-full font-medium">
+                Activos
+              </span>
+            </div>
+            <svg 
+              class="w-5 h-5 text-gray-400 transition-transform duration-200" 
+              :class="{ 'rotate-180': showMobileFilters }"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
+
         <!-- Main Content -->
-        <div class="grid grid-cols-1 xl:grid-cols-5 gap-6">
+        <div class="flex flex-col lg:grid lg:grid-cols-5 gap-4 lg:gap-6">
           <!-- Filters Panel -->
-          <div class="xl:col-span-1">
+          <div 
+            class="lg:col-span-1 order-1 lg:order-none"
+            :class="{ 'hidden lg:block': !showMobileFilters }"
+          >
             <Filters
               :doctors="doctors"
               :offices="offices"
@@ -79,15 +124,15 @@
               @clear-filters="clearFilters"
             />
 
-            <!-- Legend -->
+            <!-- Legend - Hidden on mobile -->
             <Legend 
               :doctors="filteredDoctors"
-              class="mt-6"
+              class="mt-6 hidden lg:block"
             />
           </div>
 
           <!-- Calendar View -->
-          <div class="xl:col-span-4">
+          <div class="lg:col-span-4 order-2 lg:order-none">
             <WeeklyCalendar
               :schedules="localSchedules"
               :week-start="localWeekStart"
@@ -238,6 +283,7 @@ export default {
       loading: false,
       showDayModal: false,
       showExportWizard: false,
+      showMobileFilters: false,
       dayModalData: {
         date: null,
         dayName: '',
@@ -270,6 +316,10 @@ export default {
         return this.doctors;
       }
       return this.doctors.filter(d => this.selectedDoctorIds.includes(d.id));
+    },
+
+    hasActiveFilters() {
+      return this.selectedDoctorIds.length > 0 || this.selectedOfficeId !== null;
     },
   },
 

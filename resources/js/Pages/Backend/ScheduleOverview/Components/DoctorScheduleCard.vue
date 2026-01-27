@@ -1,67 +1,74 @@
 <template>
   <div 
-    class="group relative rounded-xl border-2 p-3 transition-all duration-200 hover:shadow-md hover:scale-[1.02] cursor-default"
+    class="group relative rounded-lg sm:rounded-xl border sm:border-2 p-2 sm:p-3 transition-all duration-200 md:hover:shadow-md md:hover:scale-[1.02] cursor-default"
     :class="cardClasses"
     :style="cardStyles"
   >
     <!-- Color Indicator -->
     <div 
-      class="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
+      class="absolute left-0 top-0 bottom-0 w-0.5 sm:w-1 rounded-l-lg sm:rounded-l-xl"
       :style="{ backgroundColor: indicatorColor }"
     ></div>
 
-    <!-- Occupied Badge -->
+    <!-- Occupied Badge - Hidden on mobile, shown as inline on tablet+ -->
     <div 
       v-if="schedule.is_occupied"
-      class="absolute -top-2 -right-2 z-10"
+      class="hidden sm:block absolute -top-2 -right-2 z-10"
     >
-      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-600 text-white shadow-sm">
+      <span class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium bg-gray-600 text-white shadow-sm">
         Ocupado
       </span>
     </div>
 
     <!-- Content -->
-    <div class="pl-2">
+    <div class="pl-1.5 sm:pl-2">
       <!-- Time -->
-      <div class="flex items-center gap-1.5 mb-2">
+      <div class="flex items-center gap-1 sm:gap-1.5 mb-1 sm:mb-2">
         <svg 
-          class="w-3.5 h-3.5" 
+          class="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" 
           :class="schedule.is_occupied ? 'text-gray-400' : 'text-emerald-500'"
           fill="none" stroke="currentColor" viewBox="0 0 24 24"
         >
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <span 
-          class="font-mono text-sm font-semibold"
+          class="font-mono text-[11px] sm:text-sm font-semibold"
           :class="schedule.is_occupied ? 'text-gray-500' : 'text-gray-700'"
         >
           {{ schedule.start_time }}
         </span>
         <svg 
-          class="w-3 h-3" 
+          class="w-2 h-2 sm:w-3 sm:h-3 flex-shrink-0" 
           :class="schedule.is_occupied ? 'text-gray-300' : 'text-gray-400'"
           fill="none" stroke="currentColor" viewBox="0 0 24 24"
         >
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>
         <span 
-          class="font-mono text-sm font-semibold"
+          class="font-mono text-[11px] sm:text-sm font-semibold"
           :class="schedule.is_occupied ? 'text-gray-500' : 'text-gray-700'"
         >
           {{ schedule.end_time }}
         </span>
+        <!-- Mobile Occupied Indicator -->
+        <span 
+          v-if="schedule.is_occupied"
+          class="sm:hidden ml-auto px-1.5 py-0.5 rounded text-[9px] font-medium bg-gray-200 text-gray-600"
+        >
+          Ocup.
+        </span>
       </div>
 
       <!-- Doctor Name -->
-      <div class="flex items-center gap-2 mb-1.5">
+      <div class="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-1.5">
         <div 
-          class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+          class="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-white text-[9px] sm:text-xs font-bold flex-shrink-0"
           :style="{ backgroundColor: schedule.is_occupied ? '#9CA3AF' : doctorColor }"
         >
           {{ schedule.doctor_name.charAt(0).toUpperCase() }}
         </div>
         <span 
-          class="text-sm font-medium truncate" 
+          class="text-[11px] sm:text-sm font-medium truncate" 
           :class="schedule.is_occupied ? 'text-gray-500' : 'text-gray-800'"
           :title="schedule.doctor_name"
         >
@@ -70,16 +77,16 @@
       </div>
 
       <!-- Office -->
-      <div class="flex items-center gap-1.5">
+      <div class="flex items-center gap-1 sm:gap-1.5">
         <svg 
-          class="w-3.5 h-3.5" 
+          class="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" 
           :class="schedule.is_occupied ? 'text-gray-300' : 'text-gray-400'"
           fill="none" stroke="currentColor" viewBox="0 0 24 24"
         >
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
         </svg>
         <span 
-          class="text-xs truncate" 
+          class="text-[10px] sm:text-xs truncate" 
           :class="schedule.is_occupied ? 'text-gray-400' : 'text-gray-500'"
           :title="schedule.office_name"
         >
@@ -87,18 +94,18 @@
         </span>
       </div>
 
-      <!-- Patient Info (if occupied) -->
-      <div v-if="schedule.is_occupied && schedule.patient_name" class="mt-2 pt-2 border-t border-gray-200">
-        <div class="flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <!-- Patient Info (if occupied) - Simplified on mobile -->
+      <div v-if="schedule.is_occupied && schedule.patient_name" class="mt-1.5 sm:mt-2 pt-1.5 sm:pt-2 border-t border-gray-200">
+        <div class="flex items-center gap-1 sm:gap-1.5 flex-wrap">
+          <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
-          <span class="text-xs text-gray-500 truncate" :title="schedule.patient_name">
-            {{ schedule.patient_name }}
+          <span class="text-[10px] sm:text-xs text-gray-500 truncate flex-1" :title="schedule.patient_name">
+            {{ truncatedPatientName }}
           </span>
           <span 
             v-if="schedule.appointment_status_label"
-            class="px-1.5 py-0.5 rounded text-xs font-medium ml-auto"
+            class="px-1 sm:px-1.5 py-0.5 rounded text-[9px] sm:text-xs font-medium flex-shrink-0"
             :class="getStatusClass(schedule.appointment_status)"
           >
             {{ schedule.appointment_status_label }}
@@ -107,9 +114,9 @@
       </div>
     </div>
 
-    <!-- Hover Info Tooltip -->
+    <!-- Hover Info Tooltip - Hidden on touch devices -->
     <div 
-      class="absolute left-full top-0 ml-2 z-20 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none"
+      class="hidden md:block absolute left-full top-0 ml-2 z-20 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none"
     >
       <div class="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-xl">
         <div class="font-semibold">{{ schedule.doctor_name }}</div>
@@ -148,6 +155,14 @@ export default {
 
     truncatedDoctorName() {
       const name = this.schedule.doctor_name;
+      if (name.length > 12) {
+        return name.substring(0, 12) + '...';
+      }
+      return name;
+    },
+
+    truncatedPatientName() {
+      const name = this.schedule.patient_name || '';
       if (name.length > 15) {
         return name.substring(0, 15) + '...';
       }
