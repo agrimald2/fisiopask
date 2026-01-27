@@ -526,3 +526,18 @@ Route::post('/rate/file/store', [FileController::class, 'storeRate'])->name('rat
 
 
 Route::get('/patientPayments', [PatientPaymentsController::class, 'index'])->name('paymentsPayments.index');
+
+
+/**
+ * Marketing
+ */
+Route::prefix('marketing')
+    ->name('marketing.')
+    ->group(function () {
+        Route::get('/', [App\Http\Controllers\Backend\MarketingController::class, 'index'])
+            ->name('index');
+        Route::post('/export', [App\Http\Controllers\Backend\MarketingController::class, 'export'])
+            ->name('export');
+        Route::post('/preview', [App\Http\Controllers\Backend\MarketingController::class, 'preview'])
+            ->name('preview');
+    });

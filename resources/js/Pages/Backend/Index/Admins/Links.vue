@@ -70,6 +70,15 @@
     />
   </link-group>
 
+  <!-- Marketing -->
+  <link-group title="Marketing">
+    <link-item
+      label="Exportar Clientes"
+      icon="fa-bullhorn"
+      @click="go('marketing.index')"
+    />
+  </link-group>
+
   <!-- System records -->
   <link-group title="Registros" class="">
     <link-item
