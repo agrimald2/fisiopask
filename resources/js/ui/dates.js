@@ -3,8 +3,7 @@ import 'moment-timezone';
 
 export default {
     dateForHumans(date) {
-        console.log(date);
-        return moment(date).tz("America/Lima").locale("es").format("dddd DD MMMM YYYY");
+        return moment(date, "YYYY-MM-DD").locale("es").format("dddd DD MMMM YYYY");
     },
 
     dateDiff(date) {
@@ -12,12 +11,16 @@ export default {
     },
 
     dateForLaravel(date) {
-        return moment(date).tz("America/Lima").format("YYYY-MM-DD");
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     },
 
     
     dateForApp(date) {
-        return moment(date).tz("America/Lima").locale("es").format("dddd DD/MM");
+        return moment(date, "YYYY-MM-DD").locale("es").format("dddd DD/MM");
     },
 
     hourForHumans(hour) {
