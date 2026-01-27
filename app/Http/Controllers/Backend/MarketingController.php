@@ -85,7 +85,8 @@ class MarketingController extends Controller
             'min_amount' => 'nullable|numeric|min:0',
             'max_amount' => 'nullable|numeric|min:0',
             'never_assisted' => 'nullable|boolean',
-            'doctor_id' => 'nullable|integer|exists:doctors,id',
+            'doctor_ids' => 'nullable|array',
+            'doctor_ids.*' => 'integer|exists:doctors,id',
             'min_age' => 'nullable|integer|min:0|max:150',
             'max_age' => 'nullable|integer|min:0|max:150',
             'sex' => 'nullable|string|in:M,F',
@@ -114,7 +115,8 @@ class MarketingController extends Controller
             'min_amount' => 'nullable|numeric|min:0',
             'max_amount' => 'nullable|numeric|min:0',
             'never_assisted' => 'nullable|boolean',
-            'doctor_id' => 'nullable|integer|exists:doctors,id',
+            'doctor_ids' => 'nullable|array',
+            'doctor_ids.*' => 'integer|exists:doctors,id',
             'min_age' => 'nullable|integer|min:0|max:150',
             'max_age' => 'nullable|integer|min:0|max:150',
             'sex' => 'nullable|string|in:M,F',
@@ -203,13 +205,14 @@ class MarketingController extends Controller
             });
         }
 
-        // Filtro por doctor
-        if (!empty($filters['doctor_id'])) {
-            $query->whereExists(function ($subquery) use ($filters) {
+        // Filtro por doctores (múltiples)
+        if (!empty($filters['doctor_ids']) && is_array($filters['doctor_ids']) && count($filters['doctor_ids']) > 0) {
+            $doctorIds = $filters['doctor_ids'];
+            $query->whereExists(function ($subquery) use ($doctorIds) {
                 $subquery->select(DB::raw(1))
                     ->from('appointments')
                     ->whereColumn('appointments.patient_id', 'patients.id')
-                    ->where('appointments.doctor_id', $filters['doctor_id']);
+                    ->whereIn('appointments.doctor_id', $doctorIds);
             });
         }
 

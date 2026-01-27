@@ -277,9 +277,39 @@
                   </div>
                 </label>
 
-                <!-- Por Licenciado -->
+                <!-- Por Licenciados (Múltiples) -->
                 <div>
-                  <label class="block text-sm font-medium text-gray-600 mb-2">Por Licenciado</label>
+                  <label class="block text-sm font-medium text-gray-600 mb-2">
+                    Por Licenciado(s)
+                    <span v-if="filters.doctor_ids.length > 0" class="text-purple-600 ml-2">
+                      ({{ filters.doctor_ids.length }} seleccionado(s))
+                    </span>
+                  </label>
+                  
+                  <!-- Selected Doctor Tags -->
+                  <div v-if="filters.doctor_ids.length > 0" class="flex flex-wrap gap-2 mb-3">
+                    <span 
+                      v-for="id in filters.doctor_ids" 
+                      :key="id"
+                      class="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-100 text-purple-800 rounded-full text-sm font-medium"
+                    >
+                      {{ getDoctorName(id) }}
+                      <button 
+                        @click="removeDoctor(id)"
+                        class="ml-1 hover:text-purple-600 transition-colors"
+                      >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </span>
+                    <button 
+                      @click="filters.doctor_ids = []"
+                      class="text-xs text-gray-500 hover:text-rose-500 transition-colors underline"
+                    >
+                      Limpiar todo
+                    </button>
+                  </div>
                   
                   <!-- Doctor Search Select -->
                   <div class="relative" ref="doctorDropdownContainer">
@@ -289,27 +319,16 @@
                       type="button"
                       class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white text-left flex items-center justify-between"
                     >
-                      <span :class="filters.doctor_id ? 'text-gray-800' : 'text-gray-500'">
-                        {{ getSelectedDoctorName() }}
+                      <span class="text-gray-500">
+                        {{ filters.doctor_ids.length > 0 ? 'Agregar más licenciados...' : 'Seleccionar licenciados...' }}
                       </span>
-                      <div class="flex items-center gap-2">
-                        <button 
-                          v-if="filters.doctor_id"
-                          @click.stop="filters.doctor_id = null"
-                          class="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                        >
-                          <svg class="w-4 h-4 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
-                        <svg 
-                          class="w-5 h-5 text-gray-400 transition-transform" 
-                          :class="{ 'rotate-180': showDoctorDropdown }"
-                          fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        >
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
+                      <svg 
+                        class="w-5 h-5 text-gray-400 transition-transform" 
+                        :class="{ 'rotate-180': showDoctorDropdown }"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                      >
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
                     </button>
                   </div>
 
@@ -350,46 +369,62 @@
 
                       <!-- Doctor List -->
                       <div class="overflow-y-auto max-h-56">
-                        <!-- Opción: Todos los licenciados -->
-                        <button
-                          @click="selectDoctor(null)"
-                          class="w-full px-4 py-3 text-left hover:bg-purple-50 transition-colors flex items-center gap-3 border-b border-gray-100"
-                          :class="{ 'bg-purple-50': filters.doctor_id === null }"
-                        >
-                          <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                          </div>
-                          <span class="font-medium text-gray-700">Todos los licenciados</span>
-                          <svg v-if="filters.doctor_id === null" class="w-5 h-5 text-purple-500 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                          </svg>
-                        </button>
+                        <!-- Select All / Deselect All -->
+                        <div class="sticky top-0 bg-gray-50 px-4 py-2 border-b border-gray-100">
+                          <label class="flex items-center gap-3 cursor-pointer group">
+                            <input
+                              type="checkbox"
+                              :checked="areAllDoctorsSelected"
+                              :indeterminate.prop="areSomeDoctorsSelected && !areAllDoctorsSelected"
+                              @change="toggleAllDoctors"
+                              class="w-4 h-4 text-purple-500 border-gray-300 rounded focus:ring-purple-500"
+                            />
+                            <span class="font-semibold text-gray-700 group-hover:text-purple-600 transition-colors">
+                              Todos los licenciados
+                            </span>
+                            <span class="text-xs text-gray-400 ml-auto">
+                              {{ filters.doctor_ids.length }}/{{ doctors.length }}
+                            </span>
+                          </label>
+                        </div>
 
                         <!-- Lista de doctores -->
-                        <button
+                        <label
                           v-for="doctor in filteredDoctors"
                           :key="doctor.id"
-                          @click="selectDoctor(doctor.id)"
-                          class="w-full px-4 py-3 text-left hover:bg-purple-50 transition-colors flex items-center gap-3 border-b border-gray-50 last:border-b-0"
-                          :class="{ 'bg-purple-50': filters.doctor_id === doctor.id }"
+                          class="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-purple-50 transition-colors border-b border-gray-50 last:border-b-0"
                         >
+                          <input
+                            type="checkbox"
+                            :value="doctor.id"
+                            v-model="filters.doctor_ids"
+                            class="w-4 h-4 text-purple-500 border-gray-300 rounded focus:ring-purple-500"
+                          />
                           <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
                             <span class="text-sm font-semibold text-purple-600">
                               {{ doctor.name.charAt(0).toUpperCase() }}
                             </span>
                           </div>
                           <span class="text-gray-700">{{ doctor.name }}</span>
-                          <svg v-if="filters.doctor_id === doctor.id" class="w-5 h-5 text-purple-500 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                          </svg>
-                        </button>
+                        </label>
 
                         <!-- No results -->
                         <div v-if="filteredDoctors.length === 0 && doctorSearch.trim()" class="p-4 text-center text-gray-500 text-sm">
                           No se encontraron licenciados para "{{ doctorSearch }}"
                         </div>
+                      </div>
+
+                      <!-- Footer -->
+                      <div class="p-3 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
+                        <span class="text-xs text-gray-500">
+                          {{ filters.doctor_ids.length }} licenciado(s) seleccionado(s)
+                        </span>
+                        <button
+                          @click="showDoctorDropdown = false"
+                          class="px-4 py-1.5 bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-600 transition-colors"
+                        >
+                          Listo
+                        </button>
                       </div>
                     </div>
                   </teleport>
@@ -661,7 +696,7 @@ export default {
         min_amount: null,
         max_amount: null,
         never_assisted: false,
-        doctor_id: null,
+        doctor_ids: [],
         min_age: null,
         max_age: null,
         sex: null,
@@ -696,7 +731,7 @@ export default {
         (this.filters.min_amount !== null && this.filters.min_amount !== '') ||
         (this.filters.max_amount !== null && this.filters.max_amount !== '') ||
         this.filters.never_assisted === true ||
-        this.filters.doctor_id !== null ||
+        this.filters.doctor_ids.length > 0 ||
         (this.filters.min_age !== null && this.filters.min_age !== '') ||
         (this.filters.max_age !== null && this.filters.max_age !== '') ||
         this.filters.sex !== null
@@ -709,7 +744,7 @@ export default {
       if (this.filters.subfamily_ids.length > 0) count++;
       if (this.filters.min_amount || this.filters.max_amount) count++;
       if (this.filters.never_assisted) count++;
-      if (this.filters.doctor_id) count++;
+      if (this.filters.doctor_ids.length > 0) count++;
       if (this.filters.min_age || this.filters.max_age) count++;
       if (this.filters.sex) count++;
       return count;
@@ -766,6 +801,14 @@ export default {
         width: `${this.doctorDropdownPosition.width}px`,
       };
     },
+
+    areAllDoctorsSelected() {
+      return this.doctors.length > 0 && this.filters.doctor_ids.length === this.doctors.length;
+    },
+
+    areSomeDoctorsSelected() {
+      return this.filters.doctor_ids.length > 0 && this.filters.doctor_ids.length < this.doctors.length;
+    },
   },
 
   methods: {
@@ -789,7 +832,7 @@ export default {
         min_amount: null,
         max_amount: null,
         never_assisted: false,
-        doctor_id: null,
+        doctor_ids: [],
         min_age: null,
         max_age: null,
         sex: null,
@@ -923,18 +966,21 @@ export default {
       }
     },
 
-    selectDoctor(doctorId) {
-      this.filters.doctor_id = doctorId;
-      this.showDoctorDropdown = false;
-      this.doctorSearch = '';
+    getDoctorName(id) {
+      const doctor = this.doctors.find(d => d.id === id);
+      return doctor ? doctor.name : '';
     },
 
-    getSelectedDoctorName() {
-      if (this.filters.doctor_id === null) {
-        return 'Todos los licenciados';
+    removeDoctor(id) {
+      this.filters.doctor_ids = this.filters.doctor_ids.filter(did => did !== id);
+    },
+
+    toggleAllDoctors() {
+      if (this.areAllDoctorsSelected) {
+        this.filters.doctor_ids = [];
+      } else {
+        this.filters.doctor_ids = this.doctors.map(d => d.id);
       }
-      const doctor = this.doctors.find(d => d.id === this.filters.doctor_id);
-      return doctor ? doctor.name : 'Todos los licenciados';
     },
 
     async getPreview() {

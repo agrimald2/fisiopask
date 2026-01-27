@@ -140,13 +140,14 @@ class MarketingPatientsExport
             });
         }
 
-        // Filtro por doctor
-        if (!empty($filters['doctor_id'])) {
-            $query->whereExists(function ($subquery) use ($filters) {
+        // Filtro por doctores (múltiples)
+        if (!empty($filters['doctor_ids']) && is_array($filters['doctor_ids']) && count($filters['doctor_ids']) > 0) {
+            $doctorIds = $filters['doctor_ids'];
+            $query->whereExists(function ($subquery) use ($doctorIds) {
                 $subquery->selectRaw(1)
                     ->from('appointments')
                     ->whereColumn('appointments.patient_id', 'patients.id')
-                    ->where('appointments.doctor_id', $filters['doctor_id']);
+                    ->whereIn('appointments.doctor_id', $doctorIds);
             });
         }
 
