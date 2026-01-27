@@ -55,6 +55,13 @@
                 >
                   Marketing
                 </jet-nav-link>
+
+                <jet-nav-link
+                  :href="route('scheduleOverview.index')"
+                  :active="route().current('scheduleOverview.*')"
+                >
+                  Horarios
+                </jet-nav-link>
               </div>
             </div>
 
@@ -271,6 +278,13 @@
               :active="route().current('doctors.appointments.index')"
             >
               Citas
+            </jet-responsive-nav-link>
+
+            <jet-responsive-nav-link
+              :href="route('scheduleOverview.index')"
+              :active="route().current('scheduleOverview.*')"
+            >
+              Horarios
             </jet-responsive-nav-link>
             
           </div>
