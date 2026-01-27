@@ -541,3 +541,21 @@ Route::prefix('marketing')
         Route::post('/preview', [App\Http\Controllers\Backend\MarketingController::class, 'preview'])
             ->name('preview');
     });
+
+/**
+ * Schedule Overview - Visualización de horarios de doctores
+ */
+Route::prefix('schedule-overview')
+    ->name('scheduleOverview.')
+    ->group(function () {
+        Route::get('/', [App\Http\Controllers\Backend\DoctorScheduleOverviewController::class, 'index'])
+            ->name('index');
+        Route::post('/filter', [App\Http\Controllers\Backend\DoctorScheduleOverviewController::class, 'filter'])
+            ->name('filter');
+        Route::post('/day-detail', [App\Http\Controllers\Backend\DoctorScheduleOverviewController::class, 'dayDetail'])
+            ->name('dayDetail');
+        Route::post('/preview-availability', [App\Http\Controllers\Backend\AvailabilityExportController::class, 'preview'])
+            ->name('previewAvailability');
+        Route::post('/export-pdf', [App\Http\Controllers\Backend\AvailabilityExportController::class, 'exportPdf'])
+            ->name('exportPdf');
+    });
