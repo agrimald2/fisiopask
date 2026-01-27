@@ -147,7 +147,9 @@ class DoctorScheduleOverviewController extends Controller
         
         $appointments = Appointment::query()
             ->select('appointments.schedule_id', 'appointments.date', 'appointments.status', 
-                     'patients.name as patient_first_name', 'patients.lastname as patient_lastname')
+                     'patients.name as patient_first_name', 
+                     'patients.lastname1 as patient_lastname1', 
+                     'patients.lastname2 as patient_lastname2')
             ->join('patients', 'appointments.patient_id', '=', 'patients.id')
             ->whereIn('appointments.schedule_id', $scheduleIds)
             ->whereBetween('appointments.date', [$weekStart->format('Y-m-d'), $weekEnd->format('Y-m-d')])
@@ -192,7 +194,7 @@ class DoctorScheduleOverviewController extends Controller
                 'date' => $dateForDay,
                 'is_occupied' => $isOccupied,
                 'patient_name' => $isOccupied 
-                    ? trim($appointment->patient_first_name . ' ' . $appointment->patient_lastname) 
+                    ? trim($appointment->patient_first_name . ' ' . $appointment->patient_lastname1 . ' ' . $appointment->patient_lastname2) 
                     : null,
                 'appointment_status' => $isOccupied ? $appointment->status : null,
                 'appointment_status_label' => $isOccupied ? ($statusLabels[$appointment->status] ?? null) : null,
