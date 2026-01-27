@@ -185,7 +185,7 @@
               </div>
 
               <!-- Step 3: Preview & Export -->
-              <div v-if="step === 3">
+              <div v-if="step === 3 && !pdfGenerated">
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">Vista Previa y Exportar</h3>
                 <p class="text-gray-500 text-sm mb-6">Revisa la selección antes de generar el PDF</p>
 
@@ -248,10 +248,83 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Step 3b: Share Options (after PDF generated) -->
+              <div v-if="step === 3 && pdfGenerated">
+                <div class="text-center mb-6">
+                  <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-full mb-4">
+                    <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold text-gray-800 mb-2">¡PDF Generado!</h3>
+                  <p class="text-gray-500">Elige cómo deseas compartir el documento</p>
+                </div>
+
+                <!-- Share Options -->
+                <div class="space-y-3">
+                  <!-- Download -->
+                  <button
+                    @click="downloadGeneratedPdf"
+                    class="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-[#0cb8b6] hover:bg-[#e8f7f7] transition-all text-left"
+                  >
+                    <div class="p-3 bg-gray-100 rounded-xl">
+                      <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="font-semibold text-gray-800">Descargar PDF</div>
+                      <div class="text-sm text-gray-500">Guardar en tu dispositivo</div>
+                    </div>
+                  </button>
+
+                  <!-- WhatsApp -->
+                  <button
+                    @click="shareViaWhatsApp"
+                    class="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-[#25D366] hover:bg-green-50 transition-all text-left"
+                  >
+                    <div class="p-3 bg-[#25D366] rounded-xl">
+                      <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="font-semibold text-gray-800">Compartir por WhatsApp</div>
+                      <div class="text-sm text-gray-500">Envía el PDF a tus contactos</div>
+                    </div>
+                  </button>
+
+                  <!-- Native Share (if available) -->
+                  <button
+                    v-if="canNativeShare"
+                    @click="nativeShare"
+                    class="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all text-left"
+                  >
+                    <div class="p-3 bg-indigo-100 rounded-xl">
+                      <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="font-semibold text-gray-800">Compartir</div>
+                      <div class="text-sm text-gray-500">Usar otras aplicaciones</div>
+                    </div>
+                  </button>
+                </div>
+
+                <!-- Generate New -->
+                <button
+                  @click="resetToPreview"
+                  class="w-full mt-6 text-center text-sm text-gray-500 hover:text-[#0cb8b6] transition-colors"
+                >
+                  ← Generar otro PDF
+                </button>
+              </div>
             </div>
 
             <!-- Footer -->
-            <div class="px-8 py-5 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+            <div v-if="!pdfGenerated" class="px-8 py-5 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
               <button
                 v-if="step > 1"
                 @click="previousStep"
@@ -278,7 +351,7 @@
 
               <button
                 v-else
-                @click="exportPdf"
+                @click="generatePdf"
                 :disabled="loadingExport"
                 class="px-6 py-2.5 bg-gradient-to-r from-[#0cb8b6] to-[#0a9f9d] text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-[#0cb8b6]/30 transition-all disabled:opacity-50 flex items-center gap-2"
               >
@@ -289,7 +362,17 @@
                 <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                {{ loadingExport ? 'Generando...' : 'Descargar PDF' }}
+                {{ loadingExport ? 'Generando...' : 'Generar PDF' }}
+              </button>
+            </div>
+
+            <!-- Footer when PDF generated -->
+            <div v-else class="px-8 py-5 bg-gray-50 border-t border-gray-100 flex items-center justify-center">
+              <button
+                @click="closeWizard"
+                class="px-6 py-2.5 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 transition-all"
+              >
+                Cerrar
               </button>
             </div>
           </div>
@@ -332,6 +415,9 @@ export default {
       loadingPreview: false,
       loadingExport: false,
       previewData: null,
+      pdfGenerated: false,
+      pdfBlob: null,
+      pdfFilename: 'disponibilidad-fisiosalud.pdf',
       datePresets: [
         { 
           label: 'Esta semana', 
@@ -394,6 +480,10 @@ export default {
       return this.previewData.availability.reduce((total, doctor) => {
         return total + doctor.days.reduce((dayTotal, day) => dayTotal + day.slots.length, 0);
       }, 0);
+    },
+
+    canNativeShare() {
+      return navigator.share && navigator.canShare;
     },
   },
 
@@ -503,7 +593,7 @@ export default {
       }
     },
 
-    async exportPdf() {
+    async generatePdf() {
       this.loadingExport = true;
 
       try {
@@ -515,32 +605,113 @@ export default {
           responseType: 'blob',
         });
 
-        const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
-        const link = document.createElement('a');
-        link.href = url;
+        this.pdfBlob = new Blob([response.data], { type: 'application/pdf' });
         
         const contentDisposition = response.headers['content-disposition'];
-        let filename = 'disponibilidad-fisiosalud.pdf';
         if (contentDisposition) {
           const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
           if (filenameMatch) {
-            filename = filenameMatch[1].replace(/"/g, '');
+            this.pdfFilename = filenameMatch[1].replace(/"/g, '');
           }
         }
-        
-        link.setAttribute('download', filename);
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
 
-        this.closeWizard();
+        this.pdfGenerated = true;
       } catch (error) {
         console.error('Error exporting PDF:', error);
         alert('Error al generar el PDF. Por favor, intente nuevamente.');
       } finally {
         this.loadingExport = false;
       }
+    },
+
+    downloadGeneratedPdf() {
+      if (!this.pdfBlob) return;
+
+      const url = window.URL.createObjectURL(this.pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', this.pdfFilename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    },
+
+    async shareViaWhatsApp() {
+      if (!this.pdfBlob) return;
+
+      // Intentar usar Web Share API con archivos (funciona en móviles)
+      if (navigator.share && navigator.canShare) {
+        const file = new File([this.pdfBlob], this.pdfFilename, { type: 'application/pdf' });
+        const shareData = {
+          files: [file],
+          title: 'Disponibilidad Fisiosalud',
+          text: '¡Hola! Te comparto la disponibilidad de nuestros licenciados en Fisiosalud.',
+        };
+
+        if (navigator.canShare(shareData)) {
+          try {
+            await navigator.share(shareData);
+            return;
+          } catch (error) {
+            if (error.name !== 'AbortError') {
+              console.log('Web Share API falló, usando fallback');
+            } else {
+              return;
+            }
+          }
+        }
+      }
+
+      // Fallback: Descargar el PDF y abrir WhatsApp con mensaje
+      this.downloadGeneratedPdf();
+      
+      const message = encodeURIComponent(
+        '¡Hola! Te comparto la disponibilidad de nuestros licenciados en Fisiosalud. ' +
+        'Te envío el PDF adjunto.'
+      );
+      
+      // Detectar si es móvil para usar el scheme apropiado
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const whatsappUrl = isMobile 
+        ? `whatsapp://send?text=${message}`
+        : `https://web.whatsapp.com/send?text=${message}`;
+      
+      window.open(whatsappUrl, '_blank');
+    },
+
+    async nativeShare() {
+      if (!this.pdfBlob || !navigator.share) return;
+
+      const file = new File([this.pdfBlob], this.pdfFilename, { type: 'application/pdf' });
+      const shareData = {
+        files: [file],
+        title: 'Disponibilidad Fisiosalud',
+        text: 'Horarios disponibles de nuestros licenciados',
+      };
+
+      try {
+        if (navigator.canShare && navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+        } else {
+          // Si no puede compartir archivos, compartir solo texto
+          await navigator.share({
+            title: 'Disponibilidad Fisiosalud',
+            text: 'Consulta la disponibilidad de nuestros licenciados en Fisiosalud',
+          });
+          this.downloadGeneratedPdf();
+        }
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error('Error sharing:', error);
+          this.downloadGeneratedPdf();
+        }
+      }
+    },
+
+    resetToPreview() {
+      this.pdfGenerated = false;
+      this.pdfBlob = null;
     },
 
     closeWizard() {
@@ -554,6 +725,9 @@ export default {
       this.dateFrom = this.today;
       this.dateTo = dates.addDaysToDate(this.today, 6);
       this.previewData = null;
+      this.pdfGenerated = false;
+      this.pdfBlob = null;
+      this.pdfFilename = 'disponibilidad-fisiosalud.pdf';
     },
   },
 };
