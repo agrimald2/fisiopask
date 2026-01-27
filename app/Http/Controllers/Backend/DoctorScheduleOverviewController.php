@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Office;
 use App\Models\Schedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DoctorScheduleOverviewController extends Controller
 {
@@ -16,29 +18,31 @@ class DoctorScheduleOverviewController extends Controller
      */
     public function index(Request $request)
     {
+        // Consultas optimizadas: solo campos necesarios, sin eager loading innecesario
         $doctors = Doctor::query()
-            ->with('user')
+            ->select('id', 'name', 'lastname')
             ->orderBy('name')
             ->get()
-            ->map(function ($doctor) {
-                return [
-                    'id' => $doctor->id,
-                    'name' => $doctor->fullname,
-                ];
-            });
+            ->map(fn ($doctor) => [
+                'id' => $doctor->id,
+                'name' => trim($doctor->name . ' ' . $doctor->lastname),
+            ]);
 
         $offices = Office::query()
+            ->select('id', 'name')
             ->orderBy('name')
             ->get()
-            ->map(function ($office) {
-                return [
-                    'id' => $office->id,
-                    'name' => $office->name,
-                ];
-            });
+            ->map(fn ($office) => [
+                'id' => $office->id,
+                'name' => $office->name,
+            ]);
 
-        $defaultOffice = Office::where('name', 'LIKE', '%PRIMAVERA%')->first();
-        $defaultOfficeId = $request->get('office_id', $defaultOffice?->id);
+        // Buscar office por defecto con consulta optimizada
+        $defaultOfficeId = $request->get('office_id');
+        if ($defaultOfficeId === null) {
+            $defaultOfficeId = Office::where('name', 'LIKE', '%PRIMAVERA%')
+                ->value('id');
+        }
 
         $currentDate = $request->get('date', now()->format('Y-m-d'));
         $weekStart = Carbon::parse($currentDate)->startOfWeek();
@@ -106,66 +110,114 @@ class DoctorScheduleOverviewController extends Controller
 
     /**
      * Obtiene los horarios para un rango de semana con información de disponibilidad
+     * OPTIMIZADO: Una sola consulta para schedules + una consulta para appointments
      */
     private function getSchedulesForWeek(Carbon $weekStart, Carbon $weekEnd, array $doctorIds = [], $officeId = null)
     {
+        // 1. Obtener todos los schedules con doctor y office en UNA sola consulta
         $query = Schedule::query()
-            ->with(['doctor', 'office'])
-            ->orderBy('start_time');
+            ->select('schedules.*', 'doctors.name as doctor_first_name', 'doctors.lastname as doctor_lastname', 'offices.name as office_name')
+            ->join('doctors', 'schedules.doctor_id', '=', 'doctors.id')
+            ->join('offices', 'schedules.office_id', '=', 'offices.id')
+            ->whereNull('doctors.deleted_at')
+            ->orderBy('schedules.start_time');
 
         if (!empty($doctorIds)) {
-            $query->whereIn('doctor_id', $doctorIds);
+            $query->whereIn('schedules.doctor_id', $doctorIds);
         }
 
         if ($officeId) {
-            $query->where('office_id', $officeId);
+            $query->where('schedules.office_id', $officeId);
         }
 
         $schedules = $query->get();
 
-        $groupedByDay = [];
-        for ($day = 1; $day <= 7; $day++) {
-            $groupedByDay[$day] = [];
+        if ($schedules->isEmpty()) {
+            return $this->getEmptyWeekStructure();
         }
+
+        // 2. Calcular las fechas de la semana
+        $weekDates = [];
+        for ($day = 1; $day <= 7; $day++) {
+            $weekDates[$day] = $weekStart->copy()->addDays($day - 1)->format('Y-m-d');
+        }
+
+        // 3. Obtener TODAS las citas de la semana en UNA sola consulta
+        $scheduleIds = $schedules->pluck('id')->toArray();
+        
+        $appointments = Appointment::query()
+            ->select('appointments.schedule_id', 'appointments.date', 'appointments.status', 
+                     'patients.name as patient_first_name', 'patients.lastname as patient_lastname')
+            ->join('patients', 'appointments.patient_id', '=', 'patients.id')
+            ->whereIn('appointments.schedule_id', $scheduleIds)
+            ->whereBetween('appointments.date', [$weekStart->format('Y-m-d'), $weekEnd->format('Y-m-d')])
+            ->get()
+            ->groupBy(function ($appointment) {
+                // Agrupar por schedule_id + date para lookup rápido
+                return $appointment->schedule_id . '_' . $appointment->date->format('Y-m-d');
+            });
+
+        // 4. Construir la respuesta sin consultas adicionales
+        $groupedByDay = $this->getEmptyWeekStructure();
+
+        $statusLabels = [
+            1 => 'CONFI',
+            2 => 'N A',
+            3 => 'ASIS',
+            4 => 'CAN',
+        ];
 
         foreach ($schedules as $schedule) {
             $weekDay = (int) $schedule->week_day;
-            if (!isset($groupedByDay[$weekDay])) {
-                $groupedByDay[$weekDay] = [];
-            }
+            $dateForDay = $weekDates[$weekDay] ?? null;
+            
+            if (!$dateForDay) continue;
 
-            $dateForDay = $weekStart->copy()->addDays($weekDay - 1)->format('Y-m-d');
-            
-            $appointment = $schedule->appointment()
-                ->where('date', $dateForDay)
-                ->with('patient')
-                ->first();
-            
+            // Lookup O(1) en el array de appointments
+            $lookupKey = $schedule->id . '_' . $dateForDay;
+            $appointment = $appointments->get($lookupKey)?->first();
             $isOccupied = $appointment !== null;
+
+            $doctorFullname = trim($schedule->doctor_first_name . ' ' . $schedule->doctor_lastname);
 
             $groupedByDay[$weekDay][] = [
                 'id' => $schedule->id,
                 'doctor_id' => $schedule->doctor_id,
-                'doctor_name' => $schedule->doctor->fullname,
+                'doctor_name' => $doctorFullname,
                 'office_id' => $schedule->office_id,
-                'office_name' => $schedule->office->name,
+                'office_name' => $schedule->office_name,
                 'start_time' => $schedule->start_time,
                 'end_time' => $schedule->end_time,
                 'week_day' => $weekDay,
                 'date' => $dateForDay,
                 'is_occupied' => $isOccupied,
-                'patient_name' => $isOccupied ? ($appointment->patient->fullname ?? 'Sin nombre') : null,
+                'patient_name' => $isOccupied 
+                    ? trim($appointment->patient_first_name . ' ' . $appointment->patient_lastname) 
+                    : null,
                 'appointment_status' => $isOccupied ? $appointment->status : null,
-                'appointment_status_label' => $isOccupied ? $appointment->status_label : null,
+                'appointment_status_label' => $isOccupied ? ($statusLabels[$appointment->status] ?? null) : null,
             ];
         }
 
+        // 5. Ordenar por hora de inicio (ya viene ordenado de la query, pero por seguridad)
         foreach ($groupedByDay as $day => $daySchedules) {
             usort($groupedByDay[$day], function ($a, $b) {
                 return strcmp($a['start_time'], $b['start_time']);
             });
         }
 
+        return $groupedByDay;
+    }
+
+    /**
+     * Retorna estructura vacía de la semana
+     */
+    private function getEmptyWeekStructure(): array
+    {
+        $groupedByDay = [];
+        for ($day = 1; $day <= 7; $day++) {
+            $groupedByDay[$day] = [];
+        }
         return $groupedByDay;
     }
 
