@@ -84,7 +84,7 @@
                     v-model="doctorSearch"
                     type="text"
                     placeholder="Buscar licenciado..."
-                    class="w-full pl-8 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm border border-gray-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#0cb8b6] focus:border-[#0cb8b6] transition-all"
+                    class="w-full pl-8 sm:pl-10 pr-3 py-2 sm:py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#0cb8b6] focus:border-[#0cb8b6] transition-all"
                   />
                 </div>
 
@@ -159,7 +159,7 @@
                       type="date"
                       v-model="dateFrom"
                       :min="today"
-                      class="w-full px-2 sm:px-3 py-2 sm:py-2.5 text-sm border border-gray-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#0cb8b6] focus:border-[#0cb8b6] transition-all"
+                      class="w-full px-2 sm:px-3 py-2 sm:py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#0cb8b6] focus:border-[#0cb8b6] transition-all"
                     />
                   </div>
                   <div>
@@ -168,7 +168,7 @@
                       type="date"
                       v-model="dateTo"
                       :min="dateFrom || today"
-                      class="w-full px-2 sm:px-3 py-2 sm:py-2.5 text-sm border border-gray-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#0cb8b6] focus:border-[#0cb8b6] transition-all"
+                      class="w-full px-2 sm:px-3 py-2 sm:py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#0cb8b6] focus:border-[#0cb8b6] transition-all"
                     />
                   </div>
                 </div>
