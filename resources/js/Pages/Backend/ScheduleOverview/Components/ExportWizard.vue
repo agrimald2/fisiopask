@@ -173,13 +173,34 @@
                   </div>
                 </div>
 
-                <!-- Days Summary -->
-                <div v-if="dateFrom && dateTo" class="mt-4 p-4 bg-[#e8f7f7] rounded-xl border border-[#0cb8b6]/30">
-                  <div class="flex items-center gap-2 text-[#0a9f9d]">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <span class="font-medium">{{ daysCount }} día(s) seleccionado(s)</span>
+                <!-- Days Summary / Validation Messages -->
+                <div v-if="dateFrom && dateTo" class="mt-4">
+                  <!-- Error: dateTo < dateFrom -->
+                  <div v-if="dateTo < dateFrom" class="p-4 bg-red-50 rounded-xl border border-red-200">
+                    <div class="flex items-center gap-2 text-red-600">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span class="font-medium">La fecha de fin debe ser igual o posterior a la fecha de inicio</span>
+                    </div>
+                  </div>
+                  <!-- Error: More than 14 days -->
+                  <div v-else-if="daysCount > 14" class="p-4 bg-amber-50 rounded-xl border border-amber-200">
+                    <div class="flex items-center gap-2 text-amber-600">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      <span class="font-medium">Máximo 14 días permitidos (seleccionaste {{ daysCount }})</span>
+                    </div>
+                  </div>
+                  <!-- Success -->
+                  <div v-else class="p-4 bg-[#e8f7f7] rounded-xl border border-[#0cb8b6]/30">
+                    <div class="flex items-center gap-2 text-[#0a9f9d]">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span class="font-medium">{{ daysCount }} día(s) seleccionado(s)</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -460,9 +481,14 @@ export default {
 
     daysCount() {
       if (!this.dateFrom || !this.dateTo) return 0;
+      // Validar formato de fechas
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(this.dateFrom) || !/^\d{4}-\d{2}-\d{2}$/.test(this.dateTo)) {
+        return 0;
+      }
       const from = dates.parseLocalDate(this.dateFrom);
       const to = dates.parseLocalDate(this.dateTo);
-      return Math.ceil((to - from) / (1000 * 60 * 60 * 24)) + 1;
+      const diff = Math.ceil((to - from) / (1000 * 60 * 60 * 24)) + 1;
+      return diff > 0 ? diff : 0;
     },
 
     canProceed() {
@@ -470,7 +496,10 @@ export default {
         return this.selectedDoctorIds.length > 0;
       }
       if (this.step === 2) {
-        return this.dateFrom && this.dateTo && this.daysCount > 0 && this.daysCount <= 14;
+        // Validar que existan ambas fechas y que dateTo >= dateFrom
+        if (!this.dateFrom || !this.dateTo) return false;
+        if (this.dateTo < this.dateFrom) return false;
+        return this.daysCount > 0 && this.daysCount <= 14;
       }
       return true;
     },
